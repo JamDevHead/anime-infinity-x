@@ -8,7 +8,7 @@
 		"$className": "DataModel",
 		"ServerScriptService": {
 			"$className": "ServerScriptService",
-			"TS": {
+			"server": {
 				"$path": "out/server"
 			}
 		},
@@ -20,10 +20,13 @@
 					"$className": "Folder",
 					"@rbxts": {
 						"$path": "node_modules/@rbxts"
+					},
+					"@flamework": {
+						"$path": "node_modules/@flamework"
 					}
 				}
 			},
-			"TS": {
+			"shared": {
 				"$path": "out/shared"
 			}
 		},
@@ -31,7 +34,7 @@
 			"$className": "StarterPlayer",
 			"StarterPlayerScripts": {
 				"$className": "StarterPlayerScripts",
-				"TS": {
+				"client": {
 					"$path": "out/client"
 				}
 			}
