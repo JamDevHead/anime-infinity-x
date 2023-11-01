@@ -4,8 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "build": "rbxtsc",
-    "watch": "rbxtsc -w"
+    "lint": "yarn eslint src && yarn prettier --check src",
+    "build": "rbxtsc --verbose",
+    "watch": "rbxtsc -w",
+    "serve": "rojo serve"
   },
   "devDependencies": {
     "@rbxts/compiler-types": "^2.2.0-types.0",
