@@ -4,3 +4,4 @@
 *.tsbuildinfo
 .idea
 .env.local
+*.build
