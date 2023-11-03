@@ -8,8 +8,9 @@
     "compile": "rbxtsc --verbose",
     "watch": "rbxtsc -w",
     "build:prod": "cross-env NODE_ENV=production yarn compile && rojo build --output place.rbxlx && yarn sync",
-    "build:dev": "yarn compile && rojo build --output place.rbxlx && yarn sync",
+    "build:dev": "yarn compile && rojo build --output place.rbxlx && yarn sync:dev",
     "sync": "lune scripts/lune/sync-assets.luau",
+    "sync:dev": "lune scripts/lune/sync-assets.luau dev",
     "serve": "rojo serve"
   },
   "devDependencies": {
