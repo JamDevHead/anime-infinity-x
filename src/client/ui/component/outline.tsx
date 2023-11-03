@@ -1,6 +1,6 @@
 import { blend, composeBindings } from "@rbxts/pretty-react-hooks";
 import Roact, { useMemo } from "@rbxts/roact";
-import { colors } from "@/client/controllers/colors";
+import { colors } from "@/client/constants/colors";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { Group } from "@/client/ui/component/group";
 
