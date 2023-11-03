@@ -3,5 +3,6 @@
 /include
 *.tsbuildinfo
 .idea
-.env.local
+place.rbxlx
+place.lock
 *.build

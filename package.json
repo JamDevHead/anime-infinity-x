@@ -5,8 +5,11 @@
   "license": "MIT",
   "scripts": {
     "lint": "yarn eslint src && yarn prettier --check src",
-    "build": "rbxtsc --verbose",
+    "compile": "rbxtsc --verbose",
     "watch": "rbxtsc -w",
+    "build:prod": "cross-env NODE_ENV=production yarn compile && rojo build --output place.rbxlx && yarn sync",
+    "build:dev": "yarn compile && rojo build --output place.rbxlx && yarn sync",
+    "sync": "lune scripts/lune/sync-assets.luau",
     "serve": "rojo serve"
   },
   "devDependencies": {
@@ -14,6 +17,7 @@
     "@rbxts/types": "^1.0.729",
     "@typescript-eslint/eslint-plugin": "^6.9.1",
     "@typescript-eslint/parser": "^6.9.1",
+    "cross-env": "^7.0.3",
     "eslint": "^8.52.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
