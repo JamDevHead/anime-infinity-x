@@ -11,6 +11,8 @@ local buildPlace = place.download(buildersPlaceId)
 print("📦 Downloaded building place!")
 
 local game = roblox.deserializePlace(buildPlace)
+local scriptsPlace = roblox.deserializePlace(fs.readFile("place.rbxlx"))
+
 local Workspace = game:GetService("Workspace")
 
 -- Get the assets folder
@@ -27,5 +29,19 @@ print("📦 Serialized avatars!")
 print("📦 Generating dev place...")
 assetsFolder:Destroy()
 
-local testPlaceFile = roblox.serializePlace(game)
-fs.writeFile("assets/test-place.rbxlx", testPlaceFile)
+-- merge the scripts place into the game
+for _, instance in ipairs(scriptsPlace:GetChildren()) do
+    if instance:IsA("StarterPlayer") then
+        -- temp fix for starter player scripts (duplicated starter player scripts)
+        for _, child in ipairs(instance.StarterPlayerScripts:GetChildren()) do
+            child.Parent = game.StarterPlayer.StarterPlayerScripts
+        end
+        continue
+    end
+    instance.Parent = game
+end
+
+-- Serialize the game
+local gameFile = roblox.serializePlace(game)
+fs.writeFile("place.rbxlx", gameFile)
+print("📦 Serialized dev place!")
