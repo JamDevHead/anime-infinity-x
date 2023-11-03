@@ -5,4 +5,6 @@
 .idea
 place.rbxlx
 place.lock
+place.rbxlx.lock
 *.build
+*.rbxm
