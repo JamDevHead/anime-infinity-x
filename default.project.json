@@ -6,6 +6,12 @@
 	],
 	"tree": {
 		"$className": "DataModel",
+		"ServerStorage": {
+			"$className": "ServerStorage",
+			"assets": {
+				"$path": "assets/private"
+			}
+		},
 		"ServerScriptService": {
 			"$className": "ServerScriptService",
 			"server": {
@@ -28,6 +34,9 @@
 			},
 			"shared": {
 				"$path": "out/shared"
+			},
+			"assets": {
+				"$path": "assets/public"
 			}
 		},
 		"StarterPlayer": {
