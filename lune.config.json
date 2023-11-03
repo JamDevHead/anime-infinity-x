@@ -1,5 +1,9 @@
 {
     "places": {
         "builders": 15239779021
+    },
+    "assets": {
+        "public": [],
+        "private": []
     }
 }
