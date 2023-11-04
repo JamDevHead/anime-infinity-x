@@ -3,9 +3,12 @@ import { createBroadcaster } from "@rbxts/reflex";
 import { producer } from "server/reflex/producers";
 import { slices } from "shared/reflex/slices";
 import Remotes from "shared/remotes";
+import { Logger } from "@rbxts/log";
 
 @Service()
 export default class StateSync implements OnStart {
+	constructor(private logger: Logger) {}
+
 	onStart() {
 		const reflexNamespace = Remotes.Server.GetNamespace("reflex");
 		const dispatchRemote = reflexNamespace.Get("dispatch");
@@ -14,11 +17,15 @@ export default class StateSync implements OnStart {
 		const broadcaster = createBroadcaster({
 			producers: slices,
 			dispatch: (player, actions) => {
+				this.logger.Debug("Dispatching reflex actions: {@actions}", actions);
 				dispatchRemote.SendToPlayer(player, actions);
 			},
 		});
 
-		startRemote.Connect((player) => broadcaster.start(player));
+		startRemote.Connect((player) => {
+			this.logger.Info("Server Reflex state sync started");
+			broadcaster.start(player);
+		});
 		producer.applyMiddleware(broadcaster.middleware);
 	}
 }

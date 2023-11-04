@@ -51,6 +51,7 @@ export class ProfileLoad implements OnStart, OnPlayerAdd {
 			return;
 		}
 
+		this.logger.Info(`${player.Name} profile loaded {@data}`, profile.Data);
 		this.profiles.set(player, profile);
 	}
 
