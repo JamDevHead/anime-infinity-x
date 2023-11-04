@@ -10,7 +10,7 @@ export class Zircon implements OnInit {
 		this.logger.Info("Zircon controller initialized");
 		task.wait(1);
 		ZirconClient.Init({
-			Keys: [Enum.KeyCode.Backquote],
+			Keys: [Enum.KeyCode.Backquote, Enum.KeyCode.Insert],
 		});
 	}
 }
