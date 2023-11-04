@@ -77,7 +77,7 @@ end
 
 -- Setup test place
 print(`📦 Generating{if IsDev then " dev " else " "}place...`)
-assetsFolder:Destroy()
+if not IsDev then assetsFolder:Destroy() end
 
 -- Merge the scripts place into the game
 function mergeInstance(instance, parent)
