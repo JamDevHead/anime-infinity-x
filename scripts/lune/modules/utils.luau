@@ -3,7 +3,7 @@ local fs = require("@lune/fs")
 local utils = {}
 
 function utils.createAssetLocal(instance, folder: string)
-    fs.writeFile(`assets/{folder}/{instance.Name}.rbxlx`, roblox.serializeModel({instance}))
+    fs.writeFile(`assets/{folder}/{instance.Name}.rbxmx`, roblox.serializeModel({instance}))
 end
 
 function utils.createAssetsLocal(instances, folder: string) 
