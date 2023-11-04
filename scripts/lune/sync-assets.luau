@@ -49,9 +49,9 @@ end
 
 for _, instance in ipairs(publicAssets:GetChildren()) do
     if not ReplicatedStorage:FindFirstChild("assets") then
-        local assetsFolder = roblox.Instance.new("Folder")
-        assetsFolder.Name = "assets"
-        assetsFolder.Parent = ReplicatedStorage
+        local folder = roblox.Instance.new("Folder")
+        folder.Name = "assets"
+        folder.Parent = ReplicatedStorage
     end
     instance.Parent = ReplicatedStorage.assets
 end
@@ -68,16 +68,16 @@ end
 
 for _, instance in ipairs(privateAssets:GetChildren()) do
     if not ServerStorage:FindFirstChild("assets") then
-        local assetsFolder = roblox.Instance.new("Folder")
-        assetsFolder.Name = "assets"
-        assetsFolder.Parent = ServerStorage
+        local folder = roblox.Instance.new("Folder")
+        folder.Name = "assets"
+        folder.Parent = ServerStorage
     end
     instance.Parent = ServerStorage.assets
 end
 
 -- Setup test place
 print(`📦 Generating{if IsDev then " dev " else " "}place...`)
-assetsFolder:Destroy()
+if not IsDev then assetsFolder:Destroy() end
 
 -- Merge the scripts place into the game
 function mergeInstance(instance, parent)
