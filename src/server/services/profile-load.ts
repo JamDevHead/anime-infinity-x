@@ -6,6 +6,8 @@ import { defaultPlayerData } from "@/shared/reflex/slices/players/utils";
 import { OnPlayerAdd } from "@/server/services/lifecycles/on-player-add";
 import { Logger } from "@rbxts/log";
 import { Players } from "@rbxts/services";
+import { producer } from "@/server/reflex/producers";
+import { selectPlayerData } from "@/shared/reflex/selectors";
 
 @Service()
 export class ProfileLoad implements OnStart, OnPlayerAdd {
@@ -41,7 +43,16 @@ export class ProfileLoad implements OnStart, OnPlayerAdd {
 		profile.AddUserId(player.UserId);
 		profile.Reconcile();
 
+		const playerId = tostring(player.UserId);
+
+		const unsubscribe = producer.subscribe(selectPlayerData(playerId), (data) => {
+			if (data) {
+				profile.Data = data;
+			}
+		});
+
 		profile.ListenToRelease(() => {
+			unsubscribe();
 			this.profiles.delete(player);
 			player.Kick("todo label: Profile released");
 		});
@@ -51,6 +62,8 @@ export class ProfileLoad implements OnStart, OnPlayerAdd {
 			return;
 		}
 
+		producer.loadPlayerData(playerId, profile.Data);
+
 		this.logger.Info(`${player.Name} profile loaded {@data}`, profile.Data);
 		this.profiles.set(player, profile);
 	}
@@ -58,6 +71,8 @@ export class ProfileLoad implements OnStart, OnPlayerAdd {
 	onPlayerRemoved(player: Player) {
 		const profile = this.profiles.get(player);
 		profile?.Release();
+
+		producer.unloadPlayerData(tostring(player.UserId));
 
 		this.profiles.delete(player);
 	}

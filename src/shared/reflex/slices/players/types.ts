@@ -1,11 +1,13 @@
 export interface PlayerData {
-	balance: {
-		coins: number;
-		stars: number;
-	};
+	balance: PlayerBalance;
 	inventory: {};
 	missions: {};
 	fighters: {};
 	boosts: {};
 	settings: {};
+}
+
+export interface PlayerBalance {
+	coins: number;
+	stars: number;
 }
