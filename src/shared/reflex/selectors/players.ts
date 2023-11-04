@@ -8,12 +8,22 @@ export const selectPlayerBalance = (playerId: string) => {
 	};
 };
 
-export const selectPlayerData = (playerId: string) => {
-	return createSelector(selectPlayerBalance(playerId), (balance): PlayerData | undefined => {
-		if (!balance) {
-			return;
-		}
+export const selectPlayerZones = (playerId: string) => {
+	return (state: SharedState) => {
+		return state.players.zones[playerId];
+	};
+};
 
-		return { boosts: {}, fighters: {}, inventory: {}, missions: {}, settings: {}, balance };
-	});
+export const selectPlayerData = (playerId: string) => {
+	return createSelector(
+		selectPlayerBalance(playerId),
+		selectPlayerZones(playerId),
+		(balance, zones): PlayerData | undefined => {
+			if (!balance || !zones) {
+				return;
+			}
+
+			return { boosts: {}, fighters: {}, inventory: {}, missions: {}, settings: {}, balance, zones };
+		},
+	);
 };

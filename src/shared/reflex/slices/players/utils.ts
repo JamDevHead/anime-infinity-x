@@ -10,4 +10,8 @@ export const defaultPlayerData = {
 	fighters: {},
 	boosts: {},
 	settings: {},
+	zones: {
+		current: undefined,
+		unlocked: [],
+	},
 } satisfies PlayerData;
