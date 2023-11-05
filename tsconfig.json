@@ -29,5 +29,7 @@
 		"paths": {
 			"@/*": ["./*"]
 		}
-	}
+	},
+	"include": ["**/*.ts", "**/*.tsx", ".eslintrc.js"],
+	"exclude": ["node_modules", "out"]
 }
