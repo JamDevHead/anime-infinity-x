@@ -1,4 +1,29 @@
+[inputs."assets/images/icons/hand_click.png"]
+hash = "a3a9265079e2180da1db85d81175f16ee8c576bc657833fc3ba27f5acbf3ab69"
+id = 15277603766
+packable = false
+
+[inputs."assets/images/icons/sword_outline.png"]
+hash = "1527304e3c9e31bd2f701edf6c9d14fa8f3490c686204b28f3de07c34e439173"
+id = 15277603950
+packable = false
+
+[inputs."assets/images/ui/attack_button_base.png"]
+hash = "c62a8f651fe7d338d683a69573f0c75609309a67e4a98d111d544c356875adce"
+id = 15281857202
+packable = false
+
 [inputs."assets/images/ui/blur.png"]
 hash = "d1b211a8eaaf1a834836d63b984aaf85538b10e34a714d06fc65ba0faf440af6"
 id = 15255783123
+packable = false
+
+[inputs."assets/images/ui/hud_bottom_curve.png"]
+hash = "d15f6fde91884c930497e3b582818d4bba167fe9218810455ea47d5a6f2e1a89"
+id = 15278324050
+packable = false
+
+[inputs."assets/images/ui/rounded_button_base.png"]
+hash = "9e24c345039bc9deab69a4fb534ee29c91302be44dffa9a12ea1df438a3d9f81"
+id = 15267940299
 packable = false
