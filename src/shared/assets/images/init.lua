@@ -2,7 +2,14 @@
 return {
 	images = {
 		icons = {
+			boosts = {
+				coin_boost = "rbxassetid://15294309561",
+				lucky_boost = "rbxassetid://15294309649",
+				stars_boost = "rbxassetid://15294309714",
+				strength_boost = "rbxassetid://15294309767",
+			},
 			hand_click = "rbxassetid://15277603766",
+			rebirth = "rbxassetid://15295231883",
 			sword_outline = "rbxassetid://15277603950",
 		},
 		ui = {

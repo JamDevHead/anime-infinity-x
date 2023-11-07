@@ -1,6 +1,7 @@
 import { useCamera } from "@rbxts/pretty-react-hooks";
 import Roact, { useRef } from "@rbxts/roact";
 import { AttackButton } from "@/client/ui/component/attack-button";
+import { Boost } from "@/client/ui/component/boost";
 import { FadingFrame } from "@/client/ui/component/fading-frame";
 import { Frame } from "@/client/ui/component/frame";
 import { Image } from "@/client/ui/component/image";
@@ -15,7 +16,7 @@ export const BottomHudButtons = () => {
 	const rem = useRem();
 	const camera = useCamera();
 
-	const sizeFactor = camera ? (camera.ViewportSize.Y / 1080) * 1.5 : 1;
+	const aspectRatio = camera ? (camera.ViewportSize.Y / 1080) * 1.5 : 1;
 
 	return (
 		<>
@@ -37,7 +38,14 @@ export const BottomHudButtons = () => {
 						size={UDim2.fromOffset(96, 96)}
 						color={Color3.fromRGB(255, 0, 0)}
 						icon={images.icons.hand_click}
-					/>
+					>
+						<Image
+							position={UDim2.fromScale(1, 1)}
+							size={UDim2.fromOffset(38, 38)}
+							anchorPoint={new Vector2(1, 1)}
+							image={images.icons.rebirth}
+						/>
+					</SimpleButton>
 					<AttackButton
 						position={UDim2.fromScale(0.5, rem(-0.2))}
 						anchorPoint={new Vector2(0.5, 0.5)}
@@ -51,8 +59,15 @@ export const BottomHudButtons = () => {
 						size={UDim2.fromOffset(96, 96)}
 						color={Color3.fromRGB(36, 166, 15)}
 						icon={images.icons.sword_outline}
-					/>
-					<uiscale Scale={sizeFactor} />
+					>
+						<Image
+							position={UDim2.fromScale(1, 1)}
+							size={UDim2.fromOffset(38, 38)}
+							anchorPoint={new Vector2(1, 1)}
+							image={images.icons.rebirth}
+						/>
+					</SimpleButton>
+					<uiscale Scale={aspectRatio} />
 				</Image>
 				<uipadding
 					PaddingBottom={new UDim(0, 16)}
@@ -72,13 +87,30 @@ export const BottomHudButtons = () => {
 						fillDirection={Enum.FillDirection.Horizontal}
 						horizontalAlignment={Enum.HorizontalAlignment.Left}
 						verticalAlignment={Enum.VerticalAlignment.Bottom}
+						padding={new UDim(0, 16)}
 						size={UDim2.fromScale(0, 1)}
 					>
-						<SimpleButton
-							size={UDim2.fromOffset(96, 96)}
-							color={Color3.fromRGB(255, 0, 0)}
-							icon={images.icons.hand_click}
-						/>
+						<Boost.Root>
+							<Boost.Icon image={images.icons.boosts.coin_boost}>
+								<Boost.Description description={"3h"} />
+							</Boost.Icon>
+						</Boost.Root>
+						<Boost.Root>
+							<Boost.Icon image={images.icons.boosts.lucky_boost}>
+								<Boost.Description description={"3h"} />
+							</Boost.Icon>
+						</Boost.Root>
+						<Boost.Root>
+							<Boost.Icon image={images.icons.boosts.stars_boost}>
+								<Boost.Description description={"3h"} />
+							</Boost.Icon>
+						</Boost.Root>
+						<Boost.Root>
+							<Boost.Icon image={images.icons.boosts.strength_boost}>
+								<Boost.Description description={"3h"} />
+							</Boost.Icon>
+						</Boost.Root>
+						<uiscale Scale={aspectRatio} />
 					</Stack>
 
 					<Stack
@@ -107,6 +139,7 @@ export const BottomHudButtons = () => {
 								position={UDim2.fromScale(0.5, 0.5)}
 							/>
 						</FadingFrame>
+						<uiscale Scale={aspectRatio} />
 					</Stack>
 					<uipadding
 						PaddingBottom={new UDim(0, 16)}

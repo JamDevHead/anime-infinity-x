@@ -1,6 +1,31 @@
+[inputs."assets/images/icons/boosts/coin_boost.png"]
+hash = "40b6b9d7d07abd48bc6e6a811533b877461bbc57ffd1cb5658b62e94a52afcd7"
+id = 15294309561
+packable = false
+
+[inputs."assets/images/icons/boosts/lucky_boost.png"]
+hash = "08c7b98d976758b96eabeeee6deb5110c8a970f7e262527bcafaf0e2ac643170"
+id = 15294309649
+packable = false
+
+[inputs."assets/images/icons/boosts/stars_boost.png"]
+hash = "0664a34b0cf5a5199da9e3966793e10984ebce2c6f4d9b5aa9c0d2661b9d5712"
+id = 15294309714
+packable = false
+
+[inputs."assets/images/icons/boosts/strength_boost.png"]
+hash = "797b33044278b18e0614e8be5594cd5bbdc0961a00d7643ad7cd5ec41d341759"
+id = 15294309767
+packable = false
+
 [inputs."assets/images/icons/hand_click.png"]
 hash = "a3a9265079e2180da1db85d81175f16ee8c576bc657833fc3ba27f5acbf3ab69"
 id = 15277603766
+packable = false
+
+[inputs."assets/images/icons/rebirth.png"]
+hash = "2ed7067692ff5df3d5b49814860df3ce6ee0b7c1388a7f6caa0fd165d8555162"
+id = 15295231883
 packable = false
 
 [inputs."assets/images/icons/sword_outline.png"]
