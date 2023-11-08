@@ -25,10 +25,10 @@ export function SimpleButton({ children, position, size, color, onClick, icon, a
 		>
 			<Image size={UDim2.fromScale(1, 1)} image={images.ui.rounded_button_base} imageColor={color}>
 				<uipadding
-					PaddingLeft={new UDim(0, 24)}
-					PaddingRight={new UDim(0, 24)}
-					PaddingTop={new UDim(0, 24)}
-					PaddingBottom={new UDim(0, 24)}
+					PaddingLeft={new UDim(0, rem(24, "pixel"))}
+					PaddingRight={new UDim(0, rem(24, "pixel"))}
+					PaddingTop={new UDim(0, rem(24, "pixel"))}
+					PaddingBottom={new UDim(0, rem(24, "pixel"))}
 				/>
 				<Image size={UDim2.fromScale(1, 1)} image={icon} />
 			</Image>
