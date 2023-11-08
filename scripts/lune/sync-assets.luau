@@ -5,6 +5,8 @@ local place = require("modules/place")
 local utils = require("modules/utils")
 local config = require("modules/configManager"):getConfig()
 
+local initialTime = os.clock()
+
 local args = process.args
 
 local IsDev = false
@@ -18,9 +20,10 @@ end
 
 local buildersPlaceId = config.places.builders
 
+local downloadInitialTime = os.clock()
 print("📦 Downloading building place...")
 local buildPlace = place.download(buildersPlaceId)
-print("📦 Downloaded building place!")
+print(`📦 Downloaded building place! ({string.format("%.2f", os.clock() - downloadInitialTime)} seconds)`)
 
 local game = roblox.deserializePlace(buildPlace)
 
@@ -100,3 +103,27 @@ end
 local gameFile = roblox.serializePlace(game)
 fs.writeFile("place.rbxlx", gameFile)
 print("📦 Serialized dev place!")
+
+if IsDev then
+    print("📦 Generating types...")
+
+    local typesResult = process.spawn(process.os == "windows" and "yarn.cmd" or "yarn", {"types:gen"}, {
+        cwd = process.cwd,
+        env = process.env,
+        stdio = "inherit",
+    })
+    if not typesResult.ok then
+        error(`Failed to generate types!\n${typesResult.stderr}`)
+    end
+
+    print("📦 Opening place...")
+    local placeResult = process.spawn(process.os == "windows" and "scripts/open-place.bat" or "scripts/open-place.sh")
+
+    if not placeResult.ok then
+        error(`Failed to open place!\n${placeResult.stderr}`)
+    end
+
+    print("📦 Opened place!")
+end
+
+print(`📦 Synced assets in {string.format("%.2f", os.clock() - initialTime)} seconds!`)
