@@ -9,6 +9,11 @@ export const images: {
 		readonly hand_click: string;
 		readonly sword_outline: string;
 		readonly rebirth: string;
+		readonly boost: string;
+		readonly inventory: string;
+		readonly settings: string;
+		readonly twitter: string;
+		readonly daily_rewards: string;
 	};
 	readonly ui: {
 		readonly blur: string;

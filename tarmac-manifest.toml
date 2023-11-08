@@ -1,3 +1,8 @@
+[inputs."assets/images/icons/boost.png"]
+hash = "4a9465772537084ee3a7f595330e1ff07ef1ddbd1cccbc2fa32041ae3f02a413"
+id = 15302168656
+packable = false
+
 [inputs."assets/images/icons/boosts/coin_boost.png"]
 hash = "40b6b9d7d07abd48bc6e6a811533b877461bbc57ffd1cb5658b62e94a52afcd7"
 id = 15294309561
@@ -18,9 +23,19 @@ hash = "797b33044278b18e0614e8be5594cd5bbdc0961a00d7643ad7cd5ec41d341759"
 id = 15294309767
 packable = false
 
+[inputs."assets/images/icons/daily_rewards.png"]
+hash = "f76a373f68f92ed0635fac306bd73663c5b9d58e9b405f78d2721184104c7625"
+id = 15302168729
+packable = false
+
 [inputs."assets/images/icons/hand_click.png"]
 hash = "a3a9265079e2180da1db85d81175f16ee8c576bc657833fc3ba27f5acbf3ab69"
 id = 15277603766
+packable = false
+
+[inputs."assets/images/icons/inventory.png"]
+hash = "9c5348375179faac289ee4da7f608c14111f0892f8c241f3649237a7050b03af"
+id = 15302168817
 packable = false
 
 [inputs."assets/images/icons/rebirth.png"]
@@ -28,9 +43,19 @@ hash = "2ed7067692ff5df3d5b49814860df3ce6ee0b7c1388a7f6caa0fd165d8555162"
 id = 15295231883
 packable = false
 
+[inputs."assets/images/icons/settings.png"]
+hash = "1d5baffc1b06244bfcc7717f5ea7ab27c44896e9329209745ec753df9309b2e3"
+id = 15302168932
+packable = false
+
 [inputs."assets/images/icons/sword_outline.png"]
 hash = "1527304e3c9e31bd2f701edf6c9d14fa8f3490c686204b28f3de07c34e439173"
 id = 15277603950
+packable = false
+
+[inputs."assets/images/icons/twitter.png"]
+hash = "1c28f9f671cdfe61781c27f90fcd6a3507c12e071e0cedd682605a6187b9879e"
+id = 15302169045
 packable = false
 
 [inputs."assets/images/ui/attack_button_base.png"]
