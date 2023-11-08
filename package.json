@@ -13,6 +13,7 @@
     "sync:dev": "lune scripts/lune/sync-assets.luau dev",
     "types:gen": "lune scripts/lune/generate-types.luau",
     "tarmac": "tarmac sync --target roblox",
+    "open:place": "scripts/open-place",
     "serve": "rojo serve"
   },
   "devDependencies": {
