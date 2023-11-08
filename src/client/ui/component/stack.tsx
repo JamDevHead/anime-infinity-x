@@ -18,13 +18,14 @@ export const Stack: FunctionComponent<FlexBoxProps> = (props) => {
 			anchorPoint={props.anchorPoint}
 			rotation={props.rotation}
 			backgroundColor={props.backgroundColor}
-			backgroundTransparency={props.backgroundTransparency || 1}
+			backgroundTransparency={1 || props.backgroundTransparency}
 			clipsDescendants={props.clipsDescendants}
 			visible={props.visible}
 			zIndex={props.zIndex}
 			layoutOrder={props.layoutOrder}
 			event={props.event}
 			change={props.change}
+			autoSize={props.autoSize}
 		>
 			<uilistlayout
 				FillDirection={props.fillDirection}
