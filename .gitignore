@@ -1,6 +1,7 @@
 /node_modules
 /out
 /include
+/@types/generated
 *.tsbuildinfo
 .idea
 place.rbxlx
