@@ -28,6 +28,8 @@ return {
 		ui = {
 			attack_button_base = "rbxassetid://15281857202",
 			blur = "rbxassetid://15255783123",
+			checkbox = "rbxassetid://15303998273",
+			checkmark = "rbxassetid://15303998318",
 			hud_arrow = "rbxassetid://15302522438",
 			hud_bottom_curve = "rbxassetid://15278324050",
 			rounded_button_base = "rbxassetid://15267940299",

@@ -32,5 +32,7 @@ export const images: {
 		readonly stats_bar_base: string;
 		readonly stats_bar_coin: string;
 		readonly stats_bar_star: string;
+		readonly checkbox: string;
+		readonly checkmark: string;
 	};
 };

@@ -1,5 +1,6 @@
 import Roact, { FunctionComponent, PropsWithChildren } from "@rbxts/roact";
 import { fonts } from "@/client/constants/fonts";
+import { Checkbox } from "@/client/ui/component/checkbox";
 import { FadingFrame } from "@/client/ui/component/fading-frame";
 import { Image } from "@/client/ui/component/image";
 import { Stack } from "@/client/ui/component/stack";
@@ -154,12 +155,7 @@ type ListCheckboxProps = {
 const ListCheckbox: FunctionComponent<ListCheckboxProps> = ({ checked }) => {
 	const rem = useRem();
 
-	return (
-		<Image
-			image={checked ? images.icons.fish : images.icons.twitter}
-			size={UDim2.fromOffset(rem(32, "pixel"), rem(32, "pixel"))}
-		/>
-	);
+	return <Checkbox checked={checked} disabled={true} />;
 };
 
 const List: FunctionComponent<PropsWithChildren> = ({ children }) => {
