@@ -1,7 +1,7 @@
 import { OnStart, Service } from "@flamework/core";
+import { Logger } from "@rbxts/log";
 import { ServerStorage, Workspace } from "@rbxts/services";
 import { ZonesLoader } from "./zones-loader";
-import { Logger } from "@rbxts/log";
 
 @Service()
 export class EnemiesSpawner implements OnStart {
@@ -26,7 +26,14 @@ export class EnemiesSpawner implements OnStart {
 				continue;
 			}
 
-			for (const node of zone.Nodes.GetChildren()) {
+			const nodesFolder = zone.FindFirstChild("Nodes") as (typeof zone)["Nodes"] | undefined;
+
+			if (nodesFolder === undefined) {
+				this.logger.Warn("Zone {zone} doesn't have a nodes folder", zone.Name);
+				continue;
+			}
+
+			for (const node of nodesFolder.GetChildren()) {
 				node.SetAttribute("EnemyZone", zone.Name);
 				node.AddTag("EnemySpawner");
 			}
