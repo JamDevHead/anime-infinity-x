@@ -1,19 +1,29 @@
 import { OnStart, Service } from "@flamework/core";
+import { Logger } from "@rbxts/log";
 import { ReplicatedStorage, Workspace } from "@rbxts/services";
+import { producer } from "@/server/reflex/producers";
+import { OnCharacterAdd } from "@/server/services/lifecycles/on-character-add";
+import { OnPlayerAdd } from "@/server/services/lifecycles/on-player-add";
+import { selectPlayerZones } from "@/shared/reflex/selectors";
+
+interface Zone {
+	Map: Folder;
+	Spawn: Part;
+	Nodes: {
+		GetChildren(): Part[];
+	} & Folder;
+}
 
 interface ZonesFolder extends Folder {
-	GetChildren(): ({
-		Map: Folder;
-		Spawn: Part;
-		Nodes: {
-			GetChildren(): Part[];
-		} & Folder;
-	} & Instance)[];
+	GetChildren(): (Zone & Instance)[];
 }
 
 @Service()
-export class ZonesLoader implements OnStart {
+export class ZonesLoader implements OnStart, OnPlayerAdd, OnCharacterAdd {
 	public zonesFolder = new Instance("Folder") as ZonesFolder;
+	private zonesSubscriptions = new Map<Player, () => void>();
+
+	constructor(private readonly logger: Logger) {}
 
 	onStart() {
 		this.zonesFolder.Name = "Zones";
@@ -26,5 +36,53 @@ export class ZonesLoader implements OnStart {
 			const clonedZone = zone.Clone();
 			clonedZone.Parent = this.zonesFolder;
 		}
+	}
+
+	onPlayerAdded(player: Player) {
+		const unsubscribe = producer.subscribe(selectPlayerZones(tostring(player.UserId)), (zones) => {
+			if (zones?.current === undefined || !player.Character) {
+				return;
+			}
+
+			this.spawnOnZone(player.Character, zones.current);
+		});
+
+		this.zonesSubscriptions.set(player, unsubscribe);
+	}
+
+	onPlayerRemoved(player: Player) {
+		this.zonesSubscriptions.get(player)?.();
+		this.zonesSubscriptions.delete(player);
+	}
+
+	onCharacterAdded(player: Player, character: Model) {
+		const zones = producer.getState(selectPlayerZones(tostring(player.UserId)));
+
+		this.logger.Debug(`Player ${player.Name} is on zone ${zones?.current}`);
+
+		if (!zones || zones.current === undefined) {
+			return;
+		}
+
+		this.spawnOnZone(character, zones.current);
+	}
+
+	spawnOnZone(character: Model, zoneName: string) {
+		const zone = this.zonesFolder.FindFirstChild(zoneName) as Zone | undefined;
+
+		if (!zone) {
+			return;
+		}
+
+		if (character.Parent === undefined) {
+			while (character.Parent === undefined) {
+				task.wait();
+			}
+		}
+
+		this.logger.Debug("Spawning {@player} on zone {zone}", character.GetFullName(), zoneName);
+
+		const spawnOffset = Vector3.yAxis.mul(3 + zone.Spawn.Size.Y / 2);
+		character.PivotTo(zone.Spawn.CFrame.add(spawnOffset));
 	}
 }
