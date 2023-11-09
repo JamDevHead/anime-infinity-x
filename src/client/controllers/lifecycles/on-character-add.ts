@@ -17,7 +17,7 @@ class _CharacterAdd implements OnInit {
 		const localPlayer = Players.LocalPlayer;
 
 		localPlayer.CharacterAdded.Connect((character) => this.onCharacterAdded(character));
-		localPlayer.CharacterRemoving.Connect((character) => this.onCharacterAdded(character));
+		localPlayer.CharacterRemoving.Connect((character) => this.onCharacterRemoved(character));
 
 		task.spawn(() => {
 			if (localPlayer.Character === undefined) {
