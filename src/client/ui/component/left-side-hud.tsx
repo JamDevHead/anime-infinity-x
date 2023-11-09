@@ -53,10 +53,10 @@ export const LeftSideHud = () => {
 				rows={6}
 				columns={2}
 			>
-				<SimpleButton color={Color3.fromHex("BF07FF")} icon={images.icons.daily_rewards} />
-				<SimpleButton color={Color3.fromHex("BF07FF")} icon={images.icons.daily_rewards} />
-				<SimpleButton color={Color3.fromHex("BF07FF")} icon={images.icons.daily_rewards} />
-				<SimpleButton color={Color3.fromHex("BF07FF")} icon={images.icons.daily_rewards} />
+				<SimpleButton color={Color3.fromHex("#68CA58")} icon={images.icons.store} />
+				<SimpleButton color={Color3.fromHex("#ff0000")} icon={images.icons.gift} />
+				<SimpleButton color={Color3.fromHex("#E5E923")} icon={images.icons.characters} />
+				<SimpleButton color={Color3.fromHex("#c7480e")} icon={images.icons.inventory} />
 				<UiScaleAspectRatio />
 			</Grid>
 

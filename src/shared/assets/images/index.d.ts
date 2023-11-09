@@ -18,6 +18,10 @@ export const images: {
 		readonly fish: string;
 		readonly coin: string;
 		readonly star: string;
+		readonly characters: string;
+		readonly gift: string;
+		readonly guide: string;
+		readonly store: string;
 	};
 	readonly ui: {
 		readonly blur: string;

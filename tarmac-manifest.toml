@@ -23,6 +23,11 @@ hash = "797b33044278b18e0614e8be5594cd5bbdc0961a00d7643ad7cd5ec41d341759"
 id = 15294309767
 packable = false
 
+[inputs."assets/images/icons/characters.png"]
+hash = "2d2bcce989f0f6d8cda53b99f81b3457ef191a6c2e1db6853e5ca7002b1e4d92"
+id = 15303915032
+packable = false
+
 [inputs."assets/images/icons/coin.png"]
 hash = "56713fdc135af078617fd213e91c5fecf24ad3f7aacb290d4c457c3b02865be0"
 id = 15303269882
@@ -38,14 +43,24 @@ hash = "8aa7f6c2b50e29946596203380d666ef4605f588573814f3502adad225a27ab2"
 id = 15302657608
 packable = false
 
+[inputs."assets/images/icons/gift.png"]
+hash = "8fbe6ca02e3d73ef74aa79dcab2514eef97e6c014a802e4296df2e9e56cd9ccf"
+id = 15303915072
+packable = false
+
+[inputs."assets/images/icons/guide.png"]
+hash = "9c5348375179faac289ee4da7f608c14111f0892f8c241f3649237a7050b03af"
+id = 15303915150
+packable = false
+
 [inputs."assets/images/icons/hand_click.png"]
 hash = "a3a9265079e2180da1db85d81175f16ee8c576bc657833fc3ba27f5acbf3ab69"
 id = 15277603766
 packable = false
 
 [inputs."assets/images/icons/inventory.png"]
-hash = "9c5348375179faac289ee4da7f608c14111f0892f8c241f3649237a7050b03af"
-id = 15302168817
+hash = "e3dbf09faec4a4b01bbf5df28772b631312b3e0c9fb6ba33de000ad3b53a290b"
+id = 15303915192
 packable = false
 
 [inputs."assets/images/icons/mission.png"]
@@ -66,6 +81,11 @@ packable = false
 [inputs."assets/images/icons/star.png"]
 hash = "3326723ca18d335f7045844e8982195f7ac49611b88e70240917be9e38ef777d"
 id = 15303269918
+packable = false
+
+[inputs."assets/images/icons/store.png"]
+hash = "f6949ca26519fda5da23bb9940358d6a221bbb147ea9d53333d1581b02d78820"
+id = 15303915226
 packable = false
 
 [inputs."assets/images/icons/sword_outline.png"]
