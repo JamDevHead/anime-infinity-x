@@ -1,7 +1,7 @@
 import { createPortal, createRoot } from "@rbxts/react-roblox";
 import Roact, { StrictMode } from "@rbxts/roact";
-import { App } from "@/client/ui/app/app";
 import { Players } from "@rbxts/services";
+import { App } from "@/client/ui/app/app";
 import { RootProvider } from "@/client/ui/providers/root-provider";
 
 export const initializeReact = () => {

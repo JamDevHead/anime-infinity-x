@@ -22,7 +22,7 @@ export const Grid: FunctionComponent<PropsWithChildren<GridProps>> = (props) => 
 			anchorPoint={props.anchorPoint}
 			rotation={props.rotation}
 			backgroundColor={props.backgroundColor}
-			backgroundTransparency={props.backgroundTransparency || 1}
+			backgroundTransparency={props.backgroundTransparency ?? 1}
 			clipsDescendants={props.clipsDescendants}
 			visible={props.visible}
 			zIndex={props.zIndex}

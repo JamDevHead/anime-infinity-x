@@ -1,8 +1,8 @@
 import { blend, composeBindings } from "@rbxts/pretty-react-hooks";
 import Roact, { useMemo } from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
-import { useRem } from "@/client/ui/hooks/use-rem";
 import { Group } from "@/client/ui/component/group";
+import { useRem } from "@/client/ui/hooks/use-rem";
 
 interface OutlineProps extends Roact.PropsWithChildren {
 	readonly outlineTransparency?: number | Roact.Binding<number>;
@@ -37,15 +37,15 @@ export function Outline({
 	cornerRadius ??= new UDim(0, rem(0.5));
 
 	const innerStyle = useMemo(() => {
-		const size = composeBindings(innerThickness!, (thickness) => {
+		const size = composeBindings(innerThickness ?? 0, (thickness) => {
 			return new UDim2(1, ceilEven(-2 * thickness), 1, ceilEven(-2 * thickness));
 		});
 
-		const position = composeBindings(innerThickness!, (thickness) => {
+		const position = composeBindings(innerThickness ?? 0, (thickness) => {
 			return new UDim2(0, thickness, 0, thickness);
 		});
 
-		const radius = composeBindings(cornerRadius!, innerThickness!, (radius, thickness) => {
+		const radius = composeBindings(cornerRadius ?? new UDim(), innerThickness ?? 0, (radius, thickness) => {
 			return radius.sub(new UDim(0, thickness));
 		});
 
@@ -54,7 +54,7 @@ export function Outline({
 		});
 
 		return { size, position, radius, transparency };
-	}, [innerThickness, innerTransparency, cornerRadius, outlineTransparency, rem]);
+	}, [innerThickness, innerTransparency, cornerRadius, outlineTransparency]);
 
 	const outerStyle = useMemo(() => {
 		const transparency = composeBindings(outlineTransparency, outerTransparency, (a, b) => {

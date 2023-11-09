@@ -1,13 +1,13 @@
 import { OnStart, Service } from "@flamework/core";
+import { Logger } from "@rbxts/log";
 import { GetProfileStore } from "@rbxts/profileservice";
 import { Profile, ProfileStore } from "@rbxts/profileservice/globals";
-import { PlayerData } from "@/shared/reflex/slices/players/types";
-import { defaultPlayerData } from "@/shared/reflex/slices/players/utils";
-import { OnPlayerAdd } from "@/server/services/lifecycles/on-player-add";
-import { Logger } from "@rbxts/log";
 import { Players } from "@rbxts/services";
 import { producer } from "@/server/reflex/producers";
+import { OnPlayerAdd } from "@/server/services/lifecycles/on-player-add";
 import { selectPlayerData } from "@/shared/reflex/selectors";
+import { PlayerData } from "@/shared/reflex/slices/players/types";
+import { defaultPlayerData } from "@/shared/reflex/slices/players/utils";
 
 @Service()
 export class ProfileLoad implements OnStart, OnPlayerAdd {
@@ -33,7 +33,7 @@ export class ProfileLoad implements OnStart, OnPlayerAdd {
 	onPlayerAdded(player: Player) {
 		this.waitForProfileStore();
 
-		const profile = this.profileStore!.LoadProfileAsync(`Data_${player.UserId}`, "ForceLoad");
+		const profile = this.profileStore?.LoadProfileAsync(`Data_${player.UserId}`, "ForceLoad");
 
 		if (!profile) {
 			player.Kick("todo label: Profile doesn't exist");

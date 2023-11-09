@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "lint": "yarn eslint src && yarn prettier --check src",
+    "lint:fix": "yarn eslint src --fix && yarn prettier --write src",
     "compile": "rbxtsc --verbose",
     "watch": "rbxtsc -w",
     "build:prod": "cross-env NODE_ENV=production yarn compile && rojo build --output place.rbxlx && yarn sync",

@@ -1,5 +1,5 @@
-import { SharedState } from "@/shared/reflex/slices";
 import { createSelector } from "@rbxts/reflex";
+import { SharedState } from "@/shared/reflex/slices";
 import { PlayerData } from "@/shared/reflex/slices/players/types";
 
 export const selectPlayerBalance = (playerId: string) => {

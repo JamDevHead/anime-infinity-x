@@ -1,5 +1,5 @@
-import { PlayerData, PlayerZones } from "@/shared/reflex/slices/players/types";
 import { createProducer } from "@rbxts/reflex";
+import { PlayerData, PlayerZones } from "@/shared/reflex/slices/players/types";
 
 export interface ZonesState {
 	readonly [playerId: string]: PlayerZones | undefined;

@@ -1,7 +1,7 @@
 import { composeBindings } from "@rbxts/pretty-react-hooks";
 import Roact, { PropsWithChildren } from "@rbxts/roact";
-import { useRem } from "@/client/ui/hooks/use-rem";
 import { Image } from "@/client/ui/component/image";
+import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
 
 interface ShadowProps extends PropsWithChildren {

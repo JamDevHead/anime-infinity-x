@@ -1,7 +1,7 @@
 import { OnStart, Service } from "@flamework/core";
+import { Logger } from "@rbxts/log";
 import { ServerStorage, Workspace } from "@rbxts/services";
 import { ZonesLoader } from "./zones-loader";
-import { Logger } from "@rbxts/log";
 
 @Service()
 export class EnemiesSpawner implements OnStart {

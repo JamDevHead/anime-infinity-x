@@ -1,9 +1,9 @@
 import { OnStart, Service } from "@flamework/core";
+import { Logger } from "@rbxts/log";
 import { createBroadcaster } from "@rbxts/reflex";
 import { producer } from "server/reflex/producers";
 import { slices } from "shared/reflex/slices";
 import Remotes from "shared/remotes";
-import { Logger } from "@rbxts/log";
 
 @Service()
 export default class StateSync implements OnStart {
