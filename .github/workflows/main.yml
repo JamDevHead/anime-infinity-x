@@ -1,0 +1,33 @@
+name: 🏗️ Build game
+
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop]
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: bahmutov/npm-install@v1
+      - uses: ok-nick/setup-aftman@v0.3.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🧹 Eslint
+        run: |
+          yarn eslint src
+
+      - name: 🧹 Prettier
+        run: |
+          yarn prettier --check src
+
+      - name: 🏗️ Build game
+        run: yarn build:dev
