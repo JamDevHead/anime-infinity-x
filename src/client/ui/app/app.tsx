@@ -3,7 +3,7 @@ import { Hud } from "@/client/ui/layout/hud/hud";
 
 export const App = () => {
 	return (
-		<screengui>
+		<screengui key="app" ResetOnSpawn={false} IgnoreGuiInset={true}>
 			<Hud />
 		</screengui>
 	);
