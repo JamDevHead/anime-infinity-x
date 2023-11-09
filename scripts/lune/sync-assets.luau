@@ -9,12 +9,17 @@ local initialTime = os.clock()
 
 local args = process.args
 
-local IsDev = false
+local options = {
+    dev = false,
+    xml = false,
+}
 
 for _, arg in args do
-    if arg == "dev" then
-        IsDev = true
-        break
+    if arg == "--dev" then
+        options.dev = true
+    end
+    if arg == "--xml" then
+        options.xml = true
     end
 end
 
@@ -79,8 +84,8 @@ for _, instance in ipairs(privateAssets:GetChildren()) do
 end
 
 -- Setup test place
-print(`📦 Generating{if IsDev then " dev " else " "}place...`)
-if not IsDev then assetsFolder:Destroy() end
+print(`📦 Generating{if options.dev then " dev " else " "}place...`)
+if not options.dev then assetsFolder:Destroy() end
 
 -- Merge the scripts place into the game
 function mergeInstance(instance, parent)
@@ -99,15 +104,20 @@ for _, instance in scriptsPlace:GetChildren() do
     mergeInstance(instance, game)
 end
 
+-- Remove unnecessary rojo files if not xml
+if not options.xml then
+    fs.removeFile("place.rbxlx")
+end
+
 -- Serialize the game
-local gameFile = roblox.serializePlace(game)
-fs.writeFile("place.rbxlx", gameFile)
+local gameFile = roblox.serializePlace(game, options.xml)
+fs.writeFile(`place.{options.xml and "rbxlx" or "rbxl"}`, gameFile)
 print("📦 Serialized dev place!")
 
-if IsDev then
+if options.dev then
     print("📦 Generating types...")
 
-    local typesResult = process.spawn(process.os == "windows" and "yarn.cmd" or "yarn", {"types:gen"}, {
+    local typesResult = process.spawn(process.os == "windows" and "yarn.cmd" or "yarn", {"types:gen", options.xml and "--xml" or ""}, {
         cwd = process.cwd,
         env = process.env,
         stdio = "inherit",
@@ -117,7 +127,7 @@ if IsDev then
     end
 
     print("📦 Opening place...")
-    local placeResult = process.spawn(process.os == "windows" and "scripts/open-place.bat" or "scripts/open-place.sh")
+    local placeResult = process.spawn(process.os == "windows" and `scripts/open-place{not options.xml and "-binary" or ""}.bat` or "scripts/open-place.sh")
 
     if not placeResult.ok then
         error(`Failed to open place!\n${placeResult.stderr}`)

@@ -4,8 +4,13 @@
 /@types/generated
 *.tsbuildinfo
 .idea
-place.rbxlx
-place.lock
-place.rbxlx.lock
+*.rbxlx
+*.rbxl
+*.lock
+*.rbxlx.lock
+*.rbxl.lock
 *.build
 *.rbxm
+sourcemap.json
+mantle-output.json
+.mantle-state.yml

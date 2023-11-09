@@ -1,0 +1,44 @@
+owner:
+  group: 32717020
+payments: group
+
+environments:
+  - label: canary
+    targetNamePrefix: environmentLabel
+    targetAccess: private
+    targetOverrides:
+      icon: assets/place/icon_canary.png
+      thumbnails: [assets/place/thumbnail_canary.png]
+      places:
+        start:
+          configuration:
+            name: Anime Infinity X DEV 🚧
+            description: |
+              This is a development place for Anime Infinity X.
+              
+            maxPlayerCount: 20
+  - label: production
+    branches: [main]
+    targetAccess: private
+
+target:
+  experience:
+    icon: assets/place/icon_canary.png
+    thumbnails: [assets/place/thumbnail_canary.png]
+    configuration:
+      playableDevices: [computer, phone, tablet]
+      privateServers:
+        price: 10
+      enableStudioAccessToApis: true
+      avatarType: playerChoice
+      avatarAnimationType: playerChoice
+    spatialVoice:
+      enabled: true
+    places:
+      start:
+        file: place.rbxl
+        configuration:
+          name: Anime Infinity X
+          description: |
+            TODO: Add description
+          maxPlayerCount: 20
