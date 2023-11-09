@@ -2,18 +2,15 @@ import Roact, { PropsWithChildren } from "@rbxts/roact";
 import { Button } from "@/client/ui/component/button";
 import { FrameProps } from "@/client/ui/component/frame";
 import { Image } from "@/client/ui/component/image";
-import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
 
-interface SimpleButtonProps extends PropsWithChildren, FrameProps {
+interface AttackButtonProps extends PropsWithChildren, FrameProps {
 	color: Color3;
 	icon: string;
 	onClick?: () => void;
 }
 
-export function SimpleButton({ children, position, size, color, onClick, icon, anchorPoint }: SimpleButtonProps) {
-	const rem = useRem();
-
+export function AttackButton({ children, position, size, color, onClick, icon, anchorPoint }: AttackButtonProps) {
 	return (
 		<Button
 			position={position}
@@ -23,12 +20,12 @@ export function SimpleButton({ children, position, size, color, onClick, icon, a
 			backgroundTransparency={1}
 			anchorPoint={anchorPoint}
 		>
-			<Image size={UDim2.fromScale(1, 1)} image={images.ui.rounded_button_base} imageColor={color}>
+			<Image size={UDim2.fromScale(1, 1)} image={images.ui.attack_button_base} imageColor={color}>
 				<uipadding
-					PaddingLeft={new UDim(0, rem(24, "pixel"))}
-					PaddingRight={new UDim(0, rem(24, "pixel"))}
-					PaddingTop={new UDim(0, rem(24, "pixel"))}
-					PaddingBottom={new UDim(0, rem(24, "pixel"))}
+					PaddingLeft={new UDim(0, 32)}
+					PaddingRight={new UDim(0, 32)}
+					PaddingTop={new UDim(0, 32)}
+					PaddingBottom={new UDim(0, 32)}
 				/>
 				<Image size={UDim2.fromScale(1, 1)} image={icon} />
 			</Image>

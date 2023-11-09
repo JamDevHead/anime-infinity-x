@@ -39,6 +39,7 @@ export function Button(props: ButtonProps) {
 			BorderSizePixel={0}
 			Event={event}
 			Change={props.change || {}}
+			AutomaticSize={props.autoSize}
 		>
 			{props.cornerRadius && <uicorner key="corner" CornerRadius={props.cornerRadius} />}
 			{props.children}

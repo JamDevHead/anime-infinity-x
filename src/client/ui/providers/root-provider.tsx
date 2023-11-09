@@ -2,7 +2,7 @@ import Roact from "@rbxts/roact";
 
 import { RemProvider, RemProviderProps } from "./rem-provider";
 
-interface RootProviderProps extends RemProviderProps {}
+type RootProviderProps = RemProviderProps;
 
 export function RootProvider({ baseRem, remOverride, children }: RootProviderProps) {
 	return (

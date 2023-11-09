@@ -1,6 +1,6 @@
-import Roact, { forwardRef, Ref } from "@rbxts/roact";
+import Roact, { forwardRef, PropsWithChildren, Ref } from "@rbxts/roact";
 
-export interface FrameProps<T extends Instance = Frame> extends Roact.PropsWithChildren {
+export interface FrameProps<T extends Instance = Frame> extends PropsWithChildren {
 	ref?: Roact.Ref<T>;
 	event?: Roact.JsxInstanceEvents<T>;
 	change?: Roact.JsxInstanceChangeEvents<T>;
@@ -15,6 +15,7 @@ export interface FrameProps<T extends Instance = Frame> extends Roact.PropsWithC
 	zIndex?: number | Roact.Binding<number>;
 	layoutOrder?: number | Roact.Binding<number>;
 	cornerRadius?: UDim | Roact.Binding<UDim>;
+	autoSize?: Enum.AutomaticSize;
 }
 
 export const Frame = forwardRef((props: FrameProps, ref: Ref<Frame>) => {
@@ -34,6 +35,7 @@ export const Frame = forwardRef((props: FrameProps, ref: Ref<Frame>) => {
 			BorderSizePixel={0}
 			Event={props.event || {}}
 			Change={props.change || {}}
+			AutomaticSize={props.autoSize}
 		>
 			{props.cornerRadius && <uicorner key="corner" CornerRadius={props.cornerRadius} />}
 			{props.children}
