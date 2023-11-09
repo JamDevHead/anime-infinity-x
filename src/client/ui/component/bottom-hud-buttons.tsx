@@ -1,4 +1,3 @@
-import { useCamera } from "@rbxts/pretty-react-hooks";
 import Roact, { useRef } from "@rbxts/roact";
 import { AttackButton } from "@/client/ui/component/attack-button";
 import { Boost } from "@/client/ui/component/boost";
@@ -8,15 +7,13 @@ import { Image } from "@/client/ui/component/image";
 import { SimpleButton } from "@/client/ui/component/simple-button";
 import { Stack } from "@/client/ui/component/stack";
 import { Text } from "@/client/ui/component/text";
+import { UiScaleAspectRatio } from "@/client/ui/component/ui-scale-aspect-ratio";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
 
 export const BottomHudButtons = () => {
 	const imageRef = useRef<ImageLabel>();
 	const rem = useRem();
-	const camera = useCamera();
-
-	const aspectRatio = camera ? (camera.ViewportSize.Y / 1080) * 1.5 : 1;
 
 	return (
 		<>
@@ -67,7 +64,7 @@ export const BottomHudButtons = () => {
 							image={images.icons.rebirth}
 						/>
 					</SimpleButton>
-					<uiscale Scale={aspectRatio} />
+					<UiScaleAspectRatio />
 				</Image>
 				<uipadding
 					PaddingBottom={new UDim(0, 16)}
@@ -110,7 +107,6 @@ export const BottomHudButtons = () => {
 								<Boost.Description description={"3h"} />
 							</Boost.Icon>
 						</Boost.Root>
-						<uiscale Scale={aspectRatio} />
 					</Stack>
 
 					<Stack
@@ -139,7 +135,7 @@ export const BottomHudButtons = () => {
 								position={UDim2.fromScale(0.5, 0.5)}
 							/>
 						</FadingFrame>
-						<uiscale Scale={aspectRatio} />
+						<UiScaleAspectRatio />
 					</Stack>
 					<uipadding
 						PaddingBottom={new UDim(0, 16)}

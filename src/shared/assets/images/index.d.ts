@@ -14,11 +14,14 @@ export const images: {
 		readonly settings: string;
 		readonly twitter: string;
 		readonly daily_rewards: string;
+		readonly mission: string;
+		readonly fish: string;
 	};
 	readonly ui: {
 		readonly blur: string;
 		readonly rounded_button_base: string;
 		readonly attack_button_base: string;
 		readonly hud_bottom_curve: string;
+		readonly hud_arrow: string;
 	};
 };

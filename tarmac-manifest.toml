@@ -28,6 +28,11 @@ hash = "f76a373f68f92ed0635fac306bd73663c5b9d58e9b405f78d2721184104c7625"
 id = 15302168729
 packable = false
 
+[inputs."assets/images/icons/fish.png"]
+hash = "8aa7f6c2b50e29946596203380d666ef4605f588573814f3502adad225a27ab2"
+id = 15302657608
+packable = false
+
 [inputs."assets/images/icons/hand_click.png"]
 hash = "a3a9265079e2180da1db85d81175f16ee8c576bc657833fc3ba27f5acbf3ab69"
 id = 15277603766
@@ -36,6 +41,11 @@ packable = false
 [inputs."assets/images/icons/inventory.png"]
 hash = "9c5348375179faac289ee4da7f608c14111f0892f8c241f3649237a7050b03af"
 id = 15302168817
+packable = false
+
+[inputs."assets/images/icons/mission.png"]
+hash = "68579c7bade917b6774e5134df9bf325a2b3dbd11c6d7c880c8cfd4296ea9d5c"
+id = 15302522396
 packable = false
 
 [inputs."assets/images/icons/rebirth.png"]
@@ -66,6 +76,11 @@ packable = false
 [inputs."assets/images/ui/blur.png"]
 hash = "d1b211a8eaaf1a834836d63b984aaf85538b10e34a714d06fc65ba0faf440af6"
 id = 15255783123
+packable = false
+
+[inputs."assets/images/ui/hud_arrow.png"]
+hash = "40e4b7310260f1487b9dd649c32f5115e00be2702cd0e711605cc43abd0e1806"
+id = 15302522438
 packable = false
 
 [inputs."assets/images/ui/hud_bottom_curve.png"]
