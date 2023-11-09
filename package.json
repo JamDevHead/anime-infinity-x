@@ -10,11 +10,15 @@
     "build:prod": "cross-env NODE_ENV=production yarn compile && rojo build --output place.rbxlx && yarn sync",
     "build:dev": "yarn compile && rojo build --output place.rbxlx && yarn sync:dev",
     "sync": "lune scripts/lune/sync-assets.luau",
-    "sync:dev": "lune scripts/lune/sync-assets.luau dev",
-    "types:gen": "lune scripts/lune/generate-types.luau",
+    "sync:dev": "lune scripts/lune/sync-assets.luau -- --dev",
+    "types:gen": "lune scripts/lune/generate-types.luau --",
     "tarmac": "tarmac sync --target roblox",
     "open:place": "scripts/open-place",
-    "serve": "rojo serve"
+    "serve": "rojo serve",
+    "deploy:dev": "yarn build:dev && mantle deploy --environment canary",
+    "deploy:prod": "yarn build:prod && mantle deploy --environment production",
+    "output:dev": "mantle outputs --environment canary > mantle-output.json",
+    "output:prod": "mantle outputs --environment production > mantle-output.json"
   },
   "devDependencies": {
     "@rbxts/compiler-types": "^2.2.0-types.0",

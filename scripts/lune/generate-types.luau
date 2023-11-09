@@ -1,11 +1,24 @@
 local roblox = require("@lune/roblox")
 local fs = require("@lune/fs")
+local process = require("@lune/process")
 
 local typeGeneration = require("modules/typeGeneration")
 
 local initialTime = os.clock()
+local args = process.args
 
-local game = roblox.deserializePlace(fs.readFile("place.rbxlx"))
+local options = {
+    dev = false,
+    xml = false,
+}
+
+for _, arg in args do
+    if arg == "--xml" then
+        options.xml = true
+    end
+end
+
+local game = roblox.deserializePlace(fs.readFile(`place.{options.xml and "rbxlx" or "rbxl"}`))
 
 local ServerStorage = game:GetService("ServerStorage")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
