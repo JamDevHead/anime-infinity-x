@@ -107,6 +107,7 @@ export const BottomHudButtons = () => {
 								<Boost.Description description={"3h"} />
 							</Boost.Icon>
 						</Boost.Root>
+						<UiScaleAspectRatio />
 					</Stack>
 
 					<Stack
