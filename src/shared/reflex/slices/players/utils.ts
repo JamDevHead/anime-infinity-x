@@ -11,7 +11,7 @@ export const defaultPlayerData = {
 	boosts: {},
 	settings: {},
 	zones: {
-		current: undefined,
+		current: "NRT",
 		unlocked: [],
 	},
 } satisfies PlayerData;

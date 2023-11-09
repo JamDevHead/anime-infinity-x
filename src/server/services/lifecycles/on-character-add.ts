@@ -1,4 +1,4 @@
-import { Controller, Modding, OnInit } from "@flamework/core";
+import { Modding, OnInit, Service } from "@flamework/core";
 import { OnPlayerAdd } from "@/server/services/lifecycles/on-player-add";
 
 export interface OnCharacterAdd {
@@ -6,7 +6,7 @@ export interface OnCharacterAdd {
 	onCharacterRemoved?(player: Player, character: Model): void;
 }
 
-@Controller()
+@Service()
 class _CharacterAdd implements OnInit, OnPlayerAdd {
 	private listeners = new Set<OnCharacterAdd>();
 	private signalConnections = new Map<Player, Set<RBXScriptConnection>>();
