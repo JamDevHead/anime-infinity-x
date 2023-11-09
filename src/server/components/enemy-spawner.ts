@@ -72,6 +72,9 @@ export class Enemy extends BaseComponent<EnemyAttributes, Part> implements OnSta
 		clonedEnemy.PivotTo(this.spawnerSurfaceCFrame);
 		clonedEnemy.SetAttribute("Guid", HttpService.GenerateGUID(false));
 		clonedEnemy.AddTag("EnemyNPC");
+
+		clonedEnemy.ScaleTo(tonumber(clonedEnemy.GetAttribute("Scale")) ?? 1.5);
+
 		clonedEnemy.Parent = this.enemiesSpawner.enemiesFolder;
 
 		this.currentEnemy?.Destroy();
