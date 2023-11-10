@@ -31,3 +31,5 @@ jobs:
 
       - name: 🏗️ Build game
         run: yarn build:dev
+        env:
+          ROBLOSECURITY: ${{ secrets.ROBLOSECURITY }}
