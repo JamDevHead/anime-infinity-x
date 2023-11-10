@@ -2,7 +2,7 @@ export interface PlayerData {
 	balance: PlayerBalance;
 	inventory: {};
 	missions: {};
-	fighters: {};
+	fighters: PlayerFighters;
 	boosts: {};
 	settings: {};
 	zones: PlayerZones;
@@ -16,4 +16,14 @@ export interface PlayerBalance {
 export interface PlayerZones {
 	current: string | undefined;
 	unlocked: string[];
+}
+
+export interface PlayerFighters {
+	actives: PlayerFighter[];
+	all: PlayerFighter[];
+}
+
+export interface PlayerFighter {
+	name: string;
+	level: number;
 }

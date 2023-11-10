@@ -7,7 +7,10 @@ export const defaultPlayerData = {
 	},
 	inventory: {},
 	missions: {},
-	fighters: {},
+	fighters: {
+		actives: [],
+		all: [],
+	},
 	boosts: {},
 	settings: {},
 	zones: {
