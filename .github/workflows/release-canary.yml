@@ -33,6 +33,8 @@ jobs:
 
       - name: 🏗️ Build place
         run: yarn build:dev
+        env:
+          ROBLOSECURITY: ${{ secrets.ROBLOSECURITY }}
 
       - name: 📦 Upload place artifact
         uses: actions/upload-artifact@v3
