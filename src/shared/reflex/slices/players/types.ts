@@ -1,10 +1,10 @@
 export interface PlayerData {
 	balance: PlayerBalance;
-	inventory: NonNullable<unknown>;
-	missions: NonNullable<unknown>;
-	fighters: PlayerFighters;
-	boosts: NonNullable<unknown>;
-	settings: NonNullable<unknown>;
+  inventory: NonNullable<unknown>;
+  missions: NonNullable<unknown>;
+  fighters: PlayerFighters;
+  boosts: NonNullable<unknown>;
+  settings: NonNullable<unknown>;
 	zones: PlayerZones;
 }
 

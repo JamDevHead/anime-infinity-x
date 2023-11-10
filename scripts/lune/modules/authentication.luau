@@ -9,7 +9,7 @@ function auth.getAuthCookieWithFallbacks()
 		return cookie
 	end
  
-	local cookieFromEnv = process.env.LUNE_AUTH
+	local cookieFromEnv = process.env.ROBLOSECURITY
 	if cookieFromEnv and #cookieFromEnv > 0 then
 		return `.ROBLOSECURITY={cookieFromEnv}`
 	end

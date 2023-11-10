@@ -1,6 +1,6 @@
+import { Flamework, Modding } from "@flamework/core";
 import Log, { Logger } from "@rbxts/log";
 import Zircon from "@rbxts/zircon";
-import { Flamework, Modding } from "@flamework/core";
 
 Log.SetLogger(
 	Logger.configure()

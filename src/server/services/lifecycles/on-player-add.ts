@@ -7,7 +7,7 @@ export interface OnPlayerAdd {
 }
 
 @Service()
-class PlayerAdd implements OnInit {
+export class PlayerAdd implements OnInit {
 	private listeners = new Set<OnPlayerAdd>();
 
 	onInit(): void | Promise<void> {

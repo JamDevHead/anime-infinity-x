@@ -1,5 +1,5 @@
-import { PlayerBalance, PlayerData } from "@/shared/reflex/slices/players/types";
 import { createProducer } from "@rbxts/reflex";
+import { PlayerBalance, PlayerData } from "@/shared/reflex/slices/players/types";
 
 export interface BalanceState {
 	readonly [playerId: string]: PlayerBalance | undefined;

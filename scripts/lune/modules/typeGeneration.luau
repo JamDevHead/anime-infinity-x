@@ -64,18 +64,15 @@ function typeGeneration.generateFunctions(functions: {string})
     return table.concat(functions, "\n")
 end
 
-function typeGeneration.generateInterface(name: string, parent: Instance, output: string)
-    assert(parent == nil or parent:IsA("Instance"), "Parent must be an instance or nil!")
-
+function typeGeneration.generateInterface(name: string, output: string)
     local className = "Instance"
-    local parentName = parent.Name
 
     output = string.gsub(output, "\n", "\n    ")
-    return string.format(template, parentName, className, output)
+    return string.format(template, name, className, output)
 end
 
 function typeGeneration.generateInterfaceWithFunctions(name: string, parent: Instance, functions: {string})
-    return typeGeneration.generateInterface(name, parent, typeGeneration.generateFunctions(functions))
+    return typeGeneration.generateInterface(name, typeGeneration.generateFunctions(functions))
 end
 
 function typeGeneration.internalGenerateInstancesTable(instance: Instance)
@@ -92,9 +89,7 @@ function typeGeneration.internalGenerateInstancesTable(instance: Instance)
     return instances
 end
 
-function typeGeneration.parseInstance(instance: Instance)
-    local name = instance.Name
-    
+function typeGeneration.parseInstanceWithName(name: string, instance: Instance)
     local function parseRecursive(instance: Instance, limit: number)
         local children = {}
         local instances = typeGeneration.internalGenerateInstancesTable(instance)
@@ -110,7 +105,21 @@ function typeGeneration.parseInstance(instance: Instance)
         return #children > 0 and typeGeneration.generateIndexChildren(instance, children) or typeGeneration.generateIndex(instance)
     end
 
-    return typeGeneration.generateInterface(name, instance.Parent or instance, parseRecursive(instance, limitRecursive))
+    return typeGeneration.generateInterface(name, parseRecursive(instance, limitRecursive))
+end
+
+function typeGeneration.parseInstance(instance: Instance)
+    return typeGeneration.parseInstanceWithName(instance.Parent and instance.Parent.Name or instance.Name, instance) 
+end
+
+function typeGeneration.parseInstances(instances: {Instance})
+    local output = {}
+
+    for _, instance in ipairs(instances) do
+        table.insert(output, typeGeneration.parseInstance(instance))
+    end
+
+    return table.concat(output, "\n")
 end
 
 return typeGeneration

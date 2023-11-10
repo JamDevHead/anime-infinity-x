@@ -1,7 +1,7 @@
 import Roact, { useEffect, useState } from "@rbxts/roact";
-import { TextProps } from "@/client/ui/component/text";
 import { fonts } from "@/client/constants/fonts";
 import { Group } from "@/client/ui/component/group";
+import { TextProps } from "@/client/ui/component/text";
 
 interface TextFieldProps extends TextProps<TextBox> {
 	text?: string;

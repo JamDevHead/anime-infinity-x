@@ -1,4 +1,5 @@
 local roblox = require("@lune/roblox")
+local process = require("@lune/process")
 local fs = require("@lune/fs")
 local utils = {}
 
@@ -37,6 +38,32 @@ function utils.getInstanceByString(path: string, parent: Instance)
         end
     end
     return instance
+end
+
+function utils.mergeInstance(instance, parent)
+    local existingInstance = parent:FindFirstChild(instance.Name)
+    if existingInstance then
+        for _, child in ipairs(instance:GetChildren()) do
+            utils.mergeInstance(child, existingInstance)
+        end
+        return
+    end
+
+    instance.Parent = parent
+end
+
+function utils.executeYarn(command: string, ...)
+    local yarn = process.spawn(process.os == "windows" and "yarn.cmd" or "yarn", {command, ...}, {
+        cwd = process.cwd,
+        env = process.env,
+        stdio = "inherit",
+    })
+    
+    if not yarn.ok then
+        error(`Failed to execute yarn command!\n${yarn.stderr}`)
+    end
+
+    return yarn
 end
 
 return utils
