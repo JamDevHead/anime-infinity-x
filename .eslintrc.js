@@ -17,6 +17,7 @@ module.exports = {
 	},
 	ignorePatterns: ["/out"],
 	rules: {
+		"no-restricted-globals": "off",
 		"@typescript-eslint/no-unused-vars": [
 			"warn",
 			{

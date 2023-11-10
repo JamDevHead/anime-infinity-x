@@ -34,7 +34,7 @@ export class ProfileLoad implements OnStart, OnPlayerAdd {
 	onPlayerAdded(player: Player) {
 		this.waitForProfileStore();
 
-		const profile = this.profileStore!.LoadProfileAsync(`Data_${player.UserId}`, "ForceLoad");
+		const profile = this.profileStore?.LoadProfileAsync(`Data_${player.UserId}`, "ForceLoad");
 
 		if (!profile) {
 			player.Kick("todo label: Profile doesn't exist");
