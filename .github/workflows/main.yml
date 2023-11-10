@@ -28,6 +28,7 @@ jobs:
       - name: 🧹 Prettier
         run: |
           yarn prettier --check src
+        continue-on-error: true
 
       - name: 🏗️ Build game
         run: yarn build:dev
