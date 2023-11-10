@@ -4,6 +4,8 @@ import { GetProfileStore } from "@rbxts/profileservice";
 import { Profile, ProfileStore } from "@rbxts/profileservice/globals";
 import { Players } from "@rbxts/services";
 import { producer } from "@/server/reflex/producers";
+import { OnPlayerAdd } from "@/server/services/lifecycles/on-player-add";
+import loadData from "@/server/services/profile-load/loaders";
 import { selectPlayerData } from "@/shared/reflex/selectors";
 import { PlayerData } from "@/shared/reflex/slices/players/types";
 import { defaultPlayerData } from "@/shared/reflex/slices/players/utils";
