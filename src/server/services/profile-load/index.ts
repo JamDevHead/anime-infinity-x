@@ -4,7 +4,6 @@ import { GetProfileStore } from "@rbxts/profileservice";
 import { Profile, ProfileStore } from "@rbxts/profileservice/globals";
 import { Players } from "@rbxts/services";
 import { producer } from "@/server/reflex/producers";
-import { OnPlayerAdd } from "@/server/services/lifecycles/on-player-add";
 import { selectPlayerData } from "@/shared/reflex/selectors";
 import { PlayerData } from "@/shared/reflex/slices/players/types";
 import { defaultPlayerData } from "@/shared/reflex/slices/players/utils";
@@ -62,9 +61,15 @@ export class ProfileLoad implements OnStart, OnPlayerAdd {
 			return;
 		}
 
-		producer.loadPlayerData(playerId, profile.Data);
+		const t0 = os.clock();
 
-		this.logger.Info(`${player.Name} profile loaded {@data}`, profile.Data);
+		producer.loadPlayerData(playerId, profile.Data);
+		loadData(profile);
+
+		const t1 = os.clock();
+
+		this.logger.Info(`${player.Name} profile loaded in {time}s`, math.round((t1 - t0) * 1000) / 1000);
+		print(`${player.Name} data: ${profile.Data} in ${t1 - t0}`);
 		this.profiles.set(player, profile);
 	}
 

@@ -26,7 +26,14 @@ export class EnemiesSpawner implements OnStart {
 				continue;
 			}
 
-			for (const node of zone.Nodes.GetChildren()) {
+			const nodesFolder = zone.FindFirstChild("Nodes") as (typeof zone)["Nodes"] | undefined;
+
+			if (nodesFolder === undefined) {
+				this.logger.Warn("Zone {zone} doesn't have a nodes folder", zone.Name);
+				continue;
+			}
+
+			for (const node of nodesFolder.GetChildren()) {
 				node.SetAttribute("EnemyZone", zone.Name);
 				node.AddTag("EnemySpawner");
 			}
