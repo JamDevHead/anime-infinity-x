@@ -1,14 +1,22 @@
 import Roact from "@rbxts/roact";
+import { useRootSelector } from "@/client/reflex/producers";
 import { Grid } from "@/client/ui/component/grid";
 import { SimpleButton } from "@/client/ui/component/simple-button";
 import { Stack } from "@/client/ui/component/stack";
 import { Stats } from "@/client/ui/component/stats";
 import { UiScaleAspectRatio } from "@/client/ui/component/ui-scale-aspect-ratio";
+import { useAbbreviator } from "@/client/ui/hooks/use-abbreviator";
+import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
+import { selectPlayerBalance } from "@/shared/reflex/selectors";
 
 export const LeftSideHud = () => {
 	const rem = useRem();
+	const id = usePlayerId();
+	const abbreviator = useAbbreviator({});
+
+	const balance = useRootSelector(selectPlayerBalance(id));
 
 	return (
 		<Stack
@@ -23,7 +31,7 @@ export const LeftSideHud = () => {
 				<Stats.Item color={Color3.fromHex("fde9a4")}>
 					<Stats.ItemIcon image={images.icons.coin} />
 					<Stats.ItemText
-						text="1,000,000"
+						text={abbreviator.numberToString(balance?.coins ?? 0)}
 						gradiant={{
 							from: Color3.fromHex("FFDF37"),
 							to: Color3.fromHex("F8610C"),
@@ -33,7 +41,7 @@ export const LeftSideHud = () => {
 				<Stats.Item color={Color3.fromHex("95ccfe")}>
 					<Stats.ItemIcon image={images.icons.star} />
 					<Stats.ItemText
-						text="1,000,000"
+						text={abbreviator.numberToString(balance?.stars ?? 0)}
 						gradiant={{
 							from: Color3.fromHex("37E7FF"),
 							to: Color3.fromHex("0C6AF8"),
