@@ -14,7 +14,9 @@ export const defaultPlayerData = {
 		actives: [],
 		all: [],
 	},
-	boosts: {},
+	boosts: {
+		all: [],
+	},
 	settings: {},
 	zones: {
 		current: "NRT",

@@ -51,6 +51,30 @@ export const useMockData = () => {
 				],
 				active: undefined,
 			},
+			boosts: {
+				all: [
+					{
+						id: "1",
+						type: "coin",
+						expiresAt: os.time() + 60 * 60,
+					},
+					{
+						id: "2",
+						type: "stars",
+						expiresAt: os.time() + 60 * 60,
+					},
+					{
+						id: "3",
+						type: "lucky",
+						expiresAt: os.time() + 60 * 60,
+					},
+					{
+						id: "4",
+						type: "strength",
+						expiresAt: os.time() + 60 * 60,
+					},
+				],
+			},
 		});
 	});
 };
