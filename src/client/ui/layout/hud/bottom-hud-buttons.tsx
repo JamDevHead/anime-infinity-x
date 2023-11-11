@@ -1,4 +1,7 @@
-import Roact, { useRef } from "@rbxts/roact";
+import Roact, { useEffect, useRef, useState } from "@rbxts/roact";
+import { setInterval } from "@rbxts/set-timeout";
+import { boostIcons } from "@/client/constants/boost-icons";
+import { useRootSelector } from "@/client/reflex/producers";
 import { AttackButton } from "@/client/ui/component/attack-button";
 import { Boost } from "@/client/ui/component/boost";
 import { FadingFrame } from "@/client/ui/component/fading-frame";
@@ -8,12 +11,34 @@ import { SimpleButton } from "@/client/ui/component/simple-button";
 import { Stack } from "@/client/ui/component/stack";
 import { Text } from "@/client/ui/component/text";
 import { UiScaleAspectRatio } from "@/client/ui/component/ui-scale-aspect-ratio";
+import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
+import { selectPlayerBoosts } from "@/shared/reflex/selectors";
 
 export const BottomHudButtons = () => {
+	const [hoveredBoosts, setHoveredBoosts] = useState<boolean[]>([]);
+	const [boostTimers, setBoostTimers] = useState<number[]>([]);
 	const imageRef = useRef<ImageLabel>();
 	const rem = useRem();
+	const id = usePlayerId();
+
+	const { dps } = useRootSelector((state) => state.dps);
+	const boosts = useRootSelector(selectPlayerBoosts(id));
+
+	useEffect(() => {
+		setHoveredBoosts(boosts?.all.map(() => false) ?? []);
+	}, [boosts?.all]);
+
+	useEffect(() => {
+		const interval = setInterval(() => {
+			setBoostTimers(boosts?.all.map((boost) => boost.expiresAt - os.time()) ?? []);
+		}, 1);
+
+		return () => {
+			interval();
+		};
+	}, [boostTimers, boosts?.all]);
 
 	return (
 		<>
@@ -87,26 +112,32 @@ export const BottomHudButtons = () => {
 						padding={new UDim(0, 16)}
 						size={UDim2.fromScale(0, 1)}
 					>
-						<Boost.Root>
-							<Boost.Icon image={images.icons.boosts.coin_boost}>
-								<Boost.Description description={"3h"} />
-							</Boost.Icon>
-						</Boost.Root>
-						<Boost.Root>
-							<Boost.Icon image={images.icons.boosts.lucky_boost}>
-								<Boost.Description description={"3h"} />
-							</Boost.Icon>
-						</Boost.Root>
-						<Boost.Root>
-							<Boost.Icon image={images.icons.boosts.stars_boost}>
-								<Boost.Description description={"3h"} />
-							</Boost.Icon>
-						</Boost.Root>
-						<Boost.Root>
-							<Boost.Icon image={images.icons.boosts.strength_boost}>
-								<Boost.Description description={"3h"} />
-							</Boost.Icon>
-						</Boost.Root>
+						{boosts?.all.map((boost, index) => (
+							<Boost.Root>
+								<Boost.Icon
+									onMouseEnter={() => {
+										setHoveredBoosts((prev) => {
+											prev[index] = true;
+											return [...prev];
+										});
+									}}
+									onMouseLeave={() => {
+										setHoveredBoosts((prev) => {
+											prev[index] = false;
+											return [...prev];
+										});
+									}}
+									image={boostIcons[boost.type]}
+								>
+									<Boost.Description
+										active={hoveredBoosts[index]}
+										description={DateTime.fromUnixTimestamp(
+											boostTimers[index] ?? 0,
+										).FormatUniversalTime("HH:mm:ss", "en-us")}
+									/>
+								</Boost.Icon>
+							</Boost.Root>
+						))}
 						<UiScaleAspectRatio />
 					</Stack>
 
@@ -128,7 +159,7 @@ export const BottomHudButtons = () => {
 							position={UDim2.fromScale(0.5, 0.5)}
 						>
 							<Text
-								text={"1,200 DPS"}
+								text={`${dps} DPS`}
 								textColor={Color3.fromRGB(255, 255, 255)}
 								textSize={24}
 								size={UDim2.fromScale(1, 1)}

@@ -1,14 +1,23 @@
 import Roact from "@rbxts/roact";
+import { useRootProducer, useRootSelector } from "@/client/reflex/producers";
 import { MissionHud } from "@/client/ui/component/mission-hud";
 import { SideGroupButtons } from "@/client/ui/component/side-group-buttons";
 import { SimpleButton } from "@/client/ui/component/simple-button";
 import { Stack } from "@/client/ui/component/stack";
 import { UiScaleAspectRatio } from "@/client/ui/component/ui-scale-aspect-ratio";
+import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
+import { selectPlayerMissions } from "@/shared/reflex/selectors";
 
 export const RightSideHud = () => {
 	const rem = useRem();
+	const id = usePlayerId();
+
+	const { missionVisible } = useRootSelector((state) => state.hud);
+	const playerMissions = useRootSelector(selectPlayerMissions(id));
+
+	const { toggleMissionVisible } = useRootProducer();
 
 	return (
 		<Stack
@@ -21,30 +30,24 @@ export const RightSideHud = () => {
 		>
 			<MissionHud.Root>
 				<MissionHud.CardRoot>
-					<MissionHud.Dropdown />
+					<MissionHud.Dropdown onClick={() => toggleMissionVisible()} closed={missionVisible ?? false} />
 					<MissionHud.Card>
-						<MissionHud.MissionText text="0/1" />
-						<MissionHud.Title text="Mission Title" />
+						<MissionHud.MissionText
+							text={`${playerMissions?.all
+								.filter((mission) => mission.completed === true)
+								.size()}/${playerMissions?.all.size()}`}
+						/>
+						<MissionHud.Title text={playerMissions?.all[0] ? playerMissions?.all[0].title : "None"} />
 						<MissionHud.MissionIcon />
 					</MissionHud.Card>
 				</MissionHud.CardRoot>
-				<MissionHud.List>
-					<MissionHud.ListItem>
-						<MissionHud.ListItemText text="Mission" />
-						<MissionHud.ListCheckbox checked={true} />
-					</MissionHud.ListItem>
-					<MissionHud.ListItem>
-						<MissionHud.ListItemText text="Mission" />
-						<MissionHud.ListCheckbox />
-					</MissionHud.ListItem>
-					<MissionHud.ListItem>
-						<MissionHud.ListItemText text="Mission" />
-						<MissionHud.ListCheckbox />
-					</MissionHud.ListItem>
-					<MissionHud.ListItem>
-						<MissionHud.ListItemText text="Mission" />
-						<MissionHud.ListCheckbox />
-					</MissionHud.ListItem>
+				<MissionHud.List visible={missionVisible}>
+					{playerMissions?.all.map((mission) => (
+						<MissionHud.ListItem>
+							<MissionHud.ListItemText text={mission.title} />
+							<MissionHud.ListCheckbox checked={mission.completed} />
+						</MissionHud.ListItem>
+					))}
 				</MissionHud.List>
 				<UiScaleAspectRatio factor={1} />
 			</MissionHud.Root>

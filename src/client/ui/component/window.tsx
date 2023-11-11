@@ -189,7 +189,7 @@ export function Window({ children, Title, Size }: WindowProps) {
 						BorderSizePixel={0}
 						Position={UDim2.fromScale(0, 0.5)}
 						Size={UDim2.fromScale(0, 1)}
-						key={"Label"}
+						ZIndex={3}
 					>
 						<textlabel
 							FontFace={
@@ -213,9 +213,8 @@ export function Window({ children, Title, Size }: WindowProps) {
 							LayoutOrder={2}
 							Position={UDim2.fromScale(0, 0.5)}
 							Size={UDim2.fromScale(0, 0.7)}
-							key={"Label"}
 						>
-							<uistroke key={"UIStroke"} Thickness={3} Transparency={0.25}>
+							<uistroke Thickness={3} Transparency={0.25}>
 								<uigradient
 									key={"UIGradient"}
 									Rotation={90}
@@ -354,7 +353,6 @@ export function Window({ children, Title, Size }: WindowProps) {
 					Position={UDim2.fromScale(1, 0)}
 					Size={UDim2.fromScale(0.17, 0.17)}
 					ZIndex={3}
-					key={"CloseButton"}
 				>
 					<uiaspectratioconstraint key={"UIAspectRatioConstraint"} AspectRatio={0.95} />
 				</imagebutton>

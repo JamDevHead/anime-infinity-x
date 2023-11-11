@@ -6,12 +6,17 @@ export const defaultPlayerData = {
 		stars: 0,
 	},
 	inventory: {},
-	missions: {},
+	missions: {
+		all: [],
+		active: undefined,
+	},
 	fighters: {
 		actives: [],
 		all: [],
 	},
-	boosts: {},
+	boosts: {
+		all: [],
+	},
 	settings: {},
 	zones: {
 		current: "NRT",
