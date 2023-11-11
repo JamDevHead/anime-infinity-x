@@ -1,4 +1,5 @@
 import Roact, { useRef } from "@rbxts/roact";
+import { useRootSelector } from "@/client/reflex/producers";
 import { AttackButton } from "@/client/ui/component/attack-button";
 import { Boost } from "@/client/ui/component/boost";
 import { FadingFrame } from "@/client/ui/component/fading-frame";
@@ -14,6 +15,8 @@ import { images } from "@/shared/assets/images";
 export const BottomHudButtons = () => {
 	const imageRef = useRef<ImageLabel>();
 	const rem = useRem();
+
+	const { dps } = useRootSelector((state) => state.dps);
 
 	return (
 		<>
@@ -128,7 +131,7 @@ export const BottomHudButtons = () => {
 							position={UDim2.fromScale(0.5, 0.5)}
 						>
 							<Text
-								text={"1,200 DPS"}
+								text={`${dps} DPS`}
 								textColor={Color3.fromRGB(255, 255, 255)}
 								textSize={24}
 								size={UDim2.fromScale(1, 1)}
