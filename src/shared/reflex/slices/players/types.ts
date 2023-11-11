@@ -1,7 +1,9 @@
+import { Mission } from "@/@types/models/mission";
+
 export interface PlayerData {
 	balance: PlayerBalance;
 	inventory: NonNullable<unknown>;
-	missions: NonNullable<unknown>;
+	missions: PlayerMission;
 	fighters: PlayerFighters;
 	boosts: NonNullable<unknown>;
 	settings: NonNullable<unknown>;
@@ -26,4 +28,9 @@ export interface PlayerFighters {
 export interface PlayerFighter {
 	name: string;
 	level: number;
+}
+
+export interface PlayerMission {
+	all: Array<Mission>;
+	active: Mission | undefined;
 }

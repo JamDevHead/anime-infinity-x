@@ -20,17 +20,24 @@ export const selectPlayerFighters = (playerId: string) => {
 	};
 };
 
+export const selectPlayerMissions = (playerId: string) => {
+	return (state: SharedState) => {
+		return state.players.missions[playerId];
+	};
+};
+
 export const selectPlayerData = (playerId: string) => {
 	return createSelector(
 		selectPlayerBalance(playerId),
 		selectPlayerZones(playerId),
 		selectPlayerFighters(playerId),
-		(balance, zones, fighters): PlayerData | undefined => {
-			if (!balance || !zones || !fighters) {
+		selectPlayerMissions(playerId),
+		(balance, zones, fighters, missions): PlayerData | undefined => {
+			if (!balance || !zones || !fighters || !missions) {
 				return;
 			}
 
-			return { boosts: {}, fighters, inventory: {}, missions: {}, settings: {}, balance, zones };
+			return { boosts: {}, fighters, inventory: {}, missions, settings: {}, balance, zones };
 		},
 	);
 };
