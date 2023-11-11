@@ -1,5 +1,5 @@
 import Roact from "@rbxts/roact";
-import { useRootSelector } from "@/client/reflex/producers";
+import { useRootProducer, useRootSelector } from "@/client/reflex/producers";
 import { MissionHud } from "@/client/ui/component/mission-hud";
 import { SideGroupButtons } from "@/client/ui/component/side-group-buttons";
 import { SimpleButton } from "@/client/ui/component/simple-button";
@@ -14,7 +14,10 @@ export const RightSideHud = () => {
 	const rem = useRem();
 	const id = usePlayerId();
 
+	const { missionVisible } = useRootSelector((state) => state.hud);
 	const playerMissions = useRootSelector(selectPlayerMissions(id));
+
+	const { toggleMissionVisible } = useRootProducer();
 
 	return (
 		<Stack
@@ -27,7 +30,7 @@ export const RightSideHud = () => {
 		>
 			<MissionHud.Root>
 				<MissionHud.CardRoot>
-					<MissionHud.Dropdown />
+					<MissionHud.Dropdown onClick={() => toggleMissionVisible()} closed={missionVisible ?? false} />
 					<MissionHud.Card>
 						<MissionHud.MissionText
 							text={`${playerMissions?.all
@@ -38,7 +41,7 @@ export const RightSideHud = () => {
 						<MissionHud.MissionIcon />
 					</MissionHud.Card>
 				</MissionHud.CardRoot>
-				<MissionHud.List>
+				<MissionHud.List visible={missionVisible}>
 					{playerMissions?.all.map((mission) => (
 						<MissionHud.ListItem>
 							<MissionHud.ListItemText text={mission.title} />

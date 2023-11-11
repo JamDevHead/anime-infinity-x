@@ -2,6 +2,7 @@ import { useProducer, UseProducerHook, useSelector, UseSelectorHook } from "@rbx
 import { combineProducers, InferState } from "@rbxts/reflex";
 import { slices } from "shared/reflex/slices";
 import { dpsSlice } from "@/client/reflex/slices/dps";
+import { hudSlice } from "@/client/reflex/slices/hud";
 
 export type RootProducer = typeof producer;
 export type RootState = InferState<RootProducer>;
@@ -9,6 +10,7 @@ export type RootState = InferState<RootProducer>;
 export const producer = combineProducers({
 	...slices,
 	dps: dpsSlice,
+	hud: hudSlice,
 });
 
 export const useRootProducer: UseProducerHook<RootProducer> = useProducer;

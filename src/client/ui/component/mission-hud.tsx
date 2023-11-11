@@ -1,5 +1,6 @@
 import Roact, { FunctionComponent, PropsWithChildren } from "@rbxts/roact";
 import { fonts } from "@/client/constants/fonts";
+import { Button } from "@/client/ui/component/button";
 import { Checkbox } from "@/client/ui/component/checkbox";
 import { FadingFrame } from "@/client/ui/component/fading-frame";
 import { Image } from "@/client/ui/component/image";
@@ -60,10 +61,23 @@ const MissionIcon: FunctionComponent = () => {
 	return <Image image={images.icons.mission} size={UDim2.fromOffset(rem(32, "pixel"), rem(32, "pixel"))} />;
 };
 
-const Dropdown: FunctionComponent = () => {
+type DropdownProps = {
+	onClick?: () => void;
+	closed?: boolean;
+};
+
+const Dropdown: FunctionComponent<DropdownProps> = ({ onClick, closed }) => {
 	const rem = useRem();
 
-	return <Image image={images.ui.hud_arrow} size={UDim2.fromOffset(rem(32, "pixel"), rem(32, "pixel"))} />;
+	return (
+		<Button
+			size={UDim2.fromOffset(rem(32, "pixel"), rem(32, "pixel"))}
+			backgroundTransparency={1}
+			onClick={onClick}
+		>
+			<Image image={images.ui.hud_arrow} size={UDim2.fromScale(1, 1)} rotation={closed ? 90 : 0} />
+		</Button>
+	);
 };
 
 const Card: FunctionComponent<PropsWithChildren> = ({ children }) => {
@@ -156,7 +170,11 @@ const ListCheckbox: FunctionComponent<ListCheckboxProps> = ({ checked }) => {
 	return <Checkbox checked={checked} disabled={true} />;
 };
 
-const List: FunctionComponent<PropsWithChildren> = ({ children }) => {
+type ListProps = {
+	visible?: boolean;
+};
+
+const List: FunctionComponent<PropsWithChildren<ListProps>> = ({ children, visible }) => {
 	const rem = useRem();
 
 	return (
@@ -165,6 +183,7 @@ const List: FunctionComponent<PropsWithChildren> = ({ children }) => {
 			horizontalAlignment={Enum.HorizontalAlignment.Right}
 			autoSize={Enum.AutomaticSize.XY}
 			padding={new UDim(0, rem(1))}
+			visible={visible}
 		>
 			{children}
 			<uipadding PaddingLeft={new UDim(0, rem(1))} PaddingRight={new UDim(0, rem(1))} />
