@@ -1,8 +1,8 @@
 import Roact, { FunctionComponent, PropsWithChildren } from "@rbxts/roact";
 import { fonts } from "@/client/constants/fonts";
-import { Image } from "@/client/ui/component/image";
-import { Stack } from "@/client/ui/component/stack";
-import { Text } from "@/client/ui/component/text";
+import { Image } from "@/client/ui/components/image";
+import { Stack } from "@/client/ui/components/stack";
+import { Text } from "@/client/ui/components/text";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
 

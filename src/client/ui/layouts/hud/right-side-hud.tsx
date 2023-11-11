@@ -1,10 +1,10 @@
 import Roact from "@rbxts/roact";
 import { useRootProducer, useRootSelector } from "@/client/reflex/producers";
-import { MissionHud } from "@/client/ui/component/mission-hud";
-import { SideGroupButtons } from "@/client/ui/component/side-group-buttons";
-import { SimpleButton } from "@/client/ui/component/simple-button";
-import { Stack } from "@/client/ui/component/stack";
-import { UiScaleAspectRatio } from "@/client/ui/component/ui-scale-aspect-ratio";
+import { MissionHud } from "@/client/ui/components/mission-hud";
+import { SideGroupButtons } from "@/client/ui/components/side-group-buttons";
+import { SimpleButton } from "@/client/ui/components/simple-button";
+import { Stack } from "@/client/ui/components/stack";
+import { UiScaleAspectRatio } from "@/client/ui/components/ui-scale-aspect-ratio";
 import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";

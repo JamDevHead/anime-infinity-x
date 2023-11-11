@@ -1,6 +1,6 @@
 import Roact, { FunctionComponent, useState } from "@rbxts/roact";
-import { Button } from "@/client/ui/component/button";
-import { Image } from "@/client/ui/component/image";
+import { Button } from "@/client/ui/components/button";
+import { Image } from "@/client/ui/components/image";
 import { images } from "@/shared/assets/images";
 
 type CheckboxProps = {

@@ -1,5 +1,5 @@
 import Roact from "@rbxts/roact";
-import { Hud } from "@/client/ui/layout/hud/hud";
+import { Hud } from "@/client/ui/layouts/hud/hud";
 
 export const App = () => {
 	return (

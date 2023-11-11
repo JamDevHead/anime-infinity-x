@@ -1,5 +1,5 @@
 import Roact, { forwardRef, Ref } from "@rbxts/roact";
-import { FrameProps } from "@/client/ui/component/frame";
+import { FrameProps } from "@/client/ui/components/frame";
 
 export interface CanvasGroupProps extends FrameProps<CanvasGroup> {
 	groupColor?: Color3 | Roact.Binding<Color3>;

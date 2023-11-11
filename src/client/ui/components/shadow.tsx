@@ -1,6 +1,6 @@
 import { composeBindings } from "@rbxts/pretty-react-hooks";
 import Roact, { PropsWithChildren } from "@rbxts/roact";
-import { Image } from "@/client/ui/component/image";
+import { Image } from "@/client/ui/components/image";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
 

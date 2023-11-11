@@ -1,5 +1,5 @@
 import Roact from "@rbxts/roact";
-import { FrameProps } from "@/client/ui/component/frame";
+import { FrameProps } from "@/client/ui/components/frame";
 
 export interface ImageProps extends FrameProps<ImageLabel> {
 	image: string;

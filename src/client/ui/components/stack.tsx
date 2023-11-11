@@ -1,5 +1,5 @@
 import Roact, { FunctionComponent } from "@rbxts/roact";
-import { Frame, FrameProps } from "@/client/ui/component/frame";
+import { Frame, FrameProps } from "@/client/ui/components/frame";
 
 interface FlexBoxProps extends FrameProps {
 	fillDirection: Enum.FillDirection;

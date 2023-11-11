@@ -1,5 +1,5 @@
 import Roact, { PropsWithChildren } from "@rbxts/roact";
-import { Frame, FrameProps } from "@/client/ui/component/frame";
+import { Frame, FrameProps } from "@/client/ui/components/frame";
 
 interface FadingFrameProps extends PropsWithChildren, FrameProps {}
 

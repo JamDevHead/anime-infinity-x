@@ -1,10 +1,10 @@
 import Roact from "@rbxts/roact";
 import { useRootSelector } from "@/client/reflex/producers";
-import { Grid } from "@/client/ui/component/grid";
-import { SimpleButton } from "@/client/ui/component/simple-button";
-import { Stack } from "@/client/ui/component/stack";
-import { Stats } from "@/client/ui/component/stats";
-import { UiScaleAspectRatio } from "@/client/ui/component/ui-scale-aspect-ratio";
+import { Grid } from "@/client/ui/components/grid";
+import { SimpleButton } from "@/client/ui/components/simple-button";
+import { Stack } from "@/client/ui/components/stack";
+import { Stats } from "@/client/ui/components/stats";
+import { UiScaleAspectRatio } from "@/client/ui/components/ui-scale-aspect-ratio";
 import { useAbbreviator } from "@/client/ui/hooks/use-abbreviator";
 import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { useRem } from "@/client/ui/hooks/use-rem";
