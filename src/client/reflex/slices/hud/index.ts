@@ -5,7 +5,7 @@ type HudState = {
 };
 
 const initialState: HudState = {
-	missionVisible: false,
+	missionVisible: true,
 };
 
 export const hudSlice = createProducer(initialState, {
