@@ -1,11 +1,11 @@
 import Roact, { FunctionComponent, PropsWithChildren } from "@rbxts/roact";
 import { fonts } from "@/client/constants/fonts";
-import { Button } from "@/client/ui/component/button";
-import { Checkbox } from "@/client/ui/component/checkbox";
-import { FadingFrame } from "@/client/ui/component/fading-frame";
-import { Image } from "@/client/ui/component/image";
-import { Stack } from "@/client/ui/component/stack";
-import { Text } from "@/client/ui/component/text";
+import { Button } from "@/client/ui/components/button";
+import { Checkbox } from "@/client/ui/components/checkbox";
+import { FadingFrame } from "@/client/ui/components/fading-frame";
+import { Image } from "@/client/ui/components/image";
+import { Stack } from "@/client/ui/components/stack";
+import { Text } from "@/client/ui/components/text";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
 

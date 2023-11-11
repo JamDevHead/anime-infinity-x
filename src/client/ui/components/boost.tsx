@@ -1,9 +1,9 @@
 import Roact, { FunctionComponent, PropsWithChildren } from "@rbxts/roact";
 import { fonts } from "@/client/constants/fonts";
-import { Button } from "@/client/ui/component/button";
-import { Frame } from "@/client/ui/component/frame";
-import { Image } from "@/client/ui/component/image";
-import { Text } from "@/client/ui/component/text";
+import { Button } from "@/client/ui/components/button";
+import { Frame } from "@/client/ui/components/frame";
+import { Image } from "@/client/ui/components/image";
+import { Text } from "@/client/ui/components/text";
 import { useRem } from "@/client/ui/hooks/use-rem";
 
 interface DescriptionProps extends PropsWithChildren {

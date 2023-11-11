@@ -1,5 +1,5 @@
 import Roact, { Element, FunctionComponent, PropsWithChildren, useEffect, useState } from "@rbxts/roact";
-import { Stack } from "@/client/ui/component/stack";
+import { Stack } from "@/client/ui/components/stack";
 
 const Root: FunctionComponent<PropsWithChildren> = ({ children }) => {
 	const [stacks, setStacks] = useState<Element[]>([]);

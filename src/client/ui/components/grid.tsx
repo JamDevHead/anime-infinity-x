@@ -1,5 +1,5 @@
 import Roact, { FunctionComponent, PropsWithChildren } from "@rbxts/roact";
-import { Frame, FrameProps } from "@/client/ui/component/frame";
+import { Frame, FrameProps } from "@/client/ui/components/frame";
 
 interface GridProps extends FrameProps {
 	columns?: number;

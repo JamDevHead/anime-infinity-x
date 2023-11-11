@@ -1,7 +1,7 @@
 import Roact, { PropsWithChildren } from "@rbxts/roact";
-import { Button } from "@/client/ui/component/button";
-import { FrameProps } from "@/client/ui/component/frame";
-import { Image } from "@/client/ui/component/image";
+import { Button } from "@/client/ui/components/button";
+import { FrameProps } from "@/client/ui/components/frame";
+import { Image } from "@/client/ui/components/image";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
 

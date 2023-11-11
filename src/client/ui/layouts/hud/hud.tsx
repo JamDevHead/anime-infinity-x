@@ -1,9 +1,9 @@
 import Roact from "@rbxts/roact";
-import { Frame } from "@/client/ui/component/frame";
-import { Stack } from "@/client/ui/component/stack";
-import { BottomHudButtons } from "@/client/ui/layout/hud/bottom-hud-buttons";
-import { LeftSideHud } from "@/client/ui/layout/hud/left-side-hud";
-import { RightSideHud } from "@/client/ui/layout/hud/right-side-hud";
+import { Frame } from "@/client/ui/components/frame";
+import { Stack } from "@/client/ui/components/stack";
+import { BottomHudButtons } from "@/client/ui/layouts/hud/bottom-hud-buttons";
+import { LeftSideHud } from "@/client/ui/layouts/hud/left-side-hud";
+import { RightSideHud } from "@/client/ui/layouts/hud/right-side-hud";
 
 export const Hud = () => {
 	return (
