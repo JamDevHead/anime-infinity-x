@@ -58,13 +58,55 @@ export class FighterGoal extends BaseComponent<NonNullable<unknown>, Attachment>
 
 		const origin = this.root.Position;
 		const direction = goal.sub(origin);
-		const occlusionResult = Workspace.Spherecast(origin, 1, direction.add(direction.Unit), this.raycastParams);
+
+		const backwardsDirection = this.root.CFrame.LookVector.Unit.mul(-1);
+		const angleCos = math.acos(direction.Unit.Dot(backwardsDirection));
+
+		const backLength = (direction.Magnitude * angleCos) / 2;
+		const backDirection = backwardsDirection.mul(backLength);
+		const backPosition = origin.add(backDirection);
+
+		const rightDirection = goal.sub(backPosition);
+
+		let backResult = Workspace.Raycast(origin, backDirection, this.raycastParams);
 		let result = goal;
 
-		Gizmo.arrow.draw(origin, occlusionResult?.Position ?? goal);
+		if (!backResult) {
+			backResult = {
+				Position: backPosition,
+			} as RaycastResult;
+		}
 
-		if (occlusionResult) {
-			result = occlusionResult.Position.sub(occlusionResult.Normal.mul(-1));
+		let rightResult = Workspace.Raycast(
+			backResult.Position.sub(rightDirection.Unit.mul(1.5)),
+			rightDirection.mul(1.5),
+			this.raycastParams,
+		);
+
+		if (!rightResult) {
+			rightResult = {
+				Position: backResult.Position.add(rightDirection),
+			} as RaycastResult;
+		}
+
+		const purple = {
+			color: Color3.fromRGB(160, 32, 240),
+		};
+
+		Gizmo.arrow.styleDraw(purple, origin, backResult.Position);
+
+		Gizmo.arrow.styleDraw(purple, backResult.Position.sub(rightDirection.Unit.mul(1.5)), rightResult.Position);
+
+		Gizmo.arrow.styleDraw(
+			{
+				color: Color3.fromRGB(255, 0, 0),
+			},
+			origin,
+			rightResult?.Position ?? goal,
+		);
+
+		if (rightResult?.Normal) {
+			result = rightResult.Position.sub(rightResult.Normal.mul(-1));
 		}
 
 		return result;
