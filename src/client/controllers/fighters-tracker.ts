@@ -21,7 +21,9 @@ export class FightersTracker implements OnCharacterAdd {
 
 			goal.Parent = root;
 			goal.Position = rootOffset.add(goalPosition);
+
 			this.fightersContainers.add(goal);
+			goal.AddTag("FighterGoal");
 		}
 	}
 
