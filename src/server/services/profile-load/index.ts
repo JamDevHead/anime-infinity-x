@@ -71,7 +71,7 @@ export class ProfileLoad implements OnStart, OnPlayerAdd {
 		const t1 = os.clock();
 
 		this.logger.Info(`${player.Name} profile loaded in {time}s`, math.round((t1 - t0) * 1000) / 1000);
-		print(`${player.Name} data: ${profile.Data} in ${t1 - t0}`);
+		print(`${player.Name} data:`, profile.Data, `in ${t1 - t0}`);
 		this.profiles.set(player, profile);
 	}
 
