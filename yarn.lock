@@ -1285,10 +1285,9 @@
   resolved "https://registry.yarnpkg.com/@rbxts/flipper/-/flipper-2.0.1.tgz#25bd840441055da419c234a9d045309e40ac3ad2"
   integrity sha512-kxb5AZizP05XSmo3waS/QkcfNMD5b6HX4gGwyHOyBow260R5MIT4L/ZUPLvleXXyb9b67X4NVmHoac1tPXOLNA==
 
-"@rbxts/gizmo@^2.0.5":
+"@rbxts/gizmo@git+https://github.com/JamDevHead/gizmo.git":
   version "2.0.5"
-  resolved "https://registry.yarnpkg.com/@rbxts/gizmo/-/gizmo-2.0.5.tgz#2d3881f105ef1d03a8b95d1759298d64494cfe20"
-  integrity sha512-4mxZUHgstnIx+pOhUHamVtBxdHhaTUuAvZw5nSg01EztLcDqCudvlk1p56GQaj0o/aj0/5S7k46fN3XMiKTtHg==
+  resolved "git+https://github.com/JamDevHead/gizmo.git#ca885640f2bb634f0563ec0d8a347253c8425878"
 
 "@rbxts/log@0.5.0-beta.1":
   version "0.5.0-beta.1"
