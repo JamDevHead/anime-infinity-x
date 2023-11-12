@@ -15,7 +15,7 @@
     "sync:dev": "lune scripts/lune/sync-assets.luau -- --dev",
     "gen:types": "lune scripts/lune/generate-types.luau --",
     "tarmac": "tarmac sync --target roblox",
-    "open:place": "scripts/open-place",
+    "open:place": "scripts/open-place-binary",
     "serve": "rojo serve",
     "deploy:dev": "yarn build:dev && mantle deploy --environment canary",
     "deploy:prod": "yarn build:prod && mantle deploy --environment production",
