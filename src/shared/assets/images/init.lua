@@ -36,6 +36,10 @@ return {
 			stats_bar_base = "rbxassetid://15303347451",
 			stats_bar_coin = "rbxassetid://15303347522",
 			stats_bar_stars = "rbxassetid://15303347597",
+			window_background = "rbxassetid://15340127119",
+			window_close = "rbxassetid://15349268736",
+			window_container = "rbxassetid://15340127871",
+			window_title = "rbxassetid://15341232363",
 		},
 	},
 }

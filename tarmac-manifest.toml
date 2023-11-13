@@ -147,3 +147,23 @@ packable = false
 hash = "21ee36df396c9c10ca93ec1a308b0a561d9447e8fe13ec5da251807c7853d992"
 id = 15303347597
 packable = false
+
+[inputs."assets/images/ui/window_background.png"]
+hash = "4112198a8d3c2029cd8aec53fc386ee81b7ad6dadef2ae2b4a706ca3dd94c350"
+id = 15340127119
+packable = false
+
+[inputs."assets/images/ui/window_close.png"]
+hash = "38cd24476721d052e8073c22a099427bc5e3caedc98f2aafd86523ffb90af9a0"
+id = 15349268736
+packable = false
+
+[inputs."assets/images/ui/window_container.png"]
+hash = "bdc5c7ef7b3325d8218e9df6a44a53487ce6051a3dcb54e6041adfd86441076b"
+id = 15340127871
+packable = false
+
+[inputs."assets/images/ui/window_title.png"]
+hash = "cc8c3f673369039e51490a44f60e56c2bd8bec64fd9f1ed0ffb9e8f7627033c2"
+id = 15341232363
+packable = false
