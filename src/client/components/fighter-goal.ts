@@ -53,10 +53,12 @@ export class FighterGoal extends BaseComponent<NonNullable<unknown>, Attachment>
 		const humanoid = character?.FindFirstChild("Humanoid") as Humanoid | undefined;
 		const isFloating = humanoid?.FloorMaterial === Enum.Material.Air;
 
-		const finalGoal = new CFrame(new Vector3(newGoal.X, isFloating ? goal.Y : groundResult.Position.Y, newGoal.Z));
+		const rootPosition = this.root?.Position.add(this.root?.CFrame.LookVector.mul(6)) ?? goal;
+		const finalGoal = new Vector3(newGoal.X, isFloating ? goal.Y : groundResult.Position.Y, newGoal.Z);
+		const goalLookAt = new Vector3(rootPosition.X, finalGoal.Y, rootPosition.Z);
 
 		// Lerp part to origin
-		this.fighterPart.CFrame = this.fighterPart.CFrame.Lerp(finalGoal, dt * 10);
+		this.fighterPart.CFrame = this.fighterPart.CFrame.Lerp(new CFrame(finalGoal, goalLookAt), dt * 10);
 	}
 
 	private getOcclusionResult(goal: Vector3) {
