@@ -34,5 +34,9 @@ export const images: {
 		readonly stats_bar_star: string;
 		readonly checkbox: string;
 		readonly checkmark: string;
+		readonly window_background: string;
+		readonly window_container: string;
+		readonly window_title: string;
+		readonly window_close: string;
 	};
 };
