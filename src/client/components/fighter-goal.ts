@@ -3,6 +3,7 @@ import { OnRender, OnStart } from "@flamework/core";
 import Gizmo from "@rbxts/gizmo";
 import { Logger } from "@rbxts/log";
 import { Workspace } from "@rbxts/services";
+import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 
 @Component({
 	tag: "FighterGoal",
@@ -12,7 +13,10 @@ export class FighterGoal extends BaseComponent<NonNullable<unknown>, Attachment>
 	private root = this.instance.Parent as Part | undefined;
 	private raycastParams = new RaycastParams();
 
-	constructor(private readonly logger: Logger) {
+	constructor(
+		private readonly logger: Logger,
+		private readonly characterAdd: CharacterAdd,
+	) {
 		super();
 	}
 
@@ -45,7 +49,11 @@ export class FighterGoal extends BaseComponent<NonNullable<unknown>, Attachment>
 			return;
 		}
 
-		const finalGoal = new CFrame(new Vector3(newGoal.X, groundResult.Position.Y, newGoal.Z));
+		const character = this.characterAdd.character;
+		const humanoid = character?.FindFirstChild("Humanoid") as Humanoid | undefined;
+		const isFloating = humanoid?.FloorMaterial === Enum.Material.Air;
+
+		const finalGoal = new CFrame(new Vector3(newGoal.X, isFloating ? goal.Y : groundResult.Position.Y, newGoal.Z));
 
 		// Lerp part to origin
 		this.fighterPart.CFrame = this.fighterPart.CFrame.Lerp(finalGoal, dt * 10);
