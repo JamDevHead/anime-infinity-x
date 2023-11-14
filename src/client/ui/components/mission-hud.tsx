@@ -167,7 +167,7 @@ type ListCheckboxProps = {
 };
 
 const ListCheckbox: FunctionComponent<ListCheckboxProps> = ({ checked }) => {
-	return <Checkbox checked={checked} disabled={true} />;
+	return <Checkbox checked={checked} disabled />;
 };
 
 type ListProps = {
