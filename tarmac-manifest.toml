@@ -133,6 +133,11 @@ hash = "d15f6fde91884c930497e3b582818d4bba167fe9218810455ea47d5a6f2e1a89"
 id = 15278324050
 packable = false
 
+[inputs."assets/images/ui/option_background.png"]
+hash = "b7ba5d5f7346b4478815ba800e9a667d48551a5474fed4253be2f66c6bf02578"
+id = 15358053084
+packable = false
+
 [inputs."assets/images/ui/option_toggle_base.png"]
 hash = "d02f79e809398b8766016dae0b9127f29ceb431116d1d7626f9f58c50484f42f"
 id = 15352121122
