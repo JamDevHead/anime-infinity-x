@@ -79,7 +79,7 @@ export const Window: FunctionComponent<PropsWithChildren<WindowProps>> = ({
 				>
 					<Text
 						text={title}
-						textSize={28}
+						textSize={rem(2)}
 						font={fonts.inter.bold}
 						textColor={Color3.fromRGB(255, 255, 255)}
 						backgroundTransparency={1}
