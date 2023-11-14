@@ -40,5 +40,8 @@ export const images: {
 		readonly window_close: string;
 		readonly confirm_button: string;
 		readonly text_field: string;
+		readonly option_toggle_base: string;
+		readonly option_toggle_on: string;
+		readonly option_toggle_off: string;
 	};
 };

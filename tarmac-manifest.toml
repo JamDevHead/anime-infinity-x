@@ -133,6 +133,21 @@ hash = "d15f6fde91884c930497e3b582818d4bba167fe9218810455ea47d5a6f2e1a89"
 id = 15278324050
 packable = false
 
+[inputs."assets/images/ui/option_toggle_base.png"]
+hash = "d02f79e809398b8766016dae0b9127f29ceb431116d1d7626f9f58c50484f42f"
+id = 15352121122
+packable = false
+
+[inputs."assets/images/ui/option_toggle_off.png"]
+hash = "1b7ae0ec5ef1636114c45c24555cc4e24d670dcb9984562a627c4b134e0e5519"
+id = 15352146313
+packable = false
+
+[inputs."assets/images/ui/option_toggle_on.png"]
+hash = "c007d88b73265c4ec989fb55b849b03f67fb059348fd59d33509ff1e7450cb34"
+id = 15352146405
+packable = false
+
 [inputs."assets/images/ui/rounded_button_base.png"]
 hash = "9e24c345039bc9deab69a4fb534ee29c91302be44dffa9a12ea1df438a3d9f81"
 id = 15267940299
