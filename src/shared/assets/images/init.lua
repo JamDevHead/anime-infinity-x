@@ -33,6 +33,7 @@ return {
 			confirm_button = "rbxassetid://15350028108",
 			hud_arrow = "rbxassetid://15302522438",
 			hud_bottom_curve = "rbxassetid://15278324050",
+			option_background = "rbxassetid://15358053084",
 			option_toggle_base = "rbxassetid://15352121122",
 			option_toggle_off = "rbxassetid://15352146313",
 			option_toggle_on = "rbxassetid://15352146405",

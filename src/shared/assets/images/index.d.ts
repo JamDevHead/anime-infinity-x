@@ -43,5 +43,6 @@ export const images: {
 		readonly option_toggle_base: string;
 		readonly option_toggle_on: string;
 		readonly option_toggle_off: string;
+		readonly option_background: string;
 	};
 };
