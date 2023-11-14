@@ -38,5 +38,7 @@ export const images: {
 		readonly window_container: string;
 		readonly window_title: string;
 		readonly window_close: string;
+		readonly confirm_button: string;
+		readonly text_field: string;
 	};
 };
