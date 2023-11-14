@@ -118,6 +118,11 @@ hash = "35c6ffafd121ff50708a48cd67ea9fc0a5fbff63367c2d8e396bf45048f2c188"
 id = 15303998318
 packable = false
 
+[inputs."assets/images/ui/confirm_button.png"]
+hash = "5e4d80d40e7c8b01b984c9004ab7e6c36388af133a6b2dcc27a99a2c88e09163"
+id = 15350028108
+packable = false
+
 [inputs."assets/images/ui/hud_arrow.png"]
 hash = "40e4b7310260f1487b9dd649c32f5115e00be2702cd0e711605cc43abd0e1806"
 id = 15302522438
@@ -146,6 +151,11 @@ packable = false
 [inputs."assets/images/ui/stats_bar_stars.png"]
 hash = "21ee36df396c9c10ca93ec1a308b0a561d9447e8fe13ec5da251807c7853d992"
 id = 15303347597
+packable = false
+
+[inputs."assets/images/ui/text_field.png"]
+hash = "544c6fcc9f38e5c85b2bf776e3e856495bd153661d67efb1dc080f9130d9cd65"
+id = 15350028209
 packable = false
 
 [inputs."assets/images/ui/window_background.png"]
