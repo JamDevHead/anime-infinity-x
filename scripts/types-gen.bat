@@ -1,1 +1,1 @@
-yarn types:gen
+yarn gen:types

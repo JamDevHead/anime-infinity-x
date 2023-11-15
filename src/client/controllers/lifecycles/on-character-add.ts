@@ -7,8 +7,9 @@ export interface OnCharacterAdd {
 }
 
 @Controller()
-class _CharacterAdd implements OnInit {
+export class CharacterAdd implements OnInit {
 	private listeners = new Set<OnCharacterAdd>();
+	public character: Player["Character"];
 
 	onInit(): void | Promise<void> {
 		Modding.onListenerAdded<OnCharacterAdd>((listener) => this.listeners.add(listener));
@@ -29,12 +30,14 @@ class _CharacterAdd implements OnInit {
 	}
 
 	onCharacterAdded(character: Model) {
+		this.character = character;
 		for (const listener of this.listeners) {
 			task.spawn(() => listener.onCharacterAdded?.(character));
 		}
 	}
 
 	onCharacterRemoved(character: Model) {
+		this.character = undefined;
 		for (const listener of this.listeners) {
 			task.spawn(() => listener.onCharacterRemoved?.(character));
 		}

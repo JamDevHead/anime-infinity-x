@@ -1285,6 +1285,10 @@
   resolved "https://registry.yarnpkg.com/@rbxts/flipper/-/flipper-2.0.1.tgz#25bd840441055da419c234a9d045309e40ac3ad2"
   integrity sha512-kxb5AZizP05XSmo3waS/QkcfNMD5b6HX4gGwyHOyBow260R5MIT4L/ZUPLvleXXyb9b67X4NVmHoac1tPXOLNA==
 
+"@rbxts/gizmo@git+https://github.com/JamDevHead/gizmo.git":
+  version "2.0.5"
+  resolved "git+https://github.com/JamDevHead/gizmo.git#ca885640f2bb634f0563ec0d8a347253c8425878"
+
 "@rbxts/log@0.5.0-beta.1":
   version "0.5.0-beta.1"
   resolved "https://registry.yarnpkg.com/@rbxts/log/-/log-0.5.0-beta.1.tgz#2579abb1da7ca4f23aa745c646763fbc9f2faf6f"
@@ -1392,6 +1396,11 @@
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/@rbxts/reflex/-/reflex-4.2.2.tgz#49b01ca1011230d23451bbb4e2ced068ef82d1bc"
   integrity sha512-TLIwtCyGSHAheEEf9XlfqB9sZHLl02cs+fgNAE351OzQWI2RtCYeBNjAKQ3L0tZstHUQOw7FyiNvZzNQU0rDSw==
+
+"@rbxts/ripple@^0.7.1":
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/@rbxts/ripple/-/ripple-0.7.1.tgz#1b8f0d73f7d74f26ded0694d54c6d383be9a0f78"
+  integrity sha512-m8oJtsfDl1pJArSxz41AdrLGvC6e4zM/biUHdrsqpfPaouhkxSoAvExYwWV9oduDBRb03U5gyEnRpXUOERqiFA==
 
 "@rbxts/roact-compat-internal@^0.3.1":
   version "0.3.1"
