@@ -23,6 +23,7 @@ export const Settings = () => {
 				verticalAlignment="Top"
 				horizontalAlignment="Center"
 				padding={new UDim(0, 32)}
+				size={UDim2.fromScale(1, 1)}
 			>
 				<Text
 					text="~ General ~"
