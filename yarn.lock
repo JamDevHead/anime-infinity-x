@@ -1397,6 +1397,11 @@
   resolved "https://registry.yarnpkg.com/@rbxts/reflex/-/reflex-4.2.2.tgz#49b01ca1011230d23451bbb4e2ced068ef82d1bc"
   integrity sha512-TLIwtCyGSHAheEEf9XlfqB9sZHLl02cs+fgNAE351OzQWI2RtCYeBNjAKQ3L0tZstHUQOw7FyiNvZzNQU0rDSw==
 
+"@rbxts/ripple@^0.7.1":
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/@rbxts/ripple/-/ripple-0.7.1.tgz#1b8f0d73f7d74f26ded0694d54c6d383be9a0f78"
+  integrity sha512-m8oJtsfDl1pJArSxz41AdrLGvC6e4zM/biUHdrsqpfPaouhkxSoAvExYwWV9oduDBRb03U5gyEnRpXUOERqiFA==
+
 "@rbxts/roact-compat-internal@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@rbxts/roact-compat-internal/-/roact-compat-internal-0.3.1.tgz#0de935a65865eb0d5f329199f799db79d0b42737"
