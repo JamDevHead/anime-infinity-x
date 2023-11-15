@@ -10,6 +10,7 @@ export = hoarcekat(() => {
 	return (
 		<RootProvider>
 			<Hud />
+			{/*<WindowManager />*/}
 		</RootProvider>
 	);
 });
