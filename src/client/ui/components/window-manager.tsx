@@ -1,17 +1,34 @@
-import Roact from "@rbxts/roact";
+import Roact, { useEffect } from "@rbxts/roact";
 import { Windows } from "@/client/constants/windows";
-import { useRootProducer, useRootSelector } from "@/client/reflex/producers";
+import { producer, RootState, useRootProducer, useRootSelector } from "@/client/reflex/producers";
 import { Frame } from "@/client/ui/components/frame";
 import { Window } from "@/client/ui/components/window";
+import { useMotion } from "@/client/ui/hooks/use-motion";
 import { Codes } from "@/client/ui/layouts/windows/codes/codes";
 import { Settings } from "@/client/ui/layouts/windows/settings/settings";
 
 export const WindowManager = () => {
 	const { currentWindow, visible } = useRootSelector((store) => store.window);
-	const { setVisibility } = useRootProducer();
+	const { setVisibility, setCurrentWindow } = useRootProducer();
 	const window = Windows[currentWindow ?? "codes"];
 
-	if (!visible || currentWindow === undefined) return <></>;
+	const [position, positionMotion] = useMotion(new UDim2());
+
+	const selectWindow = (state: RootState) => state.window.currentWindow;
+
+	useEffect(() => {
+		return producer.subscribe(selectWindow, (currentWindow, lastWindow) => {
+			if (currentWindow !== lastWindow) {
+				setVisibility(false);
+				task.wait(0.2);
+				setVisibility(true);
+			}
+		});
+	}, [setVisibility]);
+
+	useEffect(() => {
+		positionMotion.spring(visible === true ? UDim2.fromScale(0.5, 0.5) : UDim2.fromScale(0.5, -1));
+	}, [currentWindow, positionMotion, visible]);
 
 	return (
 		<Frame
@@ -20,7 +37,7 @@ export const WindowManager = () => {
 			size={UDim2.fromScale(1, 1)}
 			backgroundTransparency={1}
 		>
-			<Window title={window.title} size={window.size} onClose={() => setVisibility(false)}>
+			<Window title={window.title} size={window.size} position={position} onClose={() => setVisibility(false)}>
 				{currentWindow === "codes" && <Codes />}
 				{currentWindow === "settings" && <Settings />}
 			</Window>

@@ -16,6 +16,10 @@ export const windowSlice = createProducer(initialState, {
 		currentWindow: window,
 		visible,
 	}),
+	setCurrentWindow: (state, window: string) => ({
+		...state,
+		currentWindow: window,
+	}),
 	toggleWindowVisible: (state, window: string) => ({
 		...state,
 		currentWindow: window,
