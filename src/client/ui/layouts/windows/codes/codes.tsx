@@ -16,6 +16,7 @@ export const Codes = () => {
 			verticalAlignment="Center"
 			horizontalAlignment="Center"
 			padding={new UDim(0, 12)}
+			size={UDim2.fromScale(1, 1)}
 		>
 			<Text
 				text="Follow our social medias for CODES and redeem for FREE items!"
