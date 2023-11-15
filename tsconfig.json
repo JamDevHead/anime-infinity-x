@@ -18,6 +18,7 @@
 		"typeRoots": ["node_modules/@rbxts", "node_modules/@flamework"],
 
 		// configurable
+		"skipLibCheck": true,
 		"rootDir": "src",
 		"outDir": "out",
 		"baseUrl": "src",
