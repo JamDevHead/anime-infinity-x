@@ -7,8 +7,7 @@ type WindowSlice = {
 };
 
 const initialState: WindowSlice = {
-	currentWindow: "settings",
-	visible: true,
+	visible: false,
 };
 
 export const windowSlice = createProducer(initialState, {
@@ -20,7 +19,7 @@ export const windowSlice = createProducer(initialState, {
 	toggleWindowVisible: (state, window: string) => ({
 		...state,
 		currentWindow: window,
-		visible: !state.visible,
+		visible: state.currentWindow === window ? !state.visible : true,
 	}),
 	setVisibility: (state, visible: boolean) => ({
 		...state,
