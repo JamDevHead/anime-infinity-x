@@ -13,7 +13,7 @@ export const Stack: FunctionComponent<FlexBoxProps> = (props) => {
 	return (
 		<Frame
 			ref={props.ref}
-			size={props.size || UDim2.fromScale(1, 1)}
+			size={props.size}
 			position={props.position}
 			anchorPoint={props.anchorPoint}
 			rotation={props.rotation}
