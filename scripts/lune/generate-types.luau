@@ -23,8 +23,8 @@ local file = config.outputName
 local extension = options.xml and "rbxlx" or "rbxl"
 local output = `{file}.{extension}`
 
-if not fs.isDir("@types/generated") then
-    fs.writeDir("@types/generated")
+if not fs.isDir("src/@types/generated") then
+    fs.writeDir("src/@types/generated")
 end
 
 local game = roblox.deserializePlace(fs.readFile(output))
@@ -35,7 +35,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local privateAssets = assert(ServerStorage:FindFirstChild("assets"), "Missing assets folder in ServerStorage!")
 local publicAssets = assert(ReplicatedStorage:FindFirstChild("assets"), "Missing assets folder in ReplicatedStorage!")
 
-fs.writeFile("@types/generated/private-assets.d.ts", typeGeneration.parseInstance(privateAssets))
-fs.writeFile("@types/generated/public-assets.d.ts", typeGeneration.parseInstance(publicAssets))
+fs.writeFile("src/@types/generated/private-assets.d.ts", typeGeneration.parseInstance(privateAssets))
+fs.writeFile("src/@types/generated/public-assets.d.ts", typeGeneration.parseInstance(publicAssets))
 
 print(`📦 Generated types in {string.format("%.2f", os.clock() - initialTime)} seconds!`)
