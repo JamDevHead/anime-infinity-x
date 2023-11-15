@@ -5,6 +5,7 @@ export const App = () => {
 	return (
 		<screengui key="app" ResetOnSpawn={false} IgnoreGuiInset={true}>
 			<Hud />
+			{/*<WindowManager />*/}
 		</screengui>
 	);
 };

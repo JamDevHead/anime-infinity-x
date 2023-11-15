@@ -7,7 +7,6 @@ import { ScrollView } from "@/client/ui/components/scroll-view";
 import { Stack } from "@/client/ui/components/stack";
 import { Text } from "@/client/ui/components/text";
 import { ToggleOption } from "@/client/ui/components/toggle-option";
-import { Window } from "@/client/ui/components/window";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
 
@@ -18,7 +17,7 @@ export const Settings = () => {
 	const dispatch = useRootProducer();
 
 	return (
-		<Window title="Settings">
+		<>
 			<Stack
 				fillDirection="Vertical"
 				verticalAlignment="Top"
@@ -66,6 +65,6 @@ export const Settings = () => {
 				PaddingTop={new UDim(0, rem(2.5))}
 				PaddingBottom={new UDim(0, rem(2.5))}
 			/>
-		</Window>
+		</>
 	);
 };

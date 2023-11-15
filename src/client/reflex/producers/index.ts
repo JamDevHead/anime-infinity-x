@@ -4,6 +4,7 @@ import { slices } from "shared/reflex/slices";
 import { dpsSlice } from "@/client/reflex/slices/dps";
 import { hudSlice } from "@/client/reflex/slices/hud";
 import { settingsSlice } from "@/client/reflex/slices/settings";
+import { windowSlice } from "@/client/reflex/slices/window";
 
 export type RootProducer = typeof producer;
 export type RootState = InferState<RootProducer>;
@@ -13,6 +14,7 @@ export const producer = combineProducers({
 	dps: dpsSlice,
 	hud: hudSlice,
 	settings: settingsSlice,
+	window: windowSlice,
 });
 
 export const useRootProducer: UseProducerHook<RootProducer> = useProducer;
