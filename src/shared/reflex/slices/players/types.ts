@@ -22,11 +22,13 @@ export interface PlayerZones {
 }
 
 export interface PlayerFighters {
-	actives: PlayerFighter[];
+	actives: string[];
 	all: PlayerFighter[];
 }
 
 export interface PlayerFighter {
+	zone: string;
+	uid: string;
 	name: string;
 	level: number;
 }

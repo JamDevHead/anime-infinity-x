@@ -2,16 +2,22 @@ import { BaseComponent, Component } from "@flamework/components";
 import { OnRender, OnStart } from "@flamework/core";
 import Gizmo from "@rbxts/gizmo";
 import { Logger } from "@rbxts/log";
-import { Workspace } from "@rbxts/services";
+import { createSelector } from "@rbxts/reflex";
+import { Players, ReplicatedStorage, Workspace } from "@rbxts/services";
+import { Trove } from "@rbxts/trove";
 import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
+import { producer } from "@/client/reflex/producers";
+import { selectPlayerFighters } from "@/shared/reflex/selectors";
 
 @Component({
 	tag: "FighterGoal",
 })
-export class FighterGoal extends BaseComponent<NonNullable<unknown>, Attachment> implements OnStart, OnRender {
+export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> implements OnStart, OnRender {
 	private fighterPart = new Instance("Part");
 	private root = this.instance.Parent as Part | undefined;
 	private raycastParams = new RaycastParams();
+	private trove = new Trove();
+	private fighterModel: Model | undefined;
 
 	constructor(
 		private readonly logger: Logger,
@@ -21,6 +27,8 @@ export class FighterGoal extends BaseComponent<NonNullable<unknown>, Attachment>
 	}
 
 	onStart() {
+		const localPlayer = Players.LocalPlayer;
+
 		this.fighterPart.Name = "FighterPart";
 		this.fighterPart.Anchored = true;
 		this.fighterPart.CanCollide = false;
@@ -38,9 +46,66 @@ export class FighterGoal extends BaseComponent<NonNullable<unknown>, Attachment>
 		if (this.root?.Parent) {
 			this.raycastParams.AddToFilter(this.root.Parent);
 		}
+
+		const selectFighter = (playerId: string, uid: string) => {
+			return createSelector(selectPlayerFighters(playerId), (fighters) => {
+				return fighters?.all.find((fighter) => fighter.uid === uid);
+			});
+		};
+
+		this.logger.Debug("Fighter UID: {uid}", this.attributes.UID);
+
+		this.trove.add(
+			producer.subscribe(selectFighter(tostring(localPlayer.UserId), this.attributes.UID), (fighter) => {
+				this.logger.Debug("fighter: {@fighter}", fighter);
+
+				if (!fighter) {
+					return;
+				}
+
+				const fighterZone = ReplicatedStorage.assets.Avatars.FindFirstChild(fighter.zone);
+				const fighterModel = fighterZone?.FindFirstChild(fighter.name) as Model | undefined;
+
+				if (fighterModel) {
+					// Cleanup fighter model
+					for (const part of fighterModel.GetDescendants()) {
+						if (part.IsA("BasePart")) {
+							part.CanCollide = false;
+							part.CanQuery = false;
+							part.CanTouch = false;
+							part.Anchored = true;
+						}
+					}
+
+					const fighterPivot = fighterModel.GetPivot();
+					fighterModel.WorldPivot = fighterPivot.sub(Vector3.yAxis.mul(-3));
+					fighterModel.Parent = this.instance;
+
+					this.fighterModel = fighterModel;
+				}
+			}),
+		);
+	}
+
+	destroy() {
+		super.destroy();
+		this.trove.destroy();
 	}
 
 	onRender(dt: number) {
+		this.updateFighterGoal(dt);
+		this.updateFighterModel();
+	}
+
+	private updateFighterModel() {
+		if (!this.fighterModel) {
+			return;
+		}
+
+		this.fighterModel.PivotTo(this.fighterPart.CFrame);
+	}
+
+	private updateFighterGoal(dt: number) {
 		const goal = this.instance.WorldPosition;
 		const newGoal = this.getOcclusionResult(goal);
 		const groundResult = newGoal && this.getGroundResult(newGoal);
