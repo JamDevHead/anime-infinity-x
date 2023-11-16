@@ -1,5 +1,6 @@
 import Object from "@rbxts/object-utils";
 import Roact from "@rbxts/roact";
+import { DefaultSettings } from "@/client/constants/default-settings";
 import { fonts } from "@/client/constants/fonts";
 import { useRootProducer, useRootSelector } from "@/client/reflex/producers";
 import { Image } from "@/client/ui/components/image";
@@ -37,16 +38,16 @@ export const Settings = () => {
 						<Image key={key} size={UDim2.fromScale(1, 0.2)} image={images.ui.option_background}>
 							<Stack size={UDim2.fromScale(1, 1)} fillDirection="Horizontal" verticalAlignment="Center">
 								<Text
-									text={value.label}
+									text={DefaultSettings[key].label}
 									font={fonts.inter.bold}
 									textSize={rem(2)}
 									size={UDim2.fromScale(0.8, 1)}
 									textColor={Color3.fromRGB(255, 255, 255)}
 								/>
-								{typeOf(value.value) === "boolean" && (
+								{typeOf(value) === "boolean" && (
 									<ToggleOption
-										checked={value.value as boolean}
-										onChange={(value) => dispatch.setSetting(key as never, value)}
+										checked={value as boolean}
+										onChange={(value) => dispatch.setSetting({ key: key, value: value })}
 									/>
 								)}
 							</Stack>

@@ -83,4 +83,22 @@ export class ProfileLoad implements OnStart, OnPlayerAdd {
 
 		this.profiles.delete(player);
 	}
+
+	public getProfile(player: Player) {
+		return this.profiles.get(player);
+	}
+
+	public setPlayerData<T extends keyof PlayerData>(player: Player, key: T, value: PlayerData[T]) {
+		const profile = this.profiles.get(player);
+		profile?.Data && (profile.Data[key] = value);
+	}
+
+	public getPlayerData<T extends keyof PlayerData>(player: Player, key: T) {
+		const profile = this.profiles.get(player);
+		return profile?.Data && profile.Data[key];
+	}
+
+	public getProfiles() {
+		return this.profiles;
+	}
 }

@@ -9,7 +9,7 @@ import { Settings } from "@/client/ui/layouts/windows/settings/settings";
 
 export const WindowManager = () => {
 	const { currentWindow, visible } = useRootSelector((store) => store.window);
-	const { setVisibility, setCurrentWindow } = useRootProducer();
+	const { setVisibility } = useRootProducer();
 	const window = Windows[currentWindow ?? "codes"];
 
 	const [position, positionMotion] = useMotion(new UDim2());

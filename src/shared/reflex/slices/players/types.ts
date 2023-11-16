@@ -7,7 +7,7 @@ export interface PlayerData {
 	missions: PlayerMission;
 	fighters: PlayerFighters;
 	boosts: PlayerBoosts;
-	settings: NonNullable<unknown>;
+	settings: Record<string, boolean | number>;
 	zones: PlayerZones;
 }
 
