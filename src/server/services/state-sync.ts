@@ -17,7 +17,7 @@ export default class StateSync implements OnStart {
 		const broadcaster = createBroadcaster({
 			producers: slices,
 			dispatch: (player, actions) => {
-				//this.logger.Debug("Dispatching reflex actions: {@actions}", actions);
+				print("Dispatching reflex actions:", actions);
 				dispatchRemote.SendToPlayer(player, actions);
 			},
 		});
