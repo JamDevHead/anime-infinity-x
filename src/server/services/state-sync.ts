@@ -7,25 +7,25 @@ import Remotes from "shared/remotes";
 
 @Service()
 export default class StateSync implements OnStart {
-	constructor(private logger: Logger) {}
+  constructor(private logger: Logger) {}
 
-	onStart() {
-		const reflexNamespace = Remotes.Server.GetNamespace("reflex");
-		const dispatchRemote = reflexNamespace.Get("dispatch");
-		const startRemote = reflexNamespace.Get("start");
+  onStart() {
+    const reflexNamespace = Remotes.Server.GetNamespace("reflex");
+    const dispatchRemote = reflexNamespace.Get("dispatch");
+    const startRemote = reflexNamespace.Get("start");
 
-		const broadcaster = createBroadcaster({
-			producers: slices,
-			dispatch: (player, actions) => {
-				print("Dispatching reflex actions:", actions);
-				dispatchRemote.SendToPlayer(player, actions);
-			},
-		});
+    const broadcaster = createBroadcaster({
+      producers: slices,
+      dispatch: (player, actions) => {
+        print("Dispatching reflex actions:", actions);
+        dispatchRemote.SendToPlayer(player, actions);
+      },
+    });
 
-		startRemote.Connect((player) => {
-			this.logger.Info("Server Reflex state sync started");
-			broadcaster.start(player);
-		});
-		producer.applyMiddleware(broadcaster.middleware);
-	}
+    startRemote.Connect((player) => {
+      this.logger.Info("Server Reflex state sync started");
+      broadcaster.start(player);
+    });
+    producer.applyMiddleware(broadcaster.middleware);
+  }
 }
