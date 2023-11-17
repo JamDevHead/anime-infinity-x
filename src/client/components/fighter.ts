@@ -24,6 +24,8 @@ export class Fighter extends BaseComponent<NonNullable<unknown>, FighterModel> i
 	private animator = this.humanoid.Animator;
 	private trove = new Trove();
 	private animationCache = new Map<string, AnimationTrack>();
+	private lastFighterPosition = Vector3.zero;
+	private fighterVelocity = 0;
 
 	constructor(
 		private readonly logger: Logger,
@@ -41,18 +43,23 @@ export class Fighter extends BaseComponent<NonNullable<unknown>, FighterModel> i
 		});
 	}
 
-	onRender(_dt: number) {
+	onRender(dt: number) {
 		const character = this.characterAdd.character;
 		const humanoid = character?.FindFirstChild("Humanoid") as Humanoid | undefined;
 
-		if (!humanoid?.RootPart) {
+		if (!this.humanoid?.RootPart || !humanoid) {
 			return;
 		}
 
-		const bodyVelocity = humanoid.RootPart.AssemblyLinearVelocity.mul(new Vector3(1, 0, 1)).Magnitude;
-		const isFalling = humanoid.FloorMaterial === Enum.Material.Air;
+		const root = this.humanoid.RootPart;
+		const distance = root.Position.sub(this.lastFighterPosition).Magnitude;
+
+		this.fighterVelocity = distance > 0.15 ? distance / dt : 0;
+		this.lastFighterPosition = root.Position;
+
+		const isFalling = this.humanoid.FloorMaterial === Enum.Material.Air;
 		const isJumping = humanoid.Jump;
-		const isRunning = bodyVelocity > 0.03;
+		const isRunning = this.fighterVelocity > 0.1;
 
 		switch (true) {
 			case isFalling:
@@ -62,7 +69,7 @@ export class Fighter extends BaseComponent<NonNullable<unknown>, FighterModel> i
 				this.swapAnimation("jump");
 				break;
 			case isRunning:
-				this.getAnimationTrack("run")?.AdjustSpeed(bodyVelocity / 16);
+				this.getAnimationTrack("run")?.AdjustSpeed(this.fighterVelocity / 16);
 				this.swapAnimation("run");
 				break;
 			default:
