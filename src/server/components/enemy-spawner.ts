@@ -1,7 +1,7 @@
 import { BaseComponent, Component } from "@flamework/components";
 import { OnStart } from "@flamework/core";
 import { Logger } from "@rbxts/log";
-import { HttpService, ReplicatedStorage } from "@rbxts/services";
+import { HttpService, ServerStorage } from "@rbxts/services";
 import { EnemyModel } from "@/server/components/enemy";
 import { EnemiesSpawner } from "@/server/services/enemies-spawner";
 
@@ -13,7 +13,7 @@ interface EnemyAttributes {
 @Component({ tag: "EnemySpawner" })
 export class Enemy extends BaseComponent<EnemyAttributes, Part> implements OnStart {
 	private currentEnemy: EnemyModel | undefined;
-	private enemiesZone = ReplicatedStorage.assets.Avatars.NPCsModels.FindFirstChild(this.attributes.EnemyZone);
+	private enemiesZone = ServerStorage.assets.Avatars.NPCsModels.FindFirstChild(this.attributes.EnemyZone);
 	private spawnerSurfaceCFrame = this.instance.CFrame.sub(Vector3.yAxis.mul(this.instance.Size.Y / 2));
 
 	constructor(
