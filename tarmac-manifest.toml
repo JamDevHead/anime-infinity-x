@@ -73,6 +73,11 @@ hash = "2ed7067692ff5df3d5b49814860df3ce6ee0b7c1388a7f6caa0fd165d8555162"
 id = 15295231883
 packable = false
 
+[inputs."assets/images/icons/search.png"]
+hash = "51fe5c55f2a91924874217b942d0b4c2155b8964f6cd1e6341038814fa41663e"
+id = 15375260444
+packable = false
+
 [inputs."assets/images/icons/settings.png"]
 hash = "1d5baffc1b06244bfcc7717f5ea7ab27c44896e9329209745ec753df9309b2e3"
 id = 15302168932

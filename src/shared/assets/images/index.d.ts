@@ -22,6 +22,7 @@ export const images: {
 		readonly gift: string;
 		readonly guide: string;
 		readonly store: string;
+		readonly search: string;
 	};
 	readonly ui: {
 		readonly blur: string;

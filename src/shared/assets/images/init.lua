@@ -19,6 +19,7 @@ return {
 			inventory = "rbxassetid://15303915192",
 			mission = "rbxassetid://15302522396",
 			rebirth = "rbxassetid://15295231883",
+			search = "rbxassetid://15375260444",
 			settings = "rbxassetid://15302168932",
 			star = "rbxassetid://15303269918",
 			store = "rbxassetid://15303915226",
