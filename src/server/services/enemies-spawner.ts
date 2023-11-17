@@ -1,6 +1,6 @@
 import { OnStart, Service } from "@flamework/core";
 import { Logger } from "@rbxts/log";
-import { ReplicatedStorage, Workspace } from "@rbxts/services";
+import { ServerStorage, Workspace } from "@rbxts/services";
 import { ZonesLoader } from "./zones-loader";
 
 @Service()
@@ -13,7 +13,7 @@ export class EnemiesSpawner implements OnStart {
 	) {}
 
 	onStart() {
-		const npcModels = ReplicatedStorage.assets.Avatars.NPCsModels;
+		const npcModels = ServerStorage.assets.Avatars.NPCsModels;
 
 		this.enemiesFolder.Name = "Enemies";
 		this.enemiesFolder.Parent = Workspace;
