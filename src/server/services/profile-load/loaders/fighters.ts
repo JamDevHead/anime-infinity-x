@@ -2,7 +2,7 @@ import { Profile } from "@rbxts/profileservice/globals";
 import { ServerStorage } from "@rbxts/services";
 import { PlayerData } from "@/shared/reflex/slices/players/types";
 
-const initialFighter = ServerStorage.assets.Avatars.FightersModels.NRT.TestFighter;
+const initialFighter = ServerStorage.assets.Avatars.NPCsModels.NRT.TestFighter;
 
 export default function loadFighters(profile: Profile<PlayerData>) {
 	const fighters = profile.Data.fighters;
