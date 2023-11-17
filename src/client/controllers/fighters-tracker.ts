@@ -1,7 +1,7 @@
 import { Controller, OnStart } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { createSelector } from "@rbxts/reflex";
-import { Players } from "@rbxts/services";
+import { Players, Workspace } from "@rbxts/services";
 import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { producer } from "@/client/reflex/producers";
 import { selectPlayerFighters } from "@/shared/reflex/selectors";
@@ -14,6 +14,8 @@ const selectActiveFighters = (playerId: string) => {
 
 @Controller()
 export class FightersTracker implements OnStart, OnCharacterAdd {
+	public fightersFolder = new Instance("Folder");
+
 	private localPlayer = Players.LocalPlayer;
 	private root: Part | undefined;
 	private fightersContainers = new Set<Attachment>();
@@ -22,12 +24,17 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 	constructor(private readonly logger: Logger) {}
 
 	onStart() {
-		producer.subscribe(selectActiveFighters(tostring(this.localPlayer.UserId)), (fighters) => {
+		this.fightersFolder.Name = "Fighters";
+		this.fightersFolder.Parent = Workspace;
+
+		producer.subscribe(selectActiveFighters(tostring(this.localPlayer.UserId)), (fighters, oldFighters) => {
 			if (!fighters) {
 				return;
 			}
 
-			this.logger.Debug("Active fighters changed", fighters);
+			this.logger.Debug("Fighters changed? {condition}", fighters === oldFighters);
+
+			this.logger.Debug("Active fighters changed");
 
 			this.fighters = fighters;
 			this.updateFighters();
@@ -52,7 +59,10 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 			return;
 		}
 
+		// TODO: don't remove goals, just reposition them
 		this.onCharacterRemoved();
+
+		this.logger.Debug("Updating fighters");
 
 		const goals = this.getGoals();
 		const rootOffset = new Vector3(4, -3, 3);
