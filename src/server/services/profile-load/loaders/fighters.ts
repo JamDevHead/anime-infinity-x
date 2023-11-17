@@ -1,16 +1,23 @@
 import { Profile } from "@rbxts/profileservice/globals";
-import { ServerStorage } from "@rbxts/services";
+import { HttpService, ReplicatedStorage } from "@rbxts/services";
+import { producer } from "@/server/reflex/producers";
 import { PlayerData } from "@/shared/reflex/slices/players/types";
 
-const initialFighter = ServerStorage.assets.Avatars.NPCsModels.NRT.TestFighter;
+const initialFighter = ReplicatedStorage.assets.Avatars.FightersModels.NRT.Bro;
 
 export default function loadFighters(profile: Profile<PlayerData>) {
-	const fighters = profile.Data.fighters;
+  const fighters = profile.Data.fighters;
+  const userId = tostring(profile.UserIds.shift());
 
-	if (fighters.all.size() === 0) {
-		fighters.all.push({
-			name: initialFighter.Name,
-			level: 0,
-		});
-	}
+  if (fighters.all.size() === 0) {
+    const uid = HttpService.GenerateGUID(false);
+
+    producer.addFighter(userId, uid, {
+      name: initialFighter.Name,
+      level: 0,
+      zone: initialFighter.Parent!.Name,
+    });
+
+    producer.setActiveFighter(userId, uid);
+  }
 }

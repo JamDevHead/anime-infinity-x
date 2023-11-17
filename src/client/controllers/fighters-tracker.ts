@@ -1,46 +1,101 @@
-import { Controller } from "@flamework/core";
+import { Controller, OnStart } from "@flamework/core";
 import { Logger } from "@rbxts/log";
+import { createSelector } from "@rbxts/reflex";
+import { Players, Workspace } from "@rbxts/services";
 import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
+import { producer } from "@/client/reflex/producers";
+import { selectPlayerFighters } from "@/shared/reflex/selectors";
+
+const selectActiveFighters = (playerId: string) => {
+  return createSelector(selectPlayerFighters(playerId), (fighters) => {
+    return fighters?.actives;
+  });
+};
 
 @Controller()
-export class FightersTracker implements OnCharacterAdd {
-	private fightersContainers = new Set<Attachment>();
+export class FightersTracker implements OnStart, OnCharacterAdd {
+  public fightersFolder = new Instance("Folder");
 
-	constructor(private readonly logger: Logger) {}
+  private localPlayer = Players.LocalPlayer;
+  private root: Part | undefined;
+  private fightersContainers = new Set<Attachment>();
+  private fighters: string[] = [];
 
-	onCharacterAdded(character: Model) {
-		const root = character.WaitForChild("HumanoidRootPart") as Part;
-		const goals = this.getGoals(1);
-		const rootOffset = new Vector3(4, -3, 3);
+  constructor(private readonly logger: Logger) {}
 
-		for (const goalPosition of goals) {
-			const goal = new Instance("Attachment");
+  onStart() {
+    this.fightersFolder.Name = "Fighters";
+    this.fightersFolder.Parent = Workspace;
 
-			goal.Name = "FighterGoal";
-			goal.Visible = true;
+    producer.subscribe(selectActiveFighters(tostring(this.localPlayer.UserId)), (fighters, oldFighters) => {
+      if (!fighters) {
+        return;
+      }
 
-			goal.Parent = root;
-			goal.Position = rootOffset.add(goalPosition);
+      this.logger.Debug("Fighters changed? {condition}", fighters === oldFighters);
 
-			this.fightersContainers.add(goal);
-			goal.AddTag("FighterGoal");
-		}
-	}
+      this.logger.Debug("Active fighters changed");
 
-	onCharacterRemoved() {
-		for (const container of this.fightersContainers) {
-			container.Destroy();
-		}
+      this.fighters = fighters;
+      this.updateFighters();
+    });
+  }
 
-		this.fightersContainers.clear();
-	}
+  onCharacterAdded(character: Model) {
+    this.root = character.WaitForChild("HumanoidRootPart") as Part;
+    this.updateFighters();
+  }
 
-	private getGoals(_trooperAmount: number) {
-		const goals = new Set<Vector3>();
+  onCharacterRemoved() {
+    for (const container of this.fightersContainers) {
+      container.Destroy();
+    }
 
-		// TODO: dynamic goal formation based on trooper amount
-		goals.add(Vector3.zero); // Center goal
+    this.fightersContainers.clear();
+  }
 
-		return goals;
-	}
+  private updateFighters() {
+    if (!this.root?.Parent) {
+      return;
+    }
+
+    // TODO: don't remove goals, just reposition them
+    this.onCharacterRemoved();
+
+    this.logger.Debug("Updating fighters");
+
+    const goals = this.getGoals();
+    const rootOffset = new Vector3(4, -3, 3);
+
+    for (const [uid, goalPosition] of goals) {
+      const goal = new Instance("Attachment");
+
+      goal.Name = "FighterGoal";
+      goal.Visible = true;
+
+      goal.Parent = this.root;
+      goal.Position = rootOffset.add(goalPosition);
+
+      this.fightersContainers.add(goal);
+
+      goal.SetAttribute("UID", uid);
+      goal.AddTag("FighterGoal");
+    }
+  }
+
+  private getGoals() {
+    const goals = new Map<string, Vector3>();
+    let index = 1;
+
+    // TODO: dynamic goal formation based on trooper amount
+    for (const uid of this.fighters) {
+      const odd = index % 2 === 0;
+      const goal = Vector3.xAxis.mul(odd ? index * 3 : index * -3);
+
+      goals.set(uid, goal);
+      index++;
+    }
+
+    return goals;
+  }
 }
