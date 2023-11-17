@@ -151,7 +151,8 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 
 		const rootPosition = this.root?.Position.add(this.root?.CFrame.LookVector.mul(6)) ?? goal;
 		const finalGoal = new Vector3(newGoal.X, isFloating ? goal.Y : groundResult.Position.Y, newGoal.Z);
-		const goalLookAt = new Vector3(rootPosition.X, finalGoal.Y, rootPosition.Z);
+		const horizontalVector = new Vector3(1, 0, 1);
+		const goalLookAt = finalGoal.add(rootPosition.mul(horizontalVector).sub(finalGoal.mul(horizontalVector)).Unit);
 
 		// Lerp part to origin
 		this.fighterPart.CFrame = this.fighterPart.CFrame.Lerp(new CFrame(finalGoal, goalLookAt), dt * 10);
