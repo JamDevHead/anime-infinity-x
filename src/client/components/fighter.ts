@@ -1,8 +1,8 @@
 import { BaseComponent, Component } from "@flamework/components";
 import { OnRender, OnStart } from "@flamework/core";
-import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
-import { Trove } from "@rbxts/trove";
 import { Logger } from "@rbxts/log";
+import { Trove } from "@rbxts/trove";
+import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 
 interface FighterModel extends Model {
 	Humanoid: Humanoid & {
@@ -19,7 +19,7 @@ const animationMap = {
 } as const;
 
 @Component({ tag: "Fighter" })
-export class Fighter extends BaseComponent<{}, FighterModel> implements OnStart, OnRender {
+export class Fighter extends BaseComponent<NonNullable<unknown>, FighterModel> implements OnStart, OnRender {
 	private humanoid = this.instance.Humanoid;
 	private animator = this.humanoid.Animator;
 	private trove = new Trove();
@@ -41,7 +41,7 @@ export class Fighter extends BaseComponent<{}, FighterModel> implements OnStart,
 		});
 	}
 
-	onRender(dt: number) {
+	onRender(_dt: number) {
 		const character = this.characterAdd.character;
 		const humanoid = character?.FindFirstChild("Humanoid") as Humanoid | undefined;
 
@@ -49,9 +49,10 @@ export class Fighter extends BaseComponent<{}, FighterModel> implements OnStart,
 			return;
 		}
 
+		const bodyVelocity = humanoid.RootPart.AssemblyLinearVelocity.mul(new Vector3(1, 0, 1)).Magnitude;
 		const isFalling = humanoid.FloorMaterial === Enum.Material.Air;
 		const isJumping = humanoid.Jump;
-		const isRunning = humanoid.RootPart.AssemblyLinearVelocity.mul(new Vector3(1, 0, 1)).Magnitude > 0.03;
+		const isRunning = bodyVelocity > 0.03;
 
 		switch (true) {
 			case isFalling:
@@ -61,6 +62,7 @@ export class Fighter extends BaseComponent<{}, FighterModel> implements OnStart,
 				this.swapAnimation("jump");
 				break;
 			case isRunning:
+				this.getAnimationTrack("run")?.AdjustSpeed(bodyVelocity / 16);
 				this.swapAnimation("run");
 				break;
 			default:
