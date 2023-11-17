@@ -38,6 +38,7 @@ export function Image(props: ImageProps) {
 			BorderSizePixel={0}
 			Event={props.event || {}}
 			Change={props.change || {}}
+			AutomaticSize={props.autoSize}
 		>
 			{props.cornerRadius && <uicorner key="corner" CornerRadius={props.cornerRadius} />}
 			{props.children}

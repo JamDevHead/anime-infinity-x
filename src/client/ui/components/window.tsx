@@ -1,362 +1,120 @@
-import Roact, { PropsWithChildren } from "@rbxts/roact";
+import Roact, { FunctionComponent, PropsWithChildren } from "@rbxts/roact";
+import { fonts } from "@/client/constants/fonts";
+import { Button } from "@/client/ui/components/button";
+import { Frame, FrameProps } from "@/client/ui/components/frame";
+import { Image } from "@/client/ui/components/image";
+import { Text } from "@/client/ui/components/text";
+import { useRem } from "@/client/ui/hooks/use-rem";
+import { images } from "@/shared/assets/images";
 
-interface WindowProps extends PropsWithChildren {
-	Title: string;
-	Size: UDim2;
-}
+type WindowProps = FrameProps & {
+	title: string;
+	size?: UDim2;
+	onClose?: () => void;
+};
 
-export function Window({ children, Title, Size }: WindowProps) {
+export const Window: FunctionComponent<PropsWithChildren<WindowProps>> = ({
+	children,
+	size,
+	title,
+	onClose,
+	position,
+}) => {
+	const rem = useRem();
+
 	return (
-		<frame
-			AnchorPoint={new Vector2(0.5, 0.5)}
-			BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-			BackgroundTransparency={1}
-			BorderColor3={Color3.fromRGB(0, 0, 0)}
-			BorderSizePixel={0}
-			Position={UDim2.fromScale(0.5, 0.5)}
-			Size={UDim2.fromScale(1, 1)}
-			key={"Bounds"}
+		<Frame
+			size={UDim2.fromScale(1, 1)}
+			position={UDim2.fromScale(0.5, 0.5)}
+			anchorPoint={new Vector2(0.5, 0.5)}
+			backgroundTransparency={1}
 		>
-			<uiaspectratioconstraint key={"UIAspectRatioConstraint"} />
-
-			<frame
-				key={"Frame"}
-				AnchorPoint={new Vector2(0.5, 0.5)}
-				BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-				BackgroundTransparency={1}
-				BorderColor3={Color3.fromRGB(0, 0, 0)}
-				BorderSizePixel={0}
-				Position={UDim2.fromScale(0.5, 0.5)}
-				Size={Size}
+			<uiaspectratioconstraint AspectRatio={1.5} />
+			<Image
+				image={images.ui.window_container}
+				anchorPoint={new Vector2(0.5, 0.5)}
+				size={size || UDim2.fromScale(0.5, 0.5)}
+				position={position || UDim2.fromScale(0.5, 0.5)}
 			>
-				<frame
-					AnchorPoint={new Vector2(0.5, 0.5)}
-					BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-					BackgroundTransparency={1}
-					BorderColor3={Color3.fromRGB(0, 0, 0)}
-					BorderSizePixel={0}
-					Position={UDim2.fromScale(0.5, 0.5)}
-					Size={UDim2.fromScale(1, 1)}
-					ZIndex={0}
-					key={"Background"}
+				<Image
+					image={images.ui.window_background}
+					size={UDim2.fromScale(0.85, 0.85)}
+					position={UDim2.fromScale(0.5, 0.5)}
+					anchorPoint={new Vector2(0.5, 0.5)}
 				>
-					<imagelabel
-						Image={"rbxassetid://14547833083"}
-						AnchorPoint={new Vector2(0.5, 0.5)}
-						BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-						BackgroundTransparency={1}
-						BorderColor3={Color3.fromRGB(0, 0, 0)}
-						BorderSizePixel={0}
-						Position={UDim2.fromScale(0.5, 0.5)}
-						Size={UDim2.fromScale(1, 1)}
-						key={"Label"}
+					<Frame
+						size={new UDim2(1, rem(-8, "pixel"), 1, rem(-8, "pixel"))}
+						position={UDim2.fromScale(0.5, 0.5)}
+						anchorPoint={new Vector2(0.5, 0.5)}
+						backgroundTransparency={1}
 					>
-						<uistroke
-							key={"UIStroke"}
-							ApplyStrokeMode={Enum.ApplyStrokeMode.Border}
-							Color={Color3.fromRGB(255, 255, 255)}
-							LineJoinMode={Enum.LineJoinMode.Bevel}
-							Thickness={3}
-						>
+						<uistroke Thickness={4} Color={Color3.fromRGB(0, 0, 0)} />
+					</Frame>
+					<Frame
+						size={new UDim2(1, rem(-12, "pixel"), 1, rem(-12, "pixel"))}
+						position={UDim2.fromScale(0.5, 0.5)}
+						anchorPoint={new Vector2(0.5, 0.5)}
+						backgroundTransparency={1}
+					>
+						{children}
+					</Frame>
+					<uistroke Thickness={4} Color={Color3.fromRGB(255, 255, 255)}>
+						<uigradient
+							Color={
+								new ColorSequence([
+									new ColorSequenceKeypoint(0, Color3.fromHex("#FF9900")),
+									new ColorSequenceKeypoint(1, Color3.fromHex("#FFD600")),
+								])
+							}
+							Rotation={90}
+						/>
+					</uistroke>
+				</Image>
+
+				<Image
+					image={images.ui.window_title}
+					position={UDim2.fromScale(0.01, 0.05)}
+					autoSize={Enum.AutomaticSize.XY}
+					rotation={-3}
+				>
+					<Text
+						text={title}
+						textSize={rem(2)}
+						font={fonts.inter.bold}
+						textColor={Color3.fromRGB(255, 255, 255)}
+						backgroundTransparency={1}
+						textAutoResize="XY"
+					>
+						<uistroke Thickness={2} Color={Color3.fromRGB(0, 0, 0)}>
 							<uigradient
-								key={"UIGradient"}
-								Color={
-									new ColorSequence([
-										new ColorSequenceKeypoint(0, Color3.fromRGB(255, 153, 0)),
-										new ColorSequenceKeypoint(1, Color3.fromRGB(255, 214, 0)),
+								Transparency={
+									new NumberSequence([
+										new NumberSequenceKeypoint(0, 0),
+										new NumberSequenceKeypoint(1, 0.7),
 									])
 								}
 								Rotation={90}
 							/>
 						</uistroke>
-					</imagelabel>
-
-					<frame
-						AnchorPoint={new Vector2(0.5, 0.5)}
-						BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-						BackgroundTransparency={1}
-						BorderColor3={Color3.fromRGB(0, 0, 0)}
-						BorderSizePixel={0}
-						Position={UDim2.fromScale(0.5, 0.5)}
-						Size={new UDim2(1, 16, 1, 16)}
-						ZIndex={0}
-						key={"Geometry"}
-					>
-						<imagelabel
-							Image={"rbxassetid://14547918297"}
-							AnchorPoint={new Vector2(0.5, 0.5)}
-							BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-							BackgroundTransparency={1}
-							BorderColor3={Color3.fromRGB(0, 0, 0)}
-							BorderSizePixel={0}
-							Position={UDim2.fromScale(0.51, 0.484)}
-							Size={UDim2.fromScale(1.1, 1.13)}
-							ZIndex={0}
-							key={"Label"}
-						/>
-					</frame>
-
-					<canvasgroup
-						AnchorPoint={new Vector2(0.5, 0.5)}
-						BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-						BackgroundTransparency={1}
-						BorderColor3={Color3.fromRGB(0, 0, 0)}
-						BorderSizePixel={0}
-						Position={UDim2.fromScale(0.5, 0.5)}
-						Size={UDim2.fromScale(1, 1)}
-						ZIndex={2}
-						key={"BackTriangles"}
-					>
-						<imagelabel
-							Image={"rbxassetid://14547779251"}
-							ImageColor3={Color3.fromRGB(0, 0, 0)}
-							ImageTransparency={0.95}
-							AnchorPoint={new Vector2(0.5, 0.5)}
-							BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-							BackgroundTransparency={1}
-							BorderColor3={Color3.fromRGB(0, 0, 0)}
-							BorderSizePixel={0}
-							Position={UDim2.fromScale(0.5, 0.5)}
-							Size={UDim2.fromOffset(100, 100)}
-							key={"Triangle"}
-						/>
-					</canvasgroup>
-				</frame>
-
-				<frame
-					AnchorPoint={new Vector2(0.5, 0.5)}
-					BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-					BackgroundTransparency={1}
-					BorderColor3={Color3.fromRGB(0, 0, 0)}
-					BorderSizePixel={0}
-					Position={UDim2.fromScale(0.5, 0.5)}
-					Size={UDim2.fromScale(1, 1)}
-					key={"Content"}
+					</Text>
+					<uipadding
+						PaddingLeft={new UDim(0, rem(18, "pixel"))}
+						PaddingRight={new UDim(0, rem(18, "pixel"))}
+						PaddingTop={new UDim(0, rem(12, "pixel"))}
+						PaddingBottom={new UDim(0, rem(12, "pixel"))}
+					/>
+				</Image>
+				<Button
+					onClick={onClose}
+					size={UDim2.fromOffset(rem(5), rem(5))}
+					position={UDim2.fromScale(0.92, 0.1)}
+					anchorPoint={new Vector2(0.5, 0.5)}
+					rotation={-4}
+					backgroundTransparency={1}
 				>
-					{children}
-				</frame>
-
-				<frame
-					AnchorPoint={new Vector2(0.5, 0.5)}
-					BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-					BackgroundTransparency={1}
-					BorderColor3={Color3.fromRGB(0, 0, 0)}
-					BorderSizePixel={0}
-					Position={UDim2.fromScale(0.5, 0.5)}
-					Size={UDim2.fromScale(1, 1)}
-					ZIndex={2}
-					key={"Foreground"}
-				>
-					<frame
-						AnchorPoint={new Vector2(0.5, 0.5)}
-						BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-						BackgroundTransparency={1}
-						BorderColor3={Color3.fromRGB(0, 0, 0)}
-						BorderSizePixel={0}
-						Position={UDim2.fromScale(0.5, 0.5)}
-						Size={new UDim2(1, -8, 1, -8)}
-						key={"Inline"}
-					>
-						<uistroke
-							key={"UIStroke"}
-							ApplyStrokeMode={Enum.ApplyStrokeMode.Border}
-							LineJoinMode={Enum.LineJoinMode.Miter}
-							Thickness={4}
-							Transparency={0.5}
-						/>
-					</frame>
-				</frame>
-
-				<frame
-					AnchorPoint={new Vector2(0.25, 1)}
-					AutomaticSize={Enum.AutomaticSize.X}
-					BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-					BackgroundTransparency={1}
-					BorderColor3={Color3.fromRGB(0, 0, 0)}
-					BorderSizePixel={0}
-					Position={UDim2.fromScale(0.025, 0.05)}
-					Rotation={-3.69}
-					Size={UDim2.fromScale(0, 0.128)}
-					ZIndex={3}
-					key={"Title"}
-				>
-					<frame
-						AnchorPoint={new Vector2(0, 0.5)}
-						AutomaticSize={Enum.AutomaticSize.X}
-						BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-						BackgroundTransparency={1}
-						BorderColor3={Color3.fromRGB(0, 0, 0)}
-						BorderSizePixel={0}
-						Position={UDim2.fromScale(0, 0.5)}
-						Size={UDim2.fromScale(0, 1)}
-						ZIndex={3}
-					>
-						<textlabel
-							FontFace={
-								new Font(
-									"rbxasset://fonts/families/GothamSSm.json",
-									Enum.FontWeight.Heavy,
-									Enum.FontStyle.Normal,
-								)
-							}
-							Text={Title}
-							TextColor3={Color3.fromRGB(255, 255, 255)}
-							TextScaled={true}
-							TextSize={14}
-							TextWrapped={true}
-							AnchorPoint={new Vector2(0, 0.5)}
-							AutomaticSize={Enum.AutomaticSize.X}
-							BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-							BackgroundTransparency={1}
-							BorderColor3={Color3.fromRGB(0, 0, 0)}
-							BorderSizePixel={0}
-							LayoutOrder={2}
-							Position={UDim2.fromScale(0, 0.5)}
-							Size={UDim2.fromScale(0, 0.7)}
-						>
-							<uistroke Thickness={3} Transparency={0.25}>
-								<uigradient
-									key={"UIGradient"}
-									Rotation={90}
-									Transparency={
-										new NumberSequence([
-											new NumberSequenceKeypoint(0, 0),
-											new NumberSequenceKeypoint(1, 0.667),
-										])
-									}
-								/>
-							</uistroke>
-						</textlabel>
-
-						<uilistlayout
-							key={"UIListLayout"}
-							FillDirection={Enum.FillDirection.Horizontal}
-							HorizontalAlignment={Enum.HorizontalAlignment.Center}
-							SortOrder={Enum.SortOrder.LayoutOrder}
-							VerticalAlignment={Enum.VerticalAlignment.Center}
-						/>
-
-						<frame
-							BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-							BackgroundTransparency={1}
-							BorderColor3={Color3.fromRGB(0, 0, 0)}
-							BorderSizePixel={0}
-							LayoutOrder={1}
-							Size={UDim2.fromScale(0.469, 1)}
-							SizeConstraint={Enum.SizeConstraint.RelativeYY}
-							key={"Padding"}
-						/>
-
-						<frame
-							BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-							BackgroundTransparency={1}
-							BorderColor3={Color3.fromRGB(0, 0, 0)}
-							BorderSizePixel={0}
-							LayoutOrder={3}
-							Size={UDim2.fromScale(0.469, 1)}
-							SizeConstraint={Enum.SizeConstraint.RelativeYY}
-							key={"Padding"}
-						/>
-					</frame>
-
-					<frame
-						AnchorPoint={new Vector2(0.5, 0.5)}
-						BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-						BackgroundTransparency={1}
-						BorderColor3={Color3.fromRGB(0, 0, 0)}
-						BorderSizePixel={0}
-						Position={UDim2.fromScale(0.5, 0.5)}
-						Size={UDim2.fromScale(1, 1)}
-						ZIndex={0}
-						key={"Back"}
-					>
-						<imagelabel
-							Image={"rbxassetid://14548396550"}
-							ScaleType={Enum.ScaleType.Slice}
-							SliceCenter={new Rect(42, 0, 46, 0)}
-							AnchorPoint={new Vector2(0.5, 0.5)}
-							BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-							BackgroundTransparency={1}
-							BorderColor3={Color3.fromRGB(0, 0, 0)}
-							BorderSizePixel={0}
-							Position={UDim2.fromScale(0.5, 0.5)}
-							Size={UDim2.fromScale(1, 1)}
-							ZIndex={-3}
-							key={"Color"}
-						>
-							<uigradient
-								key={"UIGradient"}
-								Color={
-									new ColorSequence([
-										new ColorSequenceKeypoint(0, Color3.fromRGB(40, 64, 190)),
-										new ColorSequenceKeypoint(1, Color3.fromRGB(26, 53, 193)),
-									])
-								}
-								Rotation={90}
-							/>
-						</imagelabel>
-
-						<imagelabel
-							Image={"rbxassetid://14548395602"}
-							ImageColor3={Color3.fromRGB(0, 0, 0)}
-							ImageTransparency={0.5}
-							ScaleType={Enum.ScaleType.Slice}
-							SliceCenter={new Rect(42, 0, 46, 0)}
-							AnchorPoint={new Vector2(0.5, 0.5)}
-							BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-							BackgroundTransparency={1}
-							BorderColor3={Color3.fromRGB(0, 0, 0)}
-							BorderSizePixel={0}
-							Position={UDim2.fromScale(0.5, 0.5)}
-							Size={UDim2.fromScale(1, 1)}
-							ZIndex={-2}
-							key={"Inline"}
-						/>
-
-						<imagelabel
-							Image={"rbxassetid://14548394535"}
-							ScaleType={Enum.ScaleType.Slice}
-							SliceCenter={new Rect(42, 0, 46, 0)}
-							AnchorPoint={new Vector2(0.5, 0.5)}
-							BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-							BackgroundTransparency={1}
-							BorderColor3={Color3.fromRGB(0, 0, 0)}
-							BorderSizePixel={0}
-							Position={UDim2.fromScale(0.5, 0.5)}
-							Size={UDim2.fromScale(1, 1)}
-							ZIndex={-1}
-							key={"Outline"}
-						>
-							<uigradient
-								key={"UIGradient"}
-								Color={
-									new ColorSequence([
-										new ColorSequenceKeypoint(0, Color3.fromRGB(255, 214, 0)),
-										new ColorSequenceKeypoint(1, Color3.fromRGB(255, 153, 0)),
-									])
-								}
-								Rotation={90}
-							/>
-						</imagelabel>
-					</frame>
-				</frame>
-
-				<imagebutton
-					Image={"rbxassetid://14557812960"}
-					ScaleType={Enum.ScaleType.Fit}
-					AutoButtonColor={false}
-					AnchorPoint={new Vector2(0.5, 0.5)}
-					BackgroundColor3={Color3.fromRGB(255, 255, 255)}
-					BackgroundTransparency={1}
-					BorderColor3={Color3.fromRGB(0, 0, 0)}
-					BorderSizePixel={0}
-					Position={UDim2.fromScale(1, 0)}
-					Size={UDim2.fromScale(0.17, 0.17)}
-					ZIndex={3}
-				>
-					<uiaspectratioconstraint key={"UIAspectRatioConstraint"} AspectRatio={0.95} />
-				</imagebutton>
-			</frame>
-		</frame>
+					<Image image={images.ui.window_close} size={UDim2.fromScale(1, 1)} />
+				</Button>
+			</Image>
+		</Frame>
 	);
-}
+};

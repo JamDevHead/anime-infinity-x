@@ -1,17 +1,15 @@
 import { hoarcekat } from "@rbxts/pretty-react-hooks";
 import Roact from "@rbxts/roact";
-import { WindowManager } from "@/client/ui/components/window-manager";
-import { useMockData } from "@/client/ui/hooks/use-mock-data";
-import { Hud } from "@/client/ui/layouts/hud/hud";
+import { Window } from "@/client/ui/components/window";
+import { Codes } from "@/client/ui/layouts/windows/codes/codes";
 import { RootProvider } from "@/client/ui/providers/root-provider";
 
 export = hoarcekat(() => {
-	useMockData();
-
 	return (
 		<RootProvider>
-			<Hud />
-			<WindowManager />
+			<Window title="Codes">
+				<Codes />
+			</Window>
 		</RootProvider>
 	);
 });

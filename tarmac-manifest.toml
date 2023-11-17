@@ -118,6 +118,11 @@ hash = "35c6ffafd121ff50708a48cd67ea9fc0a5fbff63367c2d8e396bf45048f2c188"
 id = 15303998318
 packable = false
 
+[inputs."assets/images/ui/confirm_button.png"]
+hash = "5e4d80d40e7c8b01b984c9004ab7e6c36388af133a6b2dcc27a99a2c88e09163"
+id = 15350028108
+packable = false
+
 [inputs."assets/images/ui/hud_arrow.png"]
 hash = "40e4b7310260f1487b9dd649c32f5115e00be2702cd0e711605cc43abd0e1806"
 id = 15302522438
@@ -126,6 +131,26 @@ packable = false
 [inputs."assets/images/ui/hud_bottom_curve.png"]
 hash = "d15f6fde91884c930497e3b582818d4bba167fe9218810455ea47d5a6f2e1a89"
 id = 15278324050
+packable = false
+
+[inputs."assets/images/ui/option_background.png"]
+hash = "b7ba5d5f7346b4478815ba800e9a667d48551a5474fed4253be2f66c6bf02578"
+id = 15358053084
+packable = false
+
+[inputs."assets/images/ui/option_toggle_base.png"]
+hash = "d02f79e809398b8766016dae0b9127f29ceb431116d1d7626f9f58c50484f42f"
+id = 15352121122
+packable = false
+
+[inputs."assets/images/ui/option_toggle_off.png"]
+hash = "1b7ae0ec5ef1636114c45c24555cc4e24d670dcb9984562a627c4b134e0e5519"
+id = 15352146313
+packable = false
+
+[inputs."assets/images/ui/option_toggle_on.png"]
+hash = "c007d88b73265c4ec989fb55b849b03f67fb059348fd59d33509ff1e7450cb34"
+id = 15352146405
 packable = false
 
 [inputs."assets/images/ui/rounded_button_base.png"]
@@ -146,4 +171,29 @@ packable = false
 [inputs."assets/images/ui/stats_bar_stars.png"]
 hash = "21ee36df396c9c10ca93ec1a308b0a561d9447e8fe13ec5da251807c7853d992"
 id = 15303347597
+packable = false
+
+[inputs."assets/images/ui/text_field.png"]
+hash = "544c6fcc9f38e5c85b2bf776e3e856495bd153661d67efb1dc080f9130d9cd65"
+id = 15350028209
+packable = false
+
+[inputs."assets/images/ui/window_background.png"]
+hash = "4112198a8d3c2029cd8aec53fc386ee81b7ad6dadef2ae2b4a706ca3dd94c350"
+id = 15340127119
+packable = false
+
+[inputs."assets/images/ui/window_close.png"]
+hash = "38cd24476721d052e8073c22a099427bc5e3caedc98f2aafd86523ffb90af9a0"
+id = 15349268736
+packable = false
+
+[inputs."assets/images/ui/window_container.png"]
+hash = "bdc5c7ef7b3325d8218e9df6a44a53487ce6051a3dcb54e6041adfd86441076b"
+id = 15340127871
+packable = false
+
+[inputs."assets/images/ui/window_title.png"]
+hash = "cc8c3f673369039e51490a44f60e56c2bd8bec64fd9f1ed0ffb9e8f7627033c2"
+id = 15341232363
 packable = false
