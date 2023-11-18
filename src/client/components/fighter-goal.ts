@@ -51,27 +51,37 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 		}
 		this.raycastParams.AddToFilter(this.fighterTracker.fightersFolder);
 
+		const playerId = tostring(localPlayer.UserId);
 		const selectFighter = (playerId: string, uid: string) => {
 			return createSelector(selectPlayerFighters(playerId), (fighters) => {
 				return fighters?.all.find((fighter) => fighter.uid === uid);
 			});
 		};
 
-		const doesFighterExists = (fighter: PlayerFighter | undefined): fighter is PlayerFighter =>
-			fighter !== undefined;
-		const fighterSelector = selectFighter(tostring(localPlayer.UserId), this.attributes.UID);
+		const onNewFighterUid = (uid: string) => {
+			const fighter = producer.getState(selectFighter(playerId, uid));
 
-		const fighter = producer.getState(fighterSelector);
+			if (this.fighterModel) {
+				this.trove.remove(this.fighterModel);
+			}
 
-		if (fighter) {
-			this.onFighterCreation(fighter);
-		} else {
-			this.trove.add(
-				producer.once(fighterSelector, doesFighterExists, (fighter) =>
-					this.onFighterCreation(fighter as PlayerFighter),
-				),
-			);
-		}
+			if (!fighter) {
+				return;
+			}
+
+			this.fighterModel = this.createFighterModel(fighter);
+			this.updateFighterGoal(0.1);
+		};
+
+		onNewFighterUid(this.attributes.UID);
+		this.onAttributeChanged("UID", (newUid, oldUid) => {
+			// May never trigger, but on roblox things change
+			if (newUid === oldUid) {
+				return;
+			}
+
+			onNewFighterUid(newUid);
+		});
 	}
 
 	destroy() {
@@ -84,7 +94,7 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 		this.updateFighterModel();
 	}
 
-	private onFighterCreation(fighter: PlayerFighter) {
+	private createFighterModel(fighter: PlayerFighter) {
 		const fighterZone = ReplicatedStorage.assets.Avatars.FightersModels.FindFirstChild(fighter.zone);
 		const fighterModel = fighterZone?.FindFirstChild(fighter.name)?.Clone() as Model | undefined;
 
@@ -109,13 +119,8 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 
 		fighterModel.AddTag("Fighter");
 
-		if (this.fighterModel) {
-			this.trove.remove(this.fighterModel);
-		}
 		this.trove.add(fighterModel);
-
-		this.fighterModel = fighterModel;
-		this.updateFighterGoal(10);
+		return fighterModel;
 	}
 
 	private updateFighterModel() {
