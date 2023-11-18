@@ -4,7 +4,7 @@ import { Logger } from "@rbxts/log";
 import { Trove } from "@rbxts/trove";
 import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 
-interface FighterModel extends Model {
+interface IFighterModel extends Model {
 	Humanoid: Humanoid & {
 		Animator: Animator;
 	};
@@ -19,7 +19,7 @@ const animationMap = {
 } as const;
 
 @Component({ tag: "Fighter" })
-export class Fighter extends BaseComponent<NonNullable<unknown>, FighterModel> implements OnStart, OnRender {
+export class FighterModel extends BaseComponent<NonNullable<unknown>, IFighterModel> implements OnStart, OnRender {
 	private humanoid = this.instance.Humanoid;
 	private animator = this.humanoid.Animator;
 	private trove = new Trove();
