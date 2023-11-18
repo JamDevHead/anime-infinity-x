@@ -1,6 +1,7 @@
 import { OnInit, Service } from "@flamework/core";
 import { Logger } from "@rbxts/log";
-import { ZirconConfigurationBuilder, ZirconServer } from "@rbxts/zircon";
+import { ZirconServer } from "@rbxts/zircon";
+import { ZirconServerConfig } from "@/server/constants/zircon-server-config";
 
 @Service({})
 export class Zircon implements OnInit {
@@ -9,6 +10,6 @@ export class Zircon implements OnInit {
 	onInit(): void | Promise<void> {
 		this.logger.Info("Zircon service initialized");
 
-		ZirconServer.Registry.Init(ZirconConfigurationBuilder.default().Build());
+		ZirconServer.Registry.Init(ZirconServerConfig.Build());
 	}
 }

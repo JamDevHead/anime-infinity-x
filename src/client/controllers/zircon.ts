@@ -1,6 +1,7 @@
 import { Controller, OnInit } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { ZirconClient } from "@rbxts/zircon";
+import { ZirconClientConfig } from "@/client/constants/zircon-client-config";
 
 @Controller({})
 export class Zircon implements OnInit {
@@ -12,5 +13,6 @@ export class Zircon implements OnInit {
 		ZirconClient.Init({
 			Keys: [Enum.KeyCode.Backquote, Enum.KeyCode.Insert],
 		});
+		ZirconClient.Registry.Init(ZirconClientConfig.Build());
 	}
 }
