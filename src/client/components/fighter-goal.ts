@@ -156,7 +156,8 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 		const horizontalVector = new Vector3(1, 0, 1);
 
 		const fighterGoalDiff = finalGoal.sub(fighterPosition);
-		const lookAt = fighterGoalDiff.Magnitude > 0.8 ? fighterGoalDiff.Unit : this.root.CFrame.LookVector;
+		const lookAt =
+			fighterGoalDiff.Magnitude > 0.8 && !isFloating ? fighterGoalDiff.Unit : this.root.CFrame.LookVector;
 
 		const goalLookAt = finalGoal.add(lookAt.mul(horizontalVector).mul(1.5));
 
