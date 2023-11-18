@@ -19,7 +19,7 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 	private readonly RootOffset = new Vector3(0, -3, 4);
 	private localPlayer = Players.LocalPlayer;
 	private root: Part | undefined;
-	private activeFighters = new Map<string, Attachment | undefined>();
+	private activeFighters = new Map<string, Attachment | false>();
 
 	constructor(private readonly logger: Logger) {}
 
@@ -49,6 +49,13 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 
 	onCharacterRemoved() {
 		this.root = undefined;
+		this.activeFighters.forEach((goalAttachment, uid) => {
+			this.activeFighters.set(uid, false);
+
+			if (goalAttachment) {
+				goalAttachment.Destroy();
+			}
+		});
 	}
 
 	private createFighter(uid: string) {
@@ -58,7 +65,7 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 			goalAttachment = new Instance("Attachment");
 		}
 
-		this.activeFighters.set(uid, goalAttachment);
+		this.activeFighters.set(uid, goalAttachment ?? false);
 
 		if (goalAttachment) {
 			goalAttachment.Name = "GoalAttachment";
@@ -68,7 +75,12 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 	}
 
 	private removeFighter(uid: string) {
-		this.activeFighters.get(uid)?.Destroy();
+		const attachment = this.activeFighters.get(uid);
+
+		if (attachment) {
+			attachment.Destroy();
+		}
+
 		this.activeFighters.delete(uid);
 	}
 
