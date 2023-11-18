@@ -16,10 +16,10 @@ const selectActiveFighters = (playerId: string) => {
 export class FightersTracker implements OnStart, OnCharacterAdd {
 	public fightersFolder = new Instance("Folder");
 
+	private readonly RootOffset = new Vector3(0, -3, 4);
 	private localPlayer = Players.LocalPlayer;
 	private root: Part | undefined;
-	private fightersContainers = new Set<Attachment>();
-	private fighters: string[] = [];
+	private activeFighters = new Map<string, Attachment | undefined>();
 
 	constructor(private readonly logger: Logger) {}
 
@@ -27,67 +27,101 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 		this.fightersFolder.Name = "Fighters";
 		this.fightersFolder.Parent = Workspace;
 
-		producer.observe(selectActiveFighters(tostring(this.localPlayer.UserId)), (fighter) => {
-			this.fighters = [...this.fighters, fighter];
+		producer.observe(selectActiveFighters(tostring(this.localPlayer.UserId)), (uid) => {
+			this.logger.Debug("New active fighter {uid}", uid);
+			this.createFighter(uid);
 			this.updateFighters();
 
-			return () => this.logger.Debug("Removing fighter");
+			return () => {
+				this.logger.Debug("Removing fighter");
+				this.removeFighter(uid);
+				this.updateFighters();
+			};
 		});
 	}
 
 	onCharacterAdded(character: Model) {
 		this.root = character.WaitForChild("HumanoidRootPart") as Part;
+		for (const [uid] of this.activeFighters) {
+			this.createFighter(uid);
+		}
 		this.updateFighters();
 	}
 
 	onCharacterRemoved() {
-		for (const container of this.fightersContainers) {
-			container.Destroy();
+		this.root = undefined;
+	}
+
+	private createFighter(uid: string) {
+		let goalAttachment = this.activeFighters.get(uid);
+
+		if (!goalAttachment && this.root) {
+			goalAttachment = new Instance("Attachment");
 		}
 
-		this.fightersContainers.clear();
+		this.activeFighters.set(uid, goalAttachment);
+
+		if (goalAttachment) {
+			goalAttachment.Name = "GoalAttachment";
+			goalAttachment.Visible = true;
+			goalAttachment.Parent = this.root;
+		}
+	}
+
+	private removeFighter(uid: string) {
+		this.activeFighters.get(uid)?.Destroy();
+		this.activeFighters.delete(uid);
 	}
 
 	private updateFighters() {
-		if (!this.root?.Parent) {
-			return;
+		const troopSize = this.activeFighters.size();
+		const formation = this.getFormation(troopSize);
+		const formationSize = formation.size();
+		let index = 0;
+
+		this.logger.Debug("Updating {size} positions", troopSize);
+
+		for (const [uid, goalAttachment] of this.activeFighters) {
+			index++;
+
+			if (!goalAttachment) {
+				continue;
+			}
+
+			const fighterGoal = formation[index % formationSize];
+
+			goalAttachment.Position = this.RootOffset.add(fighterGoal);
+			goalAttachment.SetAttribute("UID", uid);
+			goalAttachment.AddTag("FighterGoal");
 		}
 
-		// TODO: don't remove goals, just reposition them
-		this.onCharacterRemoved();
-
-		const goals = this.getGoals();
-		const rootOffset = new Vector3(4, -3, 3);
-
-		for (const [uid, goalPosition] of goals) {
-			const goal = new Instance("Attachment");
-
-			goal.Name = "FighterGoal";
-			goal.Visible = true;
-
-			goal.Parent = this.root;
-			goal.Position = rootOffset.add(goalPosition);
-
-			this.fightersContainers.add(goal);
-
-			goal.SetAttribute("UID", uid);
-			goal.AddTag("FighterGoal");
-		}
+		print("Updated", this.activeFighters);
 	}
 
-	private getGoals() {
-		const goals = new Map<string, Vector3>();
-		let index = 1;
+	private getFormation(troopAmount: number, spacing = 4) {
+		const rows = math.ceil((math.sqrt(8 * troopAmount + 1) - 1) / 2);
 
-		// TODO: dynamic goal formation based on trooper amount
-		for (const uid of this.fighters) {
-			const odd = index % 2 === 0;
-			const goal = Vector3.xAxis.mul(odd ? index * 3 : index * -3);
+		return this.generateTriangleFormation(rows, spacing);
+	}
 
-			goals.set(uid, goal);
-			index++;
+	private generateTriangleFormation(rows: number, spacing: number) {
+		const formationShape: Vector3[] = [];
+
+		const halfWidth = ((rows - 1) * spacing) / 2;
+
+		for (let i = 0; i < rows; i++) {
+			for (let j = 0; j <= i; j++) {
+				let x = i * spacing - halfWidth;
+				const z = j * spacing;
+
+				if (j % 2 === 0) {
+					x += spacing / 2;
+				}
+
+				formationShape.push(new Vector3(x - spacing / 2, 0, z));
+			}
 		}
 
-		return goals;
+		return formationShape;
 	}
 }
