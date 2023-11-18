@@ -45,12 +45,12 @@ export const fightersSlice = createProducer(initialState, {
 			...state,
 			[playerId]: {
 				all: playerData.all.filter((fighter) => fighter.uid !== fighterUid),
-				actives: playerData.actives,
+				actives: playerData.actives.filter((uid) => uid !== fighterUid),
 			},
 		};
 	},
 
-	setActiveFighter: (state, playerId: string, fighterUid: string) => {
+	addActiveFighter: (state, playerId: string, fighterUid: string) => {
 		const playerData = state[playerId];
 
 		if (!playerData) {
@@ -77,7 +77,7 @@ export const fightersSlice = createProducer(initialState, {
 			...state,
 			[playerId]: {
 				all: playerData.all,
-				actives: playerData.actives.filter((activeFighter) => activeFighter !== fighterUid),
+				actives: playerData.actives.filter((uid) => uid !== fighterUid),
 			},
 		};
 	},
