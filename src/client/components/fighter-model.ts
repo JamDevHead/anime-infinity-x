@@ -1,5 +1,5 @@
 import { BaseComponent, Component } from "@flamework/components";
-import { OnRender, OnStart } from "@flamework/core";
+import { OnPhysics, OnRender, OnStart } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { Trove } from "@rbxts/trove";
 import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
@@ -19,8 +19,12 @@ const animationMap = {
 } as const;
 
 @Component({ tag: "Fighter" })
-export class FighterModel extends BaseComponent<NonNullable<unknown>, IFighterModel> implements OnStart, OnRender {
+export class FighterModel
+	extends BaseComponent<NonNullable<unknown>, IFighterModel>
+	implements OnStart, OnRender, OnPhysics
+{
 	private humanoid = this.instance.Humanoid;
+	private torso = this.instance.FindFirstChild("Torso") as Part | undefined;
 	private animator = this.humanoid.Animator;
 	private trove = new Trove();
 	private animationCache = new Map<string, AnimationTrack>();
@@ -39,6 +43,14 @@ export class FighterModel extends BaseComponent<NonNullable<unknown>, IFighterMo
 			this.animationCache.forEach((track) => track.Destroy());
 			this.animationCache.clear();
 		});
+	}
+
+	onPhysics() {
+		if (!this.torso) {
+			return;
+		}
+
+		this.torso.CanCollide = false;
 	}
 
 	onRender(dt: number) {

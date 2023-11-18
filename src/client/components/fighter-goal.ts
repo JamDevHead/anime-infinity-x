@@ -131,13 +131,6 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 		const fighterPartSize = this.fighterPart.Size.Y / 2;
 
 		this.fighterModel.PivotTo(this.fighterPart.CFrame.add(Vector3.yAxis.mul(3 - fighterPartSize)));
-
-		// Disable torso collision
-		const torso = this.fighterModel.FindFirstChild("Torso") as BasePart | undefined;
-
-		if (torso) {
-			torso.CanCollide = false;
-		}
 	}
 
 	private updateFighterGoal(dt: number) {
