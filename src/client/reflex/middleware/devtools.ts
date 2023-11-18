@@ -10,7 +10,6 @@ export const devToolsMiddleware: ProducerMiddleware<RootState> = () => {
 			const state = nextAction(...args);
 
 			if (RunService.IsStudio() && event) {
-				print(actionName, args, state);
 				event.FireServer({ name: actionName, args: [...args], state });
 			}
 
