@@ -18,6 +18,7 @@ export function receiverMiddleware(producer: RootProducer): ProducerMiddleware {
 	});
 
 	hydrateRemote.Connect((state) => {
+		receiver.hydrate(state);
 		devToolsMiddleware(producer)(() => state, "__hydrate__")();
 	});
 
