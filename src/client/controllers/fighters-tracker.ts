@@ -28,12 +28,11 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 		this.fightersFolder.Parent = Workspace;
 
 		producer.observe(selectActiveFighters(tostring(this.localPlayer.UserId)), (uid) => {
-			this.logger.Debug("New active fighter {uid}", uid);
 			this.createFighter(uid);
 			this.updateFighters();
 
 			return () => {
-				this.logger.Debug("Removing fighter");
+				this.logger.Debug("Removing fighter {uid}", uid);
 				this.removeFighter(uid);
 				this.updateFighters();
 			};
@@ -79,8 +78,6 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 		const formationSize = formation.size();
 		let index = 0;
 
-		this.logger.Debug("Updating {size} positions", troopSize);
-
 		for (const [uid, goalAttachment] of this.activeFighters) {
 			index++;
 
@@ -94,8 +91,6 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 			goalAttachment.SetAttribute("UID", uid);
 			goalAttachment.AddTag("FighterGoal");
 		}
-
-		print("Updated", this.activeFighters);
 	}
 
 	private getFormation(troopAmount: number, spacing = 4) {
