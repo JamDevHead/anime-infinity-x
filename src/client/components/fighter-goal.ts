@@ -109,6 +109,11 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 
 		fighterModel.AddTag("Fighter");
 
+		if (this.fighterModel) {
+			this.trove.remove(this.fighterModel);
+		}
+		this.trove.add(fighterModel);
+
 		this.fighterModel = fighterModel;
 		this.updateFighterGoal(10);
 	}
