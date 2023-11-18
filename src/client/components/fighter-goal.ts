@@ -134,6 +134,10 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 	}
 
 	private updateFighterGoal(dt: number) {
+		if (!this.root) {
+			return;
+		}
+
 		const goal = this.instance.WorldPosition;
 		const newGoal = this.getOcclusionResult(goal);
 		const groundResult = newGoal && this.getGroundResult(newGoal);
@@ -146,10 +150,15 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 		const humanoid = character?.FindFirstChild("Humanoid") as Humanoid | undefined;
 		const isFloating = humanoid?.FloorMaterial === Enum.Material.Air;
 
-		const rootPosition = this.root?.Position.add(this.root?.CFrame.LookVector.mul(6)) ?? goal;
 		const finalGoal = new Vector3(newGoal.X, isFloating ? goal.Y : groundResult.Position.Y, newGoal.Z);
+
+		const fighterPosition = this.fighterPart.Position;
 		const horizontalVector = new Vector3(1, 0, 1);
-		const goalLookAt = finalGoal.add(rootPosition.mul(horizontalVector).sub(finalGoal.mul(horizontalVector)).Unit);
+
+		const fighterGoalDiff = finalGoal.sub(fighterPosition);
+		const lookAt = fighterGoalDiff.Magnitude > 0.8 ? fighterGoalDiff.Unit : this.root.CFrame.LookVector;
+
+		const goalLookAt = finalGoal.add(lookAt.mul(horizontalVector).mul(1.5));
 
 		// Lerp part to origin
 		this.fighterPart.CFrame = this.fighterPart.CFrame.Lerp(new CFrame(finalGoal, goalLookAt), dt * 10);
