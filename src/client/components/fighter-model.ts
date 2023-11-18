@@ -39,6 +39,16 @@ export class FighterModel
 	}
 
 	onStart() {
+		// Cleanup fighter model
+		for (const part of this.instance.GetDescendants()) {
+			if (part.IsA("BasePart")) {
+				part.CanCollide = false;
+				part.CanQuery = false;
+				part.Anchored = false;
+				part.CanTouch = false;
+			}
+		}
+
 		this.trove.add(() => {
 			this.animationCache.forEach((track) => track.Destroy());
 			this.animationCache.clear();
