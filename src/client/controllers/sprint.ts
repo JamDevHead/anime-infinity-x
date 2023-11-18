@@ -1,5 +1,4 @@
 import { Controller } from "@flamework/core";
-import { Logger } from "@rbxts/log";
 import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { OnInput } from "@/client/controllers/lifecycles/on-input";
 
@@ -7,15 +6,11 @@ import { OnInput } from "@/client/controllers/lifecycles/on-input";
 export class Sprint implements OnCharacterAdd, OnInput {
 	private humanoid: Humanoid | undefined;
 
-	constructor(private readonly logger: Logger) {}
-
 	onCharacterAdded(character: Model) {
-		this.logger.Debug("Sprint character added");
 		this.humanoid = character.WaitForChild("Humanoid") as unknown as Humanoid;
 	}
 
 	onCharacterRemoved() {
-		this.logger.Debug("Sprint character removed");
 		this.humanoid = undefined;
 	}
 

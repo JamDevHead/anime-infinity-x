@@ -35,8 +35,6 @@ export class Fighter extends BaseComponent<NonNullable<unknown>, FighterModel> i
 	}
 
 	onStart() {
-		this.logger.Debug("Created animator handler for fighter");
-
 		this.trove.add(() => {
 			this.animationCache.forEach((track) => track.Destroy());
 			this.animationCache.clear();

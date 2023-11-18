@@ -28,8 +28,6 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 		this.fightersFolder.Parent = Workspace;
 
 		producer.observe(selectActiveFighters(tostring(this.localPlayer.UserId)), (fighter) => {
-			this.logger.Debug("Active fighters changed");
-
 			this.fighters = [...this.fighters, fighter];
 			this.updateFighters();
 
@@ -57,8 +55,6 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 
 		// TODO: don't remove goals, just reposition them
 		this.onCharacterRemoved();
-
-		this.logger.Debug("Updating fighters");
 
 		const goals = this.getGoals();
 		const rootOffset = new Vector3(4, -3, 3);
