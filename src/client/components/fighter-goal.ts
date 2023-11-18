@@ -75,8 +75,8 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 
 		onNewFighterUid(this.attributes.UID);
 		this.onAttributeChanged("UID", (newUid, oldUid) => {
-			// May never trigger, but on roblox things change
 			if (newUid === oldUid) {
+				// May never reach, but on roblox things change
 				return;
 			}
 
@@ -104,19 +104,6 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 		}
 
 		fighterModel.Parent = this.fighterTracker.fightersFolder;
-
-		task.defer(() => {
-			// Cleanup fighter model
-			for (const part of fighterModel.GetDescendants()) {
-				if (part.IsA("BasePart")) {
-					part.CanCollide = false;
-					part.CanQuery = false;
-					part.Anchored = false;
-					part.CanTouch = false;
-				}
-			}
-		});
-
 		fighterModel.AddTag("Fighter");
 
 		this.trove.add(fighterModel);
@@ -160,9 +147,15 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 			fighterGoalDiff.Magnitude > 0.8 && !isFloating ? fighterGoalDiff.Unit : this.root.CFrame.LookVector;
 
 		const goalLookAt = finalGoal.add(lookAt.mul(horizontalVector).mul(1.5));
+		const goalCFrame = new CFrame(finalGoal, goalLookAt);
+
+		if (this.fighterPart.Position.Magnitude === math.huge) {
+			this.fighterPart.Position = goalCFrame.Position;
+			return;
+		}
 
 		// Lerp part to origin
-		this.fighterPart.CFrame = this.fighterPart.CFrame.Lerp(new CFrame(finalGoal, goalLookAt), dt * 10);
+		this.fighterPart.CFrame = this.fighterPart.CFrame.Lerp(goalCFrame, math.clamp(dt * 10, 0, 1));
 	}
 
 	private getOcclusionResult(goal: Vector3) {
