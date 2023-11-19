@@ -11,6 +11,8 @@ import { producer } from "@/client/reflex/producers";
 import { selectPlayerFighters } from "@/shared/reflex/selectors";
 import { PlayerFighter } from "@/shared/reflex/slices/players/types";
 
+const FAR_CFRAME = new CFrame(0, 5e9, 0);
+
 @Component({
 	tag: "FighterGoal",
 })
@@ -126,20 +128,23 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 		}
 
 		const goal = this.instance.WorldPosition;
-		const newGoal = this.getOcclusionResult(goal);
-		const groundResult = newGoal && this.getGroundResult(newGoal);
+		const fighterPosition = this.fighterPart.Position;
+		const occlusionResult = this.getOcclusionResult(goal);
+		const groundResult = occlusionResult && this.getGroundResult(occlusionResult);
 
-		if (!newGoal || !groundResult) {
+		if (!occlusionResult || !groundResult) {
+			this.fighterPart.CFrame = FAR_CFRAME;
 			return;
 		}
 
+		debug.profilebegin(`fighter goal update ${this.attributes.UID}`);
+
 		const character = this.characterAdd.character;
 		const humanoid = character?.FindFirstChild("Humanoid") as Humanoid | undefined;
-		const isFloating = humanoid?.FloorMaterial === Enum.Material.Air;
+		const isFloating = humanoid?.GetState() === Enum.HumanoidStateType.Freefall;
 
-		const finalGoal = new Vector3(newGoal.X, isFloating ? goal.Y : groundResult.Position.Y, newGoal.Z);
+		const finalGoal = new Vector3(occlusionResult.X, isFloating ? goal.Y : groundResult.Y, occlusionResult.Z);
 
-		const fighterPosition = this.fighterPart.Position;
 		const horizontalVector = new Vector3(1, 0, 1);
 
 		const fighterGoalDiff = finalGoal.sub(fighterPosition);
@@ -155,7 +160,8 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 		}
 
 		// Lerp part to origin
-		this.fighterPart.CFrame = this.fighterPart.CFrame.Lerp(goalCFrame, math.clamp(dt * 10, 0, 1));
+		this.fighterPart.CFrame = this.fighterPart.CFrame.Lerp(goalCFrame, dt * 10);
+		debug.profileend();
 	}
 
 	private getOcclusionResult(goal: Vector3) {
@@ -204,14 +210,6 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 
 		Gizmo.arrow.styleDraw(purple, backResult.Position.sub(rightDirection.Unit.mul(1.5)), rightResult.Position);
 
-		Gizmo.arrow.styleDraw(
-			{
-				color: Color3.fromRGB(255, 0, 0),
-			},
-			origin,
-			rightResult?.Position ?? goal,
-		);
-
 		if (rightResult?.Normal) {
 			result = rightResult.Position.sub(rightResult.Normal.mul(-1));
 		}
@@ -232,6 +230,6 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 		Gizmo.arrow.draw(goal, origin);
 		Gizmo.arrow.draw(origin, downRaycast?.Position ?? origin.add(Vector3.yAxis.mul(-100)));
 
-		return downRaycast;
+		return downRaycast?.Position;
 	}
 }
