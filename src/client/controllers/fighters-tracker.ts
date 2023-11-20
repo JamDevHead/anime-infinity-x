@@ -69,7 +69,6 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 
 		if (goalAttachment) {
 			goalAttachment.Name = "GoalAttachment";
-			goalAttachment.Visible = true;
 			goalAttachment.Parent = this.root;
 		}
 	}

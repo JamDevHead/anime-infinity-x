@@ -79,7 +79,7 @@ export class FighterModel
 
 		const isFalling = this.humanoid.FloorMaterial === Enum.Material.Air;
 		const isJumping = humanoid.Jump;
-		const isRunning = this.fighterVelocity > 0.1;
+		const isRunning = this.fighterVelocity > 0.2;
 
 		switch (true) {
 			case isFalling:

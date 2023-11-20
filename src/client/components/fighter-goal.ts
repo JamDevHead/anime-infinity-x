@@ -160,7 +160,7 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 		}
 
 		// Lerp part to origin
-		this.fighterPart.CFrame = this.fighterPart.CFrame.Lerp(goalCFrame, dt * 10);
+		this.fighterPart.CFrame = this.fighterPart.CFrame.Lerp(goalCFrame, dt * 8);
 		debug.profileend();
 	}
 
