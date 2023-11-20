@@ -1,0 +1,55 @@
+local process = require("@lune/process")
+local fs = require("@lune/fs")
+
+local config = require("modules/configManager"):getConfig()
+
+local args = process.args
+
+local options = {
+    dev = false,
+    xml = false,
+}
+
+for _, arg in args do
+    if arg == "--xml" then
+        options.xml = true
+    end
+end
+
+local file = config.outputName
+local extension = options.xml and "rbxlx" or "rbxl"
+local output = `{file}.{extension}`
+
+local success, existsOrError = pcall(fs.isFile, output)
+
+assert(success and existsOrError, (existsOrError and `❌ Internal error, failed to check place existence: {existsOrError}`) or `❌ Failed to find place "{output}" to test`)
+
+print("🔧 Running tests")
+
+local startTime = os.clock()
+
+local success, resultOrError = pcall(function()
+    return process.spawn("run-in-roblox", {
+        "--place",
+        output,
+        "--script",
+        "scripts/testez/run-tests.server.lua"
+    })
+end)
+
+local endTime = os.clock()
+
+local gotResult = type(resultOrError) == "table"
+local resultIsOk = gotResult and resultOrError.ok
+
+if success and resultIsOk then
+    print(`🔧 Ran tests in {string.format("%.2f", endTime - startTime)}s, results:\n\t{string.gsub(resultOrError.stdout, "\n", "\n\t")}`)
+else 
+    local result = resultOrError
+
+    if gotResult then
+        result = resultOrError.stderr
+    end
+
+    error(`❌ Tests didn't run, result: {result}`)
+end

@@ -1,5 +1,6 @@
 [tools]
 rojo = "rojo-rbx/rojo@7.4.0-rc3"
+run-in-roblox = "rojo-rbx/run-in-roblox@0.3.0"
 tarmac = "rojo-rbx/tarmac@0.7.4"
 mantle = "blake-mealey/mantle@0.11.9"
 lune = "filiptibell/lune@0.7.11"
