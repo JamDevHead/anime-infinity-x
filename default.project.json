@@ -72,7 +72,7 @@
 				"ExecuteWithStudioRun": true
 			},
 			"TS": {
-				"$path": "scripts/run-tests.server.lua"
+				"$path": "scripts/testez/run-tests.server.lua"
 			}
 		}
 	}
