@@ -1,5 +1,5 @@
 roots = [
-	"ReplicatedStorage/shared/test",
-	"ServerScriptService/server/test",
-	"StarterPlayer/StarterPlayerScripts/client/test",
+	"ReplicatedStorage/shared/tests",
+	"ServerScriptService/server/tests",
+	"StarterPlayer/StarterPlayerScripts/client/tests",
 ]
