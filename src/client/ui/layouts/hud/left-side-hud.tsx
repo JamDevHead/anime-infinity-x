@@ -1,5 +1,5 @@
 import Roact from "@rbxts/roact";
-import { useRootSelector } from "@/client/reflex/producers";
+import { useRootSelector } from "@/client/store";
 import { Grid } from "@/client/ui/components/grid";
 import { SimpleButton } from "@/client/ui/components/simple-button";
 import { Stack } from "@/client/ui/components/stack";
@@ -9,7 +9,7 @@ import { useAbbreviator } from "@/client/ui/hooks/use-abbreviator";
 import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
-import { selectPlayerBalance } from "@/shared/reflex/selectors";
+import { selectPlayerBalance } from "@/shared/store/players";
 
 export const LeftSideHud = () => {
 	const rem = useRem();

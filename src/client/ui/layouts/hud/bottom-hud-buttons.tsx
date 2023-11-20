@@ -1,7 +1,7 @@
 import Roact, { useEffect, useRef, useState } from "@rbxts/roact";
 import { setInterval } from "@rbxts/set-timeout";
 import { boostIcons } from "@/client/constants/boost-icons";
-import { useRootSelector } from "@/client/reflex/producers";
+import { useRootSelector } from "@/client/store";
 import { AttackButton } from "@/client/ui/components/attack-button";
 import { Boost } from "@/client/ui/components/boost";
 import { FadingFrame } from "@/client/ui/components/fading-frame";
@@ -14,7 +14,7 @@ import { UiScaleAspectRatio } from "@/client/ui/components/ui-scale-aspect-ratio
 import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
-import { selectPlayerBoosts } from "@/shared/reflex/selectors";
+import { selectPlayerBoosts } from "@/shared/store/players";
 
 export const BottomHudButtons = () => {
 	const [hoveredBoosts, setHoveredBoosts] = useState<boolean[]>([]);

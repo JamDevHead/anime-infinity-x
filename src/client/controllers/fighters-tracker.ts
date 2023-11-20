@@ -3,8 +3,8 @@ import { Logger } from "@rbxts/log";
 import { createSelector } from "@rbxts/reflex";
 import { Players, Workspace } from "@rbxts/services";
 import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
-import { producer } from "@/client/reflex/producers";
-import { selectPlayerFighters } from "@/shared/reflex/selectors";
+import { store } from "@/client/store";
+import { selectPlayerFighters } from "@/shared/store/players";
 
 const selectActiveFighters = (playerId: string) => {
 	return createSelector(selectPlayerFighters(playerId), (fighters) => {
@@ -27,7 +27,7 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 		this.fightersFolder.Name = "Fighters";
 		this.fightersFolder.Parent = Workspace;
 
-		producer.observe(selectActiveFighters(tostring(this.localPlayer.UserId)), (uid) => {
+		store.observe(selectActiveFighters(tostring(this.localPlayer.UserId)), (uid) => {
 			this.createFighter(uid);
 			this.updateFighters();
 

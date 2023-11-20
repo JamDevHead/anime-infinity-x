@@ -1,5 +1,5 @@
 import Roact from "@rbxts/roact";
-import { useRootProducer, useRootSelector } from "@/client/reflex/producers";
+import { useRootSelector, useRootStore } from "@/client/store";
 import { MissionHud } from "@/client/ui/components/mission-hud";
 import { SideGroupButtons } from "@/client/ui/components/side-group-buttons";
 import { SimpleButton } from "@/client/ui/components/simple-button";
@@ -8,7 +8,7 @@ import { UiScaleAspectRatio } from "@/client/ui/components/ui-scale-aspect-ratio
 import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
-import { selectPlayerMissions } from "@/shared/reflex/selectors";
+import { selectPlayerMissions } from "@/shared/store/players";
 
 export const RightSideHud = () => {
 	const rem = useRem();
@@ -17,7 +17,7 @@ export const RightSideHud = () => {
 	const { missionVisible } = useRootSelector((state) => state.hud);
 	const playerMissions = useRootSelector(selectPlayerMissions(id));
 
-	const { toggleMissionVisible, toggleWindowVisible } = useRootProducer();
+	const { toggleMissionVisible, toggleWindowVisible } = useRootStore();
 
 	return (
 		<Stack
