@@ -7,9 +7,8 @@ import { Players, ReplicatedStorage, Workspace } from "@rbxts/services";
 import { Trove } from "@rbxts/trove";
 import { FightersTracker } from "@/client/controllers/fighters-tracker";
 import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
-import { producer } from "@/client/reflex/producers";
-import { selectPlayerFighters } from "@/shared/reflex/selectors";
-import { PlayerFighter } from "@/shared/reflex/slices/players/types";
+import { store } from "@/client/store";
+import { PlayerFighter, selectPlayerFighters } from "@/shared/store/players";
 
 const FAR_CFRAME = new CFrame(0, 5e9, 0);
 
@@ -61,7 +60,7 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 		};
 
 		const onNewFighterUid = (uid: string) => {
-			const fighter = producer.getState(selectFighter(playerId, uid));
+			const fighter = store.getState(selectFighter(playerId, uid));
 
 			if (this.fighterModel) {
 				this.trove.remove(this.fighterModel);

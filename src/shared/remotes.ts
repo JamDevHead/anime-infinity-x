@@ -1,6 +1,6 @@
 import Net from "@rbxts/net";
 import { BroadcastAction } from "@rbxts/reflex";
-import { SharedState } from "@/shared/reflex/slices";
+import { SharedState } from "@/shared/store";
 
 const Remotes = Net.Definitions.Create({
 	reflex: Net.Definitions.Namespace({

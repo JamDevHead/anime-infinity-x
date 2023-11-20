@@ -1,6 +1,6 @@
 import Roact, { useEffect } from "@rbxts/roact";
 import { Windows } from "@/client/constants/windows";
-import { producer, RootState, useRootProducer, useRootSelector } from "@/client/reflex/producers";
+import { RootState, store, useRootSelector, useRootStore } from "@/client/store";
 import { Frame } from "@/client/ui/components/frame";
 import { Window } from "@/client/ui/components/window";
 import { useMotion } from "@/client/ui/hooks/use-motion";
@@ -9,7 +9,7 @@ import { Settings } from "@/client/ui/layouts/windows/settings/settings";
 
 export const WindowManager = () => {
 	const { currentWindow, visible } = useRootSelector((store) => store.window);
-	const { setVisibility } = useRootProducer();
+	const { setVisibility } = useRootStore();
 	const window = Windows[currentWindow ?? "codes"];
 
 	const [position, positionMotion] = useMotion(new UDim2());
@@ -17,7 +17,7 @@ export const WindowManager = () => {
 	const selectWindow = (state: RootState) => state.window.currentWindow;
 
 	useEffect(() => {
-		return producer.subscribe(selectWindow, (currentWindow, lastWindow) => {
+		return store.subscribe(selectWindow, (currentWindow, lastWindow) => {
 			if (currentWindow !== lastWindow) {
 				setVisibility(false);
 				task.wait(0.2);
