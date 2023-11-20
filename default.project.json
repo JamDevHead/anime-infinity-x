@@ -65,6 +65,15 @@
 			"$properties": {
 				"RespectFilteringEnabled": true
 			}
+		},
+		"TestService": {
+			"$className": "TestService",
+			"$properties": {
+				"ExecuteWithStudioRun": true
+			},
+			"TS": {
+				"$path": "scripts/testez/run-tests.server.lua"
+			}
 		}
 	}
 }
