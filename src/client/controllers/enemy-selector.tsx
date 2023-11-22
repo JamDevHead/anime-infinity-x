@@ -2,7 +2,7 @@ import { Controller, OnRender, OnStart } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { createRoot } from "@rbxts/react-roblox";
 import Roact, { StrictMode } from "@rbxts/roact";
-import { Players, Workspace } from "@rbxts/services";
+import { Workspace } from "@rbxts/services";
 import { Enemy } from "@/client/components/enemy";
 import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { OnInput } from "@/client/controllers/lifecycles/on-input";
@@ -16,8 +16,6 @@ import { selectHoveredEnemy } from "@/client/store/enemy-selection";
 @Controller()
 export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender {
 	private root: Part | undefined;
-	private highlight = new Instance("Highlight");
-	private selectionHighlight = new Instance("Highlight");
 	private raycastParams = new RaycastParams();
 	private currentEnemy: Enemy | undefined;
 	private enemyFolder: Folder | undefined;
@@ -28,8 +26,6 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 	) {}
 
 	onStart() {
-		const localPlayer = Players.LocalPlayer;
-		const playerGui = localPlayer.WaitForChild("PlayerGui") as PlayerGui;
 		const enemyFolder = Workspace.WaitForChild("Enemies") as Folder;
 
 		this.enemyFolder = enemyFolder;
@@ -43,20 +39,6 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 				</ReflexProvider>
 			</StrictMode>,
 		);
-
-		this.highlight.DepthMode = Enum.HighlightDepthMode.Occluded;
-		this.highlight.FillTransparency = 1;
-		this.highlight.FillColor = Color3.fromRGB();
-
-		this.selectionHighlight.DepthMode = Enum.HighlightDepthMode.Occluded;
-		this.selectionHighlight.FillTransparency = 0.75;
-		this.selectionHighlight.FillColor = Color3.fromRGB();
-
-		this.highlight.Name = "EnemyHighlight";
-		this.highlight.Parent = playerGui;
-
-		this.selectionHighlight.Name = "EnemySelectionHighlight";
-		this.selectionHighlight.Parent = playerGui;
 
 		this.raycastParams.FilterType = Enum.RaycastFilterType.Include;
 		this.raycastParams.AddToFilter(enemyFolder);
@@ -85,7 +67,6 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 
 	onCharacterRemoved() {
 		this.root = undefined;
-		this.highlight.Adornee = undefined;
 	}
 
 	onInputBegan(input: InputObject, gameProcessedEvent: boolean) {
