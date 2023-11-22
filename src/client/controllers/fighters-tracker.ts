@@ -19,6 +19,7 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 	private readonly RootOffset = new Vector3(0, -3, 4);
 	private localPlayer = Players.LocalPlayer;
 	private root: Part | undefined;
+	private goalContainer = Workspace.Terrain;
 	private activeFighters = new Map<string, Attachment | false>();
 
 	constructor(private readonly logger: Logger) {}
@@ -61,7 +62,7 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 	private createFighter(uid: string) {
 		let goalAttachment = this.activeFighters.get(uid);
 
-		if (!goalAttachment && this.root) {
+		if (!goalAttachment && this.goalContainer) {
 			goalAttachment = new Instance("Attachment");
 		}
 
@@ -69,7 +70,7 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 
 		if (goalAttachment) {
 			goalAttachment.Name = "GoalAttachment";
-			goalAttachment.Parent = this.root;
+			goalAttachment.Parent = this.goalContainer;
 		}
 	}
 
@@ -84,6 +85,10 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 	}
 
 	private updateFighters() {
+		if (!this.root) {
+			return;
+		}
+
 		const troopSize = this.activeFighters.size();
 		const formation = this.getFormation(troopSize);
 		const formationSize = formation.size();
@@ -98,8 +103,9 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 
 			const fighterGoal = formation[index % formationSize];
 
-			goalAttachment.Position = this.RootOffset.add(fighterGoal);
+			goalAttachment.WorldPosition = this.root.Position.add(this.RootOffset.add(fighterGoal));
 			goalAttachment.SetAttribute("UID", uid);
+			goalAttachment.SetAttribute("OwnerId", this.localPlayer.UserId);
 			goalAttachment.AddTag("FighterGoal");
 		}
 	}

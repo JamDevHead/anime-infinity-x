@@ -15,11 +15,14 @@ const FAR_CFRAME = new CFrame(0, 5e9, 0);
 @Component({
 	tag: "FighterGoal",
 })
-export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> implements OnStart, OnRender {
+export class FighterGoal
+	extends BaseComponent<{ UID: string; OwnerId: number }, Attachment>
+	implements OnStart, OnRender
+{
 	private fighterPart = new Instance("Part");
-	private root = this.instance.Parent as Part | undefined;
 	private raycastParams = new RaycastParams();
 	private trove = new Trove();
+	private root: Part | undefined;
 	private fighterModel: Model | undefined;
 
 	constructor(
@@ -32,6 +35,17 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 
 	onStart() {
 		const localPlayer = Players.LocalPlayer;
+		const owner =
+			localPlayer.UserId !== this.attributes.OwnerId
+				? Players.GetPlayerByUserId(this.attributes.OwnerId)
+				: localPlayer;
+
+		if (!owner) {
+			this.logger.Warn("Failed to find owner {ownerId}", this.attributes.OwnerId);
+			return;
+		}
+
+		this.root = owner.Character?.FindFirstChild("HumanoidRootPart") as Part | undefined;
 
 		this.fighterPart.Name = "FighterPart";
 		this.fighterPart.Anchored = true;
@@ -43,8 +57,6 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 		this.fighterPart.Transparency = 1;
 
 		this.fighterPart.Parent = this.instance;
-
-		this.instance.Visible = true;
 
 		this.raycastParams.FilterType = Enum.RaycastFilterType.Exclude;
 		if (this.root?.Parent) {
