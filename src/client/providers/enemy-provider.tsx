@@ -2,12 +2,19 @@ import Roact from "@rbxts/roact";
 import { EnemyAura } from "@/client/components/react/enemy-aura";
 import { createPortal } from "@rbxts/react-roblox";
 import { useRootSelector } from "@/client/store";
-import { selectSelectedEnemies } from "@/client/store/enemy-selection";
+import { selectHoveredEnemy, selectSelectedEnemies } from "@/client/store/enemy-selection";
+import { EnemyHover } from "@/client/components/react/enemy-hover";
 
 export function EnemyProvider() {
-	const enemies = useRootSelector(selectSelectedEnemies);
+	const selectedEnemies = useRootSelector(selectSelectedEnemies);
+	const hoveredEnemy = useRootSelector(selectHoveredEnemy);
 
-	print("enemies", enemies);
+	print("enemies", selectedEnemies);
 
-	return <>{enemies.map((enemy) => createPortal(<EnemyAura enemy={enemy} />, enemy.instance))}</>;
+	return (
+		<>
+			{selectedEnemies.map((enemy) => createPortal(<EnemyAura enemy={enemy} />, enemy.instance))}
+			{hoveredEnemy && createPortal(<EnemyHover />, hoveredEnemy.instance)}
+		</>
+	);
 }

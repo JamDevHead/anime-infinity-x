@@ -3,7 +3,7 @@ import { Logger } from "@rbxts/log";
 import { createRoot } from "@rbxts/react-roblox";
 import Roact, { StrictMode } from "@rbxts/roact";
 import { Players, Workspace } from "@rbxts/services";
-import { Enemy, EnemyModel } from "@/client/components/enemy";
+import { Enemy } from "@/client/components/enemy";
 import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { OnInput } from "@/client/controllers/lifecycles/on-input";
 import { getMouseTarget } from "@/client/utils/mouse";
@@ -11,9 +11,10 @@ import { EnemyProvider } from "@/client/providers/enemy-provider";
 import { ReflexProvider } from "@rbxts/react-reflex";
 import { store } from "@/client/store";
 import { Components } from "@flamework/components";
+import { selectHoveredEnemy } from "@/client/store/enemy-selection";
 
 @Controller()
-export class EnemyAttacker implements OnCharacterAdd, OnInput, OnStart, OnRender {
+export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender {
 	private root: Part | undefined;
 	private highlight = new Instance("Highlight");
 	private selectionHighlight = new Instance("Highlight");
@@ -62,20 +63,20 @@ export class EnemyAttacker implements OnCharacterAdd, OnInput, OnStart, OnRender
 	}
 
 	onRender() {
-		const enemyModel = this.getEnemyAtMousePosition();
-		const isTargetValid = enemyModel === undefined;
+		const hoveredEnemy = store.getState(selectHoveredEnemy);
+		const enemy = this.getEnemyAtMousePosition();
 
-		if (!isTargetValid) {
-			this.highlight.Adornee = undefined;
+		if (hoveredEnemy === enemy) {
 			return;
 		}
 
-		if (this.currentEnemy === enemyModel) {
-			this.highlight.Adornee = undefined;
-			return;
+		if (hoveredEnemy) {
+			store.removeHoveredEnemy(hoveredEnemy);
 		}
 
-		this.highlight.Adornee = enemyModel;
+		if (enemy) {
+			store.setHoveredEnemy(enemy);
+		}
 	}
 
 	onCharacterAdded(character: Model) {
@@ -92,9 +93,9 @@ export class EnemyAttacker implements OnCharacterAdd, OnInput, OnStart, OnRender
 			return;
 		}
 
-		const enemyModel = this.getEnemyAtMousePosition();
+		const enemy = this.getEnemyAtMousePosition();
 
-		if (!enemyModel) {
+		if (!enemy) {
 			if (this.currentEnemy) {
 				store.removeSelectedEnemy(this.currentEnemy);
 				this.currentEnemy = undefined;
@@ -102,10 +103,8 @@ export class EnemyAttacker implements OnCharacterAdd, OnInput, OnStart, OnRender
 			return;
 		}
 
-		const enemy = this.components.getComponent<Enemy>(enemyModel);
-
-		if (enemy) {
-			if (this.currentEnemy && this.currentEnemy !== enemy) {
+		if (this.currentEnemy !== enemy) {
+			if (this.currentEnemy) {
 				store.removeSelectedEnemy(this.currentEnemy);
 			}
 
@@ -139,7 +138,7 @@ export class EnemyAttacker implements OnCharacterAdd, OnInput, OnStart, OnRender
 			model = model.FindFirstAncestorOfClass("Model");
 		}
 
-		return model as EnemyModel | undefined;
+		return model && this.components.getComponent<Enemy>(model);
 	}
 
 	private getEnemyDistance(enemyPart: BasePart) {
