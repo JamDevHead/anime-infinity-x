@@ -20,7 +20,8 @@
     "deploy:dev": "yarn build:dev && mantle deploy --environment canary",
     "deploy:prod": "yarn build:prod && mantle deploy --environment production",
     "output:dev": "mantle outputs --environment canary > mantle-output.json",
-    "output:prod": "mantle outputs --environment production > mantle-output.json"
+    "output:prod": "mantle outputs --environment production > mantle-output.json",
+    "test": "lune scripts/lune/run-tests"
   },
   "devDependencies": {
     "@rbxts/compiler-types": "^2.2.0-types.0",
