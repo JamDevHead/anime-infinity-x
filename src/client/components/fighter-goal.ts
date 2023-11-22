@@ -55,6 +55,7 @@ export class FighterGoal
 		this.fighterPart.CastShadow = false;
 		this.fighterPart.Size = Vector3.one;
 		this.fighterPart.Transparency = 1;
+		this.fighterPart.CFrame = this.instance.WorldCFrame;
 
 		this.fighterPart.Parent = this.instance;
 
