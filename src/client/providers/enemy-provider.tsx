@@ -9,8 +9,6 @@ export function EnemyProvider() {
 	const selectedEnemies = useRootSelector(selectSelectedEnemies);
 	const hoveredEnemy = useRootSelector(selectHoveredEnemy);
 
-	print("enemies", selectedEnemies);
-
 	return (
 		<>
 			{selectedEnemies.map((enemy) => createPortal(<EnemyAura enemy={enemy} />, enemy.instance))}
