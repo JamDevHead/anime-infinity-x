@@ -26,6 +26,8 @@ export class FighterModel
 	extends BaseComponent<NonNullable<unknown>, IFighterModel>
 	implements OnStart, OnRender, OnPhysics
 {
+	public fighterGoal!: Part;
+
 	private humanoid = this.instance.Humanoid;
 	private torso = this.instance.FindFirstChild("Torso") as Part | undefined;
 	private animator = this.humanoid.Animator;
@@ -75,6 +77,14 @@ export class FighterModel
 		this.raycastParams.FilterType = Enum.RaycastFilterType.Exclude;
 		this.raycastParams.AddToFilter(this.fightersTracker.fightersFolder);
 
+		// Setup fighter pivot
+		const [currentPivot, fighterSize] = this.instance.GetBoundingBox();
+		const halfFighterSize = fighterSize.Y / 2;
+
+		this.instance.PrimaryPart = undefined;
+		this.instance.WorldPivot = currentPivot.sub(Vector3.yAxis.mul(halfFighterSize));
+
+		// Setup fighter cleanup
 		this.trove.add(() => {
 			this.animationCache.forEach((track) => track.Destroy());
 			this.animationCache.clear();
@@ -98,6 +108,9 @@ export class FighterModel
 		if (!this.humanoid?.RootPart || !humanoid) {
 			return;
 		}
+
+		// Update fighter model
+		this.instance.PivotTo(this.fighterGoal.CFrame);
 
 		const root = this.humanoid.RootPart;
 		const distance = root.Position.sub(this.lastFighterPosition).Magnitude;
@@ -180,7 +193,7 @@ export class FighterModel
 	}
 
 	private isGrounded() {
-		const origin = this.instance.GetPivot().Position;
+		const origin = this.instance.GetPivot().Position.add(Vector3.yAxis.mul(1.5));
 		const direction = Vector3.yAxis.mul(-2.75);
 		const groundHit = Workspace.Raycast(origin, direction, this.raycastParams);
 
