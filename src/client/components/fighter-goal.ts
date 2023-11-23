@@ -214,7 +214,7 @@ export class FighterGoal
 		const goalLookAt = finalGoal.add(lookAt.mul(HORIZONTAL_VECTOR).mul(1.5));
 		const goalCFrame = new CFrame(finalGoal, goalLookAt);
 
-		if (this.fighterPart.Position.Magnitude === math.huge) {
+		if (this.fighterPart.Position.Magnitude === math.huge || this.fighterPart.Position.Magnitude > 4e9) {
 			this.fighterPart.Position = goalCFrame.Position;
 			return;
 		}
