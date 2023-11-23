@@ -25,6 +25,8 @@ export const images: {
 		readonly search: string;
 		readonly filter: string;
 		readonly quad_menu: string;
+		readonly backpack: string;
+		readonly sword: string;
 	};
 	readonly ui: {
 		readonly blur: string;

@@ -1,3 +1,8 @@
+[inputs."assets/images/icons/backpack.png"]
+hash = "a66c56b4a9ce4e7aecf136fca0158744a01b5eefa18b1d9291f6f5f1cbb1d6d1"
+id = 15438096788
+packable = false
+
 [inputs."assets/images/icons/boost.png"]
 hash = "4a9465772537084ee3a7f595330e1ff07ef1ddbd1cccbc2fa32041ae3f02a413"
 id = 15302168656
@@ -101,6 +106,11 @@ packable = false
 [inputs."assets/images/icons/store.png"]
 hash = "f6949ca26519fda5da23bb9940358d6a221bbb147ea9d53333d1581b02d78820"
 id = 15303915226
+packable = false
+
+[inputs."assets/images/icons/sword.png"]
+hash = "1b9b681def26b488640a10c487b83ce0c6ef97cd68a8ee2dd080d2893528e6c0"
+id = 15438096844
 packable = false
 
 [inputs."assets/images/icons/sword_outline.png"]

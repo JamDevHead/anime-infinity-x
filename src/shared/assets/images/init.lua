@@ -2,6 +2,7 @@
 return {
 	images = {
 		icons = {
+			backpack = "rbxassetid://15438096788",
 			boost = "rbxassetid://15302168656",
 			boosts = {
 				coin_boost = "rbxassetid://15294309561",
@@ -25,6 +26,7 @@ return {
 			settings = "rbxassetid://15302168932",
 			star = "rbxassetid://15303269918",
 			store = "rbxassetid://15303915226",
+			sword = "rbxassetid://15438096844",
 			sword_outline = "rbxassetid://15277603950",
 			twitter = "rbxassetid://15302169045",
 		},
