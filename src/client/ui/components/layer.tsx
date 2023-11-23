@@ -1,5 +1,5 @@
 import Roact from "@rbxts/roact";
-import { IS_PLUGIN } from "@/client/constants/constants";
+import { IS_EDIT } from "@/client/constants/constants";
 
 interface LayerProps {
 	displayOrder?: number;
@@ -7,7 +7,7 @@ interface LayerProps {
 }
 
 export function Layer({ displayOrder, children }: LayerProps) {
-	return IS_PLUGIN ? (
+	return IS_EDIT ? (
 		<frame
 			BackgroundTransparency={1}
 			Size={new UDim2(1, 0, 1, 0)}
