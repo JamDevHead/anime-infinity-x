@@ -56,7 +56,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 			store.removeHoveredEnemy(hoveredEnemy);
 		}
 
-		if (enemy) {
+		if (enemy && this.currentEnemy !== enemy) {
 			store.setHoveredEnemy(enemy);
 		}
 	}
