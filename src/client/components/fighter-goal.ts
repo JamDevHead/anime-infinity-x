@@ -112,7 +112,6 @@ export class FighterGoal
 					);
 				}
 
-				print("new enemy", enemy);
 				this.currentEnemy = enemy;
 				enemy?.attackingFighters.push(this.attributes.UID);
 			}),

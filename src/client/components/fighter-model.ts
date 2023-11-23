@@ -85,6 +85,14 @@ export class FighterModel
 		this.instance.PrimaryPart = undefined;
 		this.instance.WorldPivot = currentPivot.sub(Vector3.yAxis.mul(halfFighterSize));
 
+		// Setup fighter highlight
+		const highlight = new Instance("Highlight");
+		highlight.FillTransparency = 1;
+		highlight.OutlineTransparency = 0;
+		highlight.DepthMode = Enum.HighlightDepthMode.Occluded;
+		highlight.OutlineColor = Color3.fromRGB();
+		highlight.Parent = this.instance;
+
 		// Setup fighter cleanup
 		this.trove.add(() => {
 			this.animationCache.forEach((track) => track.Destroy());
