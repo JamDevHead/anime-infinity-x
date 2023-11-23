@@ -1,5 +1,5 @@
 import Roact from "@rbxts/roact";
-import { useRootSelector } from "@/client/store";
+import { useRootSelector, useRootStore } from "@/client/store";
 import { Grid } from "@/client/ui/components/grid";
 import { SimpleButton } from "@/client/ui/components/simple-button";
 import { Stack } from "@/client/ui/components/stack";
@@ -17,6 +17,8 @@ export const LeftSideHud = () => {
 	const abbreviator = useAbbreviator({});
 
 	const balance = useRootSelector(selectPlayerBalance(id));
+
+	const { toggleWindowVisible } = useRootStore();
 
 	return (
 		<Stack
@@ -63,7 +65,11 @@ export const LeftSideHud = () => {
 			>
 				<SimpleButton color={Color3.fromHex("#68CA58")} icon={images.icons.store} />
 				<SimpleButton color={Color3.fromHex("#ff0000")} icon={images.icons.gift} />
-				<SimpleButton color={Color3.fromHex("#E5E923")} icon={images.icons.characters} />
+				<SimpleButton
+					color={Color3.fromHex("#E5E923")}
+					icon={images.icons.characters}
+					onClick={() => toggleWindowVisible("inventory")}
+				/>
 				<SimpleButton color={Color3.fromHex("#c7480e")} icon={images.icons.inventory} />
 				<UiScaleAspectRatio />
 			</Grid>
