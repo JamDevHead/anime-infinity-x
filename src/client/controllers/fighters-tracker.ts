@@ -5,6 +5,8 @@ import { Players, Workspace } from "@rbxts/services";
 import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { store } from "@/client/store";
 import { selectPlayerFighters } from "@/shared/store/players";
+import { selectFightersTarget } from "@/client/store/fighter-target/fighter-target-selectors";
+import { selectSelectedEnemies } from "@/client/store/enemy-selection";
 
 const selectActiveFighters = (playerId: string) => {
 	return createSelector(selectPlayerFighters(playerId), (fighters) => {
@@ -19,7 +21,8 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 	private readonly RootOffset = new Vector3(0, -3, 4);
 	private localPlayer = Players.LocalPlayer;
 	private root: Part | undefined;
-	private activeFighters = new Map<string, Attachment | false>();
+	private goalContainer = Workspace.Terrain;
+	private activeFighters = new Map<string, Attachment>();
 
 	constructor(private readonly logger: Logger) {}
 
@@ -37,40 +40,50 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 				this.updateFighters();
 			};
 		});
+
+		store.observe(selectSelectedEnemies, (enemy) => {
+			this.activeFighters.forEach((_, uid) => {
+				store.setFighterTarget(uid, enemy);
+			});
+
+			this.updateFighters();
+
+			return () => {
+				const fightersWithTarget = store.getState(selectFightersTarget);
+
+				for (const [uid, enemy] of pairs(fightersWithTarget)) {
+					store.removeFighterTarget(uid as string);
+				}
+
+				this.updateFighters();
+			};
+		});
 	}
 
 	onCharacterAdded(character: Model) {
 		this.root = character.WaitForChild("HumanoidRootPart") as Part;
-		for (const [uid] of this.activeFighters) {
-			this.createFighter(uid);
-		}
 		this.updateFighters();
 	}
 
 	onCharacterRemoved() {
 		this.root = undefined;
-		this.activeFighters.forEach((goalAttachment, uid) => {
-			this.activeFighters.set(uid, false);
-
-			if (goalAttachment) {
-				goalAttachment.Destroy();
-			}
-		});
 	}
 
 	private createFighter(uid: string) {
 		let goalAttachment = this.activeFighters.get(uid);
 
-		if (!goalAttachment && this.root) {
+		if (!goalAttachment && this.goalContainer) {
 			goalAttachment = new Instance("Attachment");
-		}
-
-		this.activeFighters.set(uid, goalAttachment ?? false);
-
-		if (goalAttachment) {
 			goalAttachment.Name = "GoalAttachment";
-			goalAttachment.Parent = this.root;
+			goalAttachment.Parent = this.goalContainer;
 		}
+
+		if (!goalAttachment) {
+			return;
+		}
+
+		this.activeFighters.set(uid, goalAttachment);
+		goalAttachment.SetAttribute("UID", uid);
 	}
 
 	private removeFighter(uid: string) {
@@ -84,6 +97,10 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 	}
 
 	private updateFighters() {
+		if (!this.root) {
+			return;
+		}
+
 		const troopSize = this.activeFighters.size();
 		const formation = this.getFormation(troopSize);
 		const formationSize = formation.size();
@@ -97,9 +114,12 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 			}
 
 			const fighterGoal = formation[index % formationSize];
+			const fighterOffset = this.RootOffset.add(fighterGoal);
 
-			goalAttachment.Position = this.RootOffset.add(fighterGoal);
+			goalAttachment.WorldPosition = this.root.Position.add(fighterOffset);
+			goalAttachment.SetAttribute("Offset", fighterOffset);
 			goalAttachment.SetAttribute("UID", uid);
+			goalAttachment.SetAttribute("OwnerId", this.localPlayer.UserId);
 			goalAttachment.AddTag("FighterGoal");
 		}
 	}

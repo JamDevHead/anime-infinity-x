@@ -1,4 +1,7 @@
 export const images: {
+	readonly fx: {
+		readonly target_aura: string;
+	};
 	readonly icons: {
 		readonly boosts: {
 			readonly coin_boost: string;

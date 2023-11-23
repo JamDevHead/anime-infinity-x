@@ -1,3 +1,8 @@
+[inputs."assets/images/fx/target_aura.png"]
+hash = "9cad64e8406dfcb6d557b5a6c05c49b576f60c7f56f57dce6a0c033dcf26f04c"
+id = 15415592397
+packable = false
+
 [inputs."assets/images/icons/boost.png"]
 hash = "4a9465772537084ee3a7f595330e1ff07ef1ddbd1cccbc2fa32041ae3f02a413"
 id = 15302168656
