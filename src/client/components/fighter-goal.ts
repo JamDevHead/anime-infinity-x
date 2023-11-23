@@ -16,7 +16,7 @@ const FAR_CFRAME = new CFrame(0, 5e9, 0);
 	tag: "FighterGoal",
 })
 export class FighterGoal
-	extends BaseComponent<{ UID: string; OwnerId: number }, Attachment>
+	extends BaseComponent<{ UID: string; OwnerId: number; Offset: Vector3 }, Attachment>
 	implements OnStart, OnRender
 {
 	private fighterPart = new Instance("Part");
@@ -28,7 +28,7 @@ export class FighterGoal
 	constructor(
 		private readonly logger: Logger,
 		private readonly characterAdd: CharacterAdd,
-		private readonly fighterTracker: FightersTracker,
+		private readonly fightersTracker: FightersTracker,
 	) {
 		super();
 	}
@@ -63,7 +63,7 @@ export class FighterGoal
 		if (this.root?.Parent) {
 			this.raycastParams.AddToFilter(this.root.Parent);
 		}
-		this.raycastParams.AddToFilter(this.fighterTracker.fightersFolder);
+		this.raycastParams.AddToFilter(this.fightersTracker.fightersFolder);
 
 		const playerId = tostring(localPlayer.UserId);
 		const selectFighter = (playerId: string, uid: string) => {
@@ -104,6 +104,7 @@ export class FighterGoal
 	}
 
 	onRender(dt: number) {
+		this.updateGoal();
 		this.updateFighterGoal(dt);
 		this.updateFighterModel();
 	}
@@ -117,11 +118,19 @@ export class FighterGoal
 			return;
 		}
 
-		fighterModel.Parent = this.fighterTracker.fightersFolder;
+		fighterModel.Parent = this.fightersTracker.fightersFolder;
 		fighterModel.AddTag("Fighter");
 
 		this.trove.add(fighterModel);
 		return fighterModel;
+	}
+
+	private updateGoal() {
+		if (!this.root) {
+			return;
+		}
+
+		this.instance.WorldPosition = this.root.CFrame.PointToWorldSpace(this.attributes.Offset);
 	}
 
 	private updateFighterModel() {
@@ -159,7 +168,7 @@ export class FighterGoal
 
 		const horizontalVector = new Vector3(1, 0, 1);
 
-		const fighterGoalDiff = finalGoal.sub(fighterPosition);
+		const fighterGoalDiff = finalGoal.sub(fighterPosition).mul(horizontalVector);
 		const lookAt =
 			fighterGoalDiff.Magnitude > 0.8 && !isFloating ? fighterGoalDiff.Unit : this.root.CFrame.LookVector;
 

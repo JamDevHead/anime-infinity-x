@@ -102,8 +102,10 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 			}
 
 			const fighterGoal = formation[index % formationSize];
+			const fighterOffset = this.RootOffset.add(fighterGoal);
 
-			goalAttachment.WorldPosition = this.root.Position.add(this.RootOffset.add(fighterGoal));
+			goalAttachment.WorldPosition = this.root.Position.add(fighterOffset);
+			goalAttachment.SetAttribute("Offset", fighterOffset);
 			goalAttachment.SetAttribute("UID", uid);
 			goalAttachment.SetAttribute("OwnerId", this.localPlayer.UserId);
 			goalAttachment.AddTag("FighterGoal");
