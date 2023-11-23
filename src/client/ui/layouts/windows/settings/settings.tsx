@@ -2,7 +2,7 @@ import Object from "@rbxts/object-utils";
 import Roact from "@rbxts/roact";
 import { DefaultSettings } from "@/client/constants/default-settings";
 import { fonts } from "@/client/constants/fonts";
-import { useRootProducer, useRootSelector } from "@/client/reflex/producers";
+import { useRootSelector, useRootStore } from "@/client/store";
 import { Image } from "@/client/ui/components/image";
 import { ScrollView } from "@/client/ui/components/scroll-view";
 import { Stack } from "@/client/ui/components/stack";
@@ -15,7 +15,7 @@ export const Settings = () => {
 	const rem = useRem();
 
 	const { settings } = useRootSelector((store) => store.settings);
-	const dispatch = useRootProducer();
+	const dispatch = useRootStore();
 
 	return (
 		<>

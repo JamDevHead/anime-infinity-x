@@ -1,5 +1,4 @@
 import { Flamework, Modding } from "@flamework/core";
-import Gizmo from "@rbxts/gizmo";
 import Log, { Logger } from "@rbxts/log";
 import Zircon from "@rbxts/zircon";
 
@@ -19,5 +18,4 @@ Flamework.addPaths("src/client/components");
 Flamework.addPaths("src/client/controllers");
 Flamework.addPaths("src/shared/components");
 
-Gizmo.enable();
 Flamework.ignite();

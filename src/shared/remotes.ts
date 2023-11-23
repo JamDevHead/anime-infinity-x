@@ -1,15 +1,18 @@
-import Net from "@rbxts/net";
 import { BroadcastAction } from "@rbxts/reflex";
+import { Client, createRemotes, namespace, remote, Server } from "@rbxts/remo";
+import { SharedState } from "@/shared/store";
 
-const Remotes = Net.Definitions.Create({
-	reflex: Net.Definitions.Namespace({
-		start: Net.Definitions.ClientToServerEvent(),
-		dispatch: Net.Definitions.ServerToClientEvent<[actions: BroadcastAction[]]>(),
+const remotes = createRemotes({
+	store: namespace({
+		dispatch: remote<Client, [actions: BroadcastAction[]]>(),
+		hydrate: remote<Client, [state: SharedState]>(),
+		start: remote<Server>(),
 	}),
-	settings: Net.Definitions.Namespace({
-		save: Net.Definitions.ClientToServerEvent<[settings: Record<string, boolean | number>]>(),
-		load: Net.Definitions.ServerToClientEvent<[settings: Record<string, boolean | number>]>(),
+
+	settings: namespace({
+		load: remote<Client, [settings: Record<string, boolean | number>]>(),
+		save: remote<Server, [settings: Record<string, boolean | number>]>(),
 	}),
 });
 
-export default Remotes;
+export default remotes;

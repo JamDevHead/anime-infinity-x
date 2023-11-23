@@ -1,10 +1,10 @@
 import { OnStart, Service } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { ReplicatedStorage, Workspace } from "@rbxts/services";
-import { producer } from "@/server/reflex/producers";
 import { OnCharacterAdd } from "@/server/services/lifecycles/on-character-add";
 import { OnPlayerAdd } from "@/server/services/lifecycles/on-player-add";
-import { selectPlayerZones } from "@/shared/reflex/selectors";
+import { store } from "@/server/store";
+import { selectPlayerZones } from "@/shared/store/players";
 
 interface Zone {
 	Map: Folder;
@@ -39,7 +39,7 @@ export class ZonesLoader implements OnStart, OnPlayerAdd, OnCharacterAdd {
 	}
 
 	onPlayerAdded(player: Player) {
-		const unsubscribe = producer.subscribe(selectPlayerZones(tostring(player.UserId)), (zones) => {
+		const unsubscribe = store.subscribe(selectPlayerZones(tostring(player.UserId)), (zones) => {
 			if (zones?.current === undefined || !player.Character) {
 				return;
 			}
@@ -56,7 +56,7 @@ export class ZonesLoader implements OnStart, OnPlayerAdd, OnCharacterAdd {
 	}
 
 	onCharacterAdded(player: Player, character: Model) {
-		const zones = producer.getState(selectPlayerZones(tostring(player.UserId)));
+		const zones = store.getState(selectPlayerZones(tostring(player.UserId)));
 
 		this.logger.Debug(`Player ${player.Name} is on zone ${zones?.current}`);
 

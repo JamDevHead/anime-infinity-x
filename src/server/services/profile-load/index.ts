@@ -3,12 +3,10 @@ import { Logger } from "@rbxts/log";
 import { GetProfileStore } from "@rbxts/profileservice";
 import { Profile, ProfileStore } from "@rbxts/profileservice/globals";
 import { Players } from "@rbxts/services";
-import { producer } from "@/server/reflex/producers";
 import { OnPlayerAdd } from "@/server/services/lifecycles/on-player-add";
 import loadData from "@/server/services/profile-load/loaders";
-import { selectPlayerData } from "@/shared/reflex/selectors";
-import { PlayerData } from "@/shared/reflex/slices/players/types";
-import { defaultPlayerData } from "@/shared/reflex/slices/players/utils";
+import { store } from "@/server/store";
+import { defaultPlayerData, PlayerData, selectPlayerData } from "@/shared/store/players";
 
 @Service()
 export class ProfileLoad implements OnStart, OnPlayerAdd {
@@ -46,8 +44,8 @@ export class ProfileLoad implements OnStart, OnPlayerAdd {
 
 		const playerId = tostring(player.UserId);
 
-		const unsubscribe = producer.subscribe(selectPlayerData(playerId), (data) => {
-			if (data) {
+		const unsubscribe = store.subscribe(selectPlayerData(playerId), (data) => {
+			if (data !== undefined) {
 				profile.Data = data;
 			}
 		});
@@ -65,7 +63,7 @@ export class ProfileLoad implements OnStart, OnPlayerAdd {
 
 		const t0 = os.clock();
 
-		producer.loadPlayerData(playerId, profile.Data);
+		store.loadPlayerData(playerId, profile.Data);
 		loadData(profile);
 
 		const t1 = os.clock();
@@ -79,7 +77,7 @@ export class ProfileLoad implements OnStart, OnPlayerAdd {
 		const profile = this.profiles.get(player);
 		profile?.Release();
 
-		producer.unloadPlayerData(tostring(player.UserId));
+		store.unloadPlayerData(tostring(player.UserId));
 
 		this.profiles.delete(player);
 	}

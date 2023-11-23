@@ -1,6 +1,6 @@
 import { BaseComponent, Component } from "@flamework/components";
 import { OnStart } from "@flamework/core";
-import { producer } from "@/server/reflex/producers";
+import { store } from "@/server/store";
 
 export interface EnemyModel extends Model {
 	Humanoid: Humanoid;
@@ -17,7 +17,7 @@ export class Enemy extends BaseComponent<EnemyAttributes, EnemyModel> implements
 	private root = this.instance.HumanoidRootPart;
 
 	onStart() {
-		producer.addEnemy(this.attributes.Guid);
+		store.addEnemy(this.attributes.Guid);
 
 		this.humanoid.MaxHealth = 0;
 		this.humanoid.Health = 0;
