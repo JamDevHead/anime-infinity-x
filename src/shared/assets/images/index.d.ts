@@ -23,6 +23,8 @@ export const images: {
 		readonly guide: string;
 		readonly store: string;
 		readonly search: string;
+		readonly filter: string;
+		readonly quad_menu: string;
 	};
 	readonly ui: {
 		readonly blur: string;

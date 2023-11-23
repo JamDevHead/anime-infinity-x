@@ -1,9 +1,13 @@
 import Roact from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
+import { Button } from "@/client/ui/components/button";
 import { Frame } from "@/client/ui/components/frame";
+import { Image } from "@/client/ui/components/image";
+import { Menu } from "@/client/ui/components/menu";
 import { SearchBar } from "@/client/ui/components/search-bar";
 import { Stack } from "@/client/ui/components/stack";
 import { useRem } from "@/client/ui/hooks/use-rem";
+import { images } from "@/shared/assets/images";
 
 export const Inventory = () => {
 	const rem = useRem();
@@ -22,7 +26,17 @@ export const Inventory = () => {
 					size={UDim2.fromScale(1, 1)}
 					padding={new UDim(0, 12)}
 				>
-					<SearchBar size={UDim2.fromOffset(rem(248, "pixel"), rem(38, "pixel"))} />
+					<Menu />
+					<Button size={UDim2.fromOffset(rem(32, "pixel"), rem(32, "pixel"))} backgroundTransparency={1}>
+						<Image image={images.icons.filter} size={UDim2.fromScale(1, 1)} />
+					</Button>
+					<SearchBar size={UDim2.fromScale(0.4, 1)} />
+					<uipadding
+						PaddingLeft={new UDim(0, rem(12, "pixel"))}
+						PaddingRight={new UDim(0, rem(12, "pixel"))}
+						PaddingTop={new UDim(0, rem(4, "pixel"))}
+						PaddingBottom={new UDim(0, rem(4, "pixel"))}
+					/>
 				</Stack>
 			</Frame>
 			<Frame

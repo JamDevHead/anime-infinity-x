@@ -21,8 +21,8 @@ export const SearchBar: FunctionComponent<PropsWithChildren<SearchBarProps>> = (
 			position={position}
 			backgroundColor={colors.black}
 			backgroundTransparency={0.5}
-			visible={true}
 			cornerRadius={new UDim(0, 12)}
+			visible
 		>
 			<Stack
 				fillDirection="Horizontal"
