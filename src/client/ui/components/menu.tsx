@@ -9,7 +9,7 @@ export const Menu = () => {
 	const rem = useRem();
 
 	return (
-		<Frame size={new UDim2(0, 32, 1, 0)} backgroundColor={Color3.fromHex("#2F2B66")} cornerRadius={new UDim(0, 8)}>
+		<Frame size={UDim2.fromOffset(rem(3), rem(3))} backgroundTransparency={1}>
 			<Frame
 				size={UDim2.fromScale(1, 1)}
 				backgroundColor={Color3.fromHex("#2F2B66")}
