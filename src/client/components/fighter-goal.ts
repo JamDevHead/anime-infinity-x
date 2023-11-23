@@ -14,6 +14,7 @@ import { Enemy } from "@/client/components/enemy";
 import { FighterModel } from "@/client/components/fighter-model";
 
 const FAR_CFRAME = new CFrame(0, 5e9, 0);
+const HORIZONTAL_VECTOR = new Vector3(1, 0, 1);
 
 @Component({
 	tag: "FighterGoal",
@@ -22,12 +23,13 @@ export class FighterGoal
 	extends BaseComponent<{ UID: string; OwnerId: number; Offset: Vector3 }, Attachment>
 	implements OnStart, OnRender
 {
-	private fighterPart = new Instance("Part");
+	public fighterPart = new Instance("Part");
+	public currentEnemy: Enemy | undefined;
+
 	private raycastParams = new RaycastParams();
 	private trove = new Trove();
 	private root: Part | undefined;
 	private fighterModel: FighterModel | undefined;
-	private currentEnemy: Enemy | undefined;
 
 	constructor(
 		private readonly logger: Logger,
@@ -103,9 +105,16 @@ export class FighterGoal
 		});
 
 		this.trove.add(
-			store.subscribe(selectFighterTarget(this.attributes.UID), (enemy) => {
+			store.subscribe(selectFighterTarget(this.attributes.UID), (enemy, lastEnemy) => {
+				if (lastEnemy?.attackingFighters.includes(this.attributes.UID)) {
+					lastEnemy.attackingFighters = lastEnemy.attackingFighters.filter(
+						(fighterUid) => fighterUid !== this.attributes.UID,
+					);
+				}
+
 				print("new enemy", enemy);
 				this.currentEnemy = enemy;
+				enemy?.attackingFighters.push(this.attributes.UID);
 			}),
 		);
 	}
@@ -135,7 +144,7 @@ export class FighterGoal
 		const fighterModelComponent = await this.components.waitForComponent<FighterModel>(fighterModel);
 		this.trove.add(fighterModelComponent);
 
-		fighterModelComponent.fighterGoal = this.fighterPart;
+		fighterModelComponent.fighterGoal = this;
 
 		return fighterModelComponent;
 	}
@@ -145,13 +154,24 @@ export class FighterGoal
 			return;
 		}
 
-		let target: Vector3 | undefined;
+		let target: CFrame | undefined;
 
 		if (this.currentEnemy) {
-			target = this.currentEnemy.root.Position;
+			const total = this.currentEnemy.attackingFighters.size();
+			const index = this.currentEnemy.attackingFighters.indexOf(this.attributes.UID);
+			const enemySize = this.currentEnemy.instance.GetScale() * 2 + 2;
+			const enemyPosition = this.currentEnemy.root.Position;
+
+			// Thanks NPCsController
+			const angle = math.rad((360 / total) * (index - 1));
+
+			target = new CFrame(
+				enemyPosition.add(new Vector3(math.cos(angle), 0, math.sin(angle)).mul(enemySize)),
+				enemyPosition,
+			);
 		}
 
-		this.instance.WorldPosition = target ?? this.root.CFrame.PointToWorldSpace(this.attributes.Offset);
+		this.instance.WorldCFrame = target ?? new CFrame(this.root.CFrame.PointToWorldSpace(this.attributes.Offset));
 	}
 
 	private updateFighterGoal(dt: number) {
@@ -159,13 +179,18 @@ export class FighterGoal
 			return;
 		}
 
-		const goal = this.instance.WorldPosition;
-
 		if (this.currentEnemy) {
-			this.fighterPart.CFrame = this.fighterPart.CFrame.Lerp(this.instance.WorldCFrame, dt * 8);
+			const groundResult = this.getGroundResult(this.instance.WorldPosition)?.mul(Vector3.yAxis) ?? Vector3.zero;
+			const goalCFrame = this.instance.WorldCFrame;
+
+			this.fighterPart.CFrame = this.fighterPart.CFrame.Lerp(
+				goalCFrame.sub(goalCFrame.Position.mul(Vector3.yAxis)).add(groundResult),
+				dt * 8,
+			);
 			return;
 		}
 
+		const goal = this.instance.WorldPosition;
 		const fighterPosition = this.fighterPart.Position;
 		const occlusionResult = this.getOcclusionResult(goal);
 		const groundResult = occlusionResult && this.getGroundResult(occlusionResult);
@@ -183,13 +208,11 @@ export class FighterGoal
 
 		const finalGoal = new Vector3(occlusionResult.X, isFloating ? goal.Y : groundResult.Y, occlusionResult.Z);
 
-		const horizontalVector = new Vector3(1, 0, 1);
-
-		const fighterGoalDiff = finalGoal.sub(fighterPosition).mul(horizontalVector);
+		const fighterGoalDiff = finalGoal.sub(fighterPosition).mul(HORIZONTAL_VECTOR);
 		const lookAt =
 			fighterGoalDiff.Magnitude > 0.8 && !isFloating ? fighterGoalDiff.Unit : this.root.CFrame.LookVector;
 
-		const goalLookAt = finalGoal.add(lookAt.mul(horizontalVector).mul(1.5));
+		const goalLookAt = finalGoal.add(lookAt.mul(HORIZONTAL_VECTOR).mul(1.5));
 		const goalCFrame = new CFrame(finalGoal, goalLookAt);
 
 		if (this.fighterPart.Position.Magnitude === math.huge) {

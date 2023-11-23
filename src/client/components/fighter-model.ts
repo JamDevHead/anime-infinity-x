@@ -6,6 +6,7 @@ import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { Workspace } from "@rbxts/services";
 import { FightersTracker } from "@/client/controllers/fighters-tracker";
 import Gizmo from "@rbxts/gizmo";
+import { FighterGoal } from "@/client/components/fighter-goal";
 
 interface IFighterModel extends Model {
 	Humanoid: Humanoid & {
@@ -26,7 +27,7 @@ export class FighterModel
 	extends BaseComponent<NonNullable<unknown>, IFighterModel>
 	implements OnStart, OnRender, OnPhysics
 {
-	public fighterGoal!: Part;
+	public fighterGoal!: FighterGoal;
 
 	private humanoid = this.instance.Humanoid;
 	private torso = this.instance.FindFirstChild("Torso") as Part | undefined;
@@ -110,7 +111,7 @@ export class FighterModel
 		}
 
 		// Update fighter model
-		this.instance.PivotTo(this.fighterGoal.CFrame);
+		this.instance.PivotTo(this.fighterGoal.fighterPart.CFrame);
 
 		const root = this.humanoid.RootPart;
 		const distance = root.Position.sub(this.lastFighterPosition).Magnitude;
@@ -119,7 +120,7 @@ export class FighterModel
 		this.lastFighterPosition = root.Position;
 
 		const isFalling = !this.isGrounded();
-		const isJumping = humanoid.Jump;
+		const isJumping = humanoid.Jump && this.fighterGoal.currentEnemy === undefined;
 		const isRunning = this.fighterVelocity > 0.2;
 
 		switch (true) {
