@@ -8,6 +8,7 @@ import { settingsSlice } from "./settings";
 import { windowSlice } from "./window";
 import { slices } from "@/shared/store";
 import { enemySelectionSlice } from "@/client/store/enemy-selection";
+import { fighterTargetSlice } from "client/store/fighter-target";
 
 export type RootStore = typeof store;
 export type RootState = InferState<RootStore>;
@@ -20,6 +21,7 @@ export function createStore() {
 		settings: settingsSlice,
 		window: windowSlice,
 		enemySelection: enemySelectionSlice,
+		enemyTarget: fighterTargetSlice,
 	});
 
 	store.applyMiddleware(devToolsMiddleware, receiverMiddleware(store));
