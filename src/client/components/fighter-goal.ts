@@ -16,6 +16,12 @@ import { FighterModel } from "@/client/components/fighter-model";
 const FAR_CFRAME = new CFrame(0, 5e9, 0);
 const HORIZONTAL_VECTOR = new Vector3(1, 0, 1);
 
+const selectFighter = (playerId: string, uid: string) => {
+	return createSelector(selectPlayerFighters(playerId), (fighters) => {
+		return fighters?.all.find((fighter) => fighter.uid === uid);
+	});
+};
+
 @Component({
 	tag: "FighterGoal",
 })
@@ -30,6 +36,7 @@ export class FighterGoal
 	private trove = new Trove();
 	private root: Part | undefined;
 	private fighterModel: FighterModel | undefined;
+	private localPlayer = Players.LocalPlayer;
 
 	constructor(
 		private readonly logger: Logger,
@@ -41,11 +48,10 @@ export class FighterGoal
 	}
 
 	onStart() {
-		const localPlayer = Players.LocalPlayer;
 		const owner =
-			localPlayer.UserId !== this.attributes.OwnerId
+			this.localPlayer.UserId !== this.attributes.OwnerId
 				? Players.GetPlayerByUserId(this.attributes.OwnerId)
-				: localPlayer;
+				: this.localPlayer;
 
 		if (!owner) {
 			this.logger.Warn("Failed to find owner {ownerId}", this.attributes.OwnerId);
@@ -66,43 +72,25 @@ export class FighterGoal
 
 		this.fighterPart.Parent = this.instance;
 
+		this.trove.add(this.fighterPart);
+
 		this.raycastParams.FilterType = Enum.RaycastFilterType.Exclude;
 		if (this.root?.Parent) {
 			this.raycastParams.AddToFilter(this.root.Parent);
 		}
 		this.raycastParams.AddToFilter(this.fightersTracker.fightersFolder);
 
-		const playerId = tostring(localPlayer.UserId);
-		const selectFighter = (playerId: string, uid: string) => {
-			return createSelector(selectPlayerFighters(playerId), (fighters) => {
-				return fighters?.all.find((fighter) => fighter.uid === uid);
-			});
-		};
-
-		const onNewFighterUid = async (uid: string) => {
-			const fighter = store.getState(selectFighter(playerId, uid));
-
-			if (this.fighterModel) {
-				this.trove.remove(this.fighterModel);
-			}
-
-			if (!fighter) {
-				return;
-			}
-
-			this.fighterModel = await this.createFighterModel(fighter);
-			this.updateFighterGoal(0.1);
-		};
-
-		onNewFighterUid(this.attributes.UID);
+		this.onNewFighterId(this.attributes.UID);
 		this.onAttributeChanged("UID", (newUid, oldUid) => {
 			if (newUid === oldUid) {
 				// May never reach, but on roblox things change
 				return;
 			}
 
-			onNewFighterUid(newUid);
+			this.onNewFighterId(newUid);
 		});
+
+		this.onFighterTargetUpdate(store.getState(selectFighterTarget(this.attributes.UID)));
 
 		this.trove.add(
 			store.subscribe(selectFighterTarget(this.attributes.UID), (enemy, lastEnemy) => {
@@ -112,8 +100,7 @@ export class FighterGoal
 					);
 				}
 
-				this.currentEnemy = enemy;
-				enemy?.attackingFighters.push(this.attributes.UID);
+				this.onFighterTargetUpdate(enemy);
 			}),
 		);
 	}
@@ -126,6 +113,32 @@ export class FighterGoal
 	onRender(dt: number) {
 		this.updateGoal();
 		this.updateFighterGoal(dt);
+	}
+
+	private onFighterTargetUpdate(enemy: Enemy | undefined) {
+		this.currentEnemy = enemy;
+
+		if (!enemy || enemy.attackingFighters.includes(this.attributes.UID)) {
+			return;
+		}
+
+		enemy.attackingFighters.push(this.attributes.UID);
+	}
+
+	private async onNewFighterId(uid: string) {
+		const playerId = tostring(this.localPlayer.UserId);
+		const fighter = store.getState(selectFighter(playerId, uid));
+
+		if (this.fighterModel) {
+			this.trove.remove(this.fighterModel);
+		}
+
+		if (!fighter) {
+			return;
+		}
+
+		this.fighterModel = await this.createFighterModel(fighter);
+		this.updateFighterGoal(0.1);
 	}
 
 	private async createFighterModel(fighter: PlayerFighter) {

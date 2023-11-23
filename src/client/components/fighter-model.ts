@@ -98,6 +98,7 @@ export class FighterModel
 			this.animationCache.forEach((track) => track.Destroy());
 			this.animationCache.clear();
 		});
+		this.trove.add(this.instance);
 	}
 
 	onPhysics() {

@@ -51,7 +51,7 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 			return () => {
 				const fightersWithTarget = store.getState(selectFightersTarget);
 
-				for (const [uid, enemy] of pairs(fightersWithTarget)) {
+				for (const [uid] of pairs(fightersWithTarget)) {
 					store.removeFighterTarget(uid as string);
 				}
 
@@ -67,6 +67,9 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 
 	onCharacterRemoved() {
 		this.root = undefined;
+		this.activeFighters.forEach((fighterAttachment) => {
+			fighterAttachment.RemoveTag("FighterGoal");
+		});
 	}
 
 	private createFighter(uid: string) {
