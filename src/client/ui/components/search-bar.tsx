@@ -38,15 +38,16 @@ export const SearchBar: FunctionComponent<PropsWithChildren<SearchBarProps>> = (
 				<TextField
 					placeholderText="Search"
 					textColor={colors.white}
-					size={new UDim2(1, 0, 1, 0)}
+					size={new UDim2(1, -rem(42, "pixel"), 1, rem(24, "pixel"))}
 					textSize={rem(24, "pixel")}
 					textXAlignment="Left"
+					clipsDescendants
 				/>
 				<uipadding
-					PaddingLeft={new UDim(0, 12)}
-					PaddingRight={new UDim(0, 12)}
-					PaddingTop={new UDim(0, 12)}
-					PaddingBottom={new UDim(0, 12)}
+					PaddingLeft={new UDim(0, rem(12, "pixel"))}
+					PaddingRight={new UDim(0, rem(12, "pixel"))}
+					PaddingTop={new UDim(0, rem(4, "pixel"))}
+					PaddingBottom={new UDim(0, rem(4, "pixel"))}
 				/>
 			</Stack>
 		</Frame>
