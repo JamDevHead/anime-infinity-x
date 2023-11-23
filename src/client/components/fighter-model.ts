@@ -15,9 +15,9 @@ interface IFighterModel extends Model {
 }
 
 const animationMap = {
-	idle: "180435571",
-	walk: "180426354",
-	run: "180426354",
+	idle: "14451184535",
+	walk: "14678864223",
+	run: "14678864223",
 	jump: "125750702",
 	fall: "180436148",
 } as const;
@@ -132,11 +132,11 @@ export class FighterModel
 		const isRunning = this.fighterVelocity > 0.2;
 
 		switch (true) {
-			case isFalling:
-				this.swapAnimation("fall");
-				break;
 			case isJumping:
 				this.swapAnimation("jump");
+				break;
+			case isFalling:
+				this.swapAnimation("fall");
 				break;
 			case isRunning:
 				this.getAnimationTrack("run")?.AdjustSpeed(this.fighterVelocity / 16);
