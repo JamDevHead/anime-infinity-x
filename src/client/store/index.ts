@@ -21,7 +21,7 @@ export function createStore() {
 		settings: settingsSlice,
 		window: windowSlice,
 		enemySelection: enemySelectionSlice,
-		enemyTarget: fighterTargetSlice,
+		fighterTarget: fighterTargetSlice,
 	});
 
 	store.applyMiddleware(devToolsMiddleware, receiverMiddleware(store));

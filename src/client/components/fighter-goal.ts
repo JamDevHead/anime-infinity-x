@@ -9,6 +9,8 @@ import { FightersTracker } from "@/client/controllers/fighters-tracker";
 import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { store } from "@/client/store";
 import { PlayerFighter, selectPlayerFighters } from "@/shared/store/players";
+import { selectFighterTarget } from "@/client/store/fighter-target/fighter-target-selectors";
+import { Enemy } from "@/client/components/enemy";
 
 const FAR_CFRAME = new CFrame(0, 5e9, 0);
 
@@ -24,6 +26,7 @@ export class FighterGoal
 	private trove = new Trove();
 	private root: Part | undefined;
 	private fighterModel: Model | undefined;
+	private currentEnemy: Enemy | undefined;
 
 	constructor(
 		private readonly logger: Logger,
@@ -96,6 +99,13 @@ export class FighterGoal
 
 			onNewFighterUid(newUid);
 		});
+
+		this.trove.add(
+			store.subscribe(selectFighterTarget(this.attributes.UID), (enemy) => {
+				print("new enemy");
+				this.currentEnemy = enemy;
+			}),
+		);
 	}
 
 	destroy() {
@@ -130,7 +140,13 @@ export class FighterGoal
 			return;
 		}
 
-		this.instance.WorldPosition = this.root.CFrame.PointToWorldSpace(this.attributes.Offset);
+		let target: Vector3 | undefined;
+
+		if (this.currentEnemy) {
+			target = this.currentEnemy.root.Position;
+		}
+
+		this.instance.WorldPosition = target ?? this.root.CFrame.PointToWorldSpace(this.attributes.Offset);
 	}
 
 	private updateFighterModel() {
