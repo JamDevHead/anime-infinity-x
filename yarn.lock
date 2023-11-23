@@ -1318,7 +1318,7 @@
   resolved "https://registry.yarnpkg.com/@rbxts/message-templates/-/message-templates-0.3.2.tgz#85169980cf73f659282aa9846290ceaf06967167"
   integrity sha512-79onYskH3pgrBT73Zs+biQ31vAVvupKQaxGNWGjyGsxwNhO2YaN/qkut0bvOshaGa+ZzqAXApRVrN8ifIMPiMQ==
 
-"@rbxts/net@^3.0.0-alpha.0", "@rbxts/net@^3.0.7":
+"@rbxts/net@^3.0.0-alpha.0":
   version "3.0.7"
   resolved "https://registry.yarnpkg.com/@rbxts/net/-/net-3.0.7.tgz#bbb5a7d61f622641ba2083ff9a9f1496370e6fbc"
   integrity sha512-IJ1XQFkNF81xCP2YxWtDJbORyiWBnNEneQ26DbHFpx4cIXYPdOgCO3VVCQDNjeEp1rjbkK6YtHoqiXxwEVacZQ==
@@ -1396,6 +1396,11 @@
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/@rbxts/reflex/-/reflex-4.2.2.tgz#49b01ca1011230d23451bbb4e2ced068ef82d1bc"
   integrity sha512-TLIwtCyGSHAheEEf9XlfqB9sZHLl02cs+fgNAE351OzQWI2RtCYeBNjAKQ3L0tZstHUQOw7FyiNvZzNQU0rDSw==
+
+"@rbxts/remo@^1.2.4":
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/@rbxts/remo/-/remo-1.2.4.tgz#f011665a8b5c5ed4c478459907a682751f98636c"
+  integrity sha512-ewU8l8ACjHdfDpLuIfOyK6Gahfv7ODzX+iCbHjNbQuFVs0Yfm/SQ2hjmKN3jRlOkcKi2g4hHlej46tTgVzTw4Q==
 
 "@rbxts/ripple@^0.7.1":
   version "0.7.1"

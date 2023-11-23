@@ -3,23 +3,18 @@ import remotes from "@/shared/remotes";
 import { slices } from "@/shared/store";
 
 export function broadcasterMiddleware(): ProducerMiddleware {
-	const reflexNamespace = remotes.Server.GetNamespace("reflex");
-	const startRemote = reflexNamespace.Get("start");
-	const dispatchRemote = reflexNamespace.Get("dispatch");
-	const hydrateRemote = reflexNamespace.Get("hydrate");
-
 	const broadcaster = createBroadcaster({
 		producers: slices,
 		hydrateRate: 60,
 		dispatch: (player, actions) => {
-			dispatchRemote.SendToPlayer(player, actions);
+			remotes.store.dispatch.fire(player, actions);
 		},
 		hydrate: (player, state) => {
-			hydrateRemote.SendToPlayer(player, state);
+			remotes.store.hydrate.fire(player, state);
 		},
 	});
 
-	startRemote.Connect((player) => {
+	remotes.store.start.connect((player) => {
 		broadcaster.start(player);
 	});
 
