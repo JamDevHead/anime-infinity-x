@@ -1,7 +1,25 @@
 import { Workspace } from "@rbxts/services";
 
-export function getEnemyModelByUid(uid: string) {
-	const enemiesFolder = Workspace.FindFirstChild("Enemies") as Folder | undefined;
+const enemyCache = new Map<string, Model>();
 
-	return enemiesFolder?.GetChildren().find((enemy) => enemy.GetAttribute("Guid") === uid) as Model | undefined;
+export function getEnemyModelByUid(uid: string) {
+	const enemyCached = enemyCache.get(uid);
+
+	if (enemyCached !== undefined && enemyCached.Parent) {
+		return enemyCache.get(uid);
+	} else {
+		enemyCache.delete(uid);
+	}
+
+	const enemiesFolder = Workspace.FindFirstChild("Enemies") as Folder | undefined;
+	const enemyModel = enemiesFolder?.GetChildren().find((enemy) => enemy.GetAttribute("Guid") === uid) as
+		| Model
+		| undefined;
+
+	if (!enemyModel) {
+		return undefined;
+	}
+
+	enemyCache.set(uid, enemyModel);
+	return enemyModel;
 }
