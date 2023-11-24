@@ -121,6 +121,7 @@ export class FighterGoal
 	private onFighterTargetUpdate(enemyUid: string | undefined) {
 		const enemy = enemyUid ? getEnemyByUid(enemyUid, this.components) : undefined;
 
+		print("new target update", enemyUid, enemy);
 		this.currentEnemy = enemy;
 
 		if (!enemy || enemy.attackingFighters.includes(this.attributes.UID)) {

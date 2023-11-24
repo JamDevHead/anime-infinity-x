@@ -2,7 +2,7 @@ import { Controller, OnRender, OnStart } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { createRoot } from "@rbxts/react-roblox";
 import Roact, { StrictMode } from "@rbxts/roact";
-import { Workspace } from "@rbxts/services";
+import { Players, Workspace } from "@rbxts/services";
 import { EnemyComponent } from "@/shared/components/enemy-component";
 import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { OnInput } from "@/client/controllers/lifecycles/on-input";
@@ -11,10 +11,13 @@ import { EnemyProvider } from "@/client/providers/enemy-provider";
 import { ReflexProvider } from "@rbxts/react-reflex";
 import { store } from "@/client/store";
 import { Components } from "@flamework/components";
-import { selectHoveredEnemy } from "@/client/store/enemy-selection";
+import { selectHoveredEnemy } from "@/client/store/enemy-hover";
+import remotes from "@/shared/remotes";
 
 @Controller()
 export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender {
+	private localPlayer = Players.LocalPlayer;
+	private localUserId = tostring(this.localPlayer.UserId);
 	private root: Part | undefined;
 	private raycastParams = new RaycastParams();
 	private currentEnemy: EnemyComponent | undefined;
@@ -35,7 +38,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 		root.render(
 			<StrictMode>
 				<ReflexProvider producer={store}>
-					<EnemyProvider />
+					<EnemyProvider userId={this.localUserId} components={this.components} />
 				</ReflexProvider>
 			</StrictMode>,
 		);
@@ -48,16 +51,16 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 		const hoveredEnemy = store.getState(selectHoveredEnemy);
 		const enemy = this.getEnemyAtMousePosition();
 
-		if (hoveredEnemy === enemy) {
+		if (hoveredEnemy === enemy?.attributes.Guid) {
 			return;
 		}
 
 		if (hoveredEnemy) {
-			store.removeHoveredEnemy(hoveredEnemy);
+			store.removeHoveredEnemy();
 		}
 
 		if (enemy && this.currentEnemy !== enemy) {
-			store.setHoveredEnemy(enemy);
+			store.setHoveredEnemy(enemy.attributes.Guid);
 		}
 	}
 
@@ -78,19 +81,25 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 
 		if (!enemy) {
 			if (this.currentEnemy) {
-				store.removeSelectedEnemy(this.currentEnemy);
+				const uid = this.currentEnemy.attributes.Guid;
+				remotes.fighterTarget.unselect.fire(uid);
+				store.removeSelectedEnemy(this.localUserId, uid);
 				this.currentEnemy = undefined;
 			}
 			return;
 		}
 
 		if (this.currentEnemy !== enemy) {
+			const uid = enemy.attributes.Guid;
+
 			if (this.currentEnemy) {
-				store.removeSelectedEnemy(this.currentEnemy);
+				remotes.fighterTarget.unselect.fire(uid);
+				store.removeSelectedEnemy(this.localUserId, uid);
 			}
 
 			this.currentEnemy = enemy;
-			store.setSelectedEnemy(enemy);
+			remotes.fighterTarget.select.fire(uid);
+			store.setSelectedEnemy(this.localUserId, uid);
 		}
 	}
 

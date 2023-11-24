@@ -6,8 +6,9 @@ import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add
 import { store } from "@/client/store";
 import { selectPlayerFighters } from "@/shared/store/players";
 import { selectFightersTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
-import { selectSelectedEnemies } from "@/client/store/enemy-selection";
+import { selectSelectedEnemiesByPlayerId } from "shared/store/enemy-selection";
 import remotes from "@/shared/remotes";
+import { Components } from "@flamework/components";
 
 const selectActiveFighters = (playerId: string) => {
 	return createSelector(selectPlayerFighters(playerId), (fighters) => {
@@ -21,17 +22,21 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 
 	private readonly RootOffset = new Vector3(0, -3, 4);
 	private localPlayer = Players.LocalPlayer;
+	private localUserId = tostring(this.localPlayer.UserId);
 	private root: Part | undefined;
 	private goalContainer = Workspace.Terrain;
 	private activeFighters = new Map<string, Attachment>();
 
-	constructor(private readonly logger: Logger) {}
+	constructor(
+		private readonly logger: Logger,
+		private readonly components: Components,
+	) {}
 
 	onStart() {
 		this.fightersFolder.Name = "Fighters";
 		this.fightersFolder.Parent = Workspace;
 
-		store.observe(selectActiveFighters(tostring(this.localPlayer.UserId)), (uid) => {
+		store.observe(selectActiveFighters(this.localUserId), (uid) => {
 			this.createFighter(uid);
 			this.updateFighters();
 
@@ -42,10 +47,10 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 			};
 		});
 
-		store.observe(selectSelectedEnemies, (enemy) => {
+		store.observe(selectSelectedEnemiesByPlayerId(this.localUserId), (enemyUid) => {
 			this.activeFighters.forEach((_, uid) => {
-				remotes.fighterTarget.set.fire(uid, enemy.attributes.Guid);
-				store.setFighterTarget(uid, enemy.attributes.Guid);
+				remotes.fighterTarget.set.fire(uid, enemyUid);
+				store.setFighterTarget(uid, enemyUid);
 			});
 
 			this.updateFighters();

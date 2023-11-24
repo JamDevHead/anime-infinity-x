@@ -1,7 +1,7 @@
-import { RootState } from "@/client/store";
 import { createSelector } from "@rbxts/reflex";
+import { SharedState } from "@/shared/store";
 
-export const selectFightersTarget = (state: RootState) => state.fighterTarget;
+export const selectFightersTarget = (state: SharedState) => state.fighterTarget;
 
 export const selectFighterTarget = (fighterUid: string) => {
 	return createSelector(selectFightersTarget, (fighters) => {
