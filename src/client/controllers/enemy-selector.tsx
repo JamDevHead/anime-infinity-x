@@ -2,8 +2,8 @@ import { Controller, OnRender, OnStart } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { createRoot } from "@rbxts/react-roblox";
 import Roact, { StrictMode } from "@rbxts/roact";
-import { Workspace } from "@rbxts/services";
-import { Enemy } from "@/client/components/enemy";
+import { Players, Workspace } from "@rbxts/services";
+import { EnemyComponent } from "@/shared/components/enemy-component";
 import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { OnInput } from "@/client/controllers/lifecycles/on-input";
 import { getMouseTarget } from "@/client/utils/mouse";
@@ -11,13 +11,17 @@ import { EnemyProvider } from "@/client/providers/enemy-provider";
 import { ReflexProvider } from "@rbxts/react-reflex";
 import { store } from "@/client/store";
 import { Components } from "@flamework/components";
-import { selectHoveredEnemy } from "@/client/store/enemy-selection";
+import { selectHoveredEnemy } from "@/client/store/enemy-hover";
+import remotes from "@/shared/remotes";
+import { selectSelectedEnemiesByPlayerId } from "@/shared/store/enemy-selection";
 
 @Controller()
 export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender {
+	private localPlayer = Players.LocalPlayer;
+	private localUserId = tostring(this.localPlayer.UserId);
 	private root: Part | undefined;
 	private raycastParams = new RaycastParams();
-	private currentEnemy: Enemy | undefined;
+	private currentEnemy: EnemyComponent | undefined;
 	private enemyFolder: Folder | undefined;
 
 	constructor(
@@ -35,7 +39,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 		root.render(
 			<StrictMode>
 				<ReflexProvider producer={store}>
-					<EnemyProvider />
+					<EnemyProvider userId={this.localUserId} />
 				</ReflexProvider>
 			</StrictMode>,
 		);
@@ -48,16 +52,18 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 		const hoveredEnemy = store.getState(selectHoveredEnemy);
 		const enemy = this.getEnemyAtMousePosition();
 
-		if (hoveredEnemy === enemy) {
+		if (hoveredEnemy === enemy?.attributes.Guid) {
 			return;
 		}
 
+		const selectedEnemies = store.getState(selectSelectedEnemiesByPlayerId(this.localUserId));
+
 		if (hoveredEnemy) {
-			store.removeHoveredEnemy(hoveredEnemy);
+			store.removeHoveredEnemy();
 		}
 
-		if (enemy && this.currentEnemy !== enemy) {
-			store.setHoveredEnemy(enemy);
+		if (enemy && !selectedEnemies?.includes(enemy.attributes.Guid)) {
+			store.setHoveredEnemy(enemy.attributes.Guid);
 		}
 	}
 
@@ -74,23 +80,26 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 			return;
 		}
 
+		const selectedEnemies = store.getState(selectSelectedEnemiesByPlayerId(this.localUserId));
 		const enemy = this.getEnemyAtMousePosition();
 
-		if (!enemy) {
-			if (this.currentEnemy) {
-				store.removeSelectedEnemy(this.currentEnemy);
-				this.currentEnemy = undefined;
+		const clearSelection = () => {
+			if (selectedEnemies && selectedEnemies.size() > 0) {
+				selectedEnemies.forEach((enemyUid) => remotes.fighterTarget.unselect.fire(enemyUid));
 			}
+		};
+
+		if (!enemy) {
+			clearSelection();
 			return;
 		}
 
-		if (this.currentEnemy !== enemy) {
-			if (this.currentEnemy) {
-				store.removeSelectedEnemy(this.currentEnemy);
-			}
+		const uid = enemy.attributes.Guid;
 
-			this.currentEnemy = enemy;
-			store.setSelectedEnemy(enemy);
+		if (!selectedEnemies?.includes(uid)) {
+			clearSelection();
+
+			remotes.fighterTarget.select.fire(uid);
 		}
 	}
 
@@ -119,7 +128,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 			model = model.FindFirstAncestorOfClass("Model");
 		}
 
-		return model && this.components.getComponent<Enemy>(model);
+		return model && this.components.getComponent<EnemyComponent>(model);
 	}
 
 	private getEnemyDistance(enemyPart: BasePart) {

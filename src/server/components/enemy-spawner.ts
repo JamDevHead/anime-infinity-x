@@ -2,7 +2,7 @@ import { BaseComponent, Component } from "@flamework/components";
 import { OnStart } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { HttpService, ServerStorage } from "@rbxts/services";
-import { EnemyModel } from "@/server/components/enemy";
+import { EnemyModel } from "@/shared/components/enemy-component";
 import { EnemiesSpawner } from "@/server/services/enemies-spawner";
 
 interface EnemyAttributes {

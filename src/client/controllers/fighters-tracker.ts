@@ -5,8 +5,9 @@ import { Players, Workspace } from "@rbxts/services";
 import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { store } from "@/client/store";
 import { selectPlayerFighters } from "@/shared/store/players";
-import { selectFightersTarget } from "@/client/store/fighter-target/fighter-target-selectors";
-import { selectSelectedEnemies } from "@/client/store/enemy-selection";
+import { selectFightersTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
+import { selectSelectedEnemiesByPlayerId } from "shared/store/enemy-selection";
+import remotes from "@/shared/remotes";
 
 const selectActiveFighters = (playerId: string) => {
 	return createSelector(selectPlayerFighters(playerId), (fighters) => {
@@ -20,6 +21,7 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 
 	private readonly RootOffset = new Vector3(0, -3, 4);
 	private localPlayer = Players.LocalPlayer;
+	private localUserId = tostring(this.localPlayer.UserId);
 	private root: Part | undefined;
 	private goalContainer = Workspace.Terrain;
 	private activeFighters = new Map<string, Attachment>();
@@ -30,7 +32,7 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 		this.fightersFolder.Name = "Fighters";
 		this.fightersFolder.Parent = Workspace;
 
-		store.observe(selectActiveFighters(tostring(this.localPlayer.UserId)), (uid) => {
+		store.observe(selectActiveFighters(this.localUserId), (uid) => {
 			this.createFighter(uid);
 			this.updateFighters();
 
@@ -41,9 +43,9 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 			};
 		});
 
-		store.observe(selectSelectedEnemies, (enemy) => {
+		store.observe(selectSelectedEnemiesByPlayerId(this.localUserId), (enemyUid) => {
 			this.activeFighters.forEach((_, uid) => {
-				store.setFighterTarget(uid, enemy);
+				remotes.fighterTarget.set.fire(uid, enemyUid);
 			});
 
 			this.updateFighters();
@@ -52,7 +54,7 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 				const fightersWithTarget = store.getState(selectFightersTarget);
 
 				for (const [uid] of pairs(fightersWithTarget)) {
-					store.removeFighterTarget(uid as string);
+					remotes.fighterTarget.remove.fire(uid as string);
 				}
 
 				this.updateFighters();

@@ -9,9 +9,10 @@ import { FightersTracker } from "@/client/controllers/fighters-tracker";
 import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { store } from "@/client/store";
 import { PlayerFighter, selectPlayerFighters } from "@/shared/store/players";
-import { selectFighterTarget } from "@/client/store/fighter-target/fighter-target-selectors";
-import { Enemy } from "@/client/components/enemy";
+import { selectFighterTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
+import { EnemyComponent } from "@/shared/components/enemy-component";
 import { FighterModel } from "@/client/components/fighter-model";
+import { getEnemyByUid } from "@/client/utils/enemies";
 
 const FAR_CFRAME = new CFrame(0, 5e9, 0);
 const HORIZONTAL_VECTOR = new Vector3(1, 0, 1);
@@ -30,7 +31,7 @@ export class FighterGoal
 	implements OnStart, OnRender
 {
 	public fighterPart = new Instance("Part");
-	public currentEnemy: Enemy | undefined;
+	public currentEnemy: EnemyComponent | undefined;
 
 	private raycastParams = new RaycastParams();
 	private trove = new Trove();
@@ -93,14 +94,16 @@ export class FighterGoal
 		this.onFighterTargetUpdate(store.getState(selectFighterTarget(this.attributes.UID)));
 
 		this.trove.add(
-			store.subscribe(selectFighterTarget(this.attributes.UID), (enemy, lastEnemy) => {
+			store.subscribe(selectFighterTarget(this.attributes.UID), (enemyUid, lastEnemyUid) => {
+				const lastEnemy = lastEnemyUid ? getEnemyByUid(lastEnemyUid, this.components) : undefined;
+
 				if (lastEnemy?.attackingFighters.includes(this.attributes.UID)) {
 					lastEnemy.attackingFighters = lastEnemy.attackingFighters.filter(
 						(fighterUid) => fighterUid !== this.attributes.UID,
 					);
 				}
 
-				this.onFighterTargetUpdate(enemy);
+				this.onFighterTargetUpdate(enemyUid);
 			}),
 		);
 	}
@@ -115,7 +118,9 @@ export class FighterGoal
 		this.updateFighterGoal(dt);
 	}
 
-	private onFighterTargetUpdate(enemy: Enemy | undefined) {
+	private onFighterTargetUpdate(enemyUid: string | undefined) {
+		const enemy = enemyUid ? getEnemyByUid(enemyUid, this.components) : undefined;
+
 		this.currentEnemy = enemy;
 
 		if (!enemy || enemy.attackingFighters.includes(this.attributes.UID)) {
