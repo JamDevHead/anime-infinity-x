@@ -4,7 +4,7 @@ import { createSelector } from "@rbxts/reflex";
 import { Players, Workspace } from "@rbxts/services";
 import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { store } from "@/client/store";
-import { selectPlayerFighters } from "@/shared/store/players";
+import { selectPlayerFighters } from "@/shared/store/players/fighters";
 import { selectFightersTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
 import { selectSelectedEnemiesByPlayerId } from "shared/store/enemy-selection";
 import remotes from "@/shared/remotes";

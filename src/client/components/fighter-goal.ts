@@ -8,11 +8,12 @@ import { Trove } from "@rbxts/trove";
 import { FightersTracker } from "@/client/controllers/fighters-tracker";
 import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { store } from "@/client/store";
-import { PlayerFighter, selectPlayerFighters } from "@/shared/store/players";
+import { PlayerFighter } from "@/shared/store/players";
 import { selectFighterTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
 import { EnemyComponent } from "@/shared/components/enemy-component";
 import { FighterModel } from "@/client/components/fighter-model";
 import { getEnemyByUid } from "@/client/utils/enemies";
+import { selectPlayerFighters } from "@/shared/store/players/fighters";
 
 const FAR_CFRAME = new CFrame(0, 5e9, 0);
 const HORIZONTAL_VECTOR = new Vector3(1, 0, 1);

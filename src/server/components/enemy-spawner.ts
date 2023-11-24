@@ -3,7 +3,7 @@ import { OnStart } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { HttpService, ServerStorage } from "@rbxts/services";
 import { EnemyModel } from "@/shared/components/enemy-component";
-import { EnemiesSpawner } from "@/server/services/enemies-spawner";
+import { EnemySpawner } from "@/server/services/enemy-spawner";
 
 interface EnemyAttributes {
 	EnemyZone: string;
@@ -18,7 +18,7 @@ export class Enemy extends BaseComponent<EnemyAttributes, Part> implements OnSta
 
 	constructor(
 		private readonly logger: Logger,
-		private readonly enemiesSpawner: EnemiesSpawner,
+		private readonly enemiesSpawner: EnemySpawner,
 	) {
 		super();
 	}

@@ -1,6 +1,7 @@
 import { createSelector } from "@rbxts/reflex";
 import { SharedState } from "@/shared/store";
 import { PlayerData } from "@/shared/store/players/players-types";
+import { selectPlayerFighters } from "@/shared/store/players/fighters";
 
 export const selectPlayerBalance = (playerId: string) => {
 	return (state: SharedState) => {
@@ -11,12 +12,6 @@ export const selectPlayerBalance = (playerId: string) => {
 export const selectPlayerZones = (playerId: string) => {
 	return (state: SharedState) => {
 		return state.players.zones[playerId];
-	};
-};
-
-export const selectPlayerFighters = (playerId: string) => {
-	return (state: SharedState) => {
-		return state.players.fighters[playerId];
 	};
 };
 
