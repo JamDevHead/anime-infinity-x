@@ -10,6 +10,10 @@ export const enemySelectionSlice = createProducer(initialState, {
 	setSelectedEnemy: (state, playerId: string, enemyUid: string) => {
 		const enemies = state[playerId] ?? [];
 
+		if (enemies.includes(enemyUid)) {
+			return state;
+		}
+
 		return {
 			...state,
 			[playerId]: [...enemies, enemyUid],
@@ -17,6 +21,10 @@ export const enemySelectionSlice = createProducer(initialState, {
 	},
 	removeSelectedEnemy: (state, playerId: string, enemyUid: string) => {
 		const enemies = state[playerId] ?? [];
+
+		if (!enemies.includes(enemyUid)) {
+			return state;
+		}
 
 		return {
 			...state,
