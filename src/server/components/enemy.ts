@@ -1,21 +1,10 @@
-import { BaseComponent, Component } from "@flamework/components";
+import { Component } from "@flamework/components";
 import { OnStart } from "@flamework/core";
 import { store } from "@/server/store";
-
-export interface EnemyModel extends Model {
-	Humanoid: Humanoid;
-	HumanoidRootPart: Part;
-}
-
-interface EnemyAttributes {
-	Guid: string;
-}
+import { EnemyComponent } from "@/shared/components/enemy-component";
 
 @Component({ tag: "EnemyNPC" })
-export class Enemy extends BaseComponent<EnemyAttributes, EnemyModel> implements OnStart {
-	private humanoid = this.instance.Humanoid;
-	private root = this.instance.HumanoidRootPart;
-
+export class Enemy extends EnemyComponent implements OnStart {
 	onStart() {
 		store.addEnemy(this.attributes.Guid);
 

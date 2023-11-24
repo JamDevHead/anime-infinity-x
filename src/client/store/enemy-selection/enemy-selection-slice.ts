@@ -1,9 +1,9 @@
 import { createProducer } from "@rbxts/reflex";
-import { Enemy } from "@/client/components/enemy";
+import { EnemyComponent } from "@/shared/components/enemy-component";
 
 interface EnemySelectionSlice {
-	readonly enemies: Enemy[];
-	hoveredEnemy?: Enemy;
+	readonly enemies: EnemyComponent[];
+	hoveredEnemy?: EnemyComponent;
 }
 
 const initialState: EnemySelectionSlice = {
@@ -11,14 +11,14 @@ const initialState: EnemySelectionSlice = {
 };
 
 export const enemySelectionSlice = createProducer(initialState, {
-	setSelectedEnemy: (state, enemy: Enemy) => ({
+	setSelectedEnemy: (state, enemy: EnemyComponent) => ({
 		enemies: [...state.enemies, enemy],
 		hoveredEnemy: undefined,
 	}),
-	removeSelectedEnemy: (state, enemyToRemove: Enemy) => ({
+	removeSelectedEnemy: (state, enemyToRemove: EnemyComponent) => ({
 		enemies: state.enemies.filter((enemy) => enemy !== enemyToRemove),
 	}),
-	setHoveredEnemy: (state, enemy: Enemy) => {
+	setHoveredEnemy: (state, enemy: EnemyComponent) => {
 		if (state.enemies.includes(enemy)) {
 			return state;
 		}
@@ -28,7 +28,7 @@ export const enemySelectionSlice = createProducer(initialState, {
 			hoveredEnemy: enemy,
 		};
 	},
-	removeHoveredEnemy: (state, enemyToRemove: Enemy) => {
+	removeHoveredEnemy: (state, enemyToRemove: EnemyComponent) => {
 		if (state.hoveredEnemy !== enemyToRemove) {
 			return state;
 		}

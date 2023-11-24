@@ -10,10 +10,10 @@ interface EnemyAttributes {
 }
 
 @Component({ tag: "EnemyNPC" })
-export class Enemy extends BaseComponent<EnemyAttributes, EnemyModel> {
+export class EnemyComponent extends BaseComponent<EnemyAttributes, EnemyModel> {
 	public root = this.instance.HumanoidRootPart;
+	public humanoid = this.instance.Humanoid;
 	public attackingFighters = new Array<string>();
 
-	// private humanoid = this.instance.Humanoid;
 	// private guid = this.attributes.Guid;
 }

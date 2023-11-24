@@ -3,7 +3,7 @@ import { Logger } from "@rbxts/log";
 import { createRoot } from "@rbxts/react-roblox";
 import Roact, { StrictMode } from "@rbxts/roact";
 import { Workspace } from "@rbxts/services";
-import { Enemy } from "@/client/components/enemy";
+import { EnemyComponent } from "@/shared/components/enemy-component";
 import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { OnInput } from "@/client/controllers/lifecycles/on-input";
 import { getMouseTarget } from "@/client/utils/mouse";
@@ -17,7 +17,7 @@ import { selectHoveredEnemy } from "@/client/store/enemy-selection";
 export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender {
 	private root: Part | undefined;
 	private raycastParams = new RaycastParams();
-	private currentEnemy: Enemy | undefined;
+	private currentEnemy: EnemyComponent | undefined;
 	private enemyFolder: Folder | undefined;
 
 	constructor(
@@ -119,7 +119,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 			model = model.FindFirstAncestorOfClass("Model");
 		}
 
-		return model && this.components.getComponent<Enemy>(model);
+		return model && this.components.getComponent<EnemyComponent>(model);
 	}
 
 	private getEnemyDistance(enemyPart: BasePart) {

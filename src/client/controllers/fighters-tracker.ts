@@ -5,8 +5,9 @@ import { Players, Workspace } from "@rbxts/services";
 import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { store } from "@/client/store";
 import { selectPlayerFighters } from "@/shared/store/players";
-import { selectFightersTarget } from "@/client/store/fighter-target/fighter-target-selectors";
+import { selectFightersTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
 import { selectSelectedEnemies } from "@/client/store/enemy-selection";
+import remotes from "@/shared/remotes";
 
 const selectActiveFighters = (playerId: string) => {
 	return createSelector(selectPlayerFighters(playerId), (fighters) => {
@@ -43,7 +44,8 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 
 		store.observe(selectSelectedEnemies, (enemy) => {
 			this.activeFighters.forEach((_, uid) => {
-				store.setFighterTarget(uid, enemy);
+				remotes.fighterTarget.set.fire(uid, enemy.attributes.Guid);
+				store.setFighterTarget(uid, enemy.attributes.Guid);
 			});
 
 			this.updateFighters();

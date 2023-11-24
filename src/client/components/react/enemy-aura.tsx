@@ -1,13 +1,13 @@
 import Roact, { useRef } from "@rbxts/roact";
 import { Image } from "@/client/ui/components/image";
 import { images } from "@/shared/assets/images";
-import { Enemy } from "@/client/components/enemy";
+import { EnemyComponent } from "@/shared/components/enemy-component";
 import { useLifetime, useMotor, useMountEffect } from "@rbxts/pretty-react-hooks";
 import { Spring } from "@rbxts/flipper";
 
 const auraSpeed = 20;
 
-export function EnemyAura({ enemy }: { enemy: Enemy }) {
+export function EnemyAura({ enemy }: { enemy: EnemyComponent }) {
 	const enemySize = new Vector3(4, 4, 1).mul(enemy.instance.GetScale());
 	const auraPosition = enemy.root.Position.sub(Vector3.yAxis.mul(enemySize.Y / 2 + enemy.root.Size.Y / 2));
 	const lifetime = useLifetime();
