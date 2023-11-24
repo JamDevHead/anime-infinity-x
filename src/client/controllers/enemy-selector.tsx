@@ -13,6 +13,7 @@ import { store } from "@/client/store";
 import { Components } from "@flamework/components";
 import { selectHoveredEnemy } from "@/client/store/enemy-hover";
 import remotes from "@/shared/remotes";
+import { selectSelectedEnemiesByPlayerId } from "@/shared/store/enemy-selection";
 
 @Controller()
 export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender {
@@ -38,7 +39,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 		root.render(
 			<StrictMode>
 				<ReflexProvider producer={store}>
-					<EnemyProvider userId={this.localUserId} components={this.components} />
+					<EnemyProvider userId={this.localUserId} />
 				</ReflexProvider>
 			</StrictMode>,
 		);
@@ -55,11 +56,13 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 			return;
 		}
 
+		const selectedEnemies = store.getState(selectSelectedEnemiesByPlayerId(this.localUserId));
+
 		if (hoveredEnemy) {
 			store.removeHoveredEnemy();
 		}
 
-		if (enemy && this.currentEnemy !== enemy) {
+		if (enemy && !selectedEnemies?.includes(enemy.attributes.Guid)) {
 			store.setHoveredEnemy(enemy.attributes.Guid);
 		}
 	}
@@ -77,29 +80,26 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 			return;
 		}
 
+		const selectedEnemies = store.getState(selectSelectedEnemiesByPlayerId(this.localUserId));
 		const enemy = this.getEnemyAtMousePosition();
 
-		if (!enemy) {
-			if (this.currentEnemy) {
-				const uid = this.currentEnemy.attributes.Guid;
-				remotes.fighterTarget.unselect.fire(uid);
-				store.removeSelectedEnemy(this.localUserId, uid);
-				this.currentEnemy = undefined;
+		const clearSelection = () => {
+			if (selectedEnemies && selectedEnemies.size() > 0) {
+				selectedEnemies.forEach((enemyUid) => remotes.fighterTarget.unselect.fire(enemyUid));
 			}
+		};
+
+		if (!enemy) {
+			clearSelection();
 			return;
 		}
 
-		if (this.currentEnemy !== enemy) {
-			const uid = enemy.attributes.Guid;
+		const uid = enemy.attributes.Guid;
 
-			if (this.currentEnemy) {
-				remotes.fighterTarget.unselect.fire(uid);
-				store.removeSelectedEnemy(this.localUserId, uid);
-			}
+		if (!selectedEnemies?.includes(uid)) {
+			clearSelection();
 
-			this.currentEnemy = enemy;
 			remotes.fighterTarget.select.fire(uid);
-			store.setSelectedEnemy(this.localUserId, uid);
 		}
 	}
 

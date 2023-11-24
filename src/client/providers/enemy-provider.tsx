@@ -1,29 +1,43 @@
 import Roact from "@rbxts/roact";
-import { EnemyAura } from "@/client/components/react/enemy-aura";
-import { createPortal } from "@rbxts/react-roblox";
 import { useRootSelector } from "@/client/store";
 import { selectSelectedEnemiesByPlayerId } from "shared/store/enemy-selection";
-import { EnemyHover } from "@/client/components/react/enemy-hover";
+import { getEnemyModelByUid } from "@/shared/utils/enemies";
+import { createPortal } from "@rbxts/react-roblox";
+import { EnemyAura } from "@/client/components/react/enemy-aura";
 import { selectHoveredEnemy } from "@/client/store/enemy-hover";
-import { getEnemyByUid } from "@/client/utils/enemies";
-import { Components } from "@flamework/components";
+import { EnemyHover } from "@/client/components/react/enemy-hover";
 
-export function EnemyProvider({ userId, components }: { userId: string; components: Components }) {
+function SelectionProvider({ userId }: { userId: string }) {
 	const selectedEnemies = useRootSelector(selectSelectedEnemiesByPlayerId(userId));
-	const hoveredEnemyUid = useRootSelector(selectHoveredEnemy);
 
-	const hoveredEnemy = hoveredEnemyUid ? getEnemyByUid(hoveredEnemyUid, components) : undefined;
+	print("rendering enemy provider");
 
 	return (
 		<>
-			{selectedEnemies.map((enemyUid) => {
-				const enemy = getEnemyByUid(enemyUid, components);
+			{selectedEnemies?.map((enemyUid) => {
+				const enemy = getEnemyModelByUid(enemyUid);
 
 				if (enemy) {
-					createPortal(<EnemyAura enemy={enemy} />, enemy.instance);
+					return createPortal(<EnemyAura enemy={enemy} />, enemy);
 				}
 			})}
-			{hoveredEnemy && createPortal(<EnemyHover />, hoveredEnemy.instance)}
+		</>
+	);
+}
+
+function HoverProvider() {
+	const hoveredEnemyUid = useRootSelector(selectHoveredEnemy);
+
+	const hoveredEnemy = hoveredEnemyUid ? getEnemyModelByUid(hoveredEnemyUid) : undefined;
+
+	return <>{hoveredEnemy && createPortal(<EnemyHover />, hoveredEnemy)}</>;
+}
+
+export function EnemyProvider({ userId }: { userId: string }) {
+	return (
+		<>
+			<SelectionProvider userId={userId} />
+			<HoverProvider />
 		</>
 	);
 }
