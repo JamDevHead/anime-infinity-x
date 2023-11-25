@@ -1,6 +1,7 @@
 import Roact from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
 import { Button } from "@/client/ui/components/button";
+import { CanvasGroup } from "@/client/ui/components/canvas-group";
 import { FighterCard } from "@/client/ui/components/fighter-card";
 import { Frame } from "@/client/ui/components/frame";
 import { Grid } from "@/client/ui/components/grid";
@@ -51,31 +52,33 @@ export const Inventory = () => {
 				size={new UDim2(1, 0, 1, -48)}
 				cornerRadius={new UDim(0, 12)}
 			>
-				<ScrollView
-					size={UDim2.fromScale(1, 1)}
-					padding={new UDim(0, 12)}
-					scrollingDirection={Enum.ScrollingDirection.XY}
-					clipsDescendants
-				>
-					<Grid
-						fillDirection="Horizontal"
-						horizontalAlignment="Center"
-						cellSize={UDim2.fromOffset(rem(120 * 1.8, "pixel"), rem(160 * 1.8, "pixel"))}
-						cellPadding={new UDim2(0, rem(12, "pixel"), 0, rem(12, "pixel"))}
+				<CanvasGroup size={UDim2.fromScale(1, 1)} backgroundTransparency={1}>
+					<ScrollView
 						size={UDim2.fromScale(1, 1)}
-						autoSize="Y"
+						padding={new UDim(0, 12)}
+						scrollingDirection={Enum.ScrollingDirection.XY}
+						clipsDescendants
 					>
-						{table.create(100, 1).map((_, index) => (
-							<FighterCard key={index} />
-						))}
-					</Grid>
-					<uipadding
-						PaddingLeft={new UDim(0, rem(12, "pixel"))}
-						PaddingRight={new UDim(0, rem(12, "pixel"))}
-						PaddingTop={new UDim(0, rem(12, "pixel"))}
-						PaddingBottom={new UDim(0, rem(12, "pixel"))}
-					/>
-				</ScrollView>
+						<Grid
+							fillDirection="Horizontal"
+							horizontalAlignment="Center"
+							cellSize={UDim2.fromOffset(rem(120 * 1.8, "pixel"), rem(160 * 1.8, "pixel"))}
+							cellPadding={new UDim2(0, rem(12, "pixel"), 0, rem(12, "pixel"))}
+							size={UDim2.fromScale(1, 1)}
+							autoSize="Y"
+						>
+							{table.create(100, 1).map((_, index) => (
+								<FighterCard key={index} />
+							))}
+						</Grid>
+						<uipadding
+							PaddingLeft={new UDim(0, rem(12, "pixel"))}
+							PaddingRight={new UDim(0, rem(12, "pixel"))}
+							PaddingTop={new UDim(0, rem(12, "pixel"))}
+							PaddingBottom={new UDim(0, rem(12, "pixel"))}
+						/>
+					</ScrollView>
+				</CanvasGroup>
 			</Frame>
 			<uipadding
 				PaddingLeft={new UDim(0, 12)}
