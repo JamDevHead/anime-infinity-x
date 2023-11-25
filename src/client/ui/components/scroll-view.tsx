@@ -18,8 +18,8 @@ type ScrollViewProps = FrameProps<ScrollingFrame> & {
 	enabled?: boolean;
 	verticalScrollBarPosition?: Enum.VerticalScrollBarPosition;
 	fillDirection?: Enum.FillDirection;
-	horizontalAlignment?: Enum.HorizontalAlignment;
-	verticalAlignment?: Enum.VerticalAlignment;
+	horizontalAlignment?: Enum.HorizontalAlignment | "Center" | "Left" | "Right";
+	verticalAlignment?: Enum.VerticalAlignment | "Center" | "Top" | "Bottom";
 	padding?: UDim;
 };
 

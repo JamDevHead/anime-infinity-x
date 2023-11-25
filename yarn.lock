@@ -1303,7 +1303,7 @@
   dependencies:
     "@rbxts/message-templates" "^0.3.1"
 
-"@rbxts/luau-polyfill-internal@1.2.3-ts.0":
+"@rbxts/luau-polyfill-internal@1.2.3-ts.0", "@rbxts/luau-polyfill-internal@^1.2.3-ts.0":
   version "1.2.3-ts.0"
   resolved "https://registry.yarnpkg.com/@rbxts/luau-polyfill-internal/-/luau-polyfill-internal-1.2.3-ts.0.tgz#01fec60c39e800d8b786d089648c54b1ecbf9606"
   integrity sha512-LG1h4uf+MpMxu6RfOLowRe+NOs2SWXzCmYd49WvfR8ZKVUNHvT0BeVIL9rS9q//mTlz8BXDyl5EVIyjnKgsekA==
@@ -1432,7 +1432,7 @@
   resolved "https://registry.yarnpkg.com/@rbxts/roact/-/roact-1.4.2-ts.3.tgz#6160a93d35405db317e445743dacdf0185161545"
   integrity sha512-ViS9Tu0gzRdAnOc64CplMKKOG/ISdS7AwgOd+4ld+O3f4N0fPOuxY/sIZ/67fMxH9Isu1r4A6wyg5F5YkK2csA==
 
-"@rbxts/roact@npm:@rbxts/react-ts@latest":
+"@rbxts/roact@npm:@rbxts/react-ts@^1.0.1", "@rbxts/roact@npm:@rbxts/react-ts@latest":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@rbxts/react-ts/-/react-ts-1.0.1.tgz#e659c0be23544242e03d718e6dc5152998adf5fc"
   integrity sha512-u/QsFkjWwEbr502xRfCNGjtMfOjqRiVGF5gb3Ox9Z94ymHPXniVsopmT582QpTZLuEcfB5TKvsvpFzFSQ14edg==
@@ -1528,6 +1528,15 @@
   version "1.0.730"
   resolved "https://registry.yarnpkg.com/@rbxts/types/-/types-1.0.730.tgz#89da16208c842c18d9287aabceb86e4563fb224e"
   integrity sha512-12rboJB+qu25jA2VtfLApg0Sr5LidRwlkoVf54qeTy7ih6s0JaxDicRhFm9g50h9Wa/XalL1vf1QWpZCtqzLuQ==
+
+"@rbxts/virtualized-list@^1.3.2-ts.0":
+  version "1.3.2-ts.0"
+  resolved "https://registry.yarnpkg.com/@rbxts/virtualized-list/-/virtualized-list-1.3.2-ts.0.tgz#7ed4acb5762a5b7226dbd2eba6fd49a0fe63dd1c"
+  integrity sha512-NqmuH15clV5x8iGGrDNlG2I0WAIqUUZfbg9R5aT9S7L65/PRh8vtZpaaYIMoncuLJpeIlwUIPPtpKEBgJToDtA==
+  dependencies:
+    "@rbxts/flipper" "^2.0.1"
+    "@rbxts/luau-polyfill-internal" "^1.2.3-ts.0"
+    "@rbxts/roact" "npm:@rbxts/react-ts@^1.0.1"
 
 "@rbxts/zircon@^1.0.9":
   version "1.0.9"

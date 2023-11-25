@@ -25,6 +25,8 @@ return {
 			search = "rbxassetid://15375260444",
 			settings = "rbxassetid://15302168932",
 			star = "rbxassetid://15303269918",
+			star_glow = "rbxassetid://15450618208",
+			star_rating = "rbxassetid://15449621163",
 			store = "rbxassetid://15303915226",
 			sword = "rbxassetid://15438096844",
 			sword_outline = "rbxassetid://15277603950",
@@ -33,6 +35,15 @@ return {
 		ui = {
 			attack_button_base = "rbxassetid://15281857202",
 			blur = "rbxassetid://15255783123",
+			cards = {
+				backgrounds = {
+					aot = "rbxassetid://15449187554",
+					dbz = "rbxassetid://15449187669",
+					dms = "rbxassetid://15449187774",
+					nrt = "rbxassetid://15449255334",
+					one = "rbxassetid://15449188170",
+				},
+			},
 			checkbox = "rbxassetid://15303998273",
 			checkmark = "rbxassetid://15303998318",
 			confirm_button = "rbxassetid://15350028108",
@@ -43,6 +54,7 @@ return {
 			option_toggle_off = "rbxassetid://15352146313",
 			option_toggle_on = "rbxassetid://15352146405",
 			rounded_button_base = "rbxassetid://15267940299",
+			shadow_star = "rbxassetid://15450966260",
 			stats_bar_base = "rbxassetid://15303347451",
 			stats_bar_coin = "rbxassetid://15303347522",
 			stats_bar_stars = "rbxassetid://15303347597",

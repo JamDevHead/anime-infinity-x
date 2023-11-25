@@ -27,8 +27,19 @@ export const images: {
 		readonly quad_menu: string;
 		readonly backpack: string;
 		readonly sword: string;
+		readonly star_rating: string;
+		readonly star_glow: string;
 	};
 	readonly ui: {
+		readonly cards: {
+			readonly backgrounds: {
+				readonly aot: string;
+				readonly dbz: string;
+				readonly dms: string;
+				readonly nrt: string;
+				readonly one: string;
+			};
+		};
 		readonly blur: string;
 		readonly rounded_button_base: string;
 		readonly attack_button_base: string;
@@ -49,5 +60,6 @@ export const images: {
 		readonly option_toggle_on: string;
 		readonly option_toggle_off: string;
 		readonly option_background: string;
+		readonly shadow_star: string;
 	};
 };

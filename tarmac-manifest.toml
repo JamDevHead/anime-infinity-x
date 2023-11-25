@@ -103,6 +103,16 @@ hash = "3326723ca18d335f7045844e8982195f7ac49611b88e70240917be9e38ef777d"
 id = 15303269918
 packable = false
 
+[inputs."assets/images/icons/star_glow.png"]
+hash = "3e8dcf45f3c9b70f60b374d471a74972bb622146aff28911b77a3092f7a3bf53"
+id = 15450618208
+packable = false
+
+[inputs."assets/images/icons/star_rating.png"]
+hash = "46934edee249c10f742d7f65480deaa139bc46f9ff33a58279f7f122a84c1fe5"
+id = 15449621163
+packable = false
+
 [inputs."assets/images/icons/store.png"]
 hash = "f6949ca26519fda5da23bb9940358d6a221bbb147ea9d53333d1581b02d78820"
 id = 15303915226
@@ -131,6 +141,31 @@ packable = false
 [inputs."assets/images/ui/blur.png"]
 hash = "d1b211a8eaaf1a834836d63b984aaf85538b10e34a714d06fc65ba0faf440af6"
 id = 15255783123
+packable = false
+
+[inputs."assets/images/ui/cards/backgrounds/aot.png"]
+hash = "e0703c9027e85223b92942b48b36c6b2d333fabefa50c724da0567486e55af4c"
+id = 15449187554
+packable = false
+
+[inputs."assets/images/ui/cards/backgrounds/dbz.png"]
+hash = "38ef815753da64f2409d8d29c9687e8ddae2d5b379d03ab12745ad9f339ec0e5"
+id = 15449187669
+packable = false
+
+[inputs."assets/images/ui/cards/backgrounds/dms.png"]
+hash = "d3b17185de28f2539747fa07aaf3ea47e892340d8f7312b61a6bb3c499045469"
+id = 15449187774
+packable = false
+
+[inputs."assets/images/ui/cards/backgrounds/nrt.png"]
+hash = "cfd65261f51933a111298ee2cad484387d3e58bea945fcdfe0bbbd775158739d"
+id = 15449255334
+packable = false
+
+[inputs."assets/images/ui/cards/backgrounds/one.png"]
+hash = "7ded2aec7e66f8f4fb3da31c692519958938b091b007dcdb0eb13fc9d4b4aa34"
+id = 15449188170
 packable = false
 
 [inputs."assets/images/ui/checkbox.png"]
@@ -181,6 +216,11 @@ packable = false
 [inputs."assets/images/ui/rounded_button_base.png"]
 hash = "9e24c345039bc9deab69a4fb534ee29c91302be44dffa9a12ea1df438a3d9f81"
 id = 15267940299
+packable = false
+
+[inputs."assets/images/ui/shadow_star.png"]
+hash = "2756189f46e371dddb883a04fe2c2e63d2f604924a7534c0dfcc31eb6eea506d"
+id = 15450966260
 packable = false
 
 [inputs."assets/images/ui/stats_bar_base.png"]
