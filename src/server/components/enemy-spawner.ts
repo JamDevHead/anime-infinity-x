@@ -2,8 +2,8 @@ import { BaseComponent, Component } from "@flamework/components";
 import { OnStart } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { HttpService, ServerStorage } from "@rbxts/services";
-import { EnemyModel } from "@/shared/components/enemy-component";
 import { EnemySpawner } from "@/server/services/enemy-spawner";
+import { EnemyModel } from "@/shared/components/enemy-component";
 
 interface EnemyAttributes {
 	EnemyZone: string;
@@ -79,5 +79,15 @@ export class Enemy extends BaseComponent<EnemyAttributes, Part> implements OnSta
 
 		this.currentEnemy?.Destroy();
 		this.currentEnemy = clonedEnemy;
+
+		clonedEnemy.Destroying.Connect(() => {
+			this.currentEnemy = undefined;
+			task.wait(2);
+			const newEnemy = this.getEnemy();
+
+			if (newEnemy) {
+				this.spawn(newEnemy);
+			}
+		});
 	}
 }
