@@ -1,11 +1,11 @@
-import Roact from "@rbxts/roact";
-import { useRootSelector } from "@/client/store";
-import { selectSelectedEnemiesByPlayerId } from "shared/store/enemy-selection";
-import { getEnemyModelByUid } from "@/shared/utils/enemies";
 import { createPortal } from "@rbxts/react-roblox";
+import Roact from "@rbxts/roact";
+import { selectSelectedEnemiesByPlayerId } from "shared/store/enemy-selection";
 import { EnemyAura } from "@/client/components/react/enemy-aura";
-import { selectHoveredEnemy } from "@/client/store/enemy-hover";
 import { EnemyHover } from "@/client/components/react/enemy-hover";
+import { useRootSelector } from "@/client/store";
+import { selectHoveredEnemy } from "@/client/store/enemy-hover";
+import { getEnemyModelByUid } from "@/shared/utils/enemies";
 
 function SelectionProvider({ userId }: { userId: string }) {
 	const selectedEnemies = useRootSelector(selectSelectedEnemiesByPlayerId(userId));
@@ -19,6 +19,8 @@ function SelectionProvider({ userId }: { userId: string }) {
 
 				if (enemy) {
 					return createPortal(<EnemyAura enemy={enemy} />, enemy);
+				} else {
+					return <></>;
 				}
 			})}
 		</>
@@ -28,7 +30,7 @@ function SelectionProvider({ userId }: { userId: string }) {
 function HoverProvider() {
 	const hoveredEnemyUid = useRootSelector(selectHoveredEnemy);
 
-	const hoveredEnemy = hoveredEnemyUid ? getEnemyModelByUid(hoveredEnemyUid) : undefined;
+	const hoveredEnemy = hoveredEnemyUid !== undefined ? getEnemyModelByUid(hoveredEnemyUid) : undefined;
 
 	return <>{hoveredEnemy && createPortal(<EnemyHover />, hoveredEnemy)}</>;
 }
