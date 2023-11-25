@@ -8,10 +8,16 @@ export class Enemy extends EnemyComponent implements OnStart {
 	onStart() {
 		store.addEnemy(this.attributes.Guid);
 
-		this.humanoid.MaxHealth = 0;
-		this.humanoid.Health = 0;
+		this.humanoid.MaxHealth = 100;
+		this.humanoid.Health = 5;
 		this.humanoid.BreakJointsOnDeath = false;
 
 		this.root.Anchored = true;
+	}
+
+	destroy() {
+		super.destroy();
+		store.removeEnemy(this.attributes.Guid);
+		this.instance.Destroy();
 	}
 }

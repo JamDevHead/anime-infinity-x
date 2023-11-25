@@ -16,6 +16,10 @@ export default function loadFighters(profile: Profile<PlayerData>) {
 			name: initialFighter.Oro.Name,
 			level: 0,
 			zone: initialFighter.Name,
+			stats: {
+				damage: 1,
+				dexterity: 10,
+			},
 		});
 
 		store.addActiveFighter(userId, uid);

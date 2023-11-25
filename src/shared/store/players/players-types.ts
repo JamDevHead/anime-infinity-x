@@ -31,6 +31,10 @@ export interface PlayerFighter {
 	uid: string;
 	name: string;
 	level: number;
+	stats: {
+		damage: number;
+		dexterity: number;
+	};
 }
 
 export interface PlayerMission {
