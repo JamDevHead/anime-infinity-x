@@ -10,18 +10,20 @@ export default function loadFighters(profile: Profile<PlayerData>) {
 	const userId = tostring(profile.UserIds.shift());
 
 	if (fighters.all.size() === 0) {
-		const uid = HttpService.GenerateGUID(false);
+		for (const index of $range(1, 3)) {
+			const uid = HttpService.GenerateGUID(false);
 
-		store.addFighter(userId, uid, {
-			name: initialFighter.Oro.Name,
-			level: 0,
-			zone: initialFighter.Name,
-			stats: {
-				damage: 1,
-				dexterity: 10,
-			},
-		});
+			store.addFighter(userId, uid, {
+				name: initialFighter.Oro.Name,
+				level: 0,
+				zone: initialFighter.Name,
+				stats: {
+					damage: 1,
+					dexterity: 10 + index * 1.1,
+				},
+			});
 
-		store.addActiveFighter(userId, uid);
+			store.addActiveFighter(userId, uid);
+		}
 	}
 }

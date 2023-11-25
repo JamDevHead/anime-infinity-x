@@ -5,15 +5,15 @@ import { Logger } from "@rbxts/log";
 import { createSelector } from "@rbxts/reflex";
 import { Players, ReplicatedStorage, Workspace } from "@rbxts/services";
 import { Trove } from "@rbxts/trove";
+import { FighterModel } from "@/client/components/fighter-model";
 import { FightersTracker } from "@/client/controllers/fighters-tracker";
 import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { store } from "@/client/store";
-import { PlayerFighter } from "@/shared/store/players";
-import { selectFighterTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
-import { EnemyComponent } from "@/shared/components/enemy-component";
-import { FighterModel } from "@/client/components/fighter-model";
 import { getEnemyByUid } from "@/client/utils/enemies";
-import { selectPlayerFighters } from "@/shared/store/players/fighters";
+import { EnemyComponent } from "@/shared/components/enemy-component";
+import { selectFighterTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
+import { PlayerFighter } from "@/shared/store/players";
+import { selectPlayerFighter, selectPlayerFighters } from "@/shared/store/players/fighters";
 
 const FAR_CFRAME = new CFrame(0, 5e9, 0);
 const HORIZONTAL_VECTOR = new Vector3(1, 0, 1);
@@ -33,6 +33,7 @@ export class FighterGoal
 {
 	public fighterPart = new Instance("Part");
 	public currentEnemy: EnemyComponent | undefined;
+	public fighterInfo: PlayerFighter | undefined;
 
 	private raycastParams = new RaycastParams();
 	private trove = new Trove();
@@ -96,7 +97,7 @@ export class FighterGoal
 
 		this.trove.add(
 			store.subscribe(selectFighterTarget(this.attributes.UID), (enemyUid, lastEnemyUid) => {
-				const lastEnemy = lastEnemyUid ? getEnemyByUid(lastEnemyUid, this.components) : undefined;
+				const lastEnemy = lastEnemyUid !== undefined ? getEnemyByUid(lastEnemyUid, this.components) : undefined;
 
 				if (lastEnemy?.attackingFighters.includes(this.attributes.UID)) {
 					lastEnemy.attackingFighters = lastEnemy.attackingFighters.filter(
@@ -105,6 +106,16 @@ export class FighterGoal
 				}
 
 				this.onFighterTargetUpdate(enemyUid);
+			}),
+		);
+
+		this.trove.add(
+			store.subscribe(selectPlayerFighter(tostring(this.attributes.OwnerId), this.attributes.UID), (fighter) => {
+				if (!fighter) {
+					return;
+				}
+
+				this.fighterInfo = fighter;
 			}),
 		);
 	}
@@ -120,7 +131,7 @@ export class FighterGoal
 	}
 
 	private onFighterTargetUpdate(enemyUid: string | undefined) {
-		const enemy = enemyUid ? getEnemyByUid(enemyUid, this.components) : undefined;
+		const enemy = enemyUid !== undefined ? getEnemyByUid(enemyUid, this.components) : undefined;
 
 		this.currentEnemy = enemy;
 
@@ -156,6 +167,7 @@ export class FighterGoal
 			return;
 		}
 
+		fighterModel.SetAttribute("Uid", fighter.uid);
 		fighterModel.Parent = this.fightersTracker.fightersFolder;
 		fighterModel.AddTag("Fighter");
 

@@ -1,13 +1,14 @@
 import { BaseComponent, Component } from "@flamework/components";
 import { OnPhysics, OnRender, OnStart } from "@flamework/core";
-import { Logger } from "@rbxts/log";
-import { Trove } from "@rbxts/trove";
-import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
-import { Workspace } from "@rbxts/services";
-import { FightersTracker } from "@/client/controllers/fighters-tracker";
 import Gizmo from "@rbxts/gizmo";
+import { Logger } from "@rbxts/log";
+import { Workspace } from "@rbxts/services";
+import { Trove } from "@rbxts/trove";
 import { FighterGoal } from "@/client/components/fighter-goal";
+import { FightersTracker } from "@/client/controllers/fighters-tracker";
+import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { AnimationTracker } from "@/shared/lib/animation-tracker";
+import { calculateStun } from "@/shared/utils/fighters";
 
 interface IFighterModel extends Model {
 	Humanoid: Humanoid & {
@@ -21,6 +22,8 @@ const animationMap = {
 	run: "14678864223",
 	jump: "125750702",
 	fall: "180436148",
+	soco1: "15461463119",
+	soco2: "15461470426",
 } as const;
 
 @Component({ tag: "Fighter" })
@@ -39,6 +42,8 @@ export class FighterModel
 	private fighterVelocity = 0;
 	private collidableParts = new Set<BasePart>();
 	private raycastParams = new RaycastParams();
+	private fighterStun = 0;
+	private attackState = 1;
 
 	constructor(
 		private readonly logger: Logger,
@@ -110,6 +115,8 @@ export class FighterModel
 	}
 
 	onRender(dt: number) {
+		this.fighterStun = math.max(this.fighterStun - dt, 0);
+
 		const character = this.characterAdd.character;
 		const humanoid = character?.FindFirstChild("Humanoid") as Humanoid | undefined;
 
@@ -130,6 +137,10 @@ export class FighterModel
 		const isJumping = humanoid.Jump && this.fighterGoal.currentEnemy === undefined;
 		const isRunning = this.fighterVelocity > 0.2;
 		const animationTracker = this.animationTracker;
+
+		if (animationTracker.isAnimationPlaying("soco1") || animationTracker.isAnimationPlaying("soco2")) {
+			return;
+		}
 
 		switch (true) {
 			case isJumping:
@@ -165,5 +176,18 @@ export class FighterModel
 		);
 
 		return groundHit !== undefined;
+	}
+
+	public attack() {
+		const dexterity = this.fighterGoal.fighterInfo?.stats.dexterity ?? 10;
+
+		if (this.fighterStun > 0) {
+			return;
+		}
+
+		this.fighterStun = calculateStun(dexterity);
+
+		this.attackState = this.attackState === 1 ? 2 : 1;
+		this.animationTracker.swapAnimation(`soco${this.attackState}`);
 	}
 }

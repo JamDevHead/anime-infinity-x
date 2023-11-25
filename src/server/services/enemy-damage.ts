@@ -4,8 +4,9 @@ import { Logger } from "@rbxts/log";
 import { Enemy } from "@/server/components/enemy";
 import { store } from "@/server/store";
 import { selectFightersTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
-import { selectPlayerFighterWithUid } from "@/shared/store/players/fighters";
+import { selectPlayersFightersWithUid } from "@/shared/store/players/fighters";
 import { getEnemyModelByUid } from "@/shared/utils/enemies";
+import { calculateStun } from "@/shared/utils/fighters";
 
 @Service()
 export class EnemyDamage implements OnStart, OnTick {
@@ -54,7 +55,7 @@ export class EnemyDamage implements OnStart, OnTick {
 
 	private damageEnemies() {
 		for (const [fighterId, enemy] of this.fightersTargets) {
-			const fighter = store.getState(selectPlayerFighterWithUid(fighterId));
+			const fighter = store.getState(selectPlayersFightersWithUid(fighterId));
 
 			if (!fighter) {
 				continue;
@@ -74,7 +75,7 @@ export class EnemyDamage implements OnStart, OnTick {
 			enemy.humanoid.TakeDamage(damage);
 
 			// 10 dexterity = 1 second stun, 100 dexterity = 0.1 second stun
-			this.fightersStuns.set(fighterId, 10 / fighter.stats.dexterity);
+			this.fightersStuns.set(fighterId, calculateStun(fighter.stats.dexterity));
 
 			if (enemy.humanoid.Health <= 0) {
 				store.removeFighterTarget(fighterId);

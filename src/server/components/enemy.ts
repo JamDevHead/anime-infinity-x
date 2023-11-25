@@ -10,7 +10,7 @@ export class Enemy extends EnemyComponent implements OnStart {
 		store.addEnemy(this.attributes.Guid);
 
 		this.humanoid.MaxHealth = 100;
-		this.humanoid.Health = 5;
+		this.humanoid.Health = 100;
 		this.humanoid.BreakJointsOnDeath = false;
 
 		const animator = this.humanoid.FindFirstChild("Animator") ?? new Instance("Animator");

@@ -11,7 +11,13 @@ export const selectPlayerFighters = (playerId: string) => {
 	});
 };
 
-export const selectPlayerFighterWithUid = (fighterUid: string) => {
+export const selectPlayerFighter = (playerId: string, fighterUid: string) => {
+	return createSelector(selectPlayerFighters(playerId), (fighters) => {
+		return fighters?.all.find((fighter) => fighter.uid === fighterUid);
+	});
+};
+
+export const selectPlayersFightersWithUid = (fighterUid: string) => {
 	return createSelector(selectPlayersFighters, (fighters) => {
 		for (const [_, playerFighters] of pairs(fighters)) {
 			const fighter = playerFighters?.all.find((fighter) => fighter.uid === fighterUid);

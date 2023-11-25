@@ -37,6 +37,16 @@ export class AnimationTracker {
 		});
 	}
 
+	public isAnimationPlaying(name: keyof typeof this.animationMap) {
+		const track = this.getAnimationTrack(name);
+
+		if (!track) {
+			return false;
+		}
+
+		return track.IsPlaying;
+	}
+
 	public getAnimationTrack(name: keyof typeof this.animationMap) {
 		const id = this.animationMap[name];
 

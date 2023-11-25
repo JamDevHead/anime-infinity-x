@@ -1,8 +1,11 @@
-import { Component } from "@flamework/components";
+import { Component, Components } from "@flamework/components";
 import { OnStart } from "@flamework/core";
 import { TweenService } from "@rbxts/services";
+import { store } from "@/client/store";
+import { getFighterByUid } from "@/client/utils/fighters";
 import { EnemyComponent } from "@/shared/components/enemy-component";
 import { AnimationTracker } from "@/shared/lib/animation-tracker";
+import { selectFighterWithTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
 
 const animationMap = {
 	death: "14485177001",
@@ -15,6 +18,10 @@ export class Enemy extends EnemyComponent implements OnStart {
 	private animationTracker = new AnimationTracker(this.animator, animationMap);
 	private hurtHighlight = new Instance("Highlight");
 
+	constructor(private components: Components) {
+		super();
+	}
+
 	onStart() {
 		let currentHealth = this.humanoid.Health;
 
@@ -25,7 +32,7 @@ export class Enemy extends EnemyComponent implements OnStart {
 		this.hurtHighlight.Parent = this.instance;
 
 		this.humanoid.HealthChanged.Connect((health) => {
-			if (currentHealth > health) {
+			if (currentHealth > health && health > 0) {
 				this.hurt();
 			}
 
@@ -49,5 +56,14 @@ export class Enemy extends EnemyComponent implements OnStart {
 		TweenService.Create(this.hurtHighlight, new TweenInfo(0.15), {
 			FillTransparency: 1,
 		}).Play();
+
+		// Notify current fighters of hurt
+		const fighterUid = store.getState(selectFighterWithTarget(this.attributes.Guid));
+
+		fighterUid.forEach((uid) => {
+			const fighter = getFighterByUid(uid, this.components);
+
+			fighter?.attack();
+		});
 	}
 }

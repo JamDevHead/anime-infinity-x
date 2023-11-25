@@ -8,3 +8,17 @@ export const selectFighterTarget = (fighterUid: string) => {
 		return fighters[fighterUid];
 	});
 };
+
+export const selectFighterWithTarget = (targetUid: string) => {
+	return createSelector(selectFightersTarget, (fighters) => {
+		const fighterUids = [] as string[];
+
+		for (const [fighterUid, target] of pairs(fighters)) {
+			if (target === targetUid) {
+				fighterUids.push(fighterUid as string);
+			}
+		}
+
+		return fighterUids;
+	});
+};
