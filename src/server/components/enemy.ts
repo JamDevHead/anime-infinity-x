@@ -13,6 +13,9 @@ export class Enemy extends EnemyComponent implements OnStart {
 		this.humanoid.Health = 5;
 		this.humanoid.BreakJointsOnDeath = false;
 
+		const animator = this.humanoid.FindFirstChild("Animator") ?? new Instance("Animator");
+		animator.Parent = this.humanoid;
+
 		this.root.Anchored = true;
 	}
 
@@ -26,6 +29,11 @@ export class Enemy extends EnemyComponent implements OnStart {
 				store.removeSelectedEnemy(playerId as string, this.attributes.Guid);
 			}
 		}
+
 		store.removeEnemy(this.attributes.Guid);
+
+		task.delay(5, () => {
+			this.instance.Destroy();
+		});
 	}
 }

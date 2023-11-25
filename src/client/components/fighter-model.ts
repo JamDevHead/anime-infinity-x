@@ -7,6 +7,7 @@ import { Workspace } from "@rbxts/services";
 import { FightersTracker } from "@/client/controllers/fighters-tracker";
 import Gizmo from "@rbxts/gizmo";
 import { FighterGoal } from "@/client/components/fighter-goal";
+import { AnimationTracker } from "@/shared/lib/animation-tracker";
 
 interface IFighterModel extends Model {
 	Humanoid: Humanoid & {
@@ -32,8 +33,8 @@ export class FighterModel
 	private humanoid = this.instance.Humanoid;
 	private torso = this.instance.FindFirstChild("Torso") as Part | undefined;
 	private animator = this.humanoid.Animator;
+	private animationTracker = new AnimationTracker(this.animator, animationMap);
 	private trove = new Trove();
-	private animationCache = new Map<string, AnimationTrack>();
 	private lastFighterPosition = Vector3.zero;
 	private fighterVelocity = 0;
 	private collidableParts = new Set<BasePart>();
@@ -94,10 +95,7 @@ export class FighterModel
 		highlight.Parent = this.instance;
 
 		// Setup fighter cleanup
-		this.trove.add(() => {
-			this.animationCache.forEach((track) => track.Destroy());
-			this.animationCache.clear();
-		});
+		this.trove.add(() => this.animationTracker.destroy());
 		this.trove.add(this.instance);
 	}
 
@@ -131,20 +129,21 @@ export class FighterModel
 		const isFalling = !this.isGrounded();
 		const isJumping = humanoid.Jump && this.fighterGoal.currentEnemy === undefined;
 		const isRunning = this.fighterVelocity > 0.2;
+		const animationTracker = this.animationTracker;
 
 		switch (true) {
 			case isJumping:
-				this.swapAnimation("jump");
+				animationTracker.swapAnimation("jump");
 				break;
 			case isFalling:
-				this.swapAnimation("fall");
+				animationTracker.swapAnimation("fall");
 				break;
 			case isRunning:
-				this.getAnimationTrack("run")?.AdjustSpeed(this.fighterVelocity / 16);
-				this.swapAnimation("run");
+				animationTracker.getAnimationTrack("run")?.AdjustSpeed(this.fighterVelocity / 16);
+				animationTracker.swapAnimation("run");
 				break;
 			default:
-				this.swapAnimation("idle");
+				animationTracker.swapAnimation("idle");
 				break;
 		}
 	}
@@ -152,54 +151,6 @@ export class FighterModel
 	destroy() {
 		super.destroy();
 		this.trove.destroy();
-	}
-
-	private swapAnimation(name: keyof typeof animationMap) {
-		this.stopAllAnimations(name);
-		this.playAnimationTrack(name);
-	}
-
-	private playAnimationTrack(name: keyof typeof animationMap) {
-		const fighterTrack = this.getAnimationTrack(name);
-
-		if (fighterTrack && !fighterTrack.IsPlaying) {
-			fighterTrack.Play();
-		}
-	}
-
-	private stopAllAnimations(exception?: keyof typeof animationMap) {
-		this.animationCache.forEach((track) => {
-			if (exception === track.Name) {
-				return;
-			}
-
-			track.Stop();
-		});
-	}
-
-	private getAnimationTrack(name: keyof typeof animationMap) {
-		const id = animationMap[name];
-
-		if (!id) {
-			return;
-		}
-
-		const cachedTrack = this.animationCache.get(id);
-
-		if (cachedTrack) {
-			return cachedTrack;
-		}
-
-		const animationInstance = new Instance("Animation");
-		animationInstance.AnimationId = `http://www.roblox.com/asset/?id=${id}`;
-		animationInstance.Name = name;
-		animationInstance.Parent = this.animator;
-
-		const track = this.animator.LoadAnimation(animationInstance);
-
-		this.animationCache.set(id, track);
-
-		return track;
 	}
 
 	private isGrounded() {
