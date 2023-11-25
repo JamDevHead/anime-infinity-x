@@ -2,6 +2,7 @@ import { Component } from "@flamework/components";
 import { OnStart } from "@flamework/core";
 import { store } from "@/server/store";
 import { EnemyComponent } from "@/shared/components/enemy-component";
+import { selectSelectedEnemies } from "@/shared/store/enemy-selection";
 
 @Component({ tag: "EnemyNPC" })
 export class Enemy extends EnemyComponent implements OnStart {
@@ -17,7 +18,14 @@ export class Enemy extends EnemyComponent implements OnStart {
 
 	destroy() {
 		super.destroy();
+
+		const enemiesSelected = store.getState(selectSelectedEnemies);
+
+		for (const [playerId, enemies] of pairs(enemiesSelected)) {
+			if (enemies?.includes(this.attributes.Guid)) {
+				store.removeSelectedEnemy(playerId as string, this.attributes.Guid);
+			}
+		}
 		store.removeEnemy(this.attributes.Guid);
-		this.instance.Destroy();
 	}
 }

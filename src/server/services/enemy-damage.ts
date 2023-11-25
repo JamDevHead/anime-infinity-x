@@ -1,11 +1,11 @@
+import { Components } from "@flamework/components";
 import { OnStart, OnTick, Service } from "@flamework/core";
+import { Logger } from "@rbxts/log";
 import { Enemy } from "@/server/components/enemy";
 import { store } from "@/server/store";
-import { Logger } from "@rbxts/log";
 import { selectFightersTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
-import { Components } from "@flamework/components";
-import { getEnemyModelByUid } from "@/shared/utils/enemies";
 import { selectPlayerFighterWithUid } from "@/shared/store/players/fighters";
+import { getEnemyModelByUid } from "@/shared/utils/enemies";
 
 @Service()
 export class EnemyDamage implements OnStart, OnTick {
@@ -77,7 +77,8 @@ export class EnemyDamage implements OnStart, OnTick {
 			this.fightersStuns.set(fighterId, 10 / fighter.stats.dexterity);
 
 			if (enemy.humanoid.Health <= 0) {
-				enemy.destroy();
+				store.removeFighterTarget(fighterId);
+				enemy.instance.Destroy();
 			}
 		}
 	}
