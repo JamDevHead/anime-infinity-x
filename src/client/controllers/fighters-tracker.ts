@@ -1,19 +1,12 @@
 import { Controller, OnStart } from "@flamework/core";
 import { Logger } from "@rbxts/log";
-import { createSelector } from "@rbxts/reflex";
 import { Players, Workspace } from "@rbxts/services";
+import { selectSelectedEnemiesByPlayerId } from "shared/store/enemy-selection";
 import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { store } from "@/client/store";
-import { selectPlayerFighters } from "@/shared/store/players/fighters";
-import { selectFightersTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
-import { selectSelectedEnemiesByPlayerId } from "shared/store/enemy-selection";
 import remotes from "@/shared/remotes";
-
-const selectActiveFighters = (playerId: string) => {
-	return createSelector(selectPlayerFighters(playerId), (fighters) => {
-		return fighters?.actives;
-	});
-};
+import { selectFightersTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
+import { selectActivePlayerFighters } from "@/shared/store/players/fighters";
 
 @Controller()
 export class FightersTracker implements OnStart, OnCharacterAdd {
@@ -32,7 +25,7 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 		this.fightersFolder.Name = "Fighters";
 		this.fightersFolder.Parent = Workspace;
 
-		store.observe(selectActiveFighters(this.localUserId), (uid) => {
+		store.observe(selectActivePlayerFighters(this.localUserId), (uid) => {
 			this.createFighter(uid);
 			this.updateFighters();
 
@@ -43,23 +36,32 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 			};
 		});
 
-		store.observe(selectSelectedEnemiesByPlayerId(this.localUserId), (enemyUid) => {
-			this.activeFighters.forEach((_, uid) => {
-				remotes.fighterTarget.set.fire(uid, enemyUid);
-			});
+		const enemyAdded = (enemyUid: string) => {
+			const doesNotHaveTarget = (enemies: string[] | undefined) => {
+				return enemies?.includes(enemyUid) === false;
+			};
 
-			this.updateFighters();
+			const cleanup = this.enemyObserver(enemyUid);
 
-			return () => {
-				const fightersWithTarget = store.getState(selectFightersTarget);
+			store.once(selectSelectedEnemiesByPlayerId(this.localUserId), doesNotHaveTarget, cleanup);
+		};
 
-				for (const [uid] of pairs(fightersWithTarget)) {
-					remotes.fighterTarget.remove.fire(uid as string);
+		store.subscribe(
+			selectSelectedEnemiesByPlayerId(this.localUserId),
+			(enemiesSelected, previousEnemiesSelected) => {
+				if (!enemiesSelected) {
+					return;
 				}
 
-				this.updateFighters();
-			};
-		});
+				for (const [enemyIndex, enemyUid] of pairs(enemiesSelected)) {
+					if (previousEnemiesSelected?.[enemyIndex] !== undefined) {
+						continue;
+					}
+
+					enemyAdded(enemyUid);
+				}
+			},
+		);
 	}
 
 	onCharacterAdded(character: Model) {
@@ -72,6 +74,24 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 		this.activeFighters.forEach((fighterAttachment) => {
 			fighterAttachment.RemoveTag("FighterGoal");
 		});
+	}
+
+	private enemyObserver(enemyUid: string) {
+		this.activeFighters.forEach((_, uid) => {
+			remotes.fighterTarget.set.fire(uid, enemyUid);
+		});
+
+		this.updateFighters();
+
+		return () => {
+			const fightersWithTarget = store.getState(selectFightersTarget);
+
+			for (const [uid] of pairs(fightersWithTarget)) {
+				remotes.fighterTarget.remove.fire(uid as string);
+			}
+
+			this.updateFighters();
+		};
 	}
 
 	private createFighter(uid: string) {

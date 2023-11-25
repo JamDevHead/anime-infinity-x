@@ -1,7 +1,7 @@
 import { createProducer } from "@rbxts/reflex";
 
 interface FighterTargetSlice {
-	[uid: string]: string | undefined;
+	readonly [fighterUid: string]: string | undefined;
 }
 
 const initialState: FighterTargetSlice = {};
