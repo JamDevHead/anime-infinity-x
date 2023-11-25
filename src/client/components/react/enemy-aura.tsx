@@ -1,20 +1,15 @@
+import { Spring } from "@rbxts/flipper";
+import { useLifetime, useMotor, useMountEffect } from "@rbxts/pretty-react-hooks";
 import Roact, { useRef } from "@rbxts/roact";
 import { Image } from "@/client/ui/components/image";
 import { images } from "@/shared/assets/images";
-import { useLifetime, useMotor, useMountEffect } from "@rbxts/pretty-react-hooks";
-import { Spring } from "@rbxts/flipper";
 
 const auraSpeed = 20;
 
 export function EnemyAura({ enemy }: { enemy: Model }) {
-	const root = enemy.FindFirstChild("HumanoidRootPart") as Part;
-
-	if (!root) {
-		return <></>;
-	}
-
+	const root = enemy.FindFirstChild("HumanoidRootPart") as Part | undefined;
 	const enemySize = new Vector3(4, 4, 1).mul(enemy.GetScale());
-	const auraPosition = root.Position.sub(Vector3.yAxis.mul(enemySize.Y / 2 + root.Size.Y / 2));
+	const auraPosition = root && root.Position.sub(Vector3.yAxis.mul(enemySize.Y / 2 + root.Size.Y / 2));
 	const lifetime = useLifetime();
 	const rotation = lifetime.map((time) => math.rad(time * 360) * auraSpeed);
 	const [highlightFade, setHighlightFade] = useMotor(1);
@@ -30,7 +25,7 @@ export function EnemyAura({ enemy }: { enemy: Model }) {
 		setHighlightFade(new Spring(1));
 	});
 
-	return (
+	return root ? (
 		<>
 			<part
 				Position={auraPosition}
@@ -54,5 +49,7 @@ export function EnemyAura({ enemy }: { enemy: Model }) {
 				OutlineColor={Color3.fromRGB(255, 255, 255)}
 			/>
 		</>
+	) : (
+		<></>
 	);
 }
