@@ -78,7 +78,7 @@ export class EnemyDamage implements OnStart, OnTick {
 
 			if (enemy.humanoid.Health <= 0) {
 				store.removeFighterTarget(fighterId);
-				enemy.instance.Destroy();
+				enemy.instance.RemoveTag("EnemyNPC");
 			}
 		}
 	}
