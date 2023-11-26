@@ -1,4 +1,5 @@
 import Roact, { FunctionComponent } from "@rbxts/roact";
+import { colors } from "@/client/constants/colors";
 import { ratingColors } from "@/client/constants/rating-colors";
 import { Frame } from "@/client/ui/components/frame";
 import { Image } from "@/client/ui/components/image";
@@ -85,8 +86,8 @@ export const StarRating: FunctionComponent<StarRatingProps> = ({ stars }) => {
 							<Star
 								key={index}
 								size={UDim2.fromOffset(rem(32, "pixel"), rem(32, "pixel"))}
-								imageColor={ratingColor.color}
-								gradient={ratingColor.gradient}
+								imageColor={ratingColor?.color ?? colors.white}
+								gradient={ratingColor?.gradient}
 								active={active}
 							/>
 						);
