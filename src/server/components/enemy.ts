@@ -17,6 +17,15 @@ export class Enemy extends EnemyComponent implements OnStart {
 		animator.Parent = this.humanoid;
 
 		this.root.Anchored = true;
+
+		this.instance.GetDescendants().forEach((descendant) => {
+			if (!descendant.IsA("BasePart")) {
+				return;
+			}
+
+			descendant.CanCollide = false;
+			descendant.CollisionGroup = "Enemies";
+		});
 	}
 
 	destroy() {

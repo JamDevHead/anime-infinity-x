@@ -45,6 +45,20 @@ export class Enemy extends EnemyComponent implements OnStart {
 
 		// Play death animation
 		this.animationTracker.swapAnimation("death");
+
+		// Fade out
+		const tweenInfo = new TweenInfo(2, Enum.EasingStyle.Linear, Enum.EasingDirection.Out);
+		const propertyTable = {
+			Transparency: 1,
+		};
+
+		this.instance.GetDescendants().forEach((descendant) => {
+			if (!descendant.IsA("BasePart")) {
+				return;
+			}
+
+			TweenService.Create(descendant, tweenInfo, propertyTable).Play();
+		});
 	}
 
 	private hurt() {
