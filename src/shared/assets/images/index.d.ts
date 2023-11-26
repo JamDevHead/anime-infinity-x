@@ -1,4 +1,15 @@
 export const images: {
+	readonly characters: {
+		readonly headshots: {
+			readonly aot: string;
+			readonly dbz: string;
+			readonly dms: string;
+			readonly nrt: {
+				readonly naro: string;
+			};
+			readonly one: string;
+		};
+	};
 	readonly icons: {
 		readonly boosts: {
 			readonly coin_boost: string;

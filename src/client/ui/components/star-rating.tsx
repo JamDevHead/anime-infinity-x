@@ -70,8 +70,6 @@ export const StarRating: FunctionComponent<StarRatingProps> = ({ stars }) => {
 
 	const ratingColor = ratingColors[(stars ?? 0) - 1];
 
-	print(ratingColor);
-
 	return (
 		<Stack
 			fillDirection="Horizontal"

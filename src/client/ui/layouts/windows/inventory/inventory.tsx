@@ -68,7 +68,7 @@ export const Inventory = () => {
 							autoSize="Y"
 						>
 							{table.create(100, 1).map((_, index) => (
-								<FighterCard key={index} />
+								<FighterCard key={index} headshot="naro" zone="nrt" rating={4} />
 							))}
 						</Grid>
 						<uipadding

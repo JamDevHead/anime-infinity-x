@@ -1,26 +1,32 @@
-import Object from "@rbxts/object-utils";
-import Roact from "@rbxts/roact";
+import Roact, { FunctionComponent } from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
 import { Button } from "@/client/ui/components/button";
-import { Frame } from "@/client/ui/components/frame";
+import { CanvasGroup } from "@/client/ui/components/canvas-group";
 import { Image } from "@/client/ui/components/image";
 import { Stack } from "@/client/ui/components/stack";
 import { StarRating } from "@/client/ui/components/star-rating";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
 
-export const FighterCard = () => {
+type FighterCardProps = {
+	headshot: string;
+	zone: keyof typeof images.ui.cards.backgrounds;
+	rating: number;
+};
+
+export const FighterCard: FunctionComponent<FighterCardProps> = ({ headshot, zone, rating }) => {
 	const rem = useRem();
 
-	const randomBackground = () => {
-		const backgrounds = Object.keys(images.ui.cards.backgrounds);
-		const randomIndex = math.random(0, backgrounds.size() - 1);
-		return images.ui.cards.backgrounds[backgrounds[randomIndex]];
-	};
+	const zonePath = images.characters.headshots[zone] as Record<string, string>;
+	const headshotElement = zonePath[headshot];
 
 	return (
 		<Button size={UDim2.fromScale(1, 1)} backgroundTransparency={1} cornerRadius={new UDim(0, 12)}>
-			<Image image={randomBackground()} size={UDim2.fromScale(1, 1)} cornerRadius={new UDim(0, 12)}>
+			<Image
+				image={images.ui.cards.backgrounds[zone]}
+				size={UDim2.fromScale(1, 1)}
+				cornerRadius={new UDim(0, 12)}
+			>
 				<Stack
 					fillDirection="Vertical"
 					horizontalAlignment="Center"
@@ -28,13 +34,15 @@ export const FighterCard = () => {
 					padding={new UDim(0, 12)}
 					sortOrder={Enum.SortOrder.LayoutOrder}
 				>
-					<Frame
+					<CanvasGroup
 						size={new UDim2(1, 0, 1, -rem(48, "pixel"))}
 						cornerRadius={new UDim(0, 12)}
 						backgroundTransparency={0.5}
 						backgroundColor={colors.black}
-					/>
-					<StarRating stars={math.random(1, 7)} />
+					>
+						<Image image={headshotElement ?? images.icons.fish} size={UDim2.fromScale(1, 1)} />
+					</CanvasGroup>
+					<StarRating stars={rating} />
 				</Stack>
 				<uipadding
 					PaddingLeft={new UDim(0, rem(12, "pixel"))}

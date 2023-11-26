@@ -1,3 +1,8 @@
+[inputs."assets/images/characters/headshots/nrt/naro.png"]
+hash = "b5684bcd1d5d17ac4f72a785794bc14433c03579cf004fe52c33daa01d2c46c2"
+id = 15464814050
+packable = false
+
 [inputs."assets/images/icons/backpack.png"]
 hash = "a66c56b4a9ce4e7aecf136fca0158744a01b5eefa18b1d9291f6f5f1cbb1d6d1"
 id = 15438096788
