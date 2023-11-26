@@ -14,9 +14,10 @@ type FighterCardProps = {
 	headshot: string;
 	zone: string;
 	rating: number;
+	onClick?: () => void;
 };
 
-export const FighterCard: FunctionComponent<FighterCardProps> = ({ active, headshot, zone, rating }) => {
+export const FighterCard: FunctionComponent<FighterCardProps> = ({ onClick, active, headshot, zone, rating }) => {
 	const rem = useRem();
 
 	const headshots = images.characters.headshots as unknown as Record<string, Record<string, string>>;
@@ -25,7 +26,12 @@ export const FighterCard: FunctionComponent<FighterCardProps> = ({ active, heads
 	const headshotElement = zonePath[headshot.lower()];
 
 	return (
-		<Button size={UDim2.fromScale(1, 1)} backgroundTransparency={1} cornerRadius={new UDim(0, 12)}>
+		<Button
+			size={UDim2.fromScale(1, 1)}
+			backgroundTransparency={1}
+			cornerRadius={new UDim(0, 12)}
+			onClick={onClick}
+		>
 			<CanvasGroup size={UDim2.fromScale(1, 1)} cornerRadius={new UDim(0, 12)} backgroundTransparency={1}>
 				<Image
 					image={images.ui.cards.backgrounds[zone as keyof typeof images.ui.cards.backgrounds]}
