@@ -56,8 +56,6 @@ export class EnemyDamage implements OnStart, OnTick {
 	}
 
 	private fighterTargetObserver(enemyId: string, fighterId: string) {
-		print("create fighter target", enemyId, fighterId);
-
 		const enemyModel = getEnemyModelByUid(enemyId);
 		const enemy = enemyModel && this.components.getComponent<Enemy>(enemyModel);
 
@@ -68,7 +66,6 @@ export class EnemyDamage implements OnStart, OnTick {
 		this.fightersTargets.set(fighterId as string, enemy);
 
 		return () => {
-			print("unobserve", enemyId, fighterId);
 			this.fightersTargets.delete(fighterId as string);
 		};
 	}

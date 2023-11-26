@@ -5,7 +5,7 @@ import { selectSelectedEnemiesByPlayerId } from "shared/store/enemy-selection";
 import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { store } from "@/client/store";
 import remotes from "@/shared/remotes";
-import { selectFightersTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
+import { selectFighterTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
 import { selectActivePlayerFighters } from "@/shared/store/players/fighters";
 
 @Controller()
@@ -53,6 +53,7 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 					return;
 				}
 
+				// eslint-disable-next-line roblox-ts/no-array-pairs
 				for (const [enemyIndex, enemyUid] of pairs(enemiesSelected)) {
 					if (previousEnemiesSelected?.[enemyIndex] !== undefined) {
 						continue;
@@ -74,6 +75,7 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 		this.activeFighters.forEach((fighterAttachment) => {
 			fighterAttachment.RemoveTag("FighterGoal");
 		});
+		this.activeFighters.clear();
 	}
 
 	private enemyObserver(enemyUid: string) {
@@ -84,11 +86,15 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 		this.updateFighters();
 
 		return () => {
-			const fightersWithTarget = store.getState(selectFightersTarget);
+			this.activeFighters.forEach((_, uid) => {
+				const fighterTargetUid = store.getState(selectFighterTarget(uid));
 
-			for (const [uid] of pairs(fightersWithTarget)) {
-				remotes.fighterTarget.remove.fire(uid as string);
-			}
+				if (fighterTargetUid === undefined || fighterTargetUid !== enemyUid) {
+					return;
+				}
+
+				remotes.fighterTarget.remove.fire(uid);
+			});
 
 			this.updateFighters();
 		};
