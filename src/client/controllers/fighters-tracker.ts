@@ -1,23 +1,23 @@
 import { Controller, OnStart } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { Players, Workspace } from "@rbxts/services";
+import { t } from "@rbxts/t";
+import { Trove } from "@rbxts/trove";
 import { selectSelectedEnemiesByPlayerId } from "shared/store/enemy-selection";
-import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { store } from "@/client/store";
 import remotes from "@/shared/remotes";
 import { selectFighterTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
 import { selectActivePlayerFighters } from "@/shared/store/players/fighters";
 
 @Controller()
-export class FightersTracker implements OnStart, OnCharacterAdd {
+export class FightersTracker implements OnStart {
 	public fightersFolder = new Instance("Folder");
 
 	private readonly RootOffset = new Vector3(0, -3, 4);
-	private localPlayer = Players.LocalPlayer;
-	private localUserId = tostring(this.localPlayer.UserId);
-	private root: Part | undefined;
+	private troves = new Map<string, Trove>();
 	private goalContainer = Workspace.Terrain;
-	private activeFighters = new Map<string, Attachment>();
+	private activePlayerFighters = new Map<string, Map<string, Attachment>>();
+	private rootCache = new Map<string, Part>();
 
 	constructor(private readonly logger: Logger) {}
 
@@ -25,30 +25,105 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 		this.fightersFolder.Name = "Fighters";
 		this.fightersFolder.Parent = Workspace;
 
-		store.observe(selectActivePlayerFighters(this.localUserId), (uid) => {
-			this.createFighter(uid);
-			this.updateFighters();
+		const onPlayerCleanup = (player: Player) => {
+			const userId = tostring(player.UserId);
+			const fighters = store.getState(selectActivePlayerFighters(userId));
 
-			return () => {
-				this.logger.Debug("Removing fighter {uid}", uid);
-				this.removeFighter(uid);
-				this.updateFighters();
-			};
+			this.activePlayerFighters.get(userId)?.forEach((attachment) => {
+				attachment.RemoveTag("FighterGoal");
+			});
+
+			if (fighters) {
+				fighters.forEach((uid) => {
+					this.removeFighter(uid, userId);
+				});
+			}
+		};
+
+		const onNewPlayer = (player: Player) => {
+			const trove = new Trove();
+
+			this.troves.set(tostring(player.UserId), trove);
+			this.trackFighters(player);
+
+			trove.add(
+				player.CharacterRemoving.Connect(() => {
+					onPlayerCleanup(player);
+				}),
+			);
+		};
+
+		Players.GetPlayers().forEach(onNewPlayer);
+		Players.PlayerAdded.Connect(onNewPlayer);
+
+		Players.PlayerRemoving.Connect((player) => {
+			const userId = tostring(player.UserId);
+
+			onPlayerCleanup(player);
+			this.activePlayerFighters.delete(userId);
+
+			this.troves.get(userId)?.destroy();
+			this.troves.delete(userId);
 		});
+	}
+
+	// onCharacterAdded(character: Model) {
+	// 	this.root = character.WaitForChild("HumanoidRootPart") as Part;
+	// 	this.updateFighters();
+	// }
+	//
+	// onCharacterRemoved() {
+	// 	this.root = undefined;
+	// 	this.activeFighters.forEach((fighterAttachment) => {
+	// 		fighterAttachment.RemoveTag("FighterGoal");
+	// 	});
+	// 	this.activeFighters.clear();
+	// }
+
+	private trackFighters(player: Player) {
+		const userId = tostring(player.UserId);
+		const trove = this.troves.get(userId) as Trove;
 
 		const enemyAdded = (enemyUid: string) => {
 			const doesNotHaveTarget = (enemies: string[] | undefined) => {
 				return enemies?.includes(enemyUid) === false;
 			};
 
-			const cleanup = this.enemyObserver(enemyUid);
+			const cleanup = this.enemyObserver(enemyUid, userId);
 
-			store.once(selectSelectedEnemiesByPlayerId(this.localUserId), doesNotHaveTarget, cleanup);
+			trove.add(store.once(selectSelectedEnemiesByPlayerId(userId), doesNotHaveTarget, cleanup));
 		};
 
-		store.subscribe(
-			selectSelectedEnemiesByPlayerId(this.localUserId),
-			(enemiesSelected, previousEnemiesSelected) => {
+		const onNewCharacter = () => {
+			this.getRootByPlayerId(userId);
+			this.updateFighters(userId);
+		};
+
+		const onNewActiveFighter = (uid: string) => {
+			this.createFighter(uid, userId);
+			this.updateFighters(userId);
+		};
+
+		const activeFighters = store.getState(selectActivePlayerFighters(userId));
+
+		if (activeFighters) {
+			activeFighters.forEach(onNewActiveFighter);
+		}
+
+		trove.add(
+			store.observe(selectActivePlayerFighters(userId), (uid) => {
+				onNewActiveFighter(uid);
+
+				return () => {
+					this.logger.Debug("Removing fighter {uid}", uid);
+					this.removeFighter(uid, userId);
+					this.updateFighters(userId);
+				};
+			}),
+		);
+
+		trove.add(
+			store.subscribe(selectSelectedEnemiesByPlayerId(userId), (enemiesSelected, previousEnemiesSelected) => {
 				if (!enemiesSelected) {
 					return;
 				}
@@ -61,32 +136,24 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 
 					enemyAdded(enemyUid);
 				}
-			},
+			}),
 		);
+
+		if (player.Character) {
+			onNewCharacter();
+		}
+		trove.add(player.CharacterAdded.Connect(onNewCharacter));
 	}
 
-	onCharacterAdded(character: Model) {
-		this.root = character.WaitForChild("HumanoidRootPart") as Part;
-		this.updateFighters();
-	}
-
-	onCharacterRemoved() {
-		this.root = undefined;
-		this.activeFighters.forEach((fighterAttachment) => {
-			fighterAttachment.RemoveTag("FighterGoal");
-		});
-		this.activeFighters.clear();
-	}
-
-	private enemyObserver(enemyUid: string) {
-		this.activeFighters.forEach((_, uid) => {
+	private enemyObserver(enemyUid: string, userId: string) {
+		this.activePlayerFighters.forEach((_, uid) => {
 			remotes.fighterTarget.set.fire(uid, enemyUid);
 		});
 
-		this.updateFighters();
+		this.updateFighters(userId);
 
 		return () => {
-			this.activeFighters.forEach((_, uid) => {
+			this.activePlayerFighters.forEach((_, uid) => {
 				const fighterTargetUid = store.getState(selectFighterTarget(uid));
 
 				if (fighterTargetUid === undefined || fighterTargetUid !== enemyUid) {
@@ -96,12 +163,13 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 				remotes.fighterTarget.remove.fire(uid, enemyUid);
 			});
 
-			this.updateFighters();
+			this.updateFighters(userId);
 		};
 	}
 
-	private createFighter(uid: string) {
-		let goalAttachment = this.activeFighters.get(uid);
+	private createFighter(uid: string, userId: string) {
+		const activeFighters = this.getActivePlayerFighters(userId);
+		let goalAttachment = activeFighters.get(uid);
 
 		if (!goalAttachment && this.goalContainer) {
 			goalAttachment = new Instance("Attachment");
@@ -113,31 +181,41 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 			return;
 		}
 
-		this.activeFighters.set(uid, goalAttachment);
+		activeFighters.set(uid, goalAttachment);
+		this.activePlayerFighters.set(userId, activeFighters);
+
 		goalAttachment.SetAttribute("UID", uid);
 	}
 
-	private removeFighter(uid: string) {
-		const attachment = this.activeFighters.get(uid);
+	private removeFighter(uid: string, userId: string) {
+		const activeFighters = this.getActivePlayerFighters(userId);
+		const attachment = activeFighters?.get(uid);
 
-		if (attachment) {
-			attachment.Destroy();
-		}
+		attachment?.Destroy();
 
-		this.activeFighters.delete(uid);
+		activeFighters.delete(uid);
+		this.activePlayerFighters.set(userId, activeFighters);
 	}
 
-	private updateFighters() {
-		if (!this.root) {
+	private updateFighters(userId: string) {
+		const root = this.getRootByPlayerId(userId);
+
+		if (!root) {
 			return;
 		}
 
-		const troopSize = this.activeFighters.size();
+		const activeFighters = this.activePlayerFighters.get(userId);
+
+		if (!activeFighters) {
+			return;
+		}
+
+		const troopSize = activeFighters.size();
 		const formation = this.getFormation(troopSize);
 		const formationSize = formation.size();
 		let index = 0;
 
-		for (const [uid, goalAttachment] of this.activeFighters) {
+		for (const [uid, goalAttachment] of activeFighters) {
 			index++;
 
 			if (!goalAttachment) {
@@ -147,10 +225,10 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 			const fighterGoal = formation[index % formationSize];
 			const fighterOffset = this.RootOffset.add(fighterGoal);
 
-			goalAttachment.WorldPosition = this.root.Position.add(fighterOffset);
+			goalAttachment.WorldPosition = root.Position.add(fighterOffset);
 			goalAttachment.SetAttribute("Offset", fighterOffset);
 			goalAttachment.SetAttribute("UID", uid);
-			goalAttachment.SetAttribute("OwnerId", this.localPlayer.UserId);
+			goalAttachment.SetAttribute("OwnerId", userId);
 			goalAttachment.AddTag("FighterGoal");
 		}
 	}
@@ -180,5 +258,41 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 		}
 
 		return formationShape;
+	}
+
+	private getRootByPlayerId(userIdStr: string) {
+		const cachedRoot = this.rootCache.get(userIdStr);
+
+		if (cachedRoot?.Parent) {
+			return cachedRoot;
+		}
+
+		const userId = tonumber(userIdStr);
+
+		if (!t.number(userId)) {
+			return;
+		}
+
+		const player = Players.GetPlayerByUserId(userId);
+		const character = player?.Character;
+
+		const root = character?.FindFirstChild("HumanoidRootPart") as Part | undefined;
+
+		if (root) {
+			this.rootCache.set(userIdStr, root);
+		}
+
+		return root;
+	}
+
+	private getActivePlayerFighters(userId: string) {
+		if (this.activePlayerFighters.has(userId)) {
+			return this.activePlayerFighters.get(userId) as Map<string, Attachment>;
+		}
+
+		const activeFighters = new Map<string, Attachment>();
+		this.activePlayerFighters.set(userId, activeFighters);
+
+		return activeFighters;
 	}
 }

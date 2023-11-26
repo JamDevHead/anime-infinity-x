@@ -28,7 +28,7 @@ const selectFighter = (playerId: string, uid: string) => {
 	tag: "FighterGoal",
 })
 export class FighterGoal
-	extends BaseComponent<{ UID: string; OwnerId: number; Offset: Vector3 }, Attachment>
+	extends BaseComponent<{ UID: string; OwnerId: string; Offset: Vector3 }, Attachment>
 	implements OnStart, OnRender
 {
 	public fighterPart = new Instance("Part");
@@ -51,10 +51,14 @@ export class FighterGoal
 	}
 
 	onStart() {
-		const owner =
-			this.localPlayer.UserId !== this.attributes.OwnerId
-				? Players.GetPlayerByUserId(this.attributes.OwnerId)
-				: this.localPlayer;
+		const ownerId = tonumber(this.attributes.OwnerId);
+
+		if (ownerId === undefined) {
+			this.logger.Warn("Failed to find owner {ownerId}", this.attributes.OwnerId);
+			return;
+		}
+
+		const owner = this.localPlayer.UserId !== ownerId ? Players.GetPlayerByUserId(ownerId) : this.localPlayer;
 
 		if (!owner) {
 			this.logger.Warn("Failed to find owner {ownerId}", this.attributes.OwnerId);
