@@ -39,7 +39,7 @@ export class FighterGoal
 	private trove = new Trove();
 	private root: Part | undefined;
 	private fighterModel: FighterModel | undefined;
-	private localPlayer = Players.LocalPlayer;
+	private owner!: Player;
 
 	constructor(
 		private readonly logger: Logger,
@@ -58,13 +58,15 @@ export class FighterGoal
 			return;
 		}
 
-		const owner = this.localPlayer.UserId !== ownerId ? Players.GetPlayerByUserId(ownerId) : this.localPlayer;
+		const localPlayer = Players.LocalPlayer;
+		const owner = localPlayer.UserId !== ownerId ? Players.GetPlayerByUserId(ownerId) : localPlayer;
 
 		if (!owner) {
 			this.logger.Warn("Failed to find owner {ownerId}", this.attributes.OwnerId);
 			return;
 		}
 
+		this.owner = owner;
 		this.root = owner.Character?.FindFirstChild("HumanoidRootPart") as Part | undefined;
 
 		this.fighterPart.Name = "FighterPart";
@@ -148,7 +150,7 @@ export class FighterGoal
 	}
 
 	private async onNewFighterId(uid: string) {
-		const playerId = tostring(this.localPlayer.UserId);
+		const playerId = tostring(this.owner.UserId);
 		const fighter = store.getState(selectFighter(playerId, uid));
 
 		if (this.fighterModel) {
