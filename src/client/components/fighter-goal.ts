@@ -6,8 +6,8 @@ import { createSelector } from "@rbxts/reflex";
 import { Players, ReplicatedStorage, Workspace } from "@rbxts/services";
 import { Trove } from "@rbxts/trove";
 import { FighterModel } from "@/client/components/fighter-model";
+import { EnemySelector } from "@/client/controllers/enemy-selector";
 import { FightersTracker } from "@/client/controllers/fighters-tracker";
-import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { store } from "@/client/store";
 import { getEnemyByUid } from "@/client/utils/enemies";
 import { EnemyComponent } from "@/shared/components/enemy-component";
@@ -38,13 +38,14 @@ export class FighterGoal
 	private raycastParams = new RaycastParams();
 	private trove = new Trove();
 	private root: Part | undefined;
+	private humanoid: Humanoid | undefined;
 	private fighterModel: FighterModel | undefined;
 	private owner!: Player;
 
 	constructor(
 		private readonly logger: Logger,
-		private readonly characterAdd: CharacterAdd,
 		private readonly fightersTracker: FightersTracker,
+		private readonly enemySelector: EnemySelector,
 		private readonly components: Components,
 	) {
 		super();
@@ -68,6 +69,7 @@ export class FighterGoal
 
 		this.owner = owner;
 		this.root = owner.Character?.FindFirstChild("HumanoidRootPart") as Part | undefined;
+		this.humanoid = owner.Character?.FindFirstChild("Humanoid") as Humanoid | undefined;
 
 		this.fighterPart.Name = "FighterPart";
 		this.fighterPart.Anchored = true;
@@ -87,7 +89,13 @@ export class FighterGoal
 		if (this.root?.Parent) {
 			this.raycastParams.AddToFilter(this.root.Parent);
 		}
+		if (this.enemySelector.enemyFolder) {
+			this.raycastParams.AddToFilter(this.enemySelector.enemyFolder);
+		}
 		this.raycastParams.AddToFilter(this.fightersTracker.fightersFolder);
+		task.spawn(() => {
+			this.raycastParams.AddToFilter(Workspace.WaitForChild("Players"));
+		});
 
 		this.onNewFighterId(this.attributes.UID);
 		this.onAttributeChanged("UID", (newUid, oldUid) => {
@@ -239,9 +247,7 @@ export class FighterGoal
 
 		debug.profilebegin(`fighter goal update ${this.attributes.UID}`);
 
-		const character = this.characterAdd.character;
-		const humanoid = character?.FindFirstChild("Humanoid") as Humanoid | undefined;
-		const isFloating = humanoid?.GetState() === Enum.HumanoidStateType.Freefall;
+		const isFloating = this.humanoid?.GetState() === Enum.HumanoidStateType.Freefall;
 
 		const finalGoal = new Vector3(occlusionResult.X, isFloating ? goal.Y : groundResult.Y, occlusionResult.Z);
 
