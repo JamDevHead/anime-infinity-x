@@ -50,10 +50,10 @@ export const InventoryStatus: FunctionComponent<InventoryStatusProps> = ({
 				fillDirection="Horizontal"
 				verticalAlignment="Center"
 				autoSize={Enum.AutomaticSize.XY}
-				padding={new UDim(0, rem(32, "pixel"))}
+				padding={new UDim(0, rem(24, "pixel"))}
 				sortOrder={Enum.SortOrder.LayoutOrder}
 			>
-				<Image image={images.icons.sword} size={UDim2.fromOffset(rem(48, "pixel"), rem(48, "pixel"))} />
+				<Image image={images.icons.sword} size={UDim2.fromOffset(rem(32, "pixel"), rem(32, "pixel"))} />
 				<Text
 					text={`${fighters}/${maxFighters}`}
 					textSize={rem(24, "pixel")}
