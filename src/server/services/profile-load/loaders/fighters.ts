@@ -10,7 +10,7 @@ export default function loadFighters(profile: Profile<PlayerData>) {
 	const userId = tostring(profile.UserIds.shift());
 
 	if (fighters.all.size() === 0) {
-		for (const index of $range(1, 3)) {
+		for (const index of $range(1, 2)) {
 			const uid = HttpService.GenerateGUID(false);
 
 			store.addFighter(userId, uid, {

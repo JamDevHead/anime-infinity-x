@@ -3,6 +3,7 @@ import { OnStart, OnTick, Service } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { Enemy } from "@/server/components/enemy";
 import { store } from "@/server/store";
+import { FighterTargetSlice } from "@/shared/store/fighter-target";
 import { selectFightersTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
 import { selectPlayersFightersWithUid } from "@/shared/store/players/fighters";
 import { getEnemyModelByUid } from "@/shared/utils/enemies";
@@ -22,21 +23,22 @@ export class EnemyDamage implements OnStart, OnTick {
 	) {}
 
 	onStart() {
-		store.observe(selectFightersTarget, (enemyId, fighterId) => {
-			print("create fighter target", enemyId, fighterId);
-			const enemyModel = getEnemyModelByUid(enemyId);
-			const enemy = enemyModel && this.components.getComponent<Enemy>(enemyModel);
-
-			if (!enemy) {
-				return;
-			}
-
-			this.fightersTargets.set(fighterId as string, enemy);
-
-			return () => {
-				print("unobserve", enemyId, fighterId);
-				this.fightersTargets.delete(fighterId as string);
+		const fighterTargetAdded = (enemyId: string, fighterId: string) => {
+			const doesNotHaveFighterTarget = (fighterTarget: FighterTargetSlice) => {
+				return fighterTarget[fighterId] === undefined;
 			};
+
+			const cleanup = this.fighterTargetObserver(enemyId, fighterId);
+
+			store.once(selectFightersTarget, doesNotHaveFighterTarget, () => cleanup?.());
+		};
+
+		store.subscribe(selectFightersTarget, (fightersTarget, previousFightersTarget) => {
+			for (const [fighterId, enemyId] of pairs(fightersTarget)) {
+				if (previousFightersTarget[fighterId] === undefined) {
+					fighterTargetAdded(enemyId, fighterId as string);
+				}
+			}
 		});
 	}
 
@@ -51,6 +53,24 @@ export class EnemyDamage implements OnStart, OnTick {
 			this.damageEnemies();
 			debug.profileend();
 		}
+	}
+
+	private fighterTargetObserver(enemyId: string, fighterId: string) {
+		print("create fighter target", enemyId, fighterId);
+
+		const enemyModel = getEnemyModelByUid(enemyId);
+		const enemy = enemyModel && this.components.getComponent<Enemy>(enemyModel);
+
+		if (!enemy) {
+			return;
+		}
+
+		this.fightersTargets.set(fighterId as string, enemy);
+
+		return () => {
+			print("unobserve", enemyId, fighterId);
+			this.fightersTargets.delete(fighterId as string);
+		};
 	}
 
 	private damageEnemies() {

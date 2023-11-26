@@ -1,6 +1,6 @@
 import { createProducer } from "@rbxts/reflex";
 
-interface FighterTargetSlice {
+export interface FighterTargetSlice {
 	readonly [fighterUid: string]: string | undefined;
 }
 
