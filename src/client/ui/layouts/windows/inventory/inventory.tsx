@@ -45,7 +45,7 @@ export const Inventory = () => {
 					</Button>
 					<SearchBar size={UDim2.fromScale(0.4, 1)} />
 					<InventoryStatus
-						storage={inventory?.all.size() ?? 0}
+						storage={playerFighters?.all.size() ?? 0}
 						fighters={playerFighters?.actives.size() ?? 0}
 						maxStorage={inventory?.maxStorage ?? 0}
 						maxFighters={inventory?.maxFighters ?? 0}
@@ -79,9 +79,10 @@ export const Inventory = () => {
 							size={UDim2.fromScale(1, 1)}
 							autoSize="Y"
 						>
-							{inventory?.all.map((fighter) => (
+							{playerFighters?.all.map((fighter) => (
 								<FighterCard
 									key={fighter.uid}
+									active={playerFighters?.actives.includes(fighter.uid)}
 									headshot={fighter.name}
 									zone={fighter.zone}
 									rating={fighter.level}

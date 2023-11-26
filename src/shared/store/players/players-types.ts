@@ -43,7 +43,6 @@ export interface PlayerBoosts {
 }
 
 export interface PlayerInventory {
-	all: Array<PlayerFighter>;
 	maxStorage: number;
 	maxFighters: number;
 }

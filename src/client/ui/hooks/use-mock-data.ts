@@ -10,6 +10,53 @@ export const useMockData = () => {
 				coins: 1e10,
 				stars: 10000000,
 			},
+			fighters: {
+				all: [
+					{
+						uid: "1",
+						name: "Naro",
+						level: 1,
+						zone: "nrt",
+					},
+					{
+						uid: "2",
+						name: "Naro",
+						level: 2,
+						zone: "nrt",
+					},
+					{
+						uid: "3",
+						name: "Naro",
+						level: 3,
+						zone: "nrt",
+					},
+					{
+						uid: "4",
+						name: "Naro",
+						level: 4,
+						zone: "nrt",
+					},
+					{
+						uid: "5",
+						name: "Naro",
+						level: 5,
+						zone: "nrt",
+					},
+					{
+						uid: "6",
+						name: "Naro",
+						level: 6,
+						zone: "nrt",
+					},
+					{
+						uid: "7",
+						name: "Naro",
+						level: 7,
+						zone: "nrt",
+					},
+				],
+				actives: ["1"],
+			},
 			missions: {
 				all: [
 					{
@@ -76,50 +123,6 @@ export const useMockData = () => {
 				],
 			},
 			inventory: {
-				all: [
-					{
-						uid: "1",
-						name: "Naro",
-						level: 1,
-						zone: "nrt",
-					},
-					{
-						uid: "2",
-						name: "Naro",
-						level: 2,
-						zone: "nrt",
-					},
-					{
-						uid: "3",
-						name: "Naro",
-						level: 3,
-						zone: "nrt",
-					},
-					{
-						uid: "4",
-						name: "Naro",
-						level: 4,
-						zone: "nrt",
-					},
-					{
-						uid: "5",
-						name: "Naro",
-						level: 5,
-						zone: "nrt",
-					},
-					{
-						uid: "6",
-						name: "Naro",
-						level: 6,
-						zone: "nrt",
-					},
-					{
-						uid: "7",
-						name: "Naro",
-						level: 7,
-						zone: "nrt",
-					},
-				],
 				maxStorage: 100,
 				maxFighters: 3,
 			},

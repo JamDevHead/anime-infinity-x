@@ -6,7 +6,6 @@ export const defaultPlayerData = {
 		stars: 0,
 	},
 	inventory: {
-		all: [],
 		maxFighters: 3,
 		maxStorage: 100,
 	},
