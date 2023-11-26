@@ -1,5 +1,6 @@
 import Roact from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
+import { useRootSelector } from "@/client/store";
 import { Button } from "@/client/ui/components/button";
 import { CanvasGroup } from "@/client/ui/components/canvas-group";
 import { FighterCard } from "@/client/ui/components/fighter-card";
@@ -11,11 +12,17 @@ import { Menu } from "@/client/ui/components/menu";
 import { ScrollView } from "@/client/ui/components/scroll-view";
 import { SearchBar } from "@/client/ui/components/search-bar";
 import { Stack } from "@/client/ui/components/stack";
+import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
+import { selectPlayerFighters, selectPlayerInventory } from "@/shared/store/players";
 
 export const Inventory = () => {
 	const rem = useRem();
+	const userId = usePlayerId();
+
+	const inventory = useRootSelector(selectPlayerInventory(userId));
+	const playerFighters = useRootSelector(selectPlayerFighters(userId));
 
 	return (
 		<Stack fillDirection="Vertical" size={UDim2.fromScale(1, 1)} padding={new UDim(0, 12)}>
@@ -37,7 +44,12 @@ export const Inventory = () => {
 						<Image image={images.icons.filter} size={UDim2.fromScale(1, 1)} />
 					</Button>
 					<SearchBar size={UDim2.fromScale(0.4, 1)} />
-					<InventoryStatus />
+					<InventoryStatus
+						storage={inventory?.all.size() ?? 0}
+						fighters={playerFighters?.actives.size() ?? 0}
+						maxStorage={inventory?.maxStorage ?? 0}
+						maxFighters={inventory?.maxFighters ?? 0}
+					/>
 					<uipadding
 						PaddingLeft={new UDim(0, rem(12, "pixel"))}
 						PaddingRight={new UDim(0, rem(12, "pixel"))}
@@ -67,8 +79,13 @@ export const Inventory = () => {
 							size={UDim2.fromScale(1, 1)}
 							autoSize="Y"
 						>
-							{table.create(100, 1).map((_, index) => (
-								<FighterCard key={index} headshot="naro" zone="nrt" rating={4} />
+							{inventory?.all.map((fighter) => (
+								<FighterCard
+									key={fighter.uid}
+									headshot={fighter.name}
+									zone={fighter.zone}
+									rating={fighter.level}
+								/>
 							))}
 						</Grid>
 						<uipadding

@@ -22,7 +22,7 @@ const Star: FunctionComponent<StarProps> = ({ size, imageColor, gradient, glow, 
 	return (
 		<Image
 			image={images.icons.star_rating}
-			size={size ?? UDim2.fromOffset(rem(28, "pixel"), rem(28, "pixel"))}
+			size={size ?? UDim2.fromOffset(rem(32, "pixel"), rem(32, "pixel"))}
 			imageColor={Color3.fromHex("#000")}
 			anchorPoint={new Vector2(0.5, 0.5)}
 			position={position}
@@ -52,10 +52,10 @@ const Star: FunctionComponent<StarProps> = ({ size, imageColor, gradient, glow, 
 				</Image>
 			)}
 			<uipadding
-				PaddingLeft={new UDim(0, rem(glow ? 2 : 6, "pixel"))}
-				PaddingRight={new UDim(0, rem(glow ? 2 : 6, "pixel"))}
-				PaddingTop={new UDim(0, rem(glow ? 2 : 6, "pixel"))}
-				PaddingBottom={new UDim(0, rem(glow ? 2 : 6, "pixel"))}
+				PaddingLeft={new UDim(0, rem(glow ? 2 : 7, "pixel"))}
+				PaddingRight={new UDim(0, rem(glow ? 2 : 7, "pixel"))}
+				PaddingTop={new UDim(0, rem(glow ? 2 : 7, "pixel"))}
+				PaddingBottom={new UDim(0, rem(glow ? 2 : 7, "pixel"))}
 			/>
 		</Image>
 	);
@@ -84,7 +84,7 @@ export const StarRating: FunctionComponent<StarRatingProps> = ({ stars }) => {
 						return (
 							<Star
 								key={index}
-								size={UDim2.fromOffset(rem(28, "pixel"), rem(28, "pixel"))}
+								size={UDim2.fromOffset(rem(32, "pixel"), rem(32, "pixel"))}
 								imageColor={ratingColor.color}
 								gradient={ratingColor.gradient}
 								active={active}
@@ -98,11 +98,11 @@ export const StarRating: FunctionComponent<StarRatingProps> = ({ stars }) => {
 						image={images.ui.shadow_star}
 						anchorPoint={new Vector2(0.5, 0.5)}
 						position={UDim2.fromScale(0.5, 0.5)}
-						size={UDim2.fromOffset(rem(128, "pixel"), rem(18, "pixel"))}
+						size={UDim2.fromOffset(rem(178, "pixel"), rem(18, "pixel"))}
 					/>
 
 					<Star
-						position={new UDim2(0.5, rem(28, "pixel"), 0.5, -rem(0, "pixel"))}
+						position={new UDim2(0.5, rem(38, "pixel"), 0.5, -rem(0, "pixel"))}
 						imageColor={ratingColor.stars ? ratingColor.stars?.[0].color : ratingColor.color}
 						gradient={ratingColor.stars ? ratingColor.stars?.[0].gradient : ratingColor.gradient}
 						rotation={-7.5}
@@ -111,14 +111,14 @@ export const StarRating: FunctionComponent<StarRatingProps> = ({ stars }) => {
 					/>
 					<Star
 						position={UDim2.fromScale(0.5, 0.5)}
-						size={UDim2.fromOffset(rem(32, "pixel"), rem(32, "pixel"))}
+						size={UDim2.fromOffset(rem(36, "pixel"), rem(36, "pixel"))}
 						imageColor={ratingColor.stars ? ratingColor.stars?.[1].color : ratingColor.color}
 						gradient={ratingColor.stars ? ratingColor.stars?.[1].gradient : ratingColor.gradient}
 						glow
 						active
 					/>
 					<Star
-						position={new UDim2(0.5, -rem(28, "pixel"), 0.5, -rem(0, "pixel"))}
+						position={new UDim2(0.5, -rem(38, "pixel"), 0.5, -rem(0, "pixel"))}
 						imageColor={ratingColor.stars ? ratingColor.stars?.[2].color : ratingColor.color}
 						gradient={ratingColor.stars ? ratingColor.stars?.[2].gradient : ratingColor.gradient}
 						rotation={7.5}

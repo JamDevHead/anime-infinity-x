@@ -10,20 +10,22 @@ import { images } from "@/shared/assets/images";
 
 type FighterCardProps = {
 	headshot: string;
-	zone: keyof typeof images.ui.cards.backgrounds;
+	zone: string;
 	rating: number;
 };
 
 export const FighterCard: FunctionComponent<FighterCardProps> = ({ headshot, zone, rating }) => {
 	const rem = useRem();
 
-	const zonePath = images.characters.headshots[zone] as Record<string, string>;
-	const headshotElement = zonePath[headshot];
+	const headshots = images.characters.headshots as unknown as Record<string, Record<string, string>>;
+
+	const zonePath = headshots[zone.lower()];
+	const headshotElement = zonePath[headshot.lower()];
 
 	return (
 		<Button size={UDim2.fromScale(1, 1)} backgroundTransparency={1} cornerRadius={new UDim(0, 12)}>
 			<Image
-				image={images.ui.cards.backgrounds[zone]}
+				image={images.ui.cards.backgrounds[zone as keyof typeof images.ui.cards.backgrounds]}
 				size={UDim2.fromScale(1, 1)}
 				cornerRadius={new UDim(0, 12)}
 			>

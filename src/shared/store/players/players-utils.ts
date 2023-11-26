@@ -5,7 +5,11 @@ export const defaultPlayerData = {
 		coins: 0,
 		stars: 0,
 	},
-	inventory: {},
+	inventory: {
+		all: [],
+		maxFighters: 3,
+		maxStorage: 100,
+	},
 	missions: {
 		all: [],
 		active: undefined,

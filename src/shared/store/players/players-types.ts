@@ -3,7 +3,7 @@ import { Mission } from "@/@types/models/mission";
 
 export interface PlayerData {
 	balance: PlayerBalance;
-	inventory: NonNullable<unknown>;
+	inventory: PlayerInventory;
 	missions: PlayerMission;
 	fighters: PlayerFighters;
 	boosts: PlayerBoosts;
@@ -40,4 +40,10 @@ export interface PlayerMission {
 
 export interface PlayerBoosts {
 	all: Array<Boost>;
+}
+
+export interface PlayerInventory {
+	all: Array<PlayerFighter>;
+	maxStorage: number;
+	maxFighters: number;
 }
