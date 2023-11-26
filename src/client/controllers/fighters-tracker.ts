@@ -93,7 +93,7 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 					return;
 				}
 
-				remotes.fighterTarget.remove.fire(uid);
+				remotes.fighterTarget.remove.fire(uid, enemyUid);
 			});
 
 			this.updateFighters();

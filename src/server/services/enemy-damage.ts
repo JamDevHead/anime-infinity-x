@@ -25,7 +25,7 @@ export class EnemyDamage implements OnStart, OnTick {
 	onStart() {
 		const fighterTargetAdded = (enemyId: string, fighterId: string) => {
 			const doesNotHaveFighterTarget = (fighterTarget: FighterTargetSlice) => {
-				return fighterTarget[fighterId] === undefined;
+				return fighterTarget[fighterId] === undefined || fighterTarget[fighterId] !== enemyId;
 			};
 
 			const cleanup = this.fighterTargetObserver(enemyId, fighterId);
@@ -35,7 +35,10 @@ export class EnemyDamage implements OnStart, OnTick {
 
 		store.subscribe(selectFightersTarget, (fightersTarget, previousFightersTarget) => {
 			for (const [fighterId, enemyId] of pairs(fightersTarget)) {
-				if (previousFightersTarget[fighterId] === undefined) {
+				if (
+					previousFightersTarget[fighterId] === undefined ||
+					fightersTarget[fighterId] !== previousFightersTarget[fighterId]
+				) {
 					fighterTargetAdded(enemyId, fighterId as string);
 				}
 			}
@@ -63,10 +66,16 @@ export class EnemyDamage implements OnStart, OnTick {
 			return;
 		}
 
-		this.fightersTargets.set(fighterId as string, enemy);
+		this.fightersTargets.set(fighterId, enemy);
 
 		return () => {
-			this.fightersTargets.delete(fighterId as string);
+			const fighterTarget = this.fightersTargets.get(fighterId);
+
+			if (fighterTarget?.attributes.Guid !== enemy.attributes.Guid) {
+				return;
+			}
+
+			this.fightersTargets.delete(fighterId);
 		};
 	}
 

@@ -10,8 +10,6 @@ import { getEnemyModelByUid } from "@/shared/utils/enemies";
 function SelectionProvider({ userId }: { userId: string }) {
 	const selectedEnemies = useRootSelector(selectSelectedEnemiesByPlayerId(userId));
 
-	print("rendering enemy provider");
-
 	return (
 		<>
 			{selectedEnemies?.map((enemyUid) => {

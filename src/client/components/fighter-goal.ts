@@ -100,6 +100,7 @@ export class FighterGoal
 				const lastEnemy = lastEnemyUid !== undefined ? getEnemyByUid(lastEnemyUid, this.components) : undefined;
 
 				if (lastEnemy?.attackingFighters.includes(this.attributes.UID)) {
+					// Remove fighter from last enemy
 					lastEnemy.attackingFighters = lastEnemy.attackingFighters.filter(
 						(fighterUid) => fighterUid !== this.attributes.UID,
 					);

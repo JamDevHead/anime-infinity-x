@@ -1,17 +1,17 @@
+import { Components } from "@flamework/components";
 import { Controller, OnRender, OnStart } from "@flamework/core";
 import { Logger } from "@rbxts/log";
+import { ReflexProvider } from "@rbxts/react-reflex";
 import { createRoot } from "@rbxts/react-roblox";
 import Roact, { StrictMode } from "@rbxts/roact";
 import { Players, Workspace } from "@rbxts/services";
-import { EnemyComponent } from "@/shared/components/enemy-component";
 import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { OnInput } from "@/client/controllers/lifecycles/on-input";
-import { getMouseTarget } from "@/client/utils/mouse";
 import { EnemyProvider } from "@/client/providers/enemy-provider";
-import { ReflexProvider } from "@rbxts/react-reflex";
 import { store } from "@/client/store";
-import { Components } from "@flamework/components";
 import { selectHoveredEnemy } from "@/client/store/enemy-hover";
+import { getMouseTarget } from "@/client/utils/mouse";
+import { EnemyComponent } from "@/shared/components/enemy-component";
 import remotes from "@/shared/remotes";
 import { selectSelectedEnemiesByPlayerId } from "@/shared/store/enemy-selection";
 
@@ -21,7 +21,6 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 	private localUserId = tostring(this.localPlayer.UserId);
 	private root: Part | undefined;
 	private raycastParams = new RaycastParams();
-	private currentEnemy: EnemyComponent | undefined;
 	private enemyFolder: Folder | undefined;
 
 	constructor(
@@ -58,7 +57,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 
 		const selectedEnemies = store.getState(selectSelectedEnemiesByPlayerId(this.localUserId));
 
-		if (hoveredEnemy) {
+		if (hoveredEnemy !== undefined) {
 			store.removeHoveredEnemy();
 		}
 
@@ -100,12 +99,6 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 			clearSelection();
 
 			remotes.fighterTarget.select.fire(uid);
-		}
-	}
-
-	onInputEnded(input: InputObject) {
-		if (!this.isValidInput(input)) {
-			return;
 		}
 	}
 
