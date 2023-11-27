@@ -39,11 +39,6 @@ export interface PlayerFighter {
 		sellPrice: number;
 	};
 	rarity: number;
-	level: number;
-	stats: {
-		damage: number;
-		dexterity: number;
-	};
 }
 
 export interface PlayerMission {

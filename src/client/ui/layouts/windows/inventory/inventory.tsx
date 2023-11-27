@@ -16,7 +16,8 @@ import { Stack } from "@/client/ui/components/stack";
 import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
-import { selectPlayerFighters, selectPlayerInventory } from "@/shared/store/players";
+import { selectPlayerInventory } from "@/shared/store/players";
+import { selectPlayerFighters } from "@/shared/store/players/fighters";
 
 export const Inventory = () => {
 	const rem = useRem();

@@ -9,6 +9,7 @@ export const images: {
 			};
 			readonly one: string;
 		};
+	};
 	readonly fx: {
 		readonly target_aura: string;
 	};
