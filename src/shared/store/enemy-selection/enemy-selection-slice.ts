@@ -31,4 +31,8 @@ export const enemySelectionSlice = createProducer(initialState, {
 			[playerId]: enemies.filter((uid) => uid !== enemyUid),
 		};
 	},
+	deleteSelectedEnemy: (state, playerId: string) => ({
+		...state,
+		[playerId]: undefined,
+	}),
 });
