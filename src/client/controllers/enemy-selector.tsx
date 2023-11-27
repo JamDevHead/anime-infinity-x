@@ -17,11 +17,12 @@ import { selectSelectedEnemiesByPlayerId } from "@/shared/store/enemy-selection"
 
 @Controller()
 export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender {
+	public enemyFolder: Folder | undefined;
+
 	private localPlayer = Players.LocalPlayer;
 	private localUserId = tostring(this.localPlayer.UserId);
 	private root: Part | undefined;
 	private raycastParams = new RaycastParams();
-	private enemyFolder: Folder | undefined;
 
 	constructor(
 		private readonly logger: Logger,

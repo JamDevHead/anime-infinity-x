@@ -1,10 +1,15 @@
 import { OnStart, Service } from "@flamework/core";
-import { PhysicsService } from "@rbxts/services";
+import { PhysicsService, Workspace } from "@rbxts/services";
 import { OnCharacterAdd } from "@/server/services/lifecycles/on-character-add";
 
 @Service()
 export class PlayerCollisions implements OnStart, OnCharacterAdd {
+	private playersFolder = new Instance("Folder");
+
 	onStart() {
+		this.playersFolder.Name = "Players";
+		this.playersFolder.Parent = Workspace;
+
 		PhysicsService.RegisterCollisionGroup("Players");
 		PhysicsService.RegisterCollisionGroup("Enemies");
 
@@ -16,6 +21,16 @@ export class PlayerCollisions implements OnStart, OnCharacterAdd {
 		const removeCollision = (part: BasePart) => {
 			part.CollisionGroup = "Players";
 		};
+
+		task.defer(() => {
+			if (!character.Parent) {
+				while (!character.Parent) {
+					task.wait();
+				}
+			}
+
+			character.Parent = this.playersFolder;
+		});
 
 		character.GetDescendants().forEach((descendant) => {
 			if (!descendant.IsA("BasePart")) {

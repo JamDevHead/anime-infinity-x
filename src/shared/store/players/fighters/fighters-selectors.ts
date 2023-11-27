@@ -1,4 +1,4 @@
-import { createSelector } from "@rbxts/reflex";
+import { createSelector, shallowEqual } from "@rbxts/reflex";
 import type { SharedState } from "@/shared/store";
 
 export const selectPlayersFighters = (state: SharedState) => {
@@ -30,9 +30,13 @@ export const selectPlayersFightersWithUid = (fighterUid: string) => {
 };
 
 export const selectActivePlayerFighters = (playerId: string) => {
-	return createSelector(selectPlayerFighters(playerId), (fighters) => {
-		return fighters?.actives;
-	});
+	return createSelector(
+		selectPlayerFighters(playerId),
+		(fighters) => {
+			return fighters?.actives ?? [];
+		},
+		{ resultEqualityCheck: shallowEqual },
+	);
 };
 
 export const selectActiveFighters = (state: SharedState) => {
