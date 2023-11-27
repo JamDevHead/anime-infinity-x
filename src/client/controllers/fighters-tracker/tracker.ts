@@ -7,17 +7,18 @@ import { selectFighterTarget } from "@/shared/store/fighter-target/fighter-targe
 import { selectActivePlayerFighters } from "@/shared/store/players/fighters";
 
 export class Tracker {
+	public readonly localUserId: string;
+
 	private activeFighters: ActiveFighters;
-	private readonly localUserId: string;
 	private trove = new Trove();
 	private root: Part | undefined;
 
 	constructor(
 		player: Player,
-		private fightersTracker: FightersTracker,
+		public fightersTracker: FightersTracker,
 	) {
 		this.localUserId = tostring(player.UserId);
-		this.activeFighters = this.trove.add(new ActiveFighters(fightersTracker.goalContainer));
+		this.activeFighters = this.trove.add(new ActiveFighters(this));
 
 		task.spawn(() => {
 			if (player.Character) {
@@ -26,7 +27,11 @@ export class Tracker {
 		});
 
 		this.trove.add(player.CharacterAdded.Connect((character) => this.onCharacter(character)));
-		this.trove.add(store.observe(selectActivePlayerFighters(this.localUserId), (uid) => this.onActiveFighter(uid)));
+		// this.trove.add(
+		// 	store.subscribe(selectActivePlayerFighters(this.localUserId), (activeFighters, previousActiveFighters) =>
+		// 		this.updateActiveFighters(activeFighters, previousActiveFighters),
+		// 	),
+		// );
 		this.trove.add(
 			store.subscribe(
 				selectSelectedEnemiesByPlayerId(this.localUserId),
@@ -43,6 +48,34 @@ export class Tracker {
 	public onCharacterRemoving() {
 		// Cleanup previous fighters
 		this.activeFighters.clean();
+	}
+
+	public updateFighters() {
+		if (!this.root) {
+			return;
+		}
+
+		const troopSize = this.activeFighters.size();
+		const formation = this.fightersTracker.getFormation(troopSize);
+		const formationSize = formation.size();
+		let index = 0;
+
+		for (const [uid, goalAttachment] of this.activeFighters.fighters) {
+			index++;
+
+			if (!goalAttachment) {
+				continue;
+			}
+
+			const fighterGoal = formation[index % formationSize];
+			const fighterOffset = this.fightersTracker.RootOffset.add(fighterGoal);
+
+			goalAttachment.WorldPosition = this.root.Position.add(fighterOffset);
+			goalAttachment.SetAttribute("Offset", fighterOffset);
+			goalAttachment.SetAttribute("UID", uid);
+			goalAttachment.SetAttribute("OwnerId", this.localUserId);
+			goalAttachment.AddTag("FighterGoal");
+		}
 	}
 
 	private onCharacter(character: Model) {
@@ -75,16 +108,29 @@ export class Tracker {
 		}
 	}
 
-	private onActiveFighter(uid: string) {
-		print("new active fighter", uid);
+	private updateActiveFighters(activeFighters: string[] | undefined, previousActiveFighters: string[] | undefined) {
+		print("updateActiveFighters", activeFighters, previousActiveFighters);
 
-		this.activeFighters.createFighterGoal(uid);
-		this.updateFighters();
+		if (!activeFighters) {
+			return;
+		}
 
-		return () => {
-			this.activeFighters.removeFighterGoal(uid);
-			this.updateFighters();
+		const doesNotHaveFighter = (fighterUid: string) => (fighters: string[] | undefined) => {
+			return fighters?.includes(fighterUid) === false;
 		};
+
+		// eslint-disable-next-line roblox-ts/no-array-pairs
+		for (const [fighterIndex, fighterUid] of pairs(activeFighters)) {
+			if (previousActiveFighters?.[fighterIndex] !== undefined) {
+				continue;
+			}
+
+			const cleanup = this.onActiveFighter(fighterUid);
+
+			this.trove.add(
+				store.once(selectActivePlayerFighters(this.localUserId), doesNotHaveFighter(fighterUid), cleanup),
+			);
+		}
 	}
 
 	private onSelectedEnemy(enemyUid: string) {
@@ -111,31 +157,15 @@ export class Tracker {
 		};
 	}
 
-	private updateFighters() {
-		if (!this.root) {
-			return;
-		}
+	private onActiveFighter(uid: string) {
+		print("new active fighter", uid);
 
-		const troopSize = this.activeFighters.size();
-		const formation = this.fightersTracker.getFormation(troopSize);
-		const formationSize = formation.size();
-		let index = 0;
+		this.activeFighters.createFighterGoal(uid);
+		this.updateFighters();
 
-		for (const [uid, goalAttachment] of this.activeFighters.fighters) {
-			index++;
-
-			if (!goalAttachment) {
-				continue;
-			}
-
-			const fighterGoal = formation[index % formationSize];
-			const fighterOffset = this.fightersTracker.RootOffset.add(fighterGoal);
-
-			goalAttachment.WorldPosition = this.root.Position.add(fighterOffset);
-			goalAttachment.SetAttribute("Offset", fighterOffset);
-			goalAttachment.SetAttribute("UID", uid);
-			goalAttachment.SetAttribute("OwnerId", this.localUserId);
-			goalAttachment.AddTag("FighterGoal");
-		}
+		return () => {
+			this.activeFighters.removeFighterGoal(uid);
+			this.updateFighters();
+		};
 	}
 }
