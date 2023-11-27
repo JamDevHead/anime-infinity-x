@@ -3,7 +3,7 @@ import { Mission } from "@/@types/models/mission";
 
 export interface PlayerData {
 	balance: PlayerBalance;
-	inventory: NonNullable<unknown>;
+	inventory: PlayerInventory;
 	missions: PlayerMission;
 	fighters: PlayerFighters;
 	boosts: PlayerBoosts;
@@ -30,6 +30,15 @@ export interface PlayerFighter {
 	zone: string;
 	uid: string;
 	name: string;
+	displayName: string;
+	stats: {
+		damage: number;
+		dexterity: number;
+		level: number;
+		xp: number;
+		sellPrice: number;
+	};
+	rarity: number;
 	level: number;
 	stats: {
 		damage: number;
@@ -44,4 +53,9 @@ export interface PlayerMission {
 
 export interface PlayerBoosts {
 	all: Array<Boost>;
+}
+
+export interface PlayerInventory {
+	maxStorage: number;
+	maxFighters: number;
 }

@@ -1,9 +1,9 @@
 import { hoarcekat } from "@rbxts/pretty-react-hooks";
 import Roact from "@rbxts/roact";
 import { GlobalContextMenu } from "@/client/ui/components/global-context-menu";
-import { WindowManager } from "@/client/ui/components/window-manager";
+import { Window } from "@/client/ui/components/window";
 import { useMockData } from "@/client/ui/hooks/use-mock-data";
-import { Hud } from "@/client/ui/layouts/hud/hud";
+import { Inventory } from "@/client/ui/layouts/windows/inventory/inventory";
 import { RootProvider } from "@/client/ui/providers/root-provider";
 
 export = hoarcekat(() => {
@@ -11,8 +11,9 @@ export = hoarcekat(() => {
 
 	return (
 		<RootProvider>
-			<Hud />
-			<WindowManager />
+			<Window title="Inventory" size={UDim2.fromScale(0.8, 0.8)}>
+				<Inventory />
+			</Window>
 			<GlobalContextMenu />
 		</RootProvider>
 	);

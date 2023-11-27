@@ -5,6 +5,7 @@ import { Frame } from "@/client/ui/components/frame";
 import { Window } from "@/client/ui/components/window";
 import { useMotion } from "@/client/ui/hooks/use-motion";
 import { Codes } from "@/client/ui/layouts/windows/codes/codes";
+import { Inventory } from "@/client/ui/layouts/windows/inventory/inventory";
 import { Settings } from "@/client/ui/layouts/windows/settings/settings";
 
 export const WindowManager = () => {
@@ -40,6 +41,7 @@ export const WindowManager = () => {
 			<Window title={window.title} size={window.size} position={position} onClose={() => setVisibility(false)}>
 				{currentWindow === "codes" && <Codes />}
 				{currentWindow === "settings" && <Settings />}
+				{currentWindow === "inventory" && <Inventory />}
 			</Window>
 		</Frame>
 	);

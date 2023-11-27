@@ -4,13 +4,13 @@ import { Frame, FrameProps } from "@/client/ui/components/frame";
 interface GridProps extends FrameProps {
 	columns?: number;
 	rows?: number;
-	fillDirection?: Enum.FillDirection;
+	fillDirection?: Enum.FillDirection | "Horizontal" | "Vertical";
 	cellSize?: UDim2;
 	cellPadding?: UDim2;
-	horizontalAlignment?: Enum.HorizontalAlignment;
-	verticalAlignment?: Enum.VerticalAlignment;
-	sortOrder?: Enum.SortOrder;
-	startCorner?: Enum.StartCorner;
+	horizontalAlignment?: Enum.HorizontalAlignment | "Center" | "Left" | "Right";
+	verticalAlignment?: Enum.VerticalAlignment | "Center" | "Top" | "Bottom";
+	sortOrder?: Enum.SortOrder | "LayoutOrder";
+	startCorner?: Enum.StartCorner | "BottomLeft" | "BottomRight" | "TopLeft" | "TopRight";
 }
 
 export const Grid: FunctionComponent<PropsWithChildren<GridProps>> = (props) => {

@@ -13,6 +13,19 @@ export default function loadFighters(profile: Profile<PlayerData>) {
 		for (const index of $range(1, 2)) {
 			const uid = HttpService.GenerateGUID(false);
 
+		store.addFighter(userId, uid, {
+			name: initialFighter.Oro.Name,
+			displayName: initialFighter.Oro.Name,
+			stats: {
+				damage: 10,
+				dexterity: 10,
+				level: 1,
+				xp: 0,
+				sellPrice: 0,
+			},
+			rarity: 1,
+			zone: initialFighter.Name,
+		});
 			store.addFighter(userId, uid, {
 				name: initialFighter.Oro.Name,
 				level: 0,

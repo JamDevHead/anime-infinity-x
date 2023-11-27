@@ -6,6 +6,7 @@ import { devToolsMiddleware } from "./middleware/devtools";
 import { receiverMiddleware } from "./middleware/receiver";
 import { settingsSlice } from "./settings";
 import { windowSlice } from "./window";
+import { inventorySlice } from "@/client/store/inventory";
 import { slices } from "@/shared/store";
 import { enemyHoverSlice } from "@/client/store/enemy-hover";
 
@@ -19,6 +20,7 @@ export function createStore() {
 		hud: hudSlice,
 		settings: settingsSlice,
 		window: windowSlice,
+		inventory: inventorySlice,
 		enemyHover: enemyHoverSlice,
 	});
 

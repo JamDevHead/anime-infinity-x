@@ -1,3 +1,22 @@
+[inputs."assets/images/characters/headshots/nrt/naro.png"]
+hash = "b5684bcd1d5d17ac4f72a785794bc14433c03579cf004fe52c33daa01d2c46c2"
+id = 15464814050
+packable = false
+
+[inputs."assets/images/icons/arrow_left.png"]
+hash = "81a9ecfebedeb5ea35dbbe802169b4ba9cf1a536ae4d6c5c27844d8eb61756d9"
+id = 15472590955
+packable = false
+
+[inputs."assets/images/icons/backpack.png"]
+hash = "a66c56b4a9ce4e7aecf136fca0158744a01b5eefa18b1d9291f6f5f1cbb1d6d1"
+id = 15438096788
+packable = false
+
+[inputs."assets/images/icons/bolt.png"]
+hash = "99ee7b3dcf452374c7134e7a128b4a1df47f2b44f94076a30d1038b68f74a8a8"
+id = 15472591107
+
 [inputs."assets/images/fx/target_aura.png"]
 hash = "9cad64e8406dfcb6d557b5a6c05c49b576f60c7f56f57dce6a0c033dcf26f04c"
 id = 15415592397
@@ -28,6 +47,11 @@ hash = "797b33044278b18e0614e8be5594cd5bbdc0961a00d7643ad7cd5ec41d341759"
 id = 15294309767
 packable = false
 
+[inputs."assets/images/icons/cash.png"]
+hash = "a72f5234fb2a3cfcf4d7bffa0c8a90573da0e3bc65eb9eba799940f43000312d"
+id = 15472591269
+packable = false
+
 [inputs."assets/images/icons/characters.png"]
 hash = "2d2bcce989f0f6d8cda53b99f81b3457ef191a6c2e1db6853e5ca7002b1e4d92"
 id = 15303915032
@@ -41,6 +65,11 @@ packable = false
 [inputs."assets/images/icons/daily_rewards.png"]
 hash = "f76a373f68f92ed0635fac306bd73663c5b9d58e9b405f78d2721184104c7625"
 id = 15302168729
+packable = false
+
+[inputs."assets/images/icons/filter.png"]
+hash = "aba732d1e080f047ec56223e06e4c336320c95c2055d2e80897a00f0e6d10854"
+id = 15434347314
 packable = false
 
 [inputs."assets/images/icons/fish.png"]
@@ -73,9 +102,19 @@ hash = "68579c7bade917b6774e5134df9bf325a2b3dbd11c6d7c880c8cfd4296ea9d5c"
 id = 15302522396
 packable = false
 
+[inputs."assets/images/icons/quad_menu.png"]
+hash = "f24f3c6c638b569867efbb2cccbd69288105c8e6bb1df58c7058bc809bd4a912"
+id = 15434347353
+packable = false
+
 [inputs."assets/images/icons/rebirth.png"]
 hash = "2ed7067692ff5df3d5b49814860df3ce6ee0b7c1388a7f6caa0fd165d8555162"
 id = 15295231883
+packable = false
+
+[inputs."assets/images/icons/search.png"]
+hash = "51fe5c55f2a91924874217b942d0b4c2155b8964f6cd1e6341038814fa41663e"
+id = 15375260444
 packable = false
 
 [inputs."assets/images/icons/settings.png"]
@@ -88,9 +127,24 @@ hash = "3326723ca18d335f7045844e8982195f7ac49611b88e70240917be9e38ef777d"
 id = 15303269918
 packable = false
 
+[inputs."assets/images/icons/star_glow.png"]
+hash = "3e8dcf45f3c9b70f60b374d471a74972bb622146aff28911b77a3092f7a3bf53"
+id = 15450618208
+packable = false
+
+[inputs."assets/images/icons/star_rating.png"]
+hash = "46934edee249c10f742d7f65480deaa139bc46f9ff33a58279f7f122a84c1fe5"
+id = 15449621163
+packable = false
+
 [inputs."assets/images/icons/store.png"]
 hash = "f6949ca26519fda5da23bb9940358d6a221bbb147ea9d53333d1581b02d78820"
 id = 15303915226
+packable = false
+
+[inputs."assets/images/icons/sword.png"]
+hash = "affe520d1322694e04c80df73d0c9f4516307b45a0bfb07722f3fa69067e222b"
+id = 15472647561
 packable = false
 
 [inputs."assets/images/icons/sword_outline.png"]
@@ -111,6 +165,31 @@ packable = false
 [inputs."assets/images/ui/blur.png"]
 hash = "d1b211a8eaaf1a834836d63b984aaf85538b10e34a714d06fc65ba0faf440af6"
 id = 15255783123
+packable = false
+
+[inputs."assets/images/ui/cards/backgrounds/aot.png"]
+hash = "e0703c9027e85223b92942b48b36c6b2d333fabefa50c724da0567486e55af4c"
+id = 15449187554
+packable = false
+
+[inputs."assets/images/ui/cards/backgrounds/dbz.png"]
+hash = "38ef815753da64f2409d8d29c9687e8ddae2d5b379d03ab12745ad9f339ec0e5"
+id = 15449187669
+packable = false
+
+[inputs."assets/images/ui/cards/backgrounds/dms.png"]
+hash = "d3b17185de28f2539747fa07aaf3ea47e892340d8f7312b61a6bb3c499045469"
+id = 15449187774
+packable = false
+
+[inputs."assets/images/ui/cards/backgrounds/nrt.png"]
+hash = "cfd65261f51933a111298ee2cad484387d3e58bea945fcdfe0bbbd775158739d"
+id = 15449255334
+packable = false
+
+[inputs."assets/images/ui/cards/backgrounds/one.png"]
+hash = "7ded2aec7e66f8f4fb3da31c692519958938b091b007dcdb0eb13fc9d4b4aa34"
+id = 15449188170
 packable = false
 
 [inputs."assets/images/ui/checkbox.png"]
@@ -161,6 +240,11 @@ packable = false
 [inputs."assets/images/ui/rounded_button_base.png"]
 hash = "9e24c345039bc9deab69a4fb534ee29c91302be44dffa9a12ea1df438a3d9f81"
 id = 15267940299
+packable = false
+
+[inputs."assets/images/ui/shadow_star.png"]
+hash = "2756189f46e371dddb883a04fe2c2e63d2f604924a7534c0dfcc31eb6eea506d"
+id = 15450966260
 packable = false
 
 [inputs."assets/images/ui/stats_bar_base.png"]

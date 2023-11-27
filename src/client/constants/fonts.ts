@@ -7,4 +7,9 @@ export const fonts = {
 	robotoMono: {
 		regular: Font.fromEnum(Enum.Font.RobotoMono),
 	},
+	gotham: {
+		regular: Font.fromEnum(Enum.Font.Gotham),
+		medium: Font.fromEnum(Enum.Font.GothamMedium),
+		bold: Font.fromEnum(Enum.Font.GothamBold),
+	},
 };

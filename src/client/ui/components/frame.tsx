@@ -15,7 +15,7 @@ export interface FrameProps<T extends Instance = Frame> extends PropsWithChildre
 	zIndex?: number | Roact.Binding<number>;
 	layoutOrder?: number | Roact.Binding<number>;
 	cornerRadius?: UDim | Roact.Binding<UDim>;
-	autoSize?: Enum.AutomaticSize;
+	autoSize?: Enum.AutomaticSize | Roact.Binding<Enum.AutomaticSize> | "X" | "Y" | "XY";
 }
 
 export const Frame = forwardRef((props: FrameProps, ref: Ref<Frame>) => {
