@@ -1,5 +1,8 @@
+import { Workspace } from "@rbxts/services";
+
 export class AnimationTracker {
 	private animationCache = new Map<string, AnimationTrack>();
+	private animationsInQueue = new Set<string>();
 
 	constructor(
 		private animator: Animator,
@@ -60,10 +63,39 @@ export class AnimationTracker {
 			return cachedTrack;
 		}
 
+		if (this.animationsInQueue.has(id)) {
+			while (this.animationCache.get(id) === undefined) {
+				task.wait();
+			}
+			return this.animationCache.get(id);
+		}
+
 		const animationInstance = new Instance("Animation");
 		animationInstance.AnimationId = `rbxassetid://${id}`;
 		animationInstance.Name = name;
 		animationInstance.Parent = this.animator;
+
+		if (!this.animator.IsDescendantOf(Workspace)) {
+			this.animationsInQueue.add(id);
+
+			let timeout = 300;
+
+			while (!this.animator.IsDescendantOf(Workspace)) {
+				task.wait();
+				timeout--;
+				if (timeout <= 0) {
+					break;
+				}
+			}
+
+			if (timeout <= 0) {
+				warn("Failed to load animation: ", id);
+				this.animationsInQueue.delete(id);
+				return;
+			}
+
+			this.animationsInQueue.delete(id);
+		}
 
 		const track = this.animator.LoadAnimation(animationInstance);
 
