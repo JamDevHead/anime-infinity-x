@@ -2,7 +2,29 @@ import { useEffect } from "@rbxts/roact";
 import { store } from "@/client/store";
 import { defaultPlayerData } from "@/shared/store/players/players-utils";
 
-export const useMockData = () => {
+type MockDataProps = {
+	/**
+	 * Represents custom data for the player.
+	 * This is useful for testing specific scenarios.
+	 * @example
+	 * useMockData({ customData: { balance: { coins: 1000000, stars: 1000000 } } });
+	 * @type {Partial<typeof defaultPlayerData>}
+	 * @memberof MockDataProps
+	 * @default undefined
+	 */
+	customData?: Partial<typeof defaultPlayerData>;
+};
+
+/**
+ * This hook is used to load mock data into the store for testing purposes.
+ * This should only be used in development and should never be used in production.
+ *
+ * @example
+ * useMockData();
+ *
+ * @returns void
+ */
+export const useMockData = (props?: MockDataProps): void => {
 	useEffect(() => {
 		store.loadPlayerData("1", {
 			...defaultPlayerData,
@@ -15,43 +37,99 @@ export const useMockData = () => {
 					{
 						uid: "1",
 						name: "Naro",
-						level: 1,
+						displayName: "Naro",
+						stats: {
+							damage: 10,
+							dexterity: 10,
+							level: 1,
+							xp: 0,
+							sellPrice: 0,
+						},
+						rarity: 1,
 						zone: "nrt",
 					},
 					{
 						uid: "2",
 						name: "Naro",
-						level: 2,
+						displayName: "Naro",
+						stats: {
+							damage: 10,
+							dexterity: 10,
+							level: 1,
+							xp: 0,
+							sellPrice: 0,
+						},
+						rarity: 2,
 						zone: "nrt",
 					},
 					{
 						uid: "3",
 						name: "Naro",
-						level: 3,
+						displayName: "Naro",
+						stats: {
+							damage: 10,
+							dexterity: 10,
+							level: 1,
+							xp: 0,
+							sellPrice: 0,
+						},
+						rarity: 3,
 						zone: "nrt",
 					},
 					{
 						uid: "4",
 						name: "Naro",
-						level: 4,
+						displayName: "Naro",
+						stats: {
+							damage: 10,
+							dexterity: 10,
+							level: 1,
+							xp: 0,
+							sellPrice: 0,
+						},
+						rarity: 4,
 						zone: "nrt",
 					},
 					{
 						uid: "5",
 						name: "Naro",
-						level: 5,
+						displayName: "Naro",
+						stats: {
+							damage: 10,
+							dexterity: 10,
+							level: 1,
+							xp: 0,
+							sellPrice: 0,
+						},
+						rarity: 5,
 						zone: "nrt",
 					},
 					{
 						uid: "6",
 						name: "Naro",
-						level: 6,
+						displayName: "Naro",
+						stats: {
+							damage: 10,
+							dexterity: 10,
+							level: 1,
+							xp: 0,
+							sellPrice: 0,
+						},
+						rarity: 6,
 						zone: "nrt",
 					},
 					{
 						uid: "7",
 						name: "Naro",
-						level: 7,
+						displayName: "Naro",
+						stats: {
+							damage: 10,
+							dexterity: 10,
+							level: 1,
+							xp: 0,
+							sellPrice: 0,
+						},
+						rarity: 7,
 						zone: "nrt",
 					},
 				],
@@ -126,6 +204,7 @@ export const useMockData = () => {
 				maxStorage: 100,
 				maxFighters: 3,
 			},
+			...props?.customData,
 		});
 	});
 };

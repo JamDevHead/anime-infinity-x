@@ -40,6 +40,9 @@ export const images: {
 		readonly sword: string;
 		readonly star_rating: string;
 		readonly star_glow: string;
+		readonly arrow_left: string;
+		readonly bolt: string;
+		readonly cash: string;
 	};
 	readonly ui: {
 		readonly cards: {

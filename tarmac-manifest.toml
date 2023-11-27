@@ -3,9 +3,19 @@ hash = "b5684bcd1d5d17ac4f72a785794bc14433c03579cf004fe52c33daa01d2c46c2"
 id = 15464814050
 packable = false
 
+[inputs."assets/images/icons/arrow_left.png"]
+hash = "81a9ecfebedeb5ea35dbbe802169b4ba9cf1a536ae4d6c5c27844d8eb61756d9"
+id = 15472590955
+packable = false
+
 [inputs."assets/images/icons/backpack.png"]
 hash = "a66c56b4a9ce4e7aecf136fca0158744a01b5eefa18b1d9291f6f5f1cbb1d6d1"
 id = 15438096788
+packable = false
+
+[inputs."assets/images/icons/bolt.png"]
+hash = "99ee7b3dcf452374c7134e7a128b4a1df47f2b44f94076a30d1038b68f74a8a8"
+id = 15472591107
 packable = false
 
 [inputs."assets/images/icons/boost.png"]
@@ -31,6 +41,11 @@ packable = false
 [inputs."assets/images/icons/boosts/strength_boost.png"]
 hash = "797b33044278b18e0614e8be5594cd5bbdc0961a00d7643ad7cd5ec41d341759"
 id = 15294309767
+packable = false
+
+[inputs."assets/images/icons/cash.png"]
+hash = "a72f5234fb2a3cfcf4d7bffa0c8a90573da0e3bc65eb9eba799940f43000312d"
+id = 15472591269
 packable = false
 
 [inputs."assets/images/icons/characters.png"]

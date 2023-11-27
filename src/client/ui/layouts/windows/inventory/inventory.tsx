@@ -1,6 +1,7 @@
+import { useCamera, useMouse } from "@rbxts/pretty-react-hooks";
 import Roact from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
-import { useRootSelector } from "@/client/store";
+import { useRootSelector, useRootStore } from "@/client/store";
 import { Button } from "@/client/ui/components/button";
 import { CanvasGroup } from "@/client/ui/components/canvas-group";
 import { FighterCard } from "@/client/ui/components/fighter-card";
@@ -20,12 +21,18 @@ import { selectPlayerFighters, selectPlayerInventory } from "@/shared/store/play
 export const Inventory = () => {
 	const rem = useRem();
 	const userId = usePlayerId();
+	const mouse = useMouse();
+	const camera = useCamera();
+
+	const rootRef = Roact.createRef<Frame>();
+
+	const { setInventoryOpenedMenu, setInventoryMenuPosition } = useRootStore();
 
 	const inventory = useRootSelector(selectPlayerInventory(userId));
 	const playerFighters = useRootSelector(selectPlayerFighters(userId));
 
 	return (
-		<Stack fillDirection="Vertical" size={UDim2.fromScale(1, 1)} padding={new UDim(0, 12)}>
+		<Stack fillDirection="Vertical" size={UDim2.fromScale(1, 1)} padding={new UDim(0, 12)} ref={rootRef}>
 			<Frame
 				backgroundColor={colors.black}
 				backgroundTransparency={0.5}
@@ -85,7 +92,11 @@ export const Inventory = () => {
 									active={playerFighters?.actives.includes(fighter.uid)}
 									headshot={fighter.name}
 									zone={fighter.zone}
-									rating={fighter.level}
+									rating={fighter.rarity}
+									onClick={() => {
+										setInventoryMenuPosition(new Vector2(mouse.getValue().X, mouse.getValue().Y));
+										setInventoryOpenedMenu(true);
+									}}
 								/>
 							))}
 						</Grid>

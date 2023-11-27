@@ -1,5 +1,6 @@
 import Roact, { FunctionComponent, PropsWithChildren } from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
+import { fonts } from "@/client/constants/fonts";
 import { Button } from "@/client/ui/components/button";
 import { Frame } from "@/client/ui/components/frame";
 import { Image } from "@/client/ui/components/image";
@@ -46,17 +47,26 @@ const ButtonItem: FunctionComponent<PropsWithChildren<ButtonItemProps>> = ({
 
 	return (
 		<Button
-			size={size ?? UDim2.fromOffset(rem(216, "pixel"), rem(48, "pixel"))}
+			size={size ?? UDim2.fromOffset(rem(216, "pixel"), rem(38, "pixel"))}
 			backgroundTransparency={0}
-			cornerRadius={new UDim(0, 12)}
+			cornerRadius={new UDim(0, 8)}
 			onClick={onClick}
 			backgroundColor={color ? color : gradient ? colors.white : undefined}
 		>
 			<Frame
 				size={UDim2.fromScale(1, 1)}
 				backgroundColor={color ? color : gradient ? colors.white : undefined}
-				cornerRadius={new UDim(0, 8)}
+				cornerRadius={new UDim(0, 4)}
 			>
+				{icon !== undefined && (
+					<Image
+						image={icon}
+						position={UDim2.fromScale(0.2, 0.5)}
+						anchorPoint={new Vector2(0.5, 0.5)}
+						size={UDim2.fromOffset(rem(24, "pixel"), rem(24, "pixel"))}
+						backgroundTransparency={1}
+					/>
+				)}
 				<Stack
 					fillDirection="Horizontal"
 					horizontalAlignment="Center"
@@ -65,14 +75,14 @@ const ButtonItem: FunctionComponent<PropsWithChildren<ButtonItemProps>> = ({
 					padding={new UDim(0, rem(4, "pixel"))}
 					sortOrder={Enum.SortOrder.LayoutOrder}
 				>
-					{icon !== undefined && (
-						<Image
-							image={icon}
-							size={UDim2.fromOffset(rem(32, "pixel"), rem(32, "pixel"))}
-							backgroundTransparency={1}
-						/>
-					)}
-					<Text text={text} textColor={colors.white} textAutoResize={"XY"} backgroundTransparency={1} />
+					<Text
+						text={text}
+						font={fonts.inter.bold}
+						textSize={rem(18, "pixel")}
+						textColor={colors.white}
+						textAutoResize={"XY"}
+						backgroundTransparency={1}
+					/>
 					{children}
 				</Stack>
 				<uigradient Color={gradient} Rotation={90} />

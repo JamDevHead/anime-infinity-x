@@ -30,7 +30,15 @@ export interface PlayerFighter {
 	zone: string;
 	uid: string;
 	name: string;
-	level: number;
+	displayName: string;
+	stats: {
+		damage: number;
+		dexterity: number;
+		level: number;
+		xp: number;
+		sellPrice: number;
+	};
+	rarity: number;
 }
 
 export interface PlayerMission {

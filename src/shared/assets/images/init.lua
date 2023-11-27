@@ -9,7 +9,9 @@ return {
 			},
 		},
 		icons = {
+			arrow_left = "rbxassetid://15472590955",
 			backpack = "rbxassetid://15438096788",
+			bolt = "rbxassetid://15472591107",
 			boost = "rbxassetid://15302168656",
 			boosts = {
 				coin_boost = "rbxassetid://15294309561",
@@ -17,6 +19,7 @@ return {
 				stars_boost = "rbxassetid://15294309714",
 				strength_boost = "rbxassetid://15294309767",
 			},
+			cash = "rbxassetid://15472591269",
 			characters = "rbxassetid://15303915032",
 			coin = "rbxassetid://15303269882",
 			daily_rewards = "rbxassetid://15302168729",
@@ -35,7 +38,7 @@ return {
 			star_glow = "rbxassetid://15450618208",
 			star_rating = "rbxassetid://15449621163",
 			store = "rbxassetid://15303915226",
-			sword = "rbxassetid://15438096844",
+			sword = "rbxassetid://15472647561",
 			sword_outline = "rbxassetid://15277603950",
 			twitter = "rbxassetid://15302169045",
 		},
