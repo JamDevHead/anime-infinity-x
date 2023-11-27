@@ -16,6 +16,10 @@ packable = false
 [inputs."assets/images/icons/bolt.png"]
 hash = "99ee7b3dcf452374c7134e7a128b4a1df47f2b44f94076a30d1038b68f74a8a8"
 id = 15472591107
+
+[inputs."assets/images/fx/target_aura.png"]
+hash = "9cad64e8406dfcb6d557b5a6c05c49b576f60c7f56f57dce6a0c033dcf26f04c"
+id = 15415592397
 packable = false
 
 [inputs."assets/images/icons/boost.png"]

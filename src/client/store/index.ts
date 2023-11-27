@@ -8,6 +8,7 @@ import { settingsSlice } from "./settings";
 import { windowSlice } from "./window";
 import { inventorySlice } from "@/client/store/inventory";
 import { slices } from "@/shared/store";
+import { enemyHoverSlice } from "@/client/store/enemy-hover";
 
 export type RootStore = typeof store;
 export type RootState = InferState<RootStore>;
@@ -20,6 +21,7 @@ export function createStore() {
 		settings: settingsSlice,
 		window: windowSlice,
 		inventory: inventorySlice,
+		enemyHover: enemyHoverSlice,
 	});
 
 	store.applyMiddleware(devToolsMiddleware, receiverMiddleware(store));

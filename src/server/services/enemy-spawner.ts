@@ -4,7 +4,7 @@ import { ServerStorage, Workspace } from "@rbxts/services";
 import { ZonesLoader } from "./zones-loader";
 
 @Service()
-export class EnemiesSpawner implements OnStart {
+export class EnemySpawner implements OnStart {
 	public enemiesFolder = new Instance("Folder");
 
 	constructor(

@@ -7,6 +7,8 @@ return {
 					naro = "rbxassetid://15464814050",
 				},
 			},
+		fx = {
+			target_aura = "rbxassetid://15415592397",
 		},
 		icons = {
 			arrow_left = "rbxassetid://15472590955",

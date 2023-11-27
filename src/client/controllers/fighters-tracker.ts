@@ -1,16 +1,12 @@
 import { Controller, OnStart } from "@flamework/core";
 import { Logger } from "@rbxts/log";
-import { createSelector } from "@rbxts/reflex";
 import { Players, Workspace } from "@rbxts/services";
+import { selectSelectedEnemiesByPlayerId } from "shared/store/enemy-selection";
 import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { store } from "@/client/store";
-import { selectPlayerFighters } from "@/shared/store/players";
-
-const selectActiveFighters = (playerId: string) => {
-	return createSelector(selectPlayerFighters(playerId), (fighters) => {
-		return fighters?.actives;
-	});
-};
+import remotes from "@/shared/remotes";
+import { selectFighterTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
+import { selectActivePlayerFighters } from "@/shared/store/players/fighters";
 
 @Controller()
 export class FightersTracker implements OnStart, OnCharacterAdd {
@@ -18,8 +14,10 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 
 	private readonly RootOffset = new Vector3(0, -3, 4);
 	private localPlayer = Players.LocalPlayer;
+	private localUserId = tostring(this.localPlayer.UserId);
 	private root: Part | undefined;
-	private activeFighters = new Map<string, Attachment | false>();
+	private goalContainer = Workspace.Terrain;
+	private activeFighters = new Map<string, Attachment>();
 
 	constructor(private readonly logger: Logger) {}
 
@@ -27,7 +25,7 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 		this.fightersFolder.Name = "Fighters";
 		this.fightersFolder.Parent = Workspace;
 
-		store.observe(selectActiveFighters(tostring(this.localPlayer.UserId)), (uid) => {
+		store.observe(selectActivePlayerFighters(this.localUserId), (uid) => {
 			this.createFighter(uid);
 			this.updateFighters();
 
@@ -37,40 +35,86 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 				this.updateFighters();
 			};
 		});
+
+		const enemyAdded = (enemyUid: string) => {
+			const doesNotHaveTarget = (enemies: string[] | undefined) => {
+				return enemies?.includes(enemyUid) === false;
+			};
+
+			const cleanup = this.enemyObserver(enemyUid);
+
+			store.once(selectSelectedEnemiesByPlayerId(this.localUserId), doesNotHaveTarget, cleanup);
+		};
+
+		store.subscribe(
+			selectSelectedEnemiesByPlayerId(this.localUserId),
+			(enemiesSelected, previousEnemiesSelected) => {
+				if (!enemiesSelected) {
+					return;
+				}
+
+				// eslint-disable-next-line roblox-ts/no-array-pairs
+				for (const [enemyIndex, enemyUid] of pairs(enemiesSelected)) {
+					if (previousEnemiesSelected?.[enemyIndex] !== undefined) {
+						continue;
+					}
+
+					enemyAdded(enemyUid);
+				}
+			},
+		);
 	}
 
 	onCharacterAdded(character: Model) {
 		this.root = character.WaitForChild("HumanoidRootPart") as Part;
-		for (const [uid] of this.activeFighters) {
-			this.createFighter(uid);
-		}
 		this.updateFighters();
 	}
 
 	onCharacterRemoved() {
 		this.root = undefined;
-		this.activeFighters.forEach((goalAttachment, uid) => {
-			this.activeFighters.set(uid, false);
-
-			if (goalAttachment) {
-				goalAttachment.Destroy();
-			}
+		this.activeFighters.forEach((fighterAttachment) => {
+			fighterAttachment.RemoveTag("FighterGoal");
 		});
+		this.activeFighters.clear();
+	}
+
+	private enemyObserver(enemyUid: string) {
+		this.activeFighters.forEach((_, uid) => {
+			remotes.fighterTarget.set.fire(uid, enemyUid);
+		});
+
+		this.updateFighters();
+
+		return () => {
+			this.activeFighters.forEach((_, uid) => {
+				const fighterTargetUid = store.getState(selectFighterTarget(uid));
+
+				if (fighterTargetUid === undefined || fighterTargetUid !== enemyUid) {
+					return;
+				}
+
+				remotes.fighterTarget.remove.fire(uid, enemyUid);
+			});
+
+			this.updateFighters();
+		};
 	}
 
 	private createFighter(uid: string) {
 		let goalAttachment = this.activeFighters.get(uid);
 
-		if (!goalAttachment && this.root) {
+		if (!goalAttachment && this.goalContainer) {
 			goalAttachment = new Instance("Attachment");
-		}
-
-		this.activeFighters.set(uid, goalAttachment ?? false);
-
-		if (goalAttachment) {
 			goalAttachment.Name = "GoalAttachment";
-			goalAttachment.Parent = this.root;
+			goalAttachment.Parent = this.goalContainer;
 		}
+
+		if (!goalAttachment) {
+			return;
+		}
+
+		this.activeFighters.set(uid, goalAttachment);
+		goalAttachment.SetAttribute("UID", uid);
 	}
 
 	private removeFighter(uid: string) {
@@ -84,6 +128,10 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 	}
 
 	private updateFighters() {
+		if (!this.root) {
+			return;
+		}
+
 		const troopSize = this.activeFighters.size();
 		const formation = this.getFormation(troopSize);
 		const formationSize = formation.size();
@@ -97,9 +145,12 @@ export class FightersTracker implements OnStart, OnCharacterAdd {
 			}
 
 			const fighterGoal = formation[index % formationSize];
+			const fighterOffset = this.RootOffset.add(fighterGoal);
 
-			goalAttachment.Position = this.RootOffset.add(fighterGoal);
+			goalAttachment.WorldPosition = this.root.Position.add(fighterOffset);
+			goalAttachment.SetAttribute("Offset", fighterOffset);
 			goalAttachment.SetAttribute("UID", uid);
+			goalAttachment.SetAttribute("OwnerId", this.localPlayer.UserId);
 			goalAttachment.AddTag("FighterGoal");
 		}
 	}

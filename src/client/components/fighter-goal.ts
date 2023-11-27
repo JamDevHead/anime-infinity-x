@@ -1,37 +1,67 @@
-import { BaseComponent, Component } from "@flamework/components";
+import { BaseComponent, Component, Components } from "@flamework/components";
 import { OnRender, OnStart } from "@flamework/core";
 import Gizmo from "@rbxts/gizmo";
 import { Logger } from "@rbxts/log";
 import { createSelector } from "@rbxts/reflex";
 import { Players, ReplicatedStorage, Workspace } from "@rbxts/services";
 import { Trove } from "@rbxts/trove";
+import { FighterModel } from "@/client/components/fighter-model";
 import { FightersTracker } from "@/client/controllers/fighters-tracker";
 import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { store } from "@/client/store";
-import { PlayerFighter, selectPlayerFighters } from "@/shared/store/players";
+import { getEnemyByUid } from "@/client/utils/enemies";
+import { EnemyComponent } from "@/shared/components/enemy-component";
+import { selectFighterTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
+import { PlayerFighter } from "@/shared/store/players";
+import { selectPlayerFighter, selectPlayerFighters } from "@/shared/store/players/fighters";
 
 const FAR_CFRAME = new CFrame(0, 5e9, 0);
+const HORIZONTAL_VECTOR = new Vector3(1, 0, 1);
+
+const selectFighter = (playerId: string, uid: string) => {
+	return createSelector(selectPlayerFighters(playerId), (fighters) => {
+		return fighters?.all.find((fighter) => fighter.uid === uid);
+	});
+};
 
 @Component({
 	tag: "FighterGoal",
 })
-export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> implements OnStart, OnRender {
-	private fighterPart = new Instance("Part");
-	private root = this.instance.Parent as Part | undefined;
+export class FighterGoal
+	extends BaseComponent<{ UID: string; OwnerId: number; Offset: Vector3 }, Attachment>
+	implements OnStart, OnRender
+{
+	public fighterPart = new Instance("Part");
+	public currentEnemy: EnemyComponent | undefined;
+	public fighterInfo: PlayerFighter | undefined;
+
 	private raycastParams = new RaycastParams();
 	private trove = new Trove();
-	private fighterModel: Model | undefined;
+	private root: Part | undefined;
+	private fighterModel: FighterModel | undefined;
+	private localPlayer = Players.LocalPlayer;
 
 	constructor(
 		private readonly logger: Logger,
 		private readonly characterAdd: CharacterAdd,
-		private readonly fighterTracker: FightersTracker,
+		private readonly fightersTracker: FightersTracker,
+		private readonly components: Components,
 	) {
 		super();
 	}
 
 	onStart() {
-		const localPlayer = Players.LocalPlayer;
+		const owner =
+			this.localPlayer.UserId !== this.attributes.OwnerId
+				? Players.GetPlayerByUserId(this.attributes.OwnerId)
+				: this.localPlayer;
+
+		if (!owner) {
+			this.logger.Warn("Failed to find owner {ownerId}", this.attributes.OwnerId);
+			return;
+		}
+
+		this.root = owner.Character?.FindFirstChild("HumanoidRootPart") as Part | undefined;
 
 		this.fighterPart.Name = "FighterPart";
 		this.fighterPart.Anchored = true;
@@ -41,48 +71,54 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 		this.fighterPart.CastShadow = false;
 		this.fighterPart.Size = Vector3.one;
 		this.fighterPart.Transparency = 1;
+		this.fighterPart.CFrame = this.instance.WorldCFrame;
 
 		this.fighterPart.Parent = this.instance;
 
-		this.instance.Visible = true;
+		this.trove.add(this.fighterPart);
 
 		this.raycastParams.FilterType = Enum.RaycastFilterType.Exclude;
 		if (this.root?.Parent) {
 			this.raycastParams.AddToFilter(this.root.Parent);
 		}
-		this.raycastParams.AddToFilter(this.fighterTracker.fightersFolder);
+		this.raycastParams.AddToFilter(this.fightersTracker.fightersFolder);
 
-		const playerId = tostring(localPlayer.UserId);
-		const selectFighter = (playerId: string, uid: string) => {
-			return createSelector(selectPlayerFighters(playerId), (fighters) => {
-				return fighters?.all.find((fighter) => fighter.uid === uid);
-			});
-		};
-
-		const onNewFighterUid = (uid: string) => {
-			const fighter = store.getState(selectFighter(playerId, uid));
-
-			if (this.fighterModel) {
-				this.trove.remove(this.fighterModel);
-			}
-
-			if (!fighter) {
-				return;
-			}
-
-			this.fighterModel = this.createFighterModel(fighter);
-			this.updateFighterGoal(0.1);
-		};
-
-		onNewFighterUid(this.attributes.UID);
+		this.onNewFighterId(this.attributes.UID);
 		this.onAttributeChanged("UID", (newUid, oldUid) => {
 			if (newUid === oldUid) {
 				// May never reach, but on roblox things change
 				return;
 			}
 
-			onNewFighterUid(newUid);
+			this.onNewFighterId(newUid);
 		});
+
+		this.onFighterTargetUpdate(store.getState(selectFighterTarget(this.attributes.UID)));
+
+		this.trove.add(
+			store.subscribe(selectFighterTarget(this.attributes.UID), (enemyUid, lastEnemyUid) => {
+				const lastEnemy = lastEnemyUid !== undefined ? getEnemyByUid(lastEnemyUid, this.components) : undefined;
+
+				if (lastEnemy?.attackingFighters.includes(this.attributes.UID)) {
+					// Remove fighter from last enemy
+					lastEnemy.attackingFighters = lastEnemy.attackingFighters.filter(
+						(fighterUid) => fighterUid !== this.attributes.UID,
+					);
+				}
+
+				this.onFighterTargetUpdate(enemyUid);
+			}),
+		);
+
+		this.trove.add(
+			store.subscribe(selectPlayerFighter(tostring(this.attributes.OwnerId), this.attributes.UID), (fighter) => {
+				if (!fighter) {
+					return;
+				}
+
+				this.fighterInfo = fighter;
+			}),
+		);
 	}
 
 	destroy() {
@@ -91,11 +127,39 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 	}
 
 	onRender(dt: number) {
+		this.updateGoal();
 		this.updateFighterGoal(dt);
-		this.updateFighterModel();
 	}
 
-	private createFighterModel(fighter: PlayerFighter) {
+	private onFighterTargetUpdate(enemyUid: string | undefined) {
+		const enemy = enemyUid !== undefined ? getEnemyByUid(enemyUid, this.components) : undefined;
+
+		this.currentEnemy = enemy;
+
+		if (!enemy || enemy.attackingFighters.includes(this.attributes.UID)) {
+			return;
+		}
+
+		enemy.attackingFighters.push(this.attributes.UID);
+	}
+
+	private async onNewFighterId(uid: string) {
+		const playerId = tostring(this.localPlayer.UserId);
+		const fighter = store.getState(selectFighter(playerId, uid));
+
+		if (this.fighterModel) {
+			this.trove.remove(this.fighterModel);
+		}
+
+		if (!fighter) {
+			return;
+		}
+
+		this.fighterModel = await this.createFighterModel(fighter);
+		this.updateFighterGoal(0.1);
+	}
+
+	private async createFighterModel(fighter: PlayerFighter) {
 		const fighterZone = ReplicatedStorage.assets.Avatars.FightersModels.FindFirstChild(fighter.zone);
 		const fighterModel = fighterZone?.FindFirstChild(fighter.name)?.Clone() as Model | undefined;
 
@@ -104,25 +168,56 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 			return;
 		}
 
-		fighterModel.Parent = this.fighterTracker.fightersFolder;
+		fighterModel.SetAttribute("Uid", fighter.uid);
+		fighterModel.Parent = this.fightersTracker.fightersFolder;
 		fighterModel.AddTag("Fighter");
 
-		this.trove.add(fighterModel);
-		return fighterModel;
+		const fighterModelComponent = await this.components.waitForComponent<FighterModel>(fighterModel);
+		this.trove.add(fighterModelComponent);
+
+		fighterModelComponent.fighterGoal = this;
+
+		return fighterModelComponent;
 	}
 
-	private updateFighterModel() {
-		if (!this.fighterModel) {
+	private updateGoal() {
+		if (!this.root) {
 			return;
 		}
 
-		const fighterPartSize = this.fighterPart.Size.Y / 2;
+		let target: CFrame | undefined;
 
-		this.fighterModel.PivotTo(this.fighterPart.CFrame.add(Vector3.yAxis.mul(3 - fighterPartSize)));
+		if (this.currentEnemy) {
+			const total = this.currentEnemy.attackingFighters.size();
+			const index = this.currentEnemy.attackingFighters.indexOf(this.attributes.UID);
+			const enemySize = this.currentEnemy.instance.GetScale() * 2 + 2;
+			const enemyPosition = this.currentEnemy.root.Position;
+
+			// Thanks NPCsController
+			const angle = math.rad((360 / total) * (index - 1));
+
+			target = new CFrame(
+				enemyPosition.add(new Vector3(math.cos(angle), 0, math.sin(angle)).mul(enemySize)),
+				enemyPosition,
+			);
+		}
+
+		this.instance.WorldCFrame = target ?? new CFrame(this.root.CFrame.PointToWorldSpace(this.attributes.Offset));
 	}
 
 	private updateFighterGoal(dt: number) {
 		if (!this.root) {
+			return;
+		}
+
+		if (this.currentEnemy) {
+			const groundResult = this.getGroundResult(this.instance.WorldPosition)?.mul(Vector3.yAxis) ?? Vector3.zero;
+			const goalCFrame = this.instance.WorldCFrame;
+
+			this.fighterPart.CFrame = this.fighterPart.CFrame.Lerp(
+				goalCFrame.sub(goalCFrame.Position.mul(Vector3.yAxis)).add(groundResult),
+				dt * 8,
+			);
 			return;
 		}
 
@@ -144,16 +239,14 @@ export class FighterGoal extends BaseComponent<{ UID: string }, Attachment> impl
 
 		const finalGoal = new Vector3(occlusionResult.X, isFloating ? goal.Y : groundResult.Y, occlusionResult.Z);
 
-		const horizontalVector = new Vector3(1, 0, 1);
-
-		const fighterGoalDiff = finalGoal.sub(fighterPosition);
+		const fighterGoalDiff = finalGoal.sub(fighterPosition).mul(HORIZONTAL_VECTOR);
 		const lookAt =
 			fighterGoalDiff.Magnitude > 0.8 && !isFloating ? fighterGoalDiff.Unit : this.root.CFrame.LookVector;
 
-		const goalLookAt = finalGoal.add(lookAt.mul(horizontalVector).mul(1.5));
+		const goalLookAt = finalGoal.add(lookAt.mul(HORIZONTAL_VECTOR).mul(1.5));
 		const goalCFrame = new CFrame(finalGoal, goalLookAt);
 
-		if (this.fighterPart.Position.Magnitude === math.huge) {
+		if (this.fighterPart.Position.Magnitude === math.huge || this.fighterPart.Position.Magnitude > 4e9) {
 			this.fighterPart.Position = goalCFrame.Position;
 			return;
 		}

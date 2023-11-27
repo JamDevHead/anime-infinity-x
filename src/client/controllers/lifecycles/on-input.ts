@@ -2,8 +2,8 @@ import { Controller, Modding, OnInit } from "@flamework/core";
 import { UserInputService } from "@rbxts/services";
 
 export interface OnInput {
-	onInputBegan(input: InputObject, gameProcessedEvent: boolean): void;
-	onInputEnded(input: InputObject, gameProcessedEvent: boolean): void;
+	onInputBegan?(input: InputObject, gameProcessedEvent: boolean): void;
+	onInputEnded?(input: InputObject, gameProcessedEvent: boolean): void;
 }
 
 @Controller()
@@ -16,13 +16,13 @@ class _Input implements OnInit {
 
 		UserInputService.InputBegan.Connect((input, gameProcessedEvent) => {
 			for (const listener of this.listeners) {
-				listener.onInputBegan(input, gameProcessedEvent);
+				listener.onInputBegan?.(input, gameProcessedEvent);
 			}
 		});
 
 		UserInputService.InputEnded.Connect((input, gameProcessedEvent) => {
 			for (const listener of this.listeners) {
-				listener.onInputEnded(input, gameProcessedEvent);
+				listener.onInputEnded?.(input, gameProcessedEvent);
 			}
 		});
 	}

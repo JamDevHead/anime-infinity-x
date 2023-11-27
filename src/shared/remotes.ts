@@ -13,6 +13,13 @@ const remotes = createRemotes({
 		load: remote<Client, [settings: Record<string, boolean | number>]>(),
 		save: remote<Server, [settings: Record<string, boolean | number>]>(),
 	}),
+
+	fighterTarget: namespace({
+		set: remote<Server, [fighterUid: string, targetUid: string]>(),
+		remove: remote<Server, [fighterUid: string, targetUid: string]>(),
+		select: remote<Server, [targetUid: string]>(),
+		unselect: remote<Server, [targetUid: string]>(),
+	}),
 });
 
 export default remotes;
