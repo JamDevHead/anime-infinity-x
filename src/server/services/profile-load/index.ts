@@ -4,7 +4,6 @@ import { GetProfileStore } from "@rbxts/profileservice";
 import { Profile, ProfileStore } from "@rbxts/profileservice/globals";
 import { Players } from "@rbxts/services";
 import { OnPlayerAdd } from "@/server/services/lifecycles/on-player-add";
-import loadData from "@/server/services/profile-load/loaders";
 import { store } from "@/server/store";
 import { defaultPlayerData, PlayerData, selectPlayerData } from "@/shared/store/players";
 
@@ -64,7 +63,6 @@ export class ProfileLoad implements OnStart, OnPlayerAdd {
 		const t0 = os.clock();
 
 		store.loadPlayerData(playerId, profile.Data);
-		loadData(profile);
 
 		const t1 = os.clock();
 

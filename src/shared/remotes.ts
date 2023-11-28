@@ -20,6 +20,11 @@ const remotes = createRemotes({
 		select: remote<Server, [targetUid: string]>(),
 		unselect: remote<Server, [targetUid: string]>(),
 	}),
+
+	inventory: namespace({
+		equipFighter: remote<Server, [fighterUid: string]>(),
+		unequipFighter: remote<Server, [fighterUid: string]>(),
+	}),
 });
 
 export default remotes;

@@ -3,6 +3,7 @@ import { createProducer } from "@rbxts/reflex";
 type InventorySlice = {
 	openedContextMenu?: boolean;
 	menuPosition?: Vector2;
+	selectedItem?: string;
 };
 
 const initialState: InventorySlice = {
@@ -21,6 +22,12 @@ export const inventorySlice = createProducer(initialState, {
 		return {
 			...state,
 			menuPosition,
+		};
+	},
+	setInventorySelectedItem: (state, selectedItem: string) => {
+		return {
+			...state,
+			selectedItem,
 		};
 	},
 });

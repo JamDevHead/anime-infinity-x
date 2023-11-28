@@ -1,27 +1,53 @@
+import { useSelectorCreator } from "@rbxts/react-reflex";
 import Roact from "@rbxts/roact";
 import { useRootSelector, useRootStore } from "@/client/store";
 import { ContextMenu } from "@/client/ui/components/context-menu/context-menu";
+import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { images } from "@/shared/assets/images";
+import remotes from "@/shared/remotes";
+import { selectPlayerFighter, selectPlayerFighters } from "@/shared/store/players/fighters";
 
 export const InventoryContextMenu = () => {
+	const userId = usePlayerId();
+
 	const { setInventoryOpenedMenu } = useRootStore();
-	const { openedContextMenu, menuPosition } = useRootSelector((state) => state.inventory);
+	const { openedContextMenu, menuPosition, selectedItem } = useRootSelector((state) => state.inventory);
+	const playerFighters = useRootSelector(selectPlayerFighters(userId));
+	const fighter = useSelectorCreator(selectPlayerFighter, userId, selectedItem ?? "");
 
 	return (
 		<ContextMenu.Root position={UDim2.fromOffset(menuPosition?.X, menuPosition?.Y ?? 0)} opened={openedContextMenu}>
-			<ContextMenu.ButtonItem
-				text="Equip"
-				gradient={
-					new ColorSequence([
-						new ColorSequenceKeypoint(0, Color3.fromHex("#0094FF")),
-						new ColorSequenceKeypoint(1, Color3.fromHex("#0047FF")),
-					])
-				}
-				icon={images.icons.sword}
-				onClick={() => {
-					print("Set as Active");
-				}}
-			/>
+			{playerFighters && playerFighters.actives.find((fighter) => fighter === selectedItem) ? (
+				<ContextMenu.ButtonItem
+					text="Unequip"
+					gradient={
+						new ColorSequence([
+							new ColorSequenceKeypoint(0, Color3.fromHex("#F31E85")),
+							new ColorSequenceKeypoint(1, Color3.fromHex("#D32222")),
+						])
+					}
+					icon={images.icons.sword}
+					onClick={() => {
+						if (!fighter) return;
+						remotes.inventory.unequipFighter.fire(fighter.uid);
+					}}
+				/>
+			) : (
+				<ContextMenu.ButtonItem
+					text="Equip"
+					gradient={
+						new ColorSequence([
+							new ColorSequenceKeypoint(0, Color3.fromHex("#0094FF")),
+							new ColorSequenceKeypoint(1, Color3.fromHex("#0047FF")),
+						])
+					}
+					icon={images.icons.sword}
+					onClick={() => {
+						if (!fighter) return;
+						remotes.inventory.equipFighter.fire(fighter.uid);
+					}}
+				/>
+			)}
 			<ContextMenu.ButtonItem
 				text="Fuse"
 				icon={images.icons.bolt}

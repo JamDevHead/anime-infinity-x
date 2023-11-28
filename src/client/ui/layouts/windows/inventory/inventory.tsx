@@ -27,7 +27,7 @@ export const Inventory = () => {
 
 	const rootRef = Roact.createRef<Frame>();
 
-	const { setInventoryOpenedMenu, setInventoryMenuPosition } = useRootStore();
+	const { setInventoryOpenedMenu, setInventoryMenuPosition, setInventorySelectedItem } = useRootStore();
 
 	const inventory = useRootSelector(selectPlayerInventory(userId));
 	const playerFighters = useRootSelector(selectPlayerFighters(userId));
@@ -97,6 +97,7 @@ export const Inventory = () => {
 									onClick={() => {
 										setInventoryMenuPosition(new Vector2(mouse.getValue().X, mouse.getValue().Y));
 										setInventoryOpenedMenu(true);
+										setInventorySelectedItem(fighter.uid);
 									}}
 								/>
 							))}
