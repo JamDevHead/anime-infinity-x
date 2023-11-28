@@ -74,7 +74,7 @@ export const useMockData = (props?: MockDataProps): void => {
 							sellPrice: 0,
 						},
 						rarity: 3,
-						zone: "knw",
+						zone: "dms",
 					},
 					{
 						uid: "4",
