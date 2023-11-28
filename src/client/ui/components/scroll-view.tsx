@@ -24,6 +24,7 @@ type ScrollViewProps = FrameProps<ScrollingFrame> & {
 	cellPadding?: UDim2;
 	cellSize?: UDim2;
 	fillDirectionMaxCells?: number;
+	sortOrder?: Enum.SortOrder | "LayoutOrder" | "Name" | "Custom";
 	grid?: boolean;
 };
 
@@ -68,6 +69,7 @@ export const ScrollView = forwardRef((props: ScrollViewProps, ref: Ref<Scrolling
 					VerticalAlignment={props.verticalAlignment ?? Enum.VerticalAlignment.Top}
 					CellSize={props.cellSize ?? new UDim2(1, 0, 0, 36)}
 					FillDirectionMaxCells={props.fillDirectionMaxCells}
+					SortOrder={props.sortOrder ?? Enum.SortOrder.LayoutOrder}
 					CellPadding={props.cellPadding}
 				/>
 			) : (
@@ -75,6 +77,7 @@ export const ScrollView = forwardRef((props: ScrollViewProps, ref: Ref<Scrolling
 					FillDirection={props.fillDirection ?? Enum.FillDirection.Vertical}
 					HorizontalAlignment={props.horizontalAlignment ?? Enum.HorizontalAlignment.Right}
 					VerticalAlignment={props.verticalAlignment ?? Enum.VerticalAlignment.Top}
+					SortOrder={props.sortOrder ?? Enum.SortOrder.LayoutOrder}
 					Padding={props.padding ?? new UDim(0, 0)}
 				/>
 			)}
