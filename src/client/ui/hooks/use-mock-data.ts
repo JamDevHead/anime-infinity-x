@@ -204,6 +204,10 @@ export const useMockData = (props?: MockDataProps): void => {
 				maxStorage: 100,
 				maxFighters: 3,
 			},
+			zones: {
+				current: "nrt",
+				unlocked: ["nrt", "aot"],
+			},
 			...props?.customData,
 		});
 	});

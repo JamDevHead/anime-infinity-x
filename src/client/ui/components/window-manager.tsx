@@ -7,6 +7,7 @@ import { useMotion } from "@/client/ui/hooks/use-motion";
 import { Codes } from "@/client/ui/layouts/windows/codes/codes";
 import { Inventory } from "@/client/ui/layouts/windows/inventory/inventory";
 import { Settings } from "@/client/ui/layouts/windows/settings/settings";
+import { Teleport } from "@/client/ui/layouts/windows/teleport/teleport";
 
 export const WindowManager = () => {
 	const { currentWindow, visible } = useRootSelector((store) => store.window);
@@ -37,6 +38,19 @@ export const WindowManager = () => {
 		positionMotion.spring(visible === true ? UDim2.fromScale(0.5, 0.5) : UDim2.fromScale(0.5, -1));
 	}, [currentWindow, positionMotion, visible]);
 
+	const getWindowContent = () => {
+		switch (currentWindow) {
+			case "codes":
+				return <Codes />;
+			case "settings":
+				return <Settings />;
+			case "inventory":
+				return <Inventory />;
+			case "teleport":
+				return <Teleport />;
+		}
+	};
+
 	return (
 		<Frame
 			anchorPoint={new Vector2(0.5, 0.5)}
@@ -52,9 +66,7 @@ export const WindowManager = () => {
 					setVisibility(false);
 				}}
 			>
-				{currentWindow === "codes" && <Codes />}
-				{currentWindow === "settings" && <Settings />}
-				{currentWindow === "inventory" && <Inventory />}
+				{getWindowContent()}
 			</Window>
 		</Frame>
 	);

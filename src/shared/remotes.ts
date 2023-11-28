@@ -25,6 +25,10 @@ const remotes = createRemotes({
 		equipFighter: remote<Server, [fighterUid: string]>(),
 		unequipFighter: remote<Server, [fighterUid: string]>(),
 	}),
+
+	zone: namespace({
+		teleport: remote<Server, [zone: string]>(),
+	}),
 });
 
 export default remotes;
