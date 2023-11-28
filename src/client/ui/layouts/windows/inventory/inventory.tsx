@@ -1,5 +1,5 @@
-import { useCamera, useMouse } from "@rbxts/pretty-react-hooks";
-import Roact from "@rbxts/roact";
+import { useMouse } from "@rbxts/pretty-react-hooks";
+import Roact, { createRef } from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
 import { useRootSelector, useRootStore } from "@/client/store";
 import { Button } from "@/client/ui/components/button";
@@ -23,9 +23,8 @@ export const Inventory = () => {
 	const rem = useRem();
 	const userId = usePlayerId();
 	const mouse = useMouse();
-	const camera = useCamera();
 
-	const rootRef = Roact.createRef<Frame>();
+	const rootRef = createRef<Frame>();
 
 	const { setInventoryOpenedMenu, setInventoryMenuPosition, setInventorySelectedItem } = useRootStore();
 
