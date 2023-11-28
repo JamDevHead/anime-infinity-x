@@ -39,9 +39,12 @@ export class Enemy extends EnemyComponent implements OnStart {
 			}
 		}
 
-		store.removeEnemy(this.attributes.Guid);
+		for (const _ of $range(1, 10)) {
+			store.addDrop(this.attributes.Guid, { id: "Gold", quantity: math.random(1, 10) });
+		}
 
 		task.delay(5, () => {
+			store.removeEnemy(this.attributes.Guid);
 			this.instance.Destroy();
 		});
 	}
