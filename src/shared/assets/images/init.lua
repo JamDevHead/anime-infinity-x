@@ -21,14 +21,14 @@ return {
 					kora = "rbxassetid://15485667102",
 					master = "rbxassetid://15485667168",
 				},
-				knw = {
-					gyo = "rbxassetid://15485667276",
-					hont = "rbxassetid://15485667404",
-					muzo = "rbxassetid://15485667472",
-					nez = "rbxassetid://15485672336",
-					renga = "rbxassetid://15485667659",
-					tanjo = "rbxassetid://15485667740",
-					toma = "rbxassetid://15485667868",
+				dms = {
+					gyo = "rbxassetid://15485978411",
+					hont = "rbxassetid://15485978476",
+					muzo = "rbxassetid://15485978531",
+					nez = "rbxassetid://15485978589",
+					renga = "rbxassetid://15485978768",
+					tanjo = "rbxassetid://15485978840",
+					toma = "rbxassetid://15485978979",
 				},
 				nrt = {
 					bro = "rbxassetid://15485667974",

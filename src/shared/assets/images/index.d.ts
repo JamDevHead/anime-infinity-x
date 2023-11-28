@@ -19,7 +19,7 @@ export const images: {
 				readonly kora: string;
 				readonly master: string;
 			};
-			readonly knw: {
+			readonly dms: {
 				readonly gyo: string;
 				readonly hont: string;
 				readonly muzo: string;

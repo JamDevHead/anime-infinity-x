@@ -68,39 +68,39 @@ hash = "7e2c011412c9745e07606bb2d1bcb73eef1d9cd0dc5c81a40d8a1da5e1788603"
 id = 15485667168
 packable = false
 
-[inputs."assets/images/characters/headshots/knw/gyo.png"]
+[inputs."assets/images/characters/headshots/dms/gyo.png"]
 hash = "47dcf47918923a18af28d8928d0462d32c63f43b4ebc81a03dbcc3abc6404600"
-id = 15485667276
+id = 15485978411
 packable = false
 
-[inputs."assets/images/characters/headshots/knw/hont.png"]
+[inputs."assets/images/characters/headshots/dms/hont.png"]
 hash = "fb45fe3b58edc8152cf768a9995c7f757343bd61485083e7c612ccd4ba64e6aa"
-id = 15485667404
+id = 15485978476
 packable = false
 
-[inputs."assets/images/characters/headshots/knw/muzo.png"]
+[inputs."assets/images/characters/headshots/dms/muzo.png"]
 hash = "617009b47472d3386b755c497948ccdbc149565bc52206f8e93faf4dd976731e"
-id = 15485667472
+id = 15485978531
 packable = false
 
-[inputs."assets/images/characters/headshots/knw/nez.png"]
+[inputs."assets/images/characters/headshots/dms/nez.png"]
 hash = "90047bca5603f17f67001385171286d8db7835e74a5bb6366f7c4b18f3a1fbfe"
-id = 15485672336
+id = 15485978589
 packable = false
 
-[inputs."assets/images/characters/headshots/knw/renga.png"]
+[inputs."assets/images/characters/headshots/dms/renga.png"]
 hash = "95a7b10663a73e4fe03685a3331e331f4221e55c290c8a21ca5c53a92c209bd9"
-id = 15485667659
+id = 15485978768
 packable = false
 
-[inputs."assets/images/characters/headshots/knw/tanjo.png"]
+[inputs."assets/images/characters/headshots/dms/tanjo.png"]
 hash = "c9e772e41d80dcdf1883816d604eb9ce8e8b7d025554a69107e0fc6230397817"
-id = 15485667740
+id = 15485978840
 packable = false
 
-[inputs."assets/images/characters/headshots/knw/toma.png"]
+[inputs."assets/images/characters/headshots/dms/toma.png"]
 hash = "4ef310b404dfd64bc5816f91135ff686c7fc9750cafb59923411546d7fc41aea"
-id = 15485667868
+id = 15485978979
 packable = false
 
 [inputs."assets/images/characters/headshots/nrt/bro.png"]
