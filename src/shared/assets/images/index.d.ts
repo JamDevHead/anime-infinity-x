@@ -93,6 +93,8 @@ export const images: {
 		readonly arrow_left: string;
 		readonly bolt: string;
 		readonly cash: string;
+		readonly book: string;
+		readonly lock: string;
 	};
 	readonly ui: {
 		readonly cards: {
@@ -103,6 +105,13 @@ export const images: {
 				readonly nrt: string;
 				readonly one: string;
 			};
+		};
+		readonly teleport: {
+			readonly aot: string;
+			readonly dbz: string;
+			readonly dms: string;
+			readonly nrt: string;
+			readonly one: string;
 		};
 		readonly blur: string;
 		readonly rounded_button_base: string;

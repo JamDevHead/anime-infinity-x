@@ -228,6 +228,11 @@ hash = "99ee7b3dcf452374c7134e7a128b4a1df47f2b44f94076a30d1038b68f74a8a8"
 id = 15472591107
 packable = false
 
+[inputs."assets/images/icons/book.png"]
+hash = "54eed2b52a5ba50ac693d23b8a28aa3e8fc872800cc67ca6bd39e10c656bb350"
+id = 15489276385
+packable = false
+
 [inputs."assets/images/icons/boost.png"]
 hash = "4a9465772537084ee3a7f595330e1ff07ef1ddbd1cccbc2fa32041ae3f02a413"
 id = 15302168656
@@ -301,6 +306,11 @@ packable = false
 [inputs."assets/images/icons/inventory.png"]
 hash = "e3dbf09faec4a4b01bbf5df28772b631312b3e0c9fb6ba33de000ad3b53a290b"
 id = 15303915192
+packable = false
+
+[inputs."assets/images/icons/lock.png"]
+hash = "89af4ffd093e13bcd6f8e443050c05f12a8344367ba9bb5cb2f2414607a3e1c3"
+id = 15491195800
 packable = false
 
 [inputs."assets/images/icons/mission.png"]
@@ -466,6 +476,36 @@ packable = false
 [inputs."assets/images/ui/stats_bar_stars.png"]
 hash = "21ee36df396c9c10ca93ec1a308b0a561d9447e8fe13ec5da251807c7853d992"
 id = 15303347597
+packable = false
+
+[inputs."assets/images/ui/teleport/aot.png"]
+hash = "e54f4f6a2e06e9b405ac89893f64a610539c717cb3b4c8a8ad0ce710afaeff28"
+id = 15491137885
+packable = false
+
+[inputs."assets/images/ui/teleport/dbz.png"]
+hash = "2fbef62894f348d172d47c536d4926843a11f15e05065db375cdeb4acb7d8d5b"
+id = 15491138159
+packable = false
+
+[inputs."assets/images/ui/teleport/dms.png"]
+hash = "b1cc52532c99a2c89e1a155a0baaf3576b3bd21a9cae2587cf58b93ed05b1cb4"
+id = 15491138518
+packable = false
+
+[inputs."assets/images/ui/teleport/nrt.png"]
+hash = "8e482b213b40d0ff04f8f193d6722cdb00c4f5f08bff3abf7f8d98ad446d29a7"
+id = 15489959991
+packable = false
+
+[inputs."assets/images/ui/teleport/one.png"]
+hash = "4c8d55056f548a30482a3b3e68566d743e9b07fd428093e4f26ac167049c2677"
+id = 15491138839
+packable = false
+
+[inputs."assets/images/ui/teleport/tkr.png"]
+hash = "ccc00068b4900920d942058e22fa13a209ac47a2b1cfd8e36b52377efb96b485"
+id = 15491139288
 packable = false
 
 [inputs."assets/images/ui/text_field.png"]
