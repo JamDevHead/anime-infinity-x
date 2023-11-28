@@ -1,3 +1,4 @@
+import { HttpService } from "@rbxts/services";
 import { ZirconEnumBuilder, ZirconFunctionBuilder } from "@rbxts/zircon";
 import { store } from "@/server/store";
 
@@ -7,18 +8,27 @@ export const giveCommand = new ZirconFunctionBuilder("give")
 	.AddDescription("Give an item or entity to the player")
 	.AddArgument(ItemType, "Item type")
 	.AddArgument("string", "Item id")
-	.Bind((context, itemType, entityName) => {
+	.AddArgument("unknown")
+	.Bind((context, itemType, entityName, ...args) => {
 		const playerId = context.GetExecutor().UserId;
+		const uuid = HttpService.GenerateGUID(false);
 
 		itemType.match({
 			item: () => {
 				context.LogInfo("Giving item");
 			},
 			fighter: () => {
-				store.addFighter(tostring(playerId), entityName, {
+				const zone = args[0] as string;
+
+				if (zone === undefined) {
+					context.LogError("Zone must be provided");
+					return;
+				}
+
+				store.addFighter(tostring(playerId), uuid, {
 					displayName: entityName,
 					name: entityName,
-					zone: "NRT",
+					zone: zone.upper(),
 					stats: {
 						damage: 1,
 						dexterity: 10,
