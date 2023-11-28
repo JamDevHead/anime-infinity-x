@@ -60,7 +60,12 @@ export const FighterCard: FunctionComponent<FighterCardProps> = ({ onClick, acti
 							backgroundTransparency={0.5}
 							backgroundColor={colors.black}
 						>
-							<Image image={headshotElement ?? images.icons.fish} size={UDim2.fromScale(1, 1)} />
+							<Image
+								image={headshotElement ?? images.icons.fish}
+								position={UDim2.fromScale(0, 1)}
+								anchorPoint={new Vector2(0, 1)}
+								size={UDim2.fromScale(1, 0.8)}
+							/>
 						</CanvasGroup>
 						<StarRating stars={rating} />
 					</Stack>

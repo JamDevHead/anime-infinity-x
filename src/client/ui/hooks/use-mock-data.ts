@@ -50,8 +50,8 @@ export const useMockData = (props?: MockDataProps): void => {
 					},
 					{
 						uid: "2",
-						name: "Naro",
-						displayName: "Naro",
+						name: "Colossal",
+						displayName: "Colossal",
 						stats: {
 							damage: 10,
 							dexterity: 10,
@@ -60,12 +60,12 @@ export const useMockData = (props?: MockDataProps): void => {
 							sellPrice: 0,
 						},
 						rarity: 2,
-						zone: "nrt",
+						zone: "aot",
 					},
 					{
 						uid: "3",
-						name: "Naro",
-						displayName: "Naro",
+						name: "Gyo",
+						displayName: "Gyo",
 						stats: {
 							damage: 10,
 							dexterity: 10,
@@ -74,12 +74,12 @@ export const useMockData = (props?: MockDataProps): void => {
 							sellPrice: 0,
 						},
 						rarity: 3,
-						zone: "nrt",
+						zone: "knw",
 					},
 					{
 						uid: "4",
-						name: "Naro",
-						displayName: "Naro",
+						name: "Geku",
+						displayName: "Geku",
 						stats: {
 							damage: 10,
 							dexterity: 10,
@@ -88,12 +88,12 @@ export const useMockData = (props?: MockDataProps): void => {
 							sellPrice: 0,
 						},
 						rarity: 4,
-						zone: "nrt",
+						zone: "dbz",
 					},
 					{
 						uid: "5",
-						name: "Naro",
-						displayName: "Naro",
+						name: "Luffo",
+						displayName: "Luffo",
 						stats: {
 							damage: 10,
 							dexterity: 10,
@@ -102,12 +102,12 @@ export const useMockData = (props?: MockDataProps): void => {
 							sellPrice: 0,
 						},
 						rarity: 5,
-						zone: "nrt",
+						zone: "one",
 					},
 					{
 						uid: "6",
-						name: "Naro",
-						displayName: "Naro",
+						name: "Sho",
+						displayName: "Sho",
 						stats: {
 							damage: 10,
 							dexterity: 10,
@@ -116,7 +116,7 @@ export const useMockData = (props?: MockDataProps): void => {
 							sellPrice: 0,
 						},
 						rarity: 6,
-						zone: "nrt",
+						zone: "tkr",
 					},
 					{
 						uid: "7",
