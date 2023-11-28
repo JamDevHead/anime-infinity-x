@@ -10,12 +10,18 @@ import { Settings } from "@/client/ui/layouts/windows/settings/settings";
 
 export const WindowManager = () => {
 	const { currentWindow, visible } = useRootSelector((store) => store.window);
-	const { setVisibility } = useRootStore();
+	const { resetInventorySlice, setVisibility } = useRootStore();
 	const window = Windows[currentWindow ?? "codes"];
 
 	const [position, positionMotion] = useMotion(new UDim2());
 
 	const selectWindow = (state: RootState) => state.window.currentWindow;
+
+	useEffect(() => {
+		if (visible === false) {
+			resetInventorySlice();
+		}
+	}, [resetInventorySlice, visible]);
 
 	useEffect(() => {
 		return store.subscribe(selectWindow, (currentWindow, lastWindow) => {
@@ -38,7 +44,14 @@ export const WindowManager = () => {
 			size={UDim2.fromScale(1, 1)}
 			backgroundTransparency={1}
 		>
-			<Window title={window.title} size={window.size} position={position} onClose={() => setVisibility(false)}>
+			<Window
+				title={window.title}
+				size={window.size}
+				position={position}
+				onClose={() => {
+					setVisibility(false);
+				}}
+			>
 				{currentWindow === "codes" && <Codes />}
 				{currentWindow === "settings" && <Settings />}
 				{currentWindow === "inventory" && <Inventory />}
