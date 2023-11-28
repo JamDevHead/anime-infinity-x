@@ -1275,6 +1275,11 @@
   resolved "https://registry.yarnpkg.com/@rbxts/abbreviate/-/abbreviate-3.0.4.tgz#66b7eac6a241965687f28ee5765eb70ab9937011"
   integrity sha512-sf1T7D64AC/ZO76pn/bGIFduViD58d52ZD80W+UvbKI0kuH1qhzZkDZiFSmJHT8Dn7zzf3Dbn/7IWB2Rsax4Ww==
 
+"@rbxts/beacon@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@rbxts/beacon/-/beacon-2.1.1.tgz#a9b02466ff02fbc2bc64e1e2cca52b2e85605a63"
+  integrity sha512-QeFMSGj+Iijp+tHcV9eyqVyeKZ/9zp7GqRJ/hecKiHmoTu4yFcyGnUQAaX7OdQKBCgLvWMJ9wK/FXMECjFA2Kg==
+
 "@rbxts/compiler-types@^2.2.0-types.0":
   version "2.2.0-types.0"
   resolved "https://registry.yarnpkg.com/@rbxts/compiler-types/-/compiler-types-2.2.0-types.0.tgz#cba7ff0cde0fa9ac18abb4251452814232d67a1e"

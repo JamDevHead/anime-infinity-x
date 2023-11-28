@@ -13,3 +13,4 @@
 *.rbxm
 sourcemap.json
 mantle-output.json
+.env

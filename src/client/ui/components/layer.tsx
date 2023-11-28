@@ -1,5 +1,5 @@
 import Roact from "@rbxts/roact";
-import { IS_EDIT } from "@/client/constants/constants";
+import { IS_EDIT } from "@/shared/constants/core";
 
 interface LayerProps {
 	displayOrder?: number;
