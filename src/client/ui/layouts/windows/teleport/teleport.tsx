@@ -2,6 +2,7 @@ import Object from "@rbxts/object-utils";
 import Roact, { FunctionComponent } from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
 import { fonts } from "@/client/constants/fonts";
+import { useRootSelector } from "@/client/store";
 import { Button } from "@/client/ui/components/button";
 import { CanvasGroup } from "@/client/ui/components/canvas-group";
 import { Frame } from "@/client/ui/components/frame";
@@ -10,9 +11,12 @@ import { ScrollView } from "@/client/ui/components/scroll-view";
 import { Stack } from "@/client/ui/components/stack";
 import { Text } from "@/client/ui/components/text";
 import { useMotion } from "@/client/ui/hooks/use-motion";
+import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
 import { ZONES } from "@/shared/constants/zones";
+import remotes from "@/shared/remotes";
+import { selectPlayerZones } from "@/shared/store/players";
 
 type TeleportCardProps = {
 	image: string;
@@ -104,6 +108,16 @@ const TeleportCard: FunctionComponent<TeleportCardProps> = ({ text, image, locke
 
 export const Teleport = () => {
 	const rem = useRem();
+	const userId = usePlayerId();
+
+	const zones = useRootSelector(selectPlayerZones(userId));
+
+	const unlockedZone = (zone: string) => {
+		if (zones !== undefined) {
+			return zones.unlocked.find((unlockedZone) => unlockedZone.lower() === zone) !== undefined;
+		}
+		return false;
+	};
 
 	return (
 		<ScrollView
@@ -124,8 +138,11 @@ export const Teleport = () => {
 					key={zone}
 					text={name}
 					image={background}
+					locked={!unlockedZone(zone)}
 					onClick={() => {
-						print("Teleport to", zone);
+						if (!unlockedZone(zone)) return;
+
+						remotes.zone.teleport.fire(zone);
 					}}
 				/>
 			))}

@@ -7,6 +7,7 @@ import { useMotion } from "@/client/ui/hooks/use-motion";
 import { Codes } from "@/client/ui/layouts/windows/codes/codes";
 import { Inventory } from "@/client/ui/layouts/windows/inventory/inventory";
 import { Settings } from "@/client/ui/layouts/windows/settings/settings";
+import { Teleport } from "@/client/ui/layouts/windows/teleport/teleport";
 
 export const WindowManager = () => {
 	const { currentWindow, visible } = useRootSelector((store) => store.window);
@@ -45,6 +46,8 @@ export const WindowManager = () => {
 				return <Settings />;
 			case "inventory":
 				return <Inventory />;
+			case "teleport":
+				return <Teleport />;
 		}
 	};
 
