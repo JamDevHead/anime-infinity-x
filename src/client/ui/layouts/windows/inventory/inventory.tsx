@@ -6,7 +6,6 @@ import { Button } from "@/client/ui/components/button";
 import { CanvasGroup } from "@/client/ui/components/canvas-group";
 import { FighterCard } from "@/client/ui/components/fighter-card";
 import { Frame } from "@/client/ui/components/frame";
-import { Grid } from "@/client/ui/components/grid";
 import { Image } from "@/client/ui/components/image";
 import { InventoryStatus } from "@/client/ui/components/inventory-status";
 import { Menu } from "@/client/ui/components/menu";
@@ -76,31 +75,27 @@ export const Inventory = () => {
 						size={UDim2.fromScale(1, 1)}
 						padding={new UDim(0, 12)}
 						scrollingDirection={Enum.ScrollingDirection.XY}
+						fillDirection="Horizontal"
+						horizontalAlignment="Center"
+						cellSize={UDim2.fromOffset(rem(120 * 1.8, "pixel"), rem(160 * 1.8, "pixel"))}
+						cellPadding={new UDim2(0, rem(12, "pixel"), 0, rem(12, "pixel"))}
 						clipsDescendants
+						grid
 					>
-						<Grid
-							fillDirection="Horizontal"
-							horizontalAlignment="Center"
-							cellSize={UDim2.fromOffset(rem(120 * 1.8, "pixel"), rem(160 * 1.8, "pixel"))}
-							cellPadding={new UDim2(0, rem(12, "pixel"), 0, rem(12, "pixel"))}
-							size={UDim2.fromScale(1, 1)}
-							autoSize="Y"
-						>
-							{playerFighters?.all.map((fighter) => (
-								<FighterCard
-									key={fighter.uid}
-									active={playerFighters?.actives.includes(fighter.uid)}
-									headshot={fighter.name}
-									zone={fighter.zone}
-									rating={fighter.rarity}
-									onClick={() => {
-										setInventoryMenuPosition(new Vector2(mouse.getValue().X, mouse.getValue().Y));
-										setInventoryOpenedMenu(true);
-										setInventorySelectedItem(fighter.uid);
-									}}
-								/>
-							))}
-						</Grid>
+						{playerFighters?.all.map((fighter) => (
+							<FighterCard
+								key={fighter.uid}
+								active={playerFighters?.actives.includes(fighter.uid)}
+								headshot={fighter.name}
+								zone={fighter.zone}
+								rating={fighter.rarity}
+								onClick={() => {
+									setInventoryMenuPosition(new Vector2(mouse.getValue().X, mouse.getValue().Y));
+									setInventoryOpenedMenu(true);
+									setInventorySelectedItem(fighter.uid);
+								}}
+							/>
+						))}
 						<uipadding
 							PaddingLeft={new UDim(0, rem(12, "pixel"))}
 							PaddingRight={new UDim(0, rem(12, "pixel"))}

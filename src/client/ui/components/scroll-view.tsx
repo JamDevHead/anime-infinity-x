@@ -17,10 +17,14 @@ type ScrollViewProps = FrameProps<ScrollingFrame> & {
 	scrollingDirection?: Enum.ScrollingDirection;
 	enabled?: boolean;
 	verticalScrollBarPosition?: Enum.VerticalScrollBarPosition;
-	fillDirection?: Enum.FillDirection;
+	fillDirection?: Enum.FillDirection | "Vertical" | "Horizontal";
 	horizontalAlignment?: Enum.HorizontalAlignment | "Center" | "Left" | "Right";
 	verticalAlignment?: Enum.VerticalAlignment | "Center" | "Top" | "Bottom";
 	padding?: UDim;
+	cellPadding?: UDim2;
+	cellSize?: UDim2;
+	fillDirectionMaxCells?: number;
+	grid?: boolean;
 };
 
 export const ScrollView = forwardRef((props: ScrollViewProps, ref: Ref<ScrollingFrame>) => {
@@ -57,12 +61,23 @@ export const ScrollView = forwardRef((props: ScrollViewProps, ref: Ref<Scrolling
 			ScrollingEnabled={props.enabled}
 			VerticalScrollBarPosition={props.verticalScrollBarPosition}
 		>
-			<uilistlayout
-				FillDirection={props.fillDirection ?? Enum.FillDirection.Vertical}
-				HorizontalAlignment={props.horizontalAlignment ?? Enum.HorizontalAlignment.Right}
-				VerticalAlignment={props.verticalAlignment ?? Enum.VerticalAlignment.Top}
-				Padding={props.padding ?? new UDim(0, 0)}
-			/>
+			{props.grid ? (
+				<uigridlayout
+					FillDirection={props.fillDirection ?? Enum.FillDirection.Vertical}
+					HorizontalAlignment={props.horizontalAlignment ?? Enum.HorizontalAlignment.Right}
+					VerticalAlignment={props.verticalAlignment ?? Enum.VerticalAlignment.Top}
+					CellSize={props.cellSize ?? new UDim2(1, 0, 0, 36)}
+					FillDirectionMaxCells={props.fillDirectionMaxCells}
+					CellPadding={props.cellPadding}
+				/>
+			) : (
+				<uilistlayout
+					FillDirection={props.fillDirection ?? Enum.FillDirection.Vertical}
+					HorizontalAlignment={props.horizontalAlignment ?? Enum.HorizontalAlignment.Right}
+					VerticalAlignment={props.verticalAlignment ?? Enum.VerticalAlignment.Top}
+					Padding={props.padding ?? new UDim(0, 0)}
+				/>
+			)}
 			{props.cornerRadius && <uicorner key="corner" CornerRadius={props.cornerRadius} />}
 			{props.children}
 		</scrollingframe>
