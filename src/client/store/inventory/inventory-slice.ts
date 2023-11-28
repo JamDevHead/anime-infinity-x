@@ -30,4 +30,7 @@ export const inventorySlice = createProducer(initialState, {
 			selectedItem,
 		};
 	},
+	resetInventorySlice: () => {
+		return initialState;
+	},
 });
