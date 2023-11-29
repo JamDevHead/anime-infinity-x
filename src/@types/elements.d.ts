@@ -3,5 +3,6 @@ declare namespace JSX {
 		blureffect: JSX.IntrinsicElement<BlurEffect>;
 		highlight: JSX.IntrinsicElement<Highlight>;
 		part: JSX.IntrinsicElement<Part>;
+		attachment: JSX.IntrinsicElement<Attachment>;
 	}
 }
