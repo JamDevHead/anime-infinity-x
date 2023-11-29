@@ -108,6 +108,7 @@ return {
 					dms = "rbxassetid://15449187774",
 					nrt = "rbxassetid://15449255334",
 					one = "rbxassetid://15449188170",
+					tkr = "rbxassetid://15492185459",
 				},
 			},
 			checkbox = "rbxassetid://15303998273",

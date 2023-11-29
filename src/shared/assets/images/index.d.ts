@@ -104,6 +104,7 @@ export const images: {
 				readonly dms: string;
 				readonly nrt: string;
 				readonly one: string;
+				readonly tkr: string;
 			};
 		};
 		readonly teleport: {
