@@ -4,5 +4,6 @@ declare namespace JSX {
 		highlight: JSX.IntrinsicElement<Highlight>;
 		part: JSX.IntrinsicElement<Part>;
 		attachment: JSX.IntrinsicElement<Attachment>;
+		selectionbox: JSX.IntrinsicElement<SelectionBox>;
 	}
 }

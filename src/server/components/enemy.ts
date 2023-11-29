@@ -1,5 +1,6 @@
 import { Component } from "@flamework/components";
 import { OnStart } from "@flamework/core";
+import { HttpService } from "@rbxts/services";
 import { store } from "@/server/store";
 import { EnemyComponent } from "@/shared/components/enemy-component";
 import { selectSelectedEnemies } from "@/shared/store/enemy-selection";
@@ -44,7 +45,15 @@ export class Enemy extends EnemyComponent implements OnStart {
 
 		killers.forEach((killerId) => {
 			for (const _ of $range(1, 10)) {
-				store.addDrop(this.attributes.Guid, { owner: killerId, id: "Gold", quantity: math.random(1, 10) });
+				const id = HttpService.GenerateGUID(false);
+
+				store.addDrop(this.attributes.Guid, {
+					owner: killerId,
+					id,
+					type: "Gold",
+					quantity: math.random(1, 10),
+					origin: this.root.Position,
+				});
 			}
 		});
 

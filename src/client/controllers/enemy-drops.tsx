@@ -1,4 +1,3 @@
-import { Components } from "@flamework/components";
 import { Controller, OnStart } from "@flamework/core";
 import { ReflexProvider } from "@rbxts/react-reflex";
 import { createPortal, createRoot } from "@rbxts/react-roblox";
@@ -11,8 +10,6 @@ import { store } from "@/client/store";
 export class EnemyDrops implements OnStart {
 	private dropContainer = new Instance("Folder");
 
-	constructor(private components: Components) {}
-
 	onStart() {
 		this.dropContainer.Name = "Drops";
 		this.dropContainer.Parent = Workspace;
@@ -23,7 +20,7 @@ export class EnemyDrops implements OnStart {
 		root.render(
 			createPortal(
 				<ReflexProvider producer={store}>
-					<EnemyDropProvider ownerId={tostring(localPlayer.UserId)} components={this.components} />
+					<EnemyDropProvider ownerId={tostring(localPlayer.UserId)} />
 				</ReflexProvider>,
 				this.dropContainer,
 			),
