@@ -18,6 +18,7 @@ export class EnemyDrops implements OnStart {
 			}
 
 			store.removeDrop(collectableId);
+			store.addBalance(tostring(player.UserId), "coins", collectable.quantity);
 		});
 	}
 }
