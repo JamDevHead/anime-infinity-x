@@ -30,9 +30,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 	) {}
 
 	onStart() {
-		const enemyFolder = Workspace.WaitForChild("Enemies") as Folder;
-
-		this.enemyFolder = enemyFolder;
+		this.enemyFolder = Workspace.WaitForChild("Enemies") as Folder;
 
 		const root = createRoot(new Instance("Folder"));
 
@@ -44,8 +42,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 			</StrictMode>,
 		);
 
-		this.raycastParams.FilterType = Enum.RaycastFilterType.Include;
-		this.raycastParams.AddToFilter(enemyFolder);
+		this.raycastParams.FilterType = Enum.RaycastFilterType.Exclude;
 	}
 
 	onRender() {
@@ -69,6 +66,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 
 	onCharacterAdded(character: Model) {
 		this.root = character.WaitForChild("HumanoidRootPart") as unknown as Part;
+		this.raycastParams.AddToFilter(character);
 	}
 
 	onCharacterRemoved() {
@@ -130,13 +128,17 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 			return 9e9;
 		}
 
+		if (!this.enemyFolder || !enemyPart.IsDescendantOf(this.enemyFolder)) {
+			return 9e9;
+		}
+
 		const origin = this.root.Position;
 		return origin.sub(enemyPart.Position).Magnitude;
 	}
 
 	private getEnemyAtMousePosition() {
 		const target = getMouseTarget(this.raycastParams);
-		const isTargetValid = target.Instance !== undefined && this.getEnemyDistance(target.Instance) <= 80; // TODO: put the range in a constant
+		const isTargetValid = target.Instance !== undefined && this.getEnemyDistance(target.Instance) <= 10; // TODO: put the range in a constant
 		return isTargetValid ? this.getEnemyModel(target.Instance) : undefined;
 	}
 }
