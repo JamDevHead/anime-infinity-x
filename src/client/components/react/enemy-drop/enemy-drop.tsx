@@ -6,12 +6,13 @@ import { Image } from "@/client/ui/components/image";
 import { useCharacter } from "@/client/ui/hooks/use-character";
 import { useMotion } from "@/client/ui/hooks/use-motion";
 import { images } from "@/shared/assets/images";
+import { SoundTracker } from "@/shared/lib/sound-tracker";
 import remotes from "@/shared/remotes";
 import { Drop } from "@/shared/store/enemies/drops";
 
 const RNG = new Random();
 
-export function EnemyDrop({ drop }: { drop: Drop }) {
+export function EnemyDrop({ drop, soundTracker }: { drop: Drop; soundTracker: SoundTracker }) {
 	const origin = useMemo(() => drop.origin, [drop]);
 	const [position, positionMotion] = useMotion(origin);
 	const character = useCharacter();
@@ -19,9 +20,17 @@ export function EnemyDrop({ drop }: { drop: Drop }) {
 	const attachment0Ref = useRef<Attachment>();
 	const attachment1Ref = useRef<Attachment>();
 	const [trailEnabled, setTrailEnabled] = useState(false);
+	const root = useMemo(
+		() => character.getValue()?.FindFirstChild("HumanoidRootPart") as Part | undefined,
+		[character],
+	);
 
 	const collectDebounce = useDebounceCallback(
 		() => {
+			if (root) {
+				soundTracker.play("reward", root, { Volume: 0.1 });
+			}
+
 			store.removeDrop(drop.id);
 			remotes.drops.collect.fire(drop.id);
 		},
@@ -41,13 +50,11 @@ export function EnemyDrop({ drop }: { drop: Drop }) {
 	});
 
 	useEventListener(RunService.Heartbeat, () => {
-		const characterModel = character.getValue();
-
-		if (!characterModel) {
+		if (!root) {
 			return;
 		}
 
-		const target = characterModel.GetPivot().Position;
+		const target = root.Position;
 		const distance = target.sub(position.getValue()).Magnitude;
 
 		if (distance > 6) {
