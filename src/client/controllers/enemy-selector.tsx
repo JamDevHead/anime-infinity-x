@@ -30,9 +30,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 	) {}
 
 	onStart() {
-		const enemyFolder = Workspace.WaitForChild("Enemies") as Folder;
-
-		this.enemyFolder = enemyFolder;
+		this.enemyFolder = Workspace.WaitForChild("Enemies") as Folder;
 
 		const root = createRoot(new Instance("Folder"));
 
@@ -44,8 +42,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 			</StrictMode>,
 		);
 
-		this.raycastParams.FilterType = Enum.RaycastFilterType.Include;
-		this.raycastParams.AddToFilter(enemyFolder);
+		this.raycastParams.FilterType = Enum.RaycastFilterType.Exclude;
 	}
 
 	onRender() {
@@ -69,6 +66,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 
 	onCharacterAdded(character: Model) {
 		this.root = character.WaitForChild("HumanoidRootPart") as unknown as Part;
+		this.raycastParams.AddToFilter(character);
 	}
 
 	onCharacterRemoved() {
@@ -127,6 +125,10 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 
 	private getEnemyDistance(enemyPart: BasePart) {
 		if (!this.root) {
+			return 9e9;
+		}
+
+		if (!this.enemyFolder || !enemyPart.IsDescendantOf(this.enemyFolder)) {
 			return 9e9;
 		}
 
