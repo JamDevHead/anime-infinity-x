@@ -8,8 +8,8 @@ export function EnemyDropProvider({ ownerId }: { ownerId: string }) {
 
 	return (
 		<>
-			{drops.mapFiltered((drop) => (
-				<EnemyDrop drop={drop} />
+			{drops.map((drop) => (
+				<EnemyDrop drop={drop} key={drop.id} />
 			))}
 		</>
 	);

@@ -5,5 +5,7 @@ declare namespace JSX {
 		part: JSX.IntrinsicElement<Part>;
 		attachment: JSX.IntrinsicElement<Attachment>;
 		selectionbox: JSX.IntrinsicElement<SelectionBox>;
+		particleemitter: JSX.IntrinsicElement<ParticleEmitter>;
+		trail: JSX.IntrinsicElement<Trail>;
 	}
 }

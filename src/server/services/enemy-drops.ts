@@ -1,22 +1,19 @@
 import { OnStart, Service } from "@flamework/core";
+import { Logger } from "@rbxts/log";
 import { store } from "@/server/store";
 import remotes from "@/shared/remotes";
-import { selectEnemiesDrops, selectEnemyDrop } from "@/shared/store/enemies/enemies-selectors";
+import { selectEnemyDrop } from "@/shared/store/enemies/enemies-selectors";
 
 @Service()
 export class EnemyDrops implements OnStart {
+	constructor(private readonly logger: Logger) {}
+
 	onStart() {
-		store.observe(selectEnemiesDrops, (enemyDrops, enemyUid) => {
-			print(`Enemy changed ${enemyUid} drops:`, enemyDrops);
-		});
-
 		remotes.drops.collect.connect((player, collectableId) => {
-			print(`Player ${player.UserId} is trying to collect ${collectableId}`);
-
 			const collectable = store.getState(selectEnemyDrop(collectableId));
 
 			if (!collectable) {
-				print("No collectables found");
+				this.logger.Warn("No collectables found {id}", collectableId);
 				return;
 			}
 

@@ -3,6 +3,7 @@ import { OnStart } from "@flamework/core";
 import { HttpService } from "@rbxts/services";
 import { store } from "@/server/store";
 import { EnemyComponent } from "@/shared/components/enemy-component";
+import { selectEnemyDrops } from "@/shared/store/enemies/enemies-selectors";
 import { selectSelectedEnemies } from "@/shared/store/enemy-selection";
 
 @Component({ tag: "EnemyNPC" })
@@ -44,7 +45,7 @@ export class Enemy extends EnemyComponent implements OnStart {
 		}
 
 		killers.forEach((killerId) => {
-			for (const _ of $range(1, 10)) {
+			for (const _ of $range(1, 20)) {
 				const id = HttpService.GenerateGUID(false);
 
 				store.addDrop(this.attributes.Guid, {
@@ -62,7 +63,11 @@ export class Enemy extends EnemyComponent implements OnStart {
 		});
 
 		task.delay(60, () => {
-			store.removeDrops(this.attributes.Guid);
+			const drops = store.getState(selectEnemyDrops(this.attributes.Guid));
+
+			drops.forEach((drop) => {
+				store.removeDrop(drop.id);
+			});
 		});
 	}
 }
