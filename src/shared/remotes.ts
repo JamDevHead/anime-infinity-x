@@ -19,16 +19,17 @@ const remotes = createRemotes({
 		remove: remote<Server, [fighterUid: string, targetUid: string]>(),
 		select: remote<Server, [targetUid: string]>(),
 		unselect: remote<Server, [targetUid: string]>(),
+		unselectAll: remote<Server>(),
 	}),
 
 	inventory: namespace({
 		equipFighter: remote<Server, [fighterUid: string]>(),
 		unequipFighter: remote<Server, [fighterUid: string]>(),
 	}),
-    
+
 	drops: namespace({
 		collect: remote<Server, [collectableId: string]>(),
-  }),
+	}),
 
 	zone: namespace({
 		teleport: remote<Server, [zone: string]>(),

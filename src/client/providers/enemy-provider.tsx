@@ -6,29 +6,22 @@ import { EnemyAura } from "@/client/components/react/enemy-aura";
 import { EnemyHover } from "@/client/components/react/enemy-hover";
 import { useRootSelector } from "@/client/store";
 import { selectHoveredEnemy } from "@/client/store/enemy-hover";
-import { selectActivePlayerFighters } from "@/shared/store/players/fighters";
 import { getEnemyModelByUid } from "@/shared/utils/enemies";
 
 function SelectionProvider({ userId }: { userId: string }) {
 	const selectedEnemies = useSelectorCreator(selectSelectedEnemiesByPlayerId, userId);
-	const activeFighters = useSelectorCreator(selectActivePlayerFighters, userId);
-	const activeFightersIsEmpty = useMemo(() => {
-		print("active fighters changed", activeFighters.size());
-		return activeFighters.size() === 0;
-	}, [activeFighters]);
 
 	return (
 		<>
-			{!activeFightersIsEmpty &&
-				selectedEnemies?.map((enemyUid) => {
-					const enemy = getEnemyModelByUid(enemyUid);
+			{selectedEnemies?.map((enemyUid) => {
+				const enemy = getEnemyModelByUid(enemyUid);
 
-					if (enemy) {
-						return createPortal(<EnemyAura enemy={enemy} />, enemy);
-					} else {
-						return <></>;
-					}
-				})}
+				if (enemy) {
+					return createPortal(<EnemyAura enemy={enemy} />, enemy);
+				} else {
+					return <></>;
+				}
+			})}
 		</>
 	);
 }
