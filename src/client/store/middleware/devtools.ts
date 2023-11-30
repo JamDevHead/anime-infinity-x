@@ -2,7 +2,7 @@ import { ProducerMiddleware } from "@rbxts/reflex";
 import { ReplicatedStorage, RunService } from "@rbxts/services";
 import { RootState } from "@/client/store";
 
-const blacklist = ["setHoveredEnemy", "removeHoveredEnemy"];
+const blacklist = ["setHoveredEnemy", "removeHoveredEnemy", "removeDrop", "addDrop", "addBalance"];
 const event = ReplicatedStorage.FindFirstChild("REFLEX_DEVTOOLS") as RemoteEvent;
 
 export const devToolsMiddleware: ProducerMiddleware<RootState> = () => {
