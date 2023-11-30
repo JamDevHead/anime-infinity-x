@@ -1,6 +1,7 @@
 import { OnStart, Service } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { store } from "@/server/store";
+import { doesPlayerHasFighter } from "@/server/utils/fighters";
 import remotes from "@/shared/remotes";
 import { selectPlayerInventory } from "@/shared/store/players";
 import { selectPlayerFighters } from "@/shared/store/players/fighters";
@@ -19,7 +20,7 @@ export class InventoryService implements OnStart {
 				return;
 			}
 
-			if (!this.validFighter(player, fighterUid)) {
+			if (!doesPlayerHasFighter(player, fighterUid)) {
 				return;
 			}
 
@@ -39,7 +40,8 @@ export class InventoryService implements OnStart {
 		remotes.inventory.unequipFighter.connect((player, fighterUid) => {
 			const fighters = store.getState(selectPlayerFighters(tostring(player.UserId)));
 
-			if (!this.validFighter(player, fighterUid)) {
+			if (!doesPlayerHasFighter(player, fighterUid)) {
+				this.logger.Warn("Player {@player} does not own fighter {fighterUid}", player, fighterUid);
 				return;
 			}
 
@@ -48,18 +50,8 @@ export class InventoryService implements OnStart {
 				return;
 			}
 
+			store.removeFighterTarget(fighterUid);
 			store.removeActiveFighter(tostring(player.UserId), fighterUid);
 		});
-	}
-
-	validFighter(player: Player, fighterUid: string) {
-		const fighters = store.getState(selectPlayerFighters(tostring(player.UserId)));
-
-		if (!fighters?.all.find((fighter) => fighter.uid === fighterUid)) {
-			this.logger.Warn("Player {@player} does not own fighter {fighterUid}", player, fighterUid);
-			return false;
-		}
-
-		return true;
 	}
 }

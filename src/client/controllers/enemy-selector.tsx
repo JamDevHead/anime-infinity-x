@@ -14,6 +14,7 @@ import { getMouseTarget } from "@/client/utils/mouse";
 import { EnemyComponent } from "@/shared/components/enemy-component";
 import remotes from "@/shared/remotes";
 import { selectSelectedEnemiesByPlayerId } from "@/shared/store/enemy-selection";
+import { selectActivePlayerFighters } from "@/shared/store/players/fighters";
 
 @Controller()
 export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender {
@@ -23,6 +24,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 	private localUserId = tostring(this.localPlayer.UserId);
 	private root: Part | undefined;
 	private raycastParams = new RaycastParams();
+	private isActiveFightersEmpty = false;
 
 	constructor(
 		private readonly logger: Logger,
@@ -43,6 +45,21 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 		);
 
 		this.raycastParams.FilterType = Enum.RaycastFilterType.Exclude;
+
+		const selectLocalPlayerActiveFighters = selectActivePlayerFighters(this.localUserId);
+		const onActiveFighterChange = (activeFighters: string[]) => {
+			this.isActiveFightersEmpty = activeFighters.size() === 0;
+
+			if (this.isActiveFightersEmpty) {
+				this.clearSelection();
+			}
+		};
+
+		store.subscribe(selectLocalPlayerActiveFighters, onActiveFighterChange);
+
+		const activeFighters = store.getState(selectLocalPlayerActiveFighters);
+
+		onActiveFighterChange(activeFighters);
 	}
 
 	onRender() {
@@ -74,31 +91,28 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 	}
 
 	onInputBegan(input: InputObject, gameProcessedEvent: boolean) {
-		if (!this.isValidInput(input) || gameProcessedEvent) {
+		if (!this.isValidInput(input) || gameProcessedEvent || this.isActiveFightersEmpty) {
 			return;
 		}
 
 		const selectedEnemies = store.getState(selectSelectedEnemiesByPlayerId(this.localUserId));
 		const enemy = this.getEnemyAtMousePosition();
 
-		const clearSelection = () => {
-			if (selectedEnemies && selectedEnemies.size() > 0) {
-				selectedEnemies.forEach((enemyUid) => remotes.fighterTarget.unselect.fire(enemyUid));
-			}
-		};
-
 		if (!enemy) {
-			clearSelection();
+			this.clearSelection();
 			return;
 		}
 
 		const uid = enemy.attributes.Guid;
 
 		if (!selectedEnemies?.includes(uid)) {
-			clearSelection();
-
+			this.clearSelection();
 			remotes.fighterTarget.select.fire(uid);
 		}
+	}
+
+	private clearSelection() {
+		remotes.fighterTarget.unselectAll.fire();
 	}
 
 	private isValidInput(input: InputObject) {
@@ -138,7 +152,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 
 	private getEnemyAtMousePosition() {
 		const target = getMouseTarget(this.raycastParams);
-		const isTargetValid = target.Instance !== undefined && this.getEnemyDistance(target.Instance) <= 10; // TODO: put the range in a constant
+		const isTargetValid = target.Instance !== undefined && this.getEnemyDistance(target.Instance) <= 30; // TODO: put the range in a constant
 		return isTargetValid ? this.getEnemyModel(target.Instance) : undefined;
 	}
 }
