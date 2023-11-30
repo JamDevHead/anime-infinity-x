@@ -1275,6 +1275,11 @@
   resolved "https://registry.yarnpkg.com/@rbxts/abbreviate/-/abbreviate-3.0.4.tgz#66b7eac6a241965687f28ee5765eb70ab9937011"
   integrity sha512-sf1T7D64AC/ZO76pn/bGIFduViD58d52ZD80W+UvbKI0kuH1qhzZkDZiFSmJHT8Dn7zzf3Dbn/7IWB2Rsax4Ww==
 
+"@rbxts/beacon@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/@rbxts/beacon/-/beacon-2.1.1.tgz#a9b02466ff02fbc2bc64e1e2cca52b2e85605a63"
+  integrity sha512-QeFMSGj+Iijp+tHcV9eyqVyeKZ/9zp7GqRJ/hecKiHmoTu4yFcyGnUQAaX7OdQKBCgLvWMJ9wK/FXMECjFA2Kg==
+
 "@rbxts/compiler-types@^2.2.0-types.0":
   version "2.2.0-types.0"
   resolved "https://registry.yarnpkg.com/@rbxts/compiler-types/-/compiler-types-2.2.0-types.0.tgz#cba7ff0cde0fa9ac18abb4251452814232d67a1e"
@@ -1524,10 +1529,10 @@
   resolved "https://registry.yarnpkg.com/@rbxts/trove/-/trove-1.3.0.tgz#c0bb5478e17435bc16a19a4fe3fba7626650d17b"
   integrity sha512-Ibekh0xr2G0WTWlUhbIaybWZvKF0C4flaBJBhJOuyS/sp6qyyn9l3pWWbSI4zrIExuOIswwKQ7O1BJj2bIJYCA==
 
-"@rbxts/types@^1.0.317", "@rbxts/types@^1.0.730":
-  version "1.0.730"
-  resolved "https://registry.yarnpkg.com/@rbxts/types/-/types-1.0.730.tgz#89da16208c842c18d9287aabceb86e4563fb224e"
-  integrity sha512-12rboJB+qu25jA2VtfLApg0Sr5LidRwlkoVf54qeTy7ih6s0JaxDicRhFm9g50h9Wa/XalL1vf1QWpZCtqzLuQ==
+"@rbxts/types@^1.0.317", "@rbxts/types@^1.0.732":
+  version "1.0.732"
+  resolved "https://registry.yarnpkg.com/@rbxts/types/-/types-1.0.732.tgz#a9ac367104d1fac2826adbe4433c06f1b0192ebc"
+  integrity sha512-ZgyxtLx1hRjHwKDn1ysvp9/fGLO9btL+0Dt4NBmUG+tRTEkiFT6lwygweg7TT7AI44tDZLkQ4gv4RMrJiaIvNw==
 
 "@rbxts/virtualized-list@^1.3.2-ts.0":
   version "1.3.2-ts.0"

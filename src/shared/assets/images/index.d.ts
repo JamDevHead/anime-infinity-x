@@ -1,13 +1,60 @@
 export const images: {
 	readonly characters: {
 		readonly headshots: {
-			readonly aot: string;
-			readonly dbz: string;
-			readonly dms: string;
-			readonly nrt: {
-				readonly naro: string;
+			readonly aot: {
+				readonly blondeguy: string;
+				readonly colossal: string;
+				readonly eron: string;
+				readonly haunttitan: string;
+				readonly levo: string;
+				readonly mika: string;
+				readonly ze: string;
 			};
-			readonly one: string;
+			readonly dbz: {
+				readonly bigear: string;
+				readonly bighorn: string;
+				readonly fullblack: string;
+				readonly fulldrip: string;
+				readonly geku: string;
+				readonly kora: string;
+				readonly master: string;
+			};
+			readonly dms: {
+				readonly gyo: string;
+				readonly hont: string;
+				readonly muzo: string;
+				readonly nez: string;
+				readonly renga: string;
+				readonly tanjo: string;
+				readonly toma: string;
+			};
+			readonly nrt: {
+				readonly bro: string;
+				readonly gold_ninja: string;
+				readonly guro: string;
+				readonly jiro: string;
+				readonly naro: string;
+				readonly oro: string;
+				readonly rock: string;
+			};
+			readonly one: {
+				readonly blackbeard: string;
+				readonly firefeet: string;
+				readonly heaven: string;
+				readonly luffo: string;
+				readonly mi: string;
+				readonly whitebeard: string;
+				readonly zura: string;
+			};
+			readonly tkr: {
+				readonly droke: string;
+				readonly mats: string;
+				readonly no: string;
+				readonly sho: string;
+				readonly tai: string;
+				readonly tako: string;
+				readonly tetto: string;
+			};
 		};
 	};
 	readonly fx: {
@@ -46,6 +93,8 @@ export const images: {
 		readonly arrow_left: string;
 		readonly bolt: string;
 		readonly cash: string;
+		readonly book: string;
+		readonly lock: string;
 	};
 	readonly ui: {
 		readonly cards: {
@@ -55,7 +104,15 @@ export const images: {
 				readonly dms: string;
 				readonly nrt: string;
 				readonly one: string;
+				readonly tkr: string;
 			};
+		};
+		readonly teleport: {
+			readonly aot: string;
+			readonly dbz: string;
+			readonly dms: string;
+			readonly nrt: string;
+			readonly one: string;
 		};
 		readonly blur: string;
 		readonly rounded_button_base: string;

@@ -59,11 +59,15 @@ export const RightSideHud = () => {
 				sortOrder={Enum.SortOrder.Name}
 			>
 				<SideGroupButtons.Root>
-					<SimpleButton color={Color3.fromHex("BF07FF")} icon={images.icons.daily_rewards} />
-					<SimpleButton color={Color3.fromHex("076AFF")} icon={images.icons.inventory} />
-					<SimpleButton color={Color3.fromHex("16792C")} icon={images.icons.boost} />
+					<SimpleButton color={Color3.fromHex("#BF07FF")} icon={images.icons.daily_rewards} />
 					<SimpleButton
-						color={Color3.fromHex("07A6FF")}
+						color={Color3.fromHex("#076AFF")}
+						icon={images.icons.book}
+						onClick={() => toggleWindowVisible("teleport")}
+					/>
+					<SimpleButton color={Color3.fromHex("#16792C")} icon={images.icons.boost} />
+					<SimpleButton
+						color={Color3.fromHex("#07A6FF")}
 						icon={images.icons.twitter}
 						onClick={() => toggleWindowVisible("codes")}
 					/>

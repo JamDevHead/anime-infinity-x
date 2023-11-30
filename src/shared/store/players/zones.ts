@@ -17,4 +17,36 @@ export const zonesSlice = createProducer(initialState, {
 		...state,
 		[playerId]: undefined,
 	}),
+
+	unlockZone: (state, playerId: string, zone: string) => {
+		const playerZones = state[playerId];
+
+		if (!playerZones) {
+			return state;
+		}
+
+		return {
+			...state,
+			[playerId]: {
+				...playerZones,
+				unlocked: [...playerZones.unlocked, zone],
+			},
+		};
+	},
+
+	setCurrentZone: (state, playerId: string, zone: string) => {
+		const playerZones = state[playerId];
+
+		if (!playerZones) {
+			return state;
+		}
+
+		return {
+			...state,
+			[playerId]: {
+				...playerZones,
+				current: zone,
+			},
+		};
+	},
 });

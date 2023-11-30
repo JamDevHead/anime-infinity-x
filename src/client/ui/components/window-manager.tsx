@@ -7,15 +7,22 @@ import { useMotion } from "@/client/ui/hooks/use-motion";
 import { Codes } from "@/client/ui/layouts/windows/codes/codes";
 import { Inventory } from "@/client/ui/layouts/windows/inventory/inventory";
 import { Settings } from "@/client/ui/layouts/windows/settings/settings";
+import { Teleport } from "@/client/ui/layouts/windows/teleport/teleport";
 
 export const WindowManager = () => {
 	const { currentWindow, visible } = useRootSelector((store) => store.window);
-	const { setVisibility } = useRootStore();
+	const { resetInventorySlice, setVisibility } = useRootStore();
 	const window = Windows[currentWindow ?? "codes"];
 
 	const [position, positionMotion] = useMotion(new UDim2());
 
 	const selectWindow = (state: RootState) => state.window.currentWindow;
+
+	useEffect(() => {
+		if (visible === false) {
+			resetInventorySlice();
+		}
+	}, [resetInventorySlice, visible]);
 
 	useEffect(() => {
 		return store.subscribe(selectWindow, (currentWindow, lastWindow) => {
@@ -31,6 +38,19 @@ export const WindowManager = () => {
 		positionMotion.spring(visible === true ? UDim2.fromScale(0.5, 0.5) : UDim2.fromScale(0.5, -1));
 	}, [currentWindow, positionMotion, visible]);
 
+	const getWindowContent = () => {
+		switch (currentWindow) {
+			case "codes":
+				return <Codes />;
+			case "settings":
+				return <Settings />;
+			case "inventory":
+				return <Inventory />;
+			case "teleport":
+				return <Teleport />;
+		}
+	};
+
 	return (
 		<Frame
 			anchorPoint={new Vector2(0.5, 0.5)}
@@ -38,10 +58,15 @@ export const WindowManager = () => {
 			size={UDim2.fromScale(1, 1)}
 			backgroundTransparency={1}
 		>
-			<Window title={window.title} size={window.size} position={position} onClose={() => setVisibility(false)}>
-				{currentWindow === "codes" && <Codes />}
-				{currentWindow === "settings" && <Settings />}
-				{currentWindow === "inventory" && <Inventory />}
+			<Window
+				title={window.title}
+				size={window.size}
+				position={position}
+				onClose={() => {
+					setVisibility(false);
+				}}
+			>
+				{getWindowContent()}
 			</Window>
 		</Frame>
 	);

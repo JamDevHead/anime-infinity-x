@@ -1,6 +1,211 @@
+[inputs."assets/images/characters/headshots/aot/blondeguy.png"]
+hash = "eab683cf37adc0f6237a78fdfc8f01adfa2d4044bdc0c1c7c0b7ed3f92b124ac"
+id = 15485666241
+packable = false
+
+[inputs."assets/images/characters/headshots/aot/colossal.png"]
+hash = "c426d0d8c498222957f9f9d80cc8f151f7653f75186191ebc9ec5f19bbc7393d"
+id = 15485666378
+packable = false
+
+[inputs."assets/images/characters/headshots/aot/eron.png"]
+hash = "a21581c3b41a46a5c2c246886ea96ed7e0c96591b5448e7c27549746cfeca0d9"
+id = 15485666479
+packable = false
+
+[inputs."assets/images/characters/headshots/aot/haunttitan.png"]
+hash = "e0750381f787ad75ac0fd933e47101ae5dbb7e3c20cd86be24d58045bf78bb29"
+id = 15485666546
+packable = false
+
+[inputs."assets/images/characters/headshots/aot/levo.png"]
+hash = "23b2a0a3dd431bf95f2eb6c5b326034b5d60c5d5f4ba2011b7eccab7b7f3be8a"
+id = 15485666600
+packable = false
+
+[inputs."assets/images/characters/headshots/aot/mika.png"]
+hash = "e6cd4f781a5a3cb1317a55979730fdec380ccb120ed6111261f4614cfc4b7b46"
+id = 15485666656
+packable = false
+
+[inputs."assets/images/characters/headshots/aot/ze.png"]
+hash = "c0a89277a304f3870d4ffc60668eb22c3fce838237132a43134d3062fe4eb288"
+id = 15485666720
+packable = false
+
+[inputs."assets/images/characters/headshots/dbz/bigear.png"]
+hash = "aadade173a0bb445fae0b423bc871c736111f9502c5f779fa86dcc5ea81a033d"
+id = 15485666779
+packable = false
+
+[inputs."assets/images/characters/headshots/dbz/bighorn.png"]
+hash = "81be8df8eae42ae8cd7721f87a24a9b7e9797cf623a993149785d3635de651f9"
+id = 15485666834
+packable = false
+
+[inputs."assets/images/characters/headshots/dbz/fullblack.png"]
+hash = "a25b40c1486837b25401cd7a2ea247249d462ca90ec9625035d4be0732998efb"
+id = 15485666919
+packable = false
+
+[inputs."assets/images/characters/headshots/dbz/fulldrip.png"]
+hash = "ac20002fe797cb091dffbbe39f4d1aaadbd5923573c303169a483fbe40b1a0d9"
+id = 15485666971
+packable = false
+
+[inputs."assets/images/characters/headshots/dbz/geku.png"]
+hash = "90852837618e884055def1a30fca99b39d6132b5b8974083754ad08d12cb52fd"
+id = 15485667047
+packable = false
+
+[inputs."assets/images/characters/headshots/dbz/kora.png"]
+hash = "edf78fd8b1b98b190eb533c64c6da8e0359b39c81a3efe73092792078b2e4c89"
+id = 15485667102
+packable = false
+
+[inputs."assets/images/characters/headshots/dbz/master.png"]
+hash = "7e2c011412c9745e07606bb2d1bcb73eef1d9cd0dc5c81a40d8a1da5e1788603"
+id = 15485667168
+packable = false
+
+[inputs."assets/images/characters/headshots/dms/gyo.png"]
+hash = "47dcf47918923a18af28d8928d0462d32c63f43b4ebc81a03dbcc3abc6404600"
+id = 15485978411
+packable = false
+
+[inputs."assets/images/characters/headshots/dms/hont.png"]
+hash = "fb45fe3b58edc8152cf768a9995c7f757343bd61485083e7c612ccd4ba64e6aa"
+id = 15485978476
+packable = false
+
+[inputs."assets/images/characters/headshots/dms/muzo.png"]
+hash = "617009b47472d3386b755c497948ccdbc149565bc52206f8e93faf4dd976731e"
+id = 15485978531
+packable = false
+
+[inputs."assets/images/characters/headshots/dms/nez.png"]
+hash = "90047bca5603f17f67001385171286d8db7835e74a5bb6366f7c4b18f3a1fbfe"
+id = 15485978589
+packable = false
+
+[inputs."assets/images/characters/headshots/dms/renga.png"]
+hash = "95a7b10663a73e4fe03685a3331e331f4221e55c290c8a21ca5c53a92c209bd9"
+id = 15485978768
+packable = false
+
+[inputs."assets/images/characters/headshots/dms/tanjo.png"]
+hash = "c9e772e41d80dcdf1883816d604eb9ce8e8b7d025554a69107e0fc6230397817"
+id = 15485978840
+packable = false
+
+[inputs."assets/images/characters/headshots/dms/toma.png"]
+hash = "4ef310b404dfd64bc5816f91135ff686c7fc9750cafb59923411546d7fc41aea"
+id = 15485978979
+packable = false
+
+[inputs."assets/images/characters/headshots/nrt/bro.png"]
+hash = "ff1fea2918afac768b94a1162f31d74eeb8288fd2bb2eb8256c65f1955a9a19b"
+id = 15485667974
+packable = false
+
+[inputs."assets/images/characters/headshots/nrt/gold_ninja.png"]
+hash = "48726c23afe4b6be8c8852af017f3b86d805d3b6d56236e35c01e99f648a729d"
+id = 15485668164
+packable = false
+
+[inputs."assets/images/characters/headshots/nrt/guro.png"]
+hash = "c422a3ec64ee8e9237db7a43527135c8ead6973bd65087b7763a8cc49019a676"
+id = 15485668277
+packable = false
+
+[inputs."assets/images/characters/headshots/nrt/jiro.png"]
+hash = "1f120818fcd5c370f1f1436a8eb859dc14a0ae98b0ed91ad3410ca442d0bf8c0"
+id = 15485668444
+packable = false
+
 [inputs."assets/images/characters/headshots/nrt/naro.png"]
-hash = "b5684bcd1d5d17ac4f72a785794bc14433c03579cf004fe52c33daa01d2c46c2"
-id = 15464814050
+hash = "aad28611221c94617419391bb47b2bad2a94d871e8624aaf42ec16490c810431"
+id = 15485668597
+packable = false
+
+[inputs."assets/images/characters/headshots/nrt/oro.png"]
+hash = "8f0b2fa9b211f10d4378afbcaaca19d3f8aa979af3900a5aadc97a5c52a0726d"
+id = 15485668652
+packable = false
+
+[inputs."assets/images/characters/headshots/nrt/rock.png"]
+hash = "81e98106e8bc2236075533dee08ade842dd49e5430f7b092772c1f1e3819f695"
+id = 15485668743
+packable = false
+
+[inputs."assets/images/characters/headshots/one/blackbeard.png"]
+hash = "515344b54256a7923e9400990cdc533b1325a986d960c5fc8303780e32e15b3c"
+id = 15485668866
+packable = false
+
+[inputs."assets/images/characters/headshots/one/firefeet.png"]
+hash = "f012409becc4bcb925693e8472c02f21084724fc83697b559ba973255481263c"
+id = 15485668985
+packable = false
+
+[inputs."assets/images/characters/headshots/one/heaven.png"]
+hash = "3bf658bd92fea62e6ef56d9cc852a9534a7a35eedd8b3dadcee77f375271f496"
+id = 15485669092
+packable = false
+
+[inputs."assets/images/characters/headshots/one/luffo.png"]
+hash = "63932f7e15e55b329fa6952811b37f9caa5275a16d236d7d91e2ffcdd692628b"
+id = 15485669266
+packable = false
+
+[inputs."assets/images/characters/headshots/one/mi.png"]
+hash = "7b2742b2b5ec7de1725c8c24ce2d784dc8fd6e4a02670bb5b04d279bdeb047a5"
+id = 15485669355
+packable = false
+
+[inputs."assets/images/characters/headshots/one/whitebeard.png"]
+hash = "fa67a630d41336af29f97482ba3603f505e451294381d33f53f47e9c8cd66dd3"
+id = 15485669406
+packable = false
+
+[inputs."assets/images/characters/headshots/one/zura.png"]
+hash = "3486aba8baf91a2834cd9653ff0f080b25047c634b860a414cd435b6b3fd39c2"
+id = 15485669456
+packable = false
+
+[inputs."assets/images/characters/headshots/tkr/droke.png"]
+hash = "f2e6a585e87f36431ea0bb897cc9c10be0458542e6e2eae2783fbf6e61c68b51"
+id = 15485669517
+packable = false
+
+[inputs."assets/images/characters/headshots/tkr/mats.png"]
+hash = "27517a1aa593c94630faf86c0f59031def0b8d78cf0cd87ec5dd45daa8ac5b06"
+id = 15485669589
+packable = false
+
+[inputs."assets/images/characters/headshots/tkr/no.png"]
+hash = "a9d72ca6a8c2719f55c303d80c6782b16618da278c2486650b561edd2328307c"
+id = 15485669677
+packable = false
+
+[inputs."assets/images/characters/headshots/tkr/sho.png"]
+hash = "a3e05e49e4a2d408fd5714854750be1b54a7c945e59b9b086d577bd387695965"
+id = 15485669762
+packable = false
+
+[inputs."assets/images/characters/headshots/tkr/tai.png"]
+hash = "a3e316a16fbfb5bc25df747fdfb2dfaf6f0bcb59a27bc7fed267de8d97bbc778"
+id = 15485669827
+packable = false
+
+[inputs."assets/images/characters/headshots/tkr/tako.png"]
+hash = "adda6d638d252564251c71346ccb25ccb6a19c0a1e473b5a7463d62511d9e654"
+id = 15485669905
+packable = false
+
+[inputs."assets/images/characters/headshots/tkr/tetto.png"]
+hash = "c3622e1f5117261a392d133276f37a6cce133e9b5159d1001d5e70cd922f2db3"
+id = 15485670026
 packable = false
 
 [inputs."assets/images/fx/target_aura.png"]
@@ -21,6 +226,11 @@ packable = false
 [inputs."assets/images/icons/bolt.png"]
 hash = "99ee7b3dcf452374c7134e7a128b4a1df47f2b44f94076a30d1038b68f74a8a8"
 id = 15472591107
+packable = false
+
+[inputs."assets/images/icons/book.png"]
+hash = "54eed2b52a5ba50ac693d23b8a28aa3e8fc872800cc67ca6bd39e10c656bb350"
+id = 15489276385
 packable = false
 
 [inputs."assets/images/icons/boost.png"]
@@ -96,6 +306,11 @@ packable = false
 [inputs."assets/images/icons/inventory.png"]
 hash = "e3dbf09faec4a4b01bbf5df28772b631312b3e0c9fb6ba33de000ad3b53a290b"
 id = 15303915192
+packable = false
+
+[inputs."assets/images/icons/lock.png"]
+hash = "89af4ffd093e13bcd6f8e443050c05f12a8344367ba9bb5cb2f2414607a3e1c3"
+id = 15491195800
 packable = false
 
 [inputs."assets/images/icons/mission.png"]
@@ -193,6 +408,11 @@ hash = "7ded2aec7e66f8f4fb3da31c692519958938b091b007dcdb0eb13fc9d4b4aa34"
 id = 15449188170
 packable = false
 
+[inputs."assets/images/ui/cards/backgrounds/tkr.png"]
+hash = "1fd2b1d84b9731ac717b9743757fc38a4579fda94dee38b0265f0c83e9ef886f"
+id = 15492185459
+packable = false
+
 [inputs."assets/images/ui/checkbox.png"]
 hash = "9ca5f0022234429f6d89819909bde7bc6dcee872c04560dbce5d4e7a1a894ee8"
 id = 15303998273
@@ -261,6 +481,36 @@ packable = false
 [inputs."assets/images/ui/stats_bar_stars.png"]
 hash = "21ee36df396c9c10ca93ec1a308b0a561d9447e8fe13ec5da251807c7853d992"
 id = 15303347597
+packable = false
+
+[inputs."assets/images/ui/teleport/aot.png"]
+hash = "e54f4f6a2e06e9b405ac89893f64a610539c717cb3b4c8a8ad0ce710afaeff28"
+id = 15491137885
+packable = false
+
+[inputs."assets/images/ui/teleport/dbz.png"]
+hash = "2fbef62894f348d172d47c536d4926843a11f15e05065db375cdeb4acb7d8d5b"
+id = 15491138159
+packable = false
+
+[inputs."assets/images/ui/teleport/dms.png"]
+hash = "b1cc52532c99a2c89e1a155a0baaf3576b3bd21a9cae2587cf58b93ed05b1cb4"
+id = 15491138518
+packable = false
+
+[inputs."assets/images/ui/teleport/nrt.png"]
+hash = "8e482b213b40d0ff04f8f193d6722cdb00c4f5f08bff3abf7f8d98ad446d29a7"
+id = 15489959991
+packable = false
+
+[inputs."assets/images/ui/teleport/one.png"]
+hash = "4c8d55056f548a30482a3b3e68566d743e9b07fd428093e4f26ac167049c2677"
+id = 15491138839
+packable = false
+
+[inputs."assets/images/ui/teleport/tkr.png"]
+hash = "ccc00068b4900920d942058e22fa13a209ac47a2b1cfd8e36b52377efb96b485"
+id = 15491139288
 packable = false
 
 [inputs."assets/images/ui/text_field.png"]
