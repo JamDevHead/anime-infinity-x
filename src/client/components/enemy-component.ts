@@ -1,6 +1,7 @@
 import { Component, Components } from "@flamework/components";
 import { OnStart } from "@flamework/core";
 import { ReplicatedStorage, TweenService } from "@rbxts/services";
+import { SoundController } from "@/client/controllers/sound-controller";
 import { store } from "@/client/store";
 import { getFighterByUid } from "@/client/utils/fighters";
 import { EnemyComponent } from "@/shared/components/enemy-component";
@@ -19,7 +20,10 @@ export class Enemy extends EnemyComponent implements OnStart {
 	private hurtHighlight = new Instance("Highlight");
 	private hurtParticle = new Instance("Part") as Part & { Particle: ParticleEmitter };
 
-	constructor(private components: Components) {
+	constructor(
+		private readonly components: Components,
+		private readonly soundController: SoundController,
+	) {
 		super();
 	}
 
@@ -90,6 +94,9 @@ export class Enemy extends EnemyComponent implements OnStart {
 
 		// Play particle
 		this.hurtParticle.Particle.Emit(1);
+
+		// Play hurt sound
+		this.soundController.tracker.play("hurt", this.instance.HumanoidRootPart);
 
 		// Notify current fighters of hurt
 		const fighterUid = store.getState(selectFighterWithTarget(this.attributes.Guid));
