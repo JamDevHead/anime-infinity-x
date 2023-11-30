@@ -67,6 +67,9 @@ export class Enemy extends EnemyComponent implements OnStart {
 		// Play death animation
 		this.animationTracker.swapAnimation("death");
 
+		// Play death sound
+		this.soundController.tracker.play("death", this.instance.HumanoidRootPart);
+
 		// Fade out
 		const tweenInfo = new TweenInfo(2, Enum.EasingStyle.Linear, Enum.EasingDirection.Out);
 		const propertyTable = {
