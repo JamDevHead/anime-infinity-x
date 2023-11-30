@@ -17,4 +17,12 @@ export const balanceSlice = createProducer(initialState, {
 		...state,
 		[playerId]: undefined,
 	}),
+
+	addBalance: (state, playerId: string, balanceName: keyof PlayerBalance, amount: number) => ({
+		...state,
+		[playerId]: {
+			...state[playerId],
+			[balanceName]: (state[playerId]?.[balanceName] ?? 0) + amount,
+		} as PlayerBalance,
+	}),
 });

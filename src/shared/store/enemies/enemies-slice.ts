@@ -1,6 +1,6 @@
 import { combineProducers } from "@rbxts/reflex";
-import { healthSlice } from "@/shared/store/enemies/health";
+import { dropsSlice } from "@/shared/store/enemies/drops";
 
 export const enemiesSlice = combineProducers({
-	health: healthSlice,
+	drops: dropsSlice,
 });

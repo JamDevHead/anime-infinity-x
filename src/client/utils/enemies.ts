@@ -1,8 +1,8 @@
-import { getEnemyModelByUid } from "@/shared/utils/enemies";
 import { Components } from "@flamework/components";
-import { EnemyComponent } from "@/shared/components/enemy-component";
+import { Enemy } from "@/client/components/enemy-component";
+import { getEnemyModelByUid } from "@/shared/utils/enemies";
 
-const enemyCache = new Map<string, EnemyComponent>();
+const enemyCache = new Map<string, Enemy>();
 
 export function getEnemyByUid(uid: string, components: Components) {
 	const enemyCached = enemyCache.get(uid);
@@ -14,7 +14,7 @@ export function getEnemyByUid(uid: string, components: Components) {
 	}
 
 	const enemyModel = getEnemyModelByUid(uid);
-	const enemyComponent = enemyModel ? components.getComponent<EnemyComponent>(enemyModel) : undefined;
+	const enemyComponent = enemyModel ? components.getComponent<Enemy>(enemyModel) : undefined;
 
 	if (!enemyComponent) {
 		return undefined;

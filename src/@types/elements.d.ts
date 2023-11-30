@@ -3,5 +3,9 @@ declare namespace JSX {
 		blureffect: JSX.IntrinsicElement<BlurEffect>;
 		highlight: JSX.IntrinsicElement<Highlight>;
 		part: JSX.IntrinsicElement<Part>;
+		attachment: JSX.IntrinsicElement<Attachment>;
+		selectionbox: JSX.IntrinsicElement<SelectionBox>;
+		particleemitter: JSX.IntrinsicElement<ParticleEmitter>;
+		trail: JSX.IntrinsicElement<Trail>;
 	}
 }
