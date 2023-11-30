@@ -15,7 +15,7 @@ export class FightersTarget implements OnStart, OnPlayerAdd {
 		remotes.fighterTarget.set.connect((player, fighterUid, targetUid) => {
 			const userId = tostring(player.UserId);
 
-			if (!doesPlayerHasFighter(userId, fighterUid)) {
+			if (!doesPlayerHasFighter(player, fighterUid)) {
 				this.logger.Warn(
 					`Player ${userId} tried to set target for fighter ${fighterUid} but they don't own it`,
 				);
@@ -32,7 +32,7 @@ export class FightersTarget implements OnStart, OnPlayerAdd {
 				return;
 			}
 
-			if (!doesPlayerHasFighter(tostring(player.UserId), fighterUid)) {
+			if (!doesPlayerHasFighter(player, fighterUid)) {
 				this.logger.Warn(
 					`Player ${tostring(
 						player.UserId,

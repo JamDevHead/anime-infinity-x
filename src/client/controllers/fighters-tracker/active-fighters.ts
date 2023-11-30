@@ -1,7 +1,7 @@
 import { Trove } from "@rbxts/trove";
+import { Tracker } from "@/client/controllers/fighters-tracker/tracker";
 import { store } from "@/client/store";
 import { selectActivePlayerFighters } from "@/shared/store/players/fighters";
-import { Tracker } from "@/client/controllers/fighters-tracker/tracker";
 
 type KeyOf<T> = T extends Map<infer K, infer _> ? K : never;
 type ValueOf<T> = T extends Map<infer _, infer V> ? V : never;
@@ -68,8 +68,6 @@ export class ActiveFighters {
 	}
 
 	private onActiveFighter(uid: string) {
-		print("new active fighter", uid);
-
 		this.createFighterGoal(uid);
 		this.tracker.updateFighters();
 
