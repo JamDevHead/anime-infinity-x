@@ -136,7 +136,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 
 	private getEnemyAtMousePosition() {
 		const target = getMouseTarget(this.raycastParams);
-		const isTargetValid = target.Instance !== undefined && this.getEnemyDistance(target.Instance) <= 80; // TODO: put the range in a constant
+		const isTargetValid = target.Instance !== undefined && this.getEnemyDistance(target.Instance) <= 10; // TODO: put the range in a constant
 		return isTargetValid ? this.getEnemyModel(target.Instance) : undefined;
 	}
 }
