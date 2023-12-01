@@ -7,7 +7,7 @@ import { Trove } from "@rbxts/trove";
 import { FighterGoal } from "@/client/components/fighter-goal";
 import { FightersTracker } from "@/client/controllers/fighters-tracker";
 import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
-import { AnimationTracker } from "@/shared/lib/animation-tracker";
+import { AnimationMap, AnimationTracker } from "@/shared/lib/animation-tracker";
 import { calculateStun } from "@/shared/utils/fighters";
 
 interface IFighterModel extends Model {
@@ -17,14 +17,14 @@ interface IFighterModel extends Model {
 }
 
 const animationMap = {
-	idle: "14451184535",
-	walk: "14678864223",
-	run: "14678864223",
-	jump: "125750702",
-	fall: "15484732189",
-	soco1: "15461463119",
-	soco2: "15461470426",
-} as const;
+	idle: { id: "14451184535" },
+	walk: { id: "14678864223" },
+	run: { id: "14678864223" },
+	jump: { id: "125750702" },
+	fall: { id: "15484732189" },
+	soco1: { id: "15461463119" },
+	soco2: { id: "15461470426" },
+} satisfies AnimationMap;
 
 @Component({ tag: "Fighter" })
 export class FighterModel

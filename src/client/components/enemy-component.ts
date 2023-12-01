@@ -5,13 +5,14 @@ import { SoundController } from "@/client/controllers/sound-controller";
 import { store } from "@/client/store";
 import { getFighterByUid } from "@/client/utils/fighters";
 import { EnemyComponent } from "@/shared/components/enemy-component";
-import { AnimationTracker } from "@/shared/lib/animation-tracker";
+import { AnimationMap, AnimationTracker } from "@/shared/lib/animation-tracker";
 import { selectFighterWithTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
 
 const animationMap = {
-	death: "14485177001",
-	hurt: "14514314319",
-} as const;
+	death: { id: "14485177001", priority: Enum.AnimationPriority.Action },
+	hurt: { id: "14514314319", priority: Enum.AnimationPriority.Movement },
+	idle: { id: "14451184535", priority: Enum.AnimationPriority.Idle },
+} satisfies AnimationMap;
 
 @Component({ tag: "EnemyNPC" })
 export class Enemy extends EnemyComponent implements OnStart {
@@ -59,6 +60,8 @@ export class Enemy extends EnemyComponent implements OnStart {
 
 			currentHealth = health;
 		});
+
+		this.animationTracker.playAnimationTrack("idle");
 	}
 
 	destroy() {

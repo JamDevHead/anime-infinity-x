@@ -1,12 +1,14 @@
 import { Workspace } from "@rbxts/services";
 
+export type AnimationMap = Record<string, { id: string; priority?: Enum.AnimationPriority }>;
+
 export class AnimationTracker {
 	private animationCache = new Map<string, AnimationTrack>();
 	private animationsInQueue = new Set<string>();
 
 	constructor(
 		private animator: Animator,
-		private readonly animationMap: Record<string, string>,
+		private readonly animationMap: AnimationMap,
 	) {
 		try {
 			for (const [name] of pairs(animationMap)) {
@@ -51,7 +53,7 @@ export class AnimationTracker {
 	}
 
 	public getAnimationTrack(name: keyof typeof this.animationMap) {
-		const id = this.animationMap[name];
+		const { id, priority } = this.animationMap[name];
 
 		if (id === undefined) {
 			return;
@@ -99,6 +101,9 @@ export class AnimationTracker {
 
 		const track = this.animator.LoadAnimation(animationInstance);
 
+		if (priority !== undefined) {
+			track.Priority = priority;
+		}
 		this.animationCache.set(id, track);
 
 		return track;
