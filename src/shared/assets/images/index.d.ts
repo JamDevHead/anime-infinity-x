@@ -114,6 +114,19 @@ export const images: {
 			readonly nrt: string;
 			readonly one: string;
 		};
+		readonly loading_screen: {
+			readonly letters: {
+				readonly A: string;
+				readonly E: string;
+				readonly F: string;
+				readonly I: string;
+				readonly M: string;
+				readonly N: string;
+				readonly T: string;
+				readonly X: string;
+				readonly Y: string;
+			};
+		};
 		readonly blur: string;
 		readonly rounded_button_base: string;
 		readonly attack_button_base: string;

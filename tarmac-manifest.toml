@@ -438,6 +438,51 @@ hash = "d15f6fde91884c930497e3b582818d4bba167fe9218810455ea47d5a6f2e1a89"
 id = 15278324050
 packable = false
 
+[inputs."assets/images/ui/loading_screen/letters/A.png"]
+hash = "656e7e85c445d94ba0313a4ced7ea2115d0d5b329b10717ee6791045f5bab193"
+id = 15507154992
+packable = false
+
+[inputs."assets/images/ui/loading_screen/letters/E.png"]
+hash = "a8eac8f29f4075cd872683ac3ce4893b63952b2eb9a90444d0a069c4f2f5e3b2"
+id = 15507155066
+packable = false
+
+[inputs."assets/images/ui/loading_screen/letters/F.png"]
+hash = "c256b64a33dbfc5087ac300d306cffdd63fd1f6a70b3c3b1f5534c35f108e04c"
+id = 15507155154
+packable = false
+
+[inputs."assets/images/ui/loading_screen/letters/I.png"]
+hash = "ae245ea1a000de5728ad703e40a582e1265ddc65b3cb97210f961f79d3f7c176"
+id = 15507480458
+packable = false
+
+[inputs."assets/images/ui/loading_screen/letters/M.png"]
+hash = "5a1c663cb012231bd35d7047c1b2e1c5bfc325fb0924eae3d67d27bf0dfe25e8"
+id = 15507155318
+packable = false
+
+[inputs."assets/images/ui/loading_screen/letters/N.png"]
+hash = "4e3340dd4119a2bad9f66b9eb5769da800cada581734f14f2477bd0f7d9f7109"
+id = 15507155390
+packable = false
+
+[inputs."assets/images/ui/loading_screen/letters/T.png"]
+hash = "96614835c93eb98d1516fc099cc252ba6bad668c3bd81c9ff41e35d22ce071db"
+id = 15507155522
+packable = false
+
+[inputs."assets/images/ui/loading_screen/letters/X.png"]
+hash = "7e16453031a73eb80bd920059916108c095bc44fa5ca344c890b2bb48f2721d8"
+id = 15505082038
+packable = false
+
+[inputs."assets/images/ui/loading_screen/letters/Y.png"]
+hash = "d2b1a44233172e6b0c05b5fea17b5b4176db3cb021ec1bbbe86d4a4143fe2713"
+id = 15507155625
+packable = false
+
 [inputs."assets/images/ui/option_background.png"]
 hash = "b7ba5d5f7346b4478815ba800e9a667d48551a5474fed4253be2f66c6bf02578"
 id = 15358053084

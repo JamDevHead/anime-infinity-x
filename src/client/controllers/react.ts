@@ -7,6 +7,7 @@ export class React implements OnInit {
 	constructor(private logger: Logger) {}
 
 	onInit(): void | Promise<void> {
+		this.logger.Info("Initializing React controller...");
 		initializeReact();
 		this.logger.Info("React controller initialized");
 	}
