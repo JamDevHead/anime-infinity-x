@@ -11,7 +11,7 @@ import { Teleport } from "@/client/ui/layouts/windows/teleport/teleport";
 
 export const WindowManager = () => {
 	const { currentWindow, visible } = useRootSelector((store) => store.window);
-	const { resetInventorySlice, setVisibility } = useRootStore();
+	const { resetInventorySlice, setVisibility, setBlur } = useRootStore();
 	const window = Windows[currentWindow ?? "codes"];
 
 	const [position, positionMotion] = useMotion(new UDim2());
@@ -32,9 +32,10 @@ export const WindowManager = () => {
 				setVisibility(true);
 			}
 		});
-	}, [setVisibility]);
+	}, [setBlur, setVisibility]);
 
 	useEffect(() => {
+		setBlur(visible === true ? 12 : 0);
 		positionMotion.spring(visible === true ? UDim2.fromScale(0.5, 0.5) : UDim2.fromScale(0.5, -1));
 	}, [currentWindow, positionMotion, visible]);
 
