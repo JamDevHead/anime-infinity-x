@@ -4,6 +4,7 @@ import { Button } from "@/client/ui/components/button";
 import { Frame, FrameProps } from "@/client/ui/components/frame";
 import { Image } from "@/client/ui/components/image";
 import { Text } from "@/client/ui/components/text";
+import { useMotion } from "@/client/ui/hooks/use-motion";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
 
@@ -21,6 +22,7 @@ export const Window: FunctionComponent<PropsWithChildren<WindowProps>> = ({
 	position,
 }) => {
 	const rem = useRem();
+	const [closeSize, closeSizeMotion] = useMotion(UDim2.fromOffset(rem(5), rem(5)));
 
 	return (
 		<Frame
@@ -106,11 +108,19 @@ export const Window: FunctionComponent<PropsWithChildren<WindowProps>> = ({
 				</Image>
 				<Button
 					onClick={onClose}
-					size={UDim2.fromOffset(rem(5), rem(5))}
+					size={closeSize}
 					position={UDim2.fromScale(0.92, 0.1)}
 					anchorPoint={new Vector2(0.5, 0.5)}
 					rotation={-4}
 					backgroundTransparency={1}
+					event={{
+						MouseEnter: () => {
+							closeSizeMotion.spring(UDim2.fromOffset(rem(6), rem(6)));
+						},
+						MouseLeave: () => {
+							closeSizeMotion.spring(UDim2.fromOffset(rem(5), rem(5)));
+						},
+					}}
 				>
 					<Image image={images.ui.window_close} size={UDim2.fromScale(1, 1)} />
 				</Button>
