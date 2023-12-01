@@ -6,9 +6,10 @@ import { devToolsMiddleware } from "./middleware/devtools";
 import { receiverMiddleware } from "./middleware/receiver";
 import { settingsSlice } from "./settings";
 import { windowSlice } from "./window";
-import { inventorySlice } from "@/client/store/inventory";
-import { slices } from "@/shared/store";
 import { enemyHoverSlice } from "@/client/store/enemy-hover";
+import { inventorySlice } from "@/client/store/inventory";
+import { loadingSlice } from "@/client/store/loading";
+import { slices } from "@/shared/store";
 
 export type RootStore = typeof store;
 export type RootState = InferState<RootStore>;
@@ -22,6 +23,7 @@ export function createStore() {
 		window: windowSlice,
 		inventory: inventorySlice,
 		enemyHover: enemyHoverSlice,
+		loading: loadingSlice,
 	});
 
 	store.applyMiddleware(devToolsMiddleware, receiverMiddleware(store));

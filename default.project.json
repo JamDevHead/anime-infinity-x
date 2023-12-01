@@ -39,6 +39,13 @@
 				"$path": "assets/public"
 			}
 		},
+		"ReplicatedFirst":
+		{
+			"$className": "ReplicatedFirst",
+			"setup": {
+				"$path": "out/setup"
+			}
+		},
 		"StarterPlayer": {
 			"$className": "StarterPlayer",
 			"StarterPlayerScripts": {

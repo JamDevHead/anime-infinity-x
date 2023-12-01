@@ -51,6 +51,7 @@ export function Text(props: TextProps) {
 			LayoutOrder={props.layoutOrder}
 			Change={props.change || {}}
 			Event={props.event || {}}
+			Rotation={props.rotation}
 		>
 			{props.cornerRadius && <uicorner key="corner" CornerRadius={props.cornerRadius} />}
 			{props.children}
