@@ -1,6 +1,6 @@
 import { OnStart, Service } from "@flamework/core";
 import { Logger } from "@rbxts/log";
-import { ReplicatedStorage, Workspace } from "@rbxts/services";
+import { Players, ReplicatedStorage, Workspace } from "@rbxts/services";
 import { OnCharacterAdd } from "@/server/services/lifecycles/on-character-add";
 import { OnPlayerAdd } from "@/server/services/lifecycles/on-player-add";
 import { store } from "@/server/store";
@@ -80,9 +80,16 @@ export class ZonesLoader implements OnStart, OnPlayerAdd, OnCharacterAdd {
 			}
 		}
 
+		const player = Players.GetPlayerFromCharacter(character);
+
+		store.setChangingZone(tostring(player?.UserId), true);
+
 		this.logger.Debug("Spawning {@player} on zone {zone}", character.GetFullName(), zoneName);
 
 		const spawnOffset = Vector3.yAxis.mul(3 + zone.Spawn.Size.Y / 2);
 		character.PivotTo(zone.Spawn.CFrame.add(spawnOffset));
+
+		//task.wait(1);
+		store.setChangingZone(tostring(player?.UserId), false);
 	}
 }

@@ -2,7 +2,7 @@ import Object from "@rbxts/object-utils";
 import Roact, { FunctionComponent } from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
 import { fonts } from "@/client/constants/fonts";
-import { useRootSelector } from "@/client/store";
+import { useRootSelector, useRootStore } from "@/client/store";
 import { Button } from "@/client/ui/components/button";
 import { CanvasGroup } from "@/client/ui/components/canvas-group";
 import { Frame } from "@/client/ui/components/frame";
@@ -111,6 +111,7 @@ export const Teleport = () => {
 	const userId = usePlayerId();
 
 	const zones = useRootSelector(selectPlayerZones(userId));
+	const dispatcher = useRootStore();
 
 	const unlockedZone = (zone: string) => {
 		if (zones !== undefined) {
@@ -142,6 +143,14 @@ export const Teleport = () => {
 					onClick={() => {
 						if (!unlockedZone(zone)) return;
 
+						dispatcher.setMaxProgress(100);
+						dispatcher.setProgress({
+							progress: 0,
+							status: "Loading zone...",
+						});
+						dispatcher.setLoading(true);
+
+						task.wait(1);
 						remotes.zone.teleport.fire(zone);
 					}}
 				/>

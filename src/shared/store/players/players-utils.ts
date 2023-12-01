@@ -23,6 +23,7 @@ export const defaultPlayerData = {
 	settings: {},
 	zones: {
 		current: "NRT",
+		changing: false,
 		unlocked: ["NRT"],
 	},
 } satisfies PlayerData;
