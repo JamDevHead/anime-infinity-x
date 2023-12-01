@@ -141,7 +141,7 @@ export const Teleport = () => {
 					image={background}
 					locked={!unlockedZone(zone)}
 					onClick={() => {
-						if (!unlockedZone(zone)) return;
+						if (!unlockedZone(zone) || zones?.current === zone.upper()) return;
 
 						dispatcher.setMaxProgress(100);
 						dispatcher.setProgress({
