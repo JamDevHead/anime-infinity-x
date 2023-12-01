@@ -49,4 +49,20 @@ export const zonesSlice = createProducer(initialState, {
 			},
 		};
 	},
+
+	setChangingZone: (state, playerId: string, changing: boolean) => {
+		const playerZones = state[playerId];
+
+		if (!playerZones) {
+			return state;
+		}
+
+		return {
+			...state,
+			[playerId]: {
+				...playerZones,
+				changing,
+			},
+		};
+	},
 });

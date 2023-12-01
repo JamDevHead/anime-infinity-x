@@ -132,6 +132,8 @@ export const Loading = () => {
 		if (internalProgress >= 1) {
 			task.wait(2);
 			dispatcher.setLoading(false);
+			setInternalProgress(0);
+			setActives(table.create(letters.size(), false));
 		}
 	}, [internalProgress, isLoading, progress, maxProgress]);
 

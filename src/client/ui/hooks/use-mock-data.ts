@@ -206,6 +206,7 @@ export const useMockData = (props?: MockDataProps): void => {
 			},
 			zones: {
 				current: "nrt",
+				changing: false,
 				unlocked: ["nrt", "aot"],
 			},
 			...props?.customData,

@@ -18,6 +18,7 @@ export interface PlayerBalance {
 
 export interface PlayerZones {
 	current: string | undefined;
+	changing: boolean;
 	unlocked: string[];
 }
 
