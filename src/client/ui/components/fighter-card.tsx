@@ -35,7 +35,7 @@ export const FighterCard: FunctionComponent<FighterCardProps> = ({ onClick, acti
 		>
 			<CanvasGroup size={UDim2.fromScale(1, 1)} cornerRadius={new UDim(0, 12)} backgroundTransparency={1}>
 				<Image
-					image={images.ui.cards.backgrounds[zone.lower() as keyof typeof images.ui.cards.backgrounds]}
+					image={images.ui.cards.backgrounds[zone?.lower() as keyof typeof images.ui.cards.backgrounds]}
 					size={UDim2.fromScale(1, 1)}
 				>
 					{active && (
