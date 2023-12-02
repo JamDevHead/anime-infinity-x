@@ -8,6 +8,7 @@ import { EnemyModel } from "@/shared/components/enemy-component";
 interface EnemyAttributes {
 	EnemyZone: string;
 	AllowedEnemies: string | undefined;
+	Type: "Boss" | "Level 1" | "Level 2" | "Level 3" | "Level 4" | undefined;
 }
 
 @Component({ tag: "EnemySpawner" })
@@ -39,7 +40,7 @@ export class Enemy extends BaseComponent<EnemyAttributes, Part> implements OnSta
 		}
 	}
 
-	getEnemy(): EnemyModel | undefined {
+	getEnemy(tries?: number): EnemyModel | undefined {
 		let enemies = this.enemiesZone?.GetChildren() ?? [];
 
 		if (this.attributes.AllowedEnemies !== undefined) {
@@ -49,15 +50,25 @@ export class Enemy extends BaseComponent<EnemyAttributes, Part> implements OnSta
 			);
 		}
 
+		if (this.attributes.Type !== undefined) {
+			enemies = enemies.filter((enemy) => enemy.GetAttribute("Type") === this.attributes.Type);
+		}
+
 		if (enemies.isEmpty()) {
 			this.logger.Debug("Enemy array list is empty");
 			return undefined;
 		}
 
-		const enemy = enemies[math.random(1, enemies.size())] as EnemyModel | undefined;
+		const enemy = enemies[math.random(enemies.size()) - 1] as EnemyModel | undefined;
 
 		if (!enemy) {
-			return this.getEnemy();
+			tries = tries ?? 0;
+
+			if (tries > 10) {
+				return;
+			}
+
+			return this.getEnemy(tries + 1);
 		}
 
 		return enemy;
