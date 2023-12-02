@@ -21,9 +21,9 @@ export const FighterCard: FunctionComponent<FighterCardProps> = ({ onClick, acti
 	const rem = useRem();
 
 	const headshots = images.characters.headshots as unknown as Record<string, Record<string, string>>;
-	const formattedHeadshot = headshot.split(" ").join("_").lower();
+	const formattedHeadshot = headshot?.split(" ").join("_").lower();
 
-	const zonePath = headshots[zone.lower()];
+	const zonePath = headshots[zone?.lower()];
 	const headshotElement = zonePath[formattedHeadshot];
 
 	return (
