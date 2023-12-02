@@ -24,7 +24,7 @@ export const FighterCard: FunctionComponent<FighterCardProps> = ({ onClick, acti
 	const formattedHeadshot = headshot?.split(" ").join("_").lower();
 
 	const zonePath = headshots[zone?.lower()];
-	const headshotElement = zonePath[formattedHeadshot];
+	const headshotElement = zonePath?.[formattedHeadshot];
 
 	return (
 		<Button
