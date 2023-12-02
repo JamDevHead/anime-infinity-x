@@ -67,6 +67,11 @@ export class Enemy extends EnemyComponent implements OnStart {
 	destroy() {
 		super.destroy();
 
+		if (!this.instance.FindFirstChild("HumanoidRootPart")) {
+			this.animationTracker.destroy();
+			return;
+		}
+
 		// Play death animation
 		this.animationTracker.swapAnimation("death");
 
@@ -86,9 +91,15 @@ export class Enemy extends EnemyComponent implements OnStart {
 
 			TweenService.Create(descendant, tweenInfo, propertyTable).Play();
 		});
+
+		this.animationTracker.destroy();
 	}
 
 	private hurt() {
+		if (!this.instance.FindFirstChild("HumanoidRootPart")) {
+			return;
+		}
+
 		// Play hurt animation
 		this.animationTracker.playAnimationTrack("hurt");
 
