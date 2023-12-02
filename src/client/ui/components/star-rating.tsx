@@ -71,6 +71,8 @@ export const StarRating: FunctionComponent<StarRatingProps> = ({ stars }) => {
 
 	const ratingColor = ratingColors[(stars ?? 0) - 1];
 
+	if (stars === undefined) return <></>;
+
 	return (
 		<Stack
 			fillDirection="Horizontal"
@@ -78,7 +80,7 @@ export const StarRating: FunctionComponent<StarRatingProps> = ({ stars }) => {
 			size={UDim2.fromScale(1, 1)}
 			padding={new UDim(0, rem(0.2))}
 		>
-			{stars !== undefined && stars <= 5 ? (
+			{stars <= 5 ? (
 				<>
 					{table.create(5, 0).map((_, index) => {
 						const active = index < stars;
