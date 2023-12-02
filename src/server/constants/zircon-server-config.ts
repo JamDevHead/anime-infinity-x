@@ -4,8 +4,15 @@ import { Print } from "@/shared/commands/print";
 
 export const ZirconServerConfig = ZirconConfigurationBuilder.default()
 	.CreateDefaultCreatorGroup()
-	.CreateDefaultUserGroup({
-		CanAccessConsole: true,
+	.CreateGroup(255, "Devs", (group) => {
+		return group
+			.SetPermissions({
+				CanAccessConsole: true,
+				CanRecieveServerLogMessages: true,
+				CanExecuteZirconiumScripts: true,
+				CanViewLogMetadata: true,
+			})
+			.BindToUserIds([3077902399, 78662128]);
 	})
-	.AddFunction(Print, ["User"])
-	.AddNamespace(new ZirconNamespaceBuilder("debug").AddFunction(EnableGizmos).Build(), ["User"]);
+	.AddFunction(Print, ["Devs"])
+	.AddNamespace(new ZirconNamespaceBuilder("debug").AddFunction(EnableGizmos).Build(), ["Devs"]);

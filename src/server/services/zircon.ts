@@ -11,6 +11,6 @@ export class Zircon implements OnInit {
 	onInit(): void | Promise<void> {
 		this.logger.Info("Zircon service initialized");
 
-		ZirconServer.Registry.Init(ZirconServerConfig.AddFunction(giveCommand, ["User"]).Build());
+		ZirconServer.Registry.Init(ZirconServerConfig.AddFunction(giveCommand, ["Devs"]).Build());
 	}
 }
