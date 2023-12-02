@@ -4,6 +4,7 @@ import { GetProfileStore } from "@rbxts/profileservice";
 import { Profile, ProfileStore } from "@rbxts/profileservice/globals";
 import { Players } from "@rbxts/services";
 import { OnPlayerAdd } from "@/server/services/lifecycles/on-player-add";
+import { loadPlayerData } from "@/server/services/profile-load/loaders";
 import { store } from "@/server/store";
 import { defaultPlayerData, PlayerData, selectPlayerData } from "@/shared/store/players";
 
@@ -40,6 +41,7 @@ export class ProfileLoad implements OnStart, OnPlayerAdd {
 
 		profile.AddUserId(player.UserId);
 		profile.Reconcile();
+		loadPlayerData(player, profile, this.logger);
 
 		const playerId = tostring(player.UserId);
 
