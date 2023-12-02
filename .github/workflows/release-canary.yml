@@ -35,6 +35,7 @@ jobs:
         run: yarn build:dev
         env:
           ROBLOSECURITY: ${{ secrets.ROBLOSECURITY }}
+          REMOTE_CONFIG_TOKEN: ${{ secrets.REMOTE_CONFIG_TOKEN }}
 
       - name: 📦 Upload place artifact
         uses: actions/upload-artifact@v3
@@ -62,3 +63,4 @@ jobs:
         run: mantle deploy --allow-purchases --environment canary
         env:
           ROBLOSECURITY: ${{ secrets.ROBLOSECURITY }}
+          REMOTE_CONFIG_TOKEN: ${{ secrets.REMOTE_CONFIG_TOKEN }}
