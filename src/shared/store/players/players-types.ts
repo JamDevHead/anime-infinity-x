@@ -1,5 +1,5 @@
 import { Boost } from "@/@types/models/boost";
-import { Mission } from "@/@types/models/mission";
+import { Mission } from "@/shared/store/players/missions";
 
 export interface PlayerData {
 	balance: PlayerBalance;
@@ -43,7 +43,7 @@ export interface PlayerFighter {
 }
 
 export interface PlayerMission {
-	all: Array<Mission>;
+	all: Mission[];
 	active: Mission | undefined;
 }
 
