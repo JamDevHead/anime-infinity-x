@@ -12,8 +12,8 @@ export function loadFighters(player: Player, profile: Profile<PlayerData>, logge
 	logger.Debug("Loading {player} data {@data}", player.Name, profile.Data);
 
 	for (const fighter of fighters.all) {
-		const fighterZone = fightersFolder.FindFirstChild(fighter?.zone);
-		const fighterModel = fighterZone?.FindFirstChild(fighter?.name);
+		const fighterZone = fighter !== undefined ? fightersFolder.FindFirstChild(fighter.zone) : undefined;
+		const fighterModel = fighter !== undefined ? fighterZone?.FindFirstChild(fighter.name) : undefined;
 
 		if (fighterModel) {
 			continue;
