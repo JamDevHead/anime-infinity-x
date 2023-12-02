@@ -30,6 +30,7 @@ export const Grid: FunctionComponent<PropsWithChildren<GridProps>> = (props) => 
 			event={props.event}
 			change={props.change}
 			autoSize={props.autoSize}
+			cornerRadius={props.cornerRadius}
 		>
 			<uigridlayout
 				CellSize={props.cellSize}

@@ -433,6 +433,11 @@ hash = "5e4d80d40e7c8b01b984c9004ab7e6c36388af133a6b2dcc27a99a2c88e09163"
 id = 15350028108
 packable = false
 
+[inputs."assets/images/ui/egg_background.png"]
+hash = "57337e9d46a405f1aa6e508663a266016c91b027a585d17598ac54ac16475aa4"
+id = 15517924709
+packable = false
+
 [inputs."assets/images/ui/hud_arrow.png"]
 hash = "40e4b7310260f1487b9dd649c32f5115e00be2702cd0e711605cc43abd0e1806"
 id = 15302522438

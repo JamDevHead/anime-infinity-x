@@ -115,6 +115,7 @@ return {
 			checkmark = "rbxassetid://15303998318",
 			click_effect = "rbxassetid://15515564911",
 			confirm_button = "rbxassetid://15350028108",
+			egg_background = "rbxassetid://15517924709",
 			hud_arrow = "rbxassetid://15302522438",
 			hud_bottom_curve = "rbxassetid://15278324050",
 			loading_screen = {

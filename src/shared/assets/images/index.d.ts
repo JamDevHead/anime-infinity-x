@@ -149,5 +149,6 @@ export const images: {
 		readonly option_background: string;
 		readonly shadow_star: string;
 		readonly click_effect: string;
+		readonly egg_background: string;
 	};
 };
