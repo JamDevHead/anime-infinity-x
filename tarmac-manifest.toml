@@ -218,6 +218,11 @@ hash = "81a9ecfebedeb5ea35dbbe802169b4ba9cf1a536ae4d6c5c27844d8eb61756d9"
 id = 15472590955
 packable = false
 
+[inputs."assets/images/icons/attack_cursor.png"]
+hash = "f757b8594469bbc27b0622c7133251a726faeca962e96449d48f2ee078405e39"
+id = 15523386254
+packable = false
+
 [inputs."assets/images/icons/backpack.png"]
 hash = "a66c56b4a9ce4e7aecf136fca0158744a01b5eefa18b1d9291f6f5f1cbb1d6d1"
 id = 15438096788

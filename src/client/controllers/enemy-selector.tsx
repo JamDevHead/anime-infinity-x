@@ -4,13 +4,14 @@ import { Logger } from "@rbxts/log";
 import { ReflexProvider } from "@rbxts/react-reflex";
 import { createRoot } from "@rbxts/react-roblox";
 import Roact, { StrictMode } from "@rbxts/roact";
-import { Players, Workspace } from "@rbxts/services";
+import { Players, UserInputService, Workspace } from "@rbxts/services";
 import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { OnInput } from "@/client/controllers/lifecycles/on-input";
 import { EnemyProvider } from "@/client/providers/enemy-provider";
 import { store } from "@/client/store";
 import { selectHoveredEnemy } from "@/client/store/enemy-hover";
 import { getMouseTarget } from "@/client/utils/mouse";
+import { images } from "@/shared/assets/images";
 import { EnemyComponent } from "@/shared/components/enemy-component";
 import remotes from "@/shared/remotes";
 import { selectSelectedEnemiesByPlayerId } from "@/shared/store/enemy-selection";
@@ -25,6 +26,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 	private root: Part | undefined;
 	private raycastParams = new RaycastParams();
 	private isActiveFightersEmpty = false;
+	private defaultCursorIcon = UserInputService.MouseIcon;
 
 	constructor(
 		private readonly logger: Logger,
@@ -73,10 +75,12 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 		const selectedEnemies = store.getState(selectSelectedEnemiesByPlayerId(this.localUserId));
 
 		if (hoveredEnemy !== undefined) {
+			UserInputService.MouseIcon = this.defaultCursorIcon;
 			store.removeHoveredEnemy();
 		}
 
 		if (enemy && !selectedEnemies?.includes(enemy.attributes.Guid)) {
+			UserInputService.MouseIcon = images.icons.attack_cursor;
 			store.setHoveredEnemy(enemy.attributes.Guid);
 		}
 	}

@@ -67,6 +67,7 @@ export const images: {
 			readonly stars_boost: string;
 			readonly strength_boost: string;
 		};
+		readonly attack_cursor: string;
 		readonly hand_click: string;
 		readonly sword_outline: string;
 		readonly rebirth: string;
