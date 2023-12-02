@@ -1,7 +1,7 @@
 import { Controller, OnStart } from "@flamework/core";
 import { Players, Workspace } from "@rbxts/services";
 import { store } from "@/client/store";
-import { selectPlayerZones } from "@/shared/store/players";
+import { PlayerZones, selectPlayerZones } from "@/shared/store/players";
 
 interface Zone extends Instance {
 	Map: Folder;
@@ -22,24 +22,39 @@ export class ZoneLoader implements OnStart {
 	private zonesFolder = Workspace.WaitForChild("Zones") as ZonesFolder;
 
 	onStart(): void {
-		store.subscribe(selectPlayerZones(tostring(this.player.UserId)), (zones, previousZone) => {
-			if (zones?.current === undefined || !this.player.Character || zones.current === previousZone?.current) {
-				return;
-			}
+		const selectLocalPlayerZones = selectPlayerZones(tostring(this.player.UserId));
 
-			const zone = this.zonesFolder.FindFirstChild(zones.current) as Zone | undefined;
-			if (!zone) {
-				return;
-			}
+		store.subscribe(selectLocalPlayerZones, (zones, previousZone) => this.onZoneChange(zones, previousZone));
 
-			const spawn = zone.WaitForChild("Spawn") as Part;
-			const cameraPosition = this.camera.CFrame.Position;
-			this.camera.CFrame = new CFrame(cameraPosition, cameraPosition.add(spawn.CFrame.LookVector));
+		const zones = store.getState(selectLocalPlayerZones);
 
-			store.setProgress({
-				progress: 100,
-				status: "Loaded zone!",
-			});
+		if (zones) {
+			this.onZoneChange(zones);
+		}
+	}
+
+	private onZoneChange(zones?: PlayerZones, previousZone?: PlayerZones) {
+		if (
+			zones?.current === undefined ||
+			!this.player.Character ||
+			// eslint-disable-next-line roblox-ts/lua-truthiness
+			(zones.current === previousZone?.current && !zones.changing)
+		) {
+			return;
+		}
+
+		const zone = this.zonesFolder.FindFirstChild(zones.current) as Zone | undefined;
+		if (!zone) {
+			return;
+		}
+
+		const spawn = zone.WaitForChild("Spawn") as Part;
+		const cameraPosition = this.camera.CFrame.Position;
+		this.camera.CFrame = new CFrame(cameraPosition, cameraPosition.add(spawn.CFrame.LookVector));
+
+		store.setProgress({
+			progress: 100,
+			status: "Loaded zone!",
 		});
 	}
 }
