@@ -9,9 +9,11 @@ export function loadFighters(player: Player, profile: Profile<PlayerData>, logge
 	const fighters = profile.Data.fighters;
 	const fightersToRemove = [] as string[];
 
+	logger.Debug("Loading {player} data {@data}", player.Name, profile.Data);
+
 	for (const fighter of fighters.all) {
-		const fighterZone = fightersFolder.FindFirstChild(fighter.zone);
-		const fighterModel = fighterZone?.FindFirstChild(fighter.name);
+		const fighterZone = fightersFolder.FindFirstChild(fighter?.zone);
+		const fighterModel = fighterZone?.FindFirstChild(fighter?.name);
 
 		if (fighterModel) {
 			continue;
