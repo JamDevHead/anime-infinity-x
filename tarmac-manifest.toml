@@ -423,6 +423,11 @@ hash = "35c6ffafd121ff50708a48cd67ea9fc0a5fbff63367c2d8e396bf45048f2c188"
 id = 15303998318
 packable = false
 
+[inputs."assets/images/ui/click_effect.png"]
+hash = "570e77ec6f95412ef181077b0accb781650708b16aefa8ce207576b497f19442"
+id = 15515564911
+packable = false
+
 [inputs."assets/images/ui/confirm_button.png"]
 hash = "5e4d80d40e7c8b01b984c9004ab7e6c36388af133a6b2dcc27a99a2c88e09163"
 id = 15350028108

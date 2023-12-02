@@ -113,6 +113,7 @@ return {
 			},
 			checkbox = "rbxassetid://15303998273",
 			checkmark = "rbxassetid://15303998318",
+			click_effect = "rbxassetid://15515564911",
 			confirm_button = "rbxassetid://15350028108",
 			hud_arrow = "rbxassetid://15302522438",
 			hud_bottom_curve = "rbxassetid://15278324050",

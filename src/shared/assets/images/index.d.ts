@@ -148,5 +148,6 @@ export const images: {
 		readonly option_toggle_off: string;
 		readonly option_background: string;
 		readonly shadow_star: string;
+		readonly click_effect: string;
 	};
 };
