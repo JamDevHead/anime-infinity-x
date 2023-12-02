@@ -1,6 +1,6 @@
 import { Logger } from "@rbxts/log";
 import { Profile } from "@rbxts/profileservice/globals";
-import { ReplicatedStorage } from "@rbxts/services";
+import { HttpService, ReplicatedStorage } from "@rbxts/services";
 import { PlayerData } from "@/shared/store/players";
 
 const fightersFolder = ReplicatedStorage.assets.Avatars.FightersModels;
@@ -9,6 +9,7 @@ export function loadFighters(player: Player, profile: Profile<PlayerData>, logge
 	const fighters = profile.Data.fighters;
 	const fightersToRemove = [] as string[];
 
+	print(`Loading ${player.Name} data ${HttpService.JSONEncode(profile.Data)})`);
 	logger.Debug("Loading {player} data {@data}", player.Name, profile.Data);
 
 	for (const fighter of fighters.all) {
