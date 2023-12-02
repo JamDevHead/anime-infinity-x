@@ -31,10 +31,42 @@ export class ZonesLoader implements OnStart, OnPlayerAdd, OnCharacterAdd {
 
 		const assets = ReplicatedStorage.assets;
 		const zones = assets.Zones;
+		const START_POSITION = Vector3.zero;
+		const ZONE_DIRECTION = Vector3.xAxis;
+		const ZONE_DISTANCE_MULTI = 3;
+		const zonesPosition = new Map<number, Vector3>();
+		let index = 0;
 
 		for (const zone of zones.GetChildren()) {
+			index++;
+
 			const clonedZone = zone.Clone();
-			clonedZone.Parent = this.zonesFolder;
+
+			// Transform zone folder to model, so we can position it
+			const zoneModel = new Instance("Model");
+			zoneModel.Name = zone.Name;
+
+			clonedZone.GetChildren().forEach((mapChild) => {
+				mapChild.Parent = zoneModel;
+			});
+
+			clonedZone.Destroy();
+
+			const [zoneCenter, zoneSize] = zoneModel.GetBoundingBox();
+			const zoneSizeInDirection = zoneSize.mul(new Vector3(1, 0, 1)).Magnitude * ZONE_DISTANCE_MULTI;
+
+			const lastGoal = zonesPosition.get(index - 1);
+			const goal =
+				lastGoal !== undefined
+					? lastGoal.add(ZONE_DIRECTION.mul(zoneSizeInDirection))
+					: ZONE_DIRECTION.mul(zoneSizeInDirection * index);
+
+			zonesPosition.set(index, goal);
+
+			zoneModel.WorldPivot = zoneCenter;
+			zoneModel.PivotTo(new CFrame(START_POSITION.add(goal)));
+
+			zoneModel.Parent = this.zonesFolder;
 		}
 	}
 
