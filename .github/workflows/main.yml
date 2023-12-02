@@ -34,3 +34,4 @@ jobs:
         run: yarn build:dev
         env:
           ROBLOSECURITY: ${{ secrets.ROBLOSECURITY }}
+          REMOTE_CONFIG_TOKEN: ${{ secrets.REMOTE_CONFIG_TOKEN }}
