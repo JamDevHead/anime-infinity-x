@@ -1,6 +1,6 @@
 import { Logger } from "@rbxts/log";
 import { Profile } from "@rbxts/profileservice/globals";
-import { HttpService, ReplicatedStorage } from "@rbxts/services";
+import { ReplicatedStorage } from "@rbxts/services";
 import { PlayerData } from "@/shared/store/players";
 
 const fightersFolder = ReplicatedStorage.assets.Avatars.FightersModels;
@@ -9,12 +9,11 @@ export function loadFighters(player: Player, profile: Profile<PlayerData>, logge
 	const fighters = profile.Data.fighters;
 	const fightersToRemove = [] as string[];
 
-	print(`Loading ${player.Name} data ${HttpService.JSONEncode(profile.Data)})`);
-	logger.Debug("Loading {player} data {@data}", player.Name, profile.Data);
+	logger.Info("Loading {player} data {@data}", player.Name, profile.Data);
 
 	for (const fighter of fighters.all) {
-		const fighterZone = fighter !== undefined ? fightersFolder.FindFirstChild(fighter.zone) : undefined;
-		const fighterModel = fighter !== undefined ? fighterZone?.FindFirstChild(fighter.name) : undefined;
+		const fighterZone = fighter?.zone === undefined ? fightersFolder.FindFirstChild(fighter.zone) : undefined;
+		const fighterModel = fighter?.name === undefined ? fighterZone?.FindFirstChild(fighter.name) : undefined;
 
 		if (fighterModel) {
 			continue;
@@ -24,11 +23,11 @@ export function loadFighters(player: Player, profile: Profile<PlayerData>, logge
 	}
 
 	if (fightersToRemove.size() === 0) {
-		logger.Debug(`Player ${player.Name} has no outdated fighters in it's data`);
+		logger.Info(`Player ${player.Name} has no outdated fighters in it's data`);
 		return;
 	}
 
-	logger.Debug(`Removing ${fightersToRemove.size()} outdated fighters from ${player.Name} ${player.UserId}`);
+	logger.Info(`Removing ${fightersToRemove.size()} outdated fighters from ${player.Name} ${player.UserId}`);
 
 	fightersToRemove.forEach((fighterUid) => {
 		profile.Data.fighters.all = fighters.all.filter((fighter) => fighter.uid !== fighterUid);
