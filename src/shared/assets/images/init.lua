@@ -68,6 +68,7 @@ return {
 			bolt = "rbxassetid://15472591107",
 			book = "rbxassetid://15489276385",
 			boost = "rbxassetid://15302168656",
+			boost_colored = "rbxassetid://15526460181",
 			boosts = {
 				coin_boost = "rbxassetid://15294309561",
 				lucky_boost = "rbxassetid://15294309649",
@@ -81,6 +82,7 @@ return {
 			filter = "rbxassetid://15434347314",
 			fish = "rbxassetid://15302657608",
 			gift = "rbxassetid://15303915072",
+			gift_colored = "rbxassetid://15526460295",
 			guide = "rbxassetid://15303915150",
 			hand_click = "rbxassetid://15277603766",
 			inventory = "rbxassetid://15303915192",

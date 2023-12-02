@@ -83,6 +83,21 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position })
 			>
 				<BindingButton text="Open" binding={Enum.KeyCode.E} size={UDim2.fromOffset(72, 72)} />
 				<BindingButton text="Auto" binding={Enum.KeyCode.Q} size={UDim2.fromOffset(72, 72)} />
+				<BindingButton
+					icon={images.icons.boost_colored}
+					color={"#132913"}
+					borderColor={"#65d666"}
+					iconRotation={45}
+					binding={Enum.KeyCode.R}
+					size={UDim2.fromOffset(72, 72)}
+				/>
+				<BindingButton
+					icon={images.icons.gift_colored}
+					color={"#291316"}
+					borderColor={"#e62e49"}
+					binding={Enum.KeyCode.T}
+					size={UDim2.fromOffset(72, 72)}
+				/>
 			</Stack>
 		</Frame>
 	);

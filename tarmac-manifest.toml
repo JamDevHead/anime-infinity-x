@@ -238,6 +238,11 @@ hash = "4a9465772537084ee3a7f595330e1ff07ef1ddbd1cccbc2fa32041ae3f02a413"
 id = 15302168656
 packable = false
 
+[inputs."assets/images/icons/boost_colored.png"]
+hash = "2c229f1f30baa970feede9074a02873c9cd7cfdf24b2f3f80741ee12ef71472f"
+id = 15526460181
+packable = false
+
 [inputs."assets/images/icons/boosts/coin_boost.png"]
 hash = "40b6b9d7d07abd48bc6e6a811533b877461bbc57ffd1cb5658b62e94a52afcd7"
 id = 15294309561
@@ -291,6 +296,11 @@ packable = false
 [inputs."assets/images/icons/gift.png"]
 hash = "8fbe6ca02e3d73ef74aa79dcab2514eef97e6c014a802e4296df2e9e56cd9ccf"
 id = 15303915072
+packable = false
+
+[inputs."assets/images/icons/gift_colored.png"]
+hash = "227c3b2a716b579c8dc6f345e29638a153d9800de6cfb97b17a157b89e471036"
+id = 15526460295
 packable = false
 
 [inputs."assets/images/icons/guide.png"]
