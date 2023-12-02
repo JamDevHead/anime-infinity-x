@@ -1,13 +1,13 @@
 import { Logger } from "@rbxts/log";
 import { Profile } from "@rbxts/profileservice/globals";
 import { ReplicatedStorage } from "@rbxts/services";
-import { PlayerData } from "@/shared/store/players";
+import { PlayerData, PlayerFighter } from "@/shared/store/players";
 
 const fightersFolder = ReplicatedStorage.assets.Avatars.FightersModels;
 
 export function loadFighters(player: Player, profile: Profile<PlayerData>, logger: Logger) {
 	const fighters = profile.Data.fighters;
-	const fightersToRemove = [] as string[];
+	const fightersToRemove = [] as PlayerFighter[];
 
 	logger.Info("Loading {player} data {@data}", player.Name, profile.Data);
 
@@ -19,7 +19,7 @@ export function loadFighters(player: Player, profile: Profile<PlayerData>, logge
 			continue;
 		}
 
-		fightersToRemove.push(fighter.uid);
+		fightersToRemove.push(fighter);
 	}
 
 	if (fightersToRemove.size() === 0) {
@@ -29,8 +29,14 @@ export function loadFighters(player: Player, profile: Profile<PlayerData>, logge
 
 	logger.Info(`Removing ${fightersToRemove.size()} outdated fighters from ${player.Name} ${player.UserId}`);
 
-	fightersToRemove.forEach((fighterUid) => {
-		profile.Data.fighters.all = fighters.all.filter((fighter) => fighter.uid !== fighterUid);
-		profile.Data.fighters.actives = fighters.actives.filter((fighter) => fighter !== fighterUid);
+	fightersToRemove.forEach((fighterToRemove) => {
+		profile.Data.fighters.all = fighters.all.filter((fighter) => {
+			if (fighterToRemove.uid !== undefined) {
+				return fighterToRemove.uid !== fighter.uid;
+			}
+
+			return fighterToRemove.name !== fighter.name;
+		});
+		profile.Data.fighters.actives = fighters.actives.filter((fighter) => fighter !== fighterToRemove.uid);
 	});
 }
