@@ -38,7 +38,7 @@ function HealthBar({
 	);
 }
 
-export function EnemyHealth({ enemy }: { enemy: Enemy | { humanoid: Humanoid } }) {
+export function EnemyHealth({ enemy }: { enemy: Enemy | { instance: Instance; humanoid: Humanoid } }) {
 	const humanoid = enemy.humanoid;
 	const [healthBar, healthBarMotion] = useMotion(UDim2.fromScale(1, 1));
 	const [healthBarBackground, healthBarBackgroundMotion] = useMotion(UDim2.fromScale(1, 1));
@@ -76,7 +76,7 @@ export function EnemyHealth({ enemy }: { enemy: Enemy | { humanoid: Humanoid } }
 				size={UDim2.fromScale(1, 1)}
 			>
 				<Text
-					text={"gamer text"}
+					text={enemy.instance.Name}
 					font={Font.fromName("SourceSansPro", Enum.FontWeight.Heavy)}
 					size={UDim2.fromScale(1, 0.4)}
 					textColor={colors.white}

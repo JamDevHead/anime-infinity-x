@@ -39,11 +39,11 @@ export = hoarcekat(() => {
 
 	return (
 		<>
-			{createPortal(<humanoid ref={humanoidRef} />, Workspace.Terrain)}
+			{createPortal(<humanoid key={"Gamer"} ref={humanoidRef} />, Workspace.Terrain)}
 			{humanoidRef.current &&
 				createPortal(
 					<part Archivable={false} Size={Vector3.one} Position={origin} Anchored={true}>
-						<EnemyHealth enemy={{ humanoid: humanoidRef.current }} />
+						<EnemyHealth enemy={{ humanoid: humanoidRef.current, instance: humanoidRef.current }} />
 					</part>,
 					Workspace.Terrain,
 				)}
