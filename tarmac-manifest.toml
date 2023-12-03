@@ -453,6 +453,16 @@ hash = "57337e9d46a405f1aa6e508663a266016c91b027a585d17598ac54ac16475aa4"
 id = 15517924709
 packable = false
 
+[inputs."assets/images/ui/enemy_health/health_bar_fill.png"]
+hash = "bd9fd4cfddbe764d00655aa2e6243884333e60d228ec432f1428e25d087fde33"
+id = 15536579441
+packable = false
+
+[inputs."assets/images/ui/enemy_health/health_bar_outline.png"]
+hash = "8f8dc4469a4743a182a185dcdce22d7e9674dd30eecaec4036fdcf70a1adf5ee"
+id = 15536579822
+packable = false
+
 [inputs."assets/images/ui/hud_arrow.png"]
 hash = "40e4b7310260f1487b9dd649c32f5115e00be2702cd0e711605cc43abd0e1806"
 id = 15302522438

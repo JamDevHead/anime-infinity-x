@@ -11,6 +11,7 @@ export interface ImageProps extends FrameProps<ImageLabel> {
 	sliceScale?: number | Roact.Binding<number>;
 	sliceCenter?: Rect | Roact.Binding<Rect>;
 	tileSize?: UDim2 | Roact.Binding<UDim2>;
+	sizeConstraint?: Roact.InferEnumNames<Enum.SizeConstraint>;
 }
 
 export function Image(props: ImageProps) {
@@ -39,6 +40,7 @@ export function Image(props: ImageProps) {
 			Event={props.event || {}}
 			Change={props.change || {}}
 			AutomaticSize={props.autoSize}
+			SizeConstraint={props.sizeConstraint || Enum.SizeConstraint.RelativeXY}
 		>
 			{props.cornerRadius && <uicorner key="corner" CornerRadius={props.cornerRadius} />}
 			{props.children}

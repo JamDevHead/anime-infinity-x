@@ -7,5 +7,6 @@ declare namespace JSX {
 		selectionbox: JSX.IntrinsicElement<SelectionBox>;
 		particleemitter: JSX.IntrinsicElement<ParticleEmitter>;
 		trail: JSX.IntrinsicElement<Trail>;
+		humanoid: JSX.IntrinsicElement<Humanoid>;
 	}
 }
