@@ -44,7 +44,7 @@ export interface PlayerFighter {
 
 export interface PlayerMission {
 	all: Mission[];
-	active: Mission | undefined;
+	active: string | undefined;
 }
 
 export interface PlayerBoosts {
