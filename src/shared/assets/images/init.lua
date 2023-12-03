@@ -119,6 +119,10 @@ return {
 			click_effect = "rbxassetid://15515564911",
 			confirm_button = "rbxassetid://15350028108",
 			egg_background = "rbxassetid://15517924709",
+			enemy_health = {
+				health_bar_fill = "rbxassetid://15536579441",
+				health_bar_outline = "rbxassetid://15536579822",
+			},
 			hud_arrow = "rbxassetid://15302522438",
 			hud_bottom_curve = "rbxassetid://15278324050",
 			loading_screen = {

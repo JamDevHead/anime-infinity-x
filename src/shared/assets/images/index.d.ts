@@ -130,6 +130,10 @@ export const images: {
 				readonly Y: string;
 			};
 		};
+		readonly enemy_health: {
+			health_bar_fill: string;
+			health_bar_outline: string;
+		};
 		readonly blur: string;
 		readonly rounded_button_base: string;
 		readonly attack_button_base: string;

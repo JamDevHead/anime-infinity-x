@@ -7,6 +7,8 @@ export interface TextProps<T extends Instance = TextLabel> extends FrameProps<T>
 	font?: Font;
 	text?: string | Roact.Binding<string>;
 	textColor?: Color3 | Roact.Binding<Color3>;
+	textStroke?: Color3 | Roact.Binding<Color3>;
+	textStrokeTransparency?: number | Roact.Binding<number>;
 	textSize?: number | Roact.Binding<number>;
 	textTransparency?: number | Roact.Binding<number>;
 	textWrapped?: boolean | Roact.Binding<boolean>;
@@ -29,6 +31,8 @@ export function Text(props: TextProps) {
 			FontFace={props.font || fonts.inter.regular}
 			Text={props.text}
 			TextColor3={props.textColor}
+			TextStrokeColor3={props.textStroke}
+			TextStrokeTransparency={props.textStrokeTransparency}
 			TextSize={props.textSize ?? rem(1)}
 			TextTransparency={props.textTransparency}
 			TextWrapped={props.textWrapped}
