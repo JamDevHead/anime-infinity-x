@@ -37,7 +37,7 @@ export const RightSideHud = () => {
 								.filter((mission) => mission.completed === true)
 								.size()}/${playerMissions?.all.size()}`}
 						/>
-						<MissionHud.Title text={playerMissions?.all[0] ? playerMissions?.all[0].title : "None"} />
+						<MissionHud.Title text={playerMissions?.all[0]?.title ?? "None"} />
 						<MissionHud.MissionIcon />
 					</MissionHud.Card>
 				</MissionHud.CardRoot>
