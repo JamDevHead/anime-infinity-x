@@ -30,6 +30,7 @@ export interface PlayerFighters {
 export interface PlayerFighter {
 	zone: string;
 	uid: string;
+	characterUid: string;
 	name: string;
 	displayName: string;
 	stats: {

@@ -1,5 +1,7 @@
 import { useEffect } from "@rbxts/roact";
+import { ReplicatedStorage } from "@rbxts/services";
 import { store } from "@/client/store";
+import { PlayerFighter } from "@/shared/store/players";
 import { defaultPlayerData } from "@/shared/store/players/players-utils";
 
 type MockDataProps = {
@@ -26,6 +28,26 @@ type MockDataProps = {
  */
 export const useMockData = (props?: MockDataProps): void => {
 	useEffect(() => {
+		const fightersModels = ReplicatedStorage.assets.Avatars.FightersModels.GetChildren();
+		const randomZone = fightersModels[math.random(fightersModels.size()) - 1];
+		const fightersData = randomZone.GetChildren().map((fighterModel, index) => {
+			return {
+				uid: tostring(index),
+				characterUid: tostring(index + 1000),
+				name: fighterModel.Name,
+				displayName: fighterModel.Name,
+				stats: {
+					damage: 10,
+					dexterity: 10,
+					level: 1,
+					xp: 0,
+					sellPrice: 0,
+				},
+				rarity: 1,
+				zone: randomZone.Name,
+			} satisfies PlayerFighter;
+		});
+
 		store.loadPlayerData("1", {
 			...defaultPlayerData,
 			balance: {
@@ -33,107 +55,8 @@ export const useMockData = (props?: MockDataProps): void => {
 				stars: 10000000,
 			},
 			fighters: {
-				all: [
-					{
-						uid: "1",
-						name: "Naro",
-						displayName: "Naro",
-						stats: {
-							damage: 10,
-							dexterity: 10,
-							level: 1,
-							xp: 0,
-							sellPrice: 0,
-						},
-						rarity: 1,
-						zone: "nrt",
-					},
-					{
-						uid: "2",
-						name: "Colossal",
-						displayName: "Colossal",
-						stats: {
-							damage: 10,
-							dexterity: 10,
-							level: 1,
-							xp: 0,
-							sellPrice: 0,
-						},
-						rarity: 2,
-						zone: "aot",
-					},
-					{
-						uid: "3",
-						name: "Gyo",
-						displayName: "Gyo",
-						stats: {
-							damage: 10,
-							dexterity: 10,
-							level: 1,
-							xp: 0,
-							sellPrice: 0,
-						},
-						rarity: 3,
-						zone: "dms",
-					},
-					{
-						uid: "4",
-						name: "Geku",
-						displayName: "Geku",
-						stats: {
-							damage: 10,
-							dexterity: 10,
-							level: 1,
-							xp: 0,
-							sellPrice: 0,
-						},
-						rarity: 4,
-						zone: "dbz",
-					},
-					{
-						uid: "5",
-						name: "Luffo",
-						displayName: "Luffo",
-						stats: {
-							damage: 10,
-							dexterity: 10,
-							level: 1,
-							xp: 0,
-							sellPrice: 0,
-						},
-						rarity: 5,
-						zone: "one",
-					},
-					{
-						uid: "6",
-						name: "Sho",
-						displayName: "Sho",
-						stats: {
-							damage: 10,
-							dexterity: 10,
-							level: 1,
-							xp: 0,
-							sellPrice: 0,
-						},
-						rarity: 6,
-						zone: "tkr",
-					},
-					{
-						uid: "7",
-						name: "Naro",
-						displayName: "Naro",
-						stats: {
-							damage: 10,
-							dexterity: 10,
-							level: 1,
-							xp: 0,
-							sellPrice: 0,
-						},
-						rarity: 7,
-						zone: "nrt",
-					},
-				],
-				actives: ["1", "3", "5"],
+				all: fightersData,
+				actives: fightersData.map((fighter) => fighter.uid),
 			},
 			missions: {
 				all: table.create(5, false).map((_, index) => ({
