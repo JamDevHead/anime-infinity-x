@@ -1,4 +1,4 @@
-import { OnStart, Service } from "@flamework/core";
+import { Service } from "@flamework/core";
 import Object from "@rbxts/object-utils";
 import { Trove } from "@rbxts/trove";
 import { Missions } from "@/server/constants/missions";
@@ -8,12 +8,8 @@ import { Mission } from "@/shared/store/players/missions";
 import { selectAllPlayerMissions } from "@/shared/store/players/missions/missions-selectors";
 
 @Service()
-export class MissionGenerator implements OnPlayerAdd, OnStart {
+export class MissionGenerator implements OnPlayerAdd {
 	private playerTroves = new Map<Player, Trove>();
-
-	onStart() {
-		print("Missions", Missions);
-	}
 
 	onPlayerAdded(player: Player) {
 		const trove = new Trove();
