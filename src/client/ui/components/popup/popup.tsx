@@ -1,5 +1,5 @@
 import { useMountEffect } from "@rbxts/pretty-react-hooks";
-import Roact, { FunctionComponent, PropsWithChildren } from "@rbxts/roact";
+import Roact, { createContext, FunctionComponent, PropsWithChildren, useContext } from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
 import { fonts } from "@/client/constants/fonts";
 import { springs } from "@/client/constants/springs";
@@ -9,28 +9,51 @@ import { Frame } from "@/client/ui/components/frame";
 import { Stack } from "@/client/ui/components/stack";
 import { Text } from "@/client/ui/components/text";
 import { useMotion } from "@/client/ui/hooks/use-motion";
+import { useRem } from "@/client/ui/hooks/use-rem";
 
 type ActionButtonProps = {
 	text: string;
 	onClick?: () => void;
 	size?: UDim2;
+	preventClose?: boolean;
 };
 
-const ActionButton: FunctionComponent<ActionButtonProps> = ({ text, onClick, size }) => {
+const PopupContext = createContext<{
+	onClose?: () => void;
+}>({});
+
+const ActionButton: FunctionComponent<ActionButtonProps> = ({ text, onClick, preventClose, size }) => {
+	const rem = useRem();
+	const { onClose } = useContext(PopupContext);
+
 	return (
 		<Button
 			autoSize="XY"
 			backgroundColor={Color3.fromRGB(255, 255, 255)}
-			onClick={onClick}
+			onClick={() => {
+				onClick?.();
+				if (!preventClose) {
+					onClose?.();
+				}
+			}}
 			cornerRadius={new UDim(1, 0)}
 			size={size}
 		>
-			<Text text={text} textSize={12} textColor={colors.black} font={fonts.gotham.bold} textAutoResize="XY" />
+			<Text
+				text={text}
+				textSize={rem(16, "pixel")}
+				textColor={colors.black}
+				font={fonts.gotham.bold}
+				textAutoResize="XY"
+				size={UDim2.fromScale(1, 1)}
+				textXAlignment={"Center"}
+				textYAlignment={"Center"}
+			/>
 			<uipadding
-				PaddingLeft={new UDim(0, 16)}
-				PaddingRight={new UDim(0, 16)}
-				PaddingTop={new UDim(0, 12)}
-				PaddingBottom={new UDim(0, 12)}
+				PaddingLeft={new UDim(0, rem(24, "pixel"))}
+				PaddingRight={new UDim(0, rem(24, "pixel"))}
+				PaddingTop={new UDim(0, rem(12, "pixel"))}
+				PaddingBottom={new UDim(0, rem(12, "pixel"))}
 			/>
 		</Button>
 	);
@@ -83,7 +106,20 @@ type TitleProps = {
 };
 
 const Title: FunctionComponent<TitleProps> = ({ text }) => {
-	return <Text text={text} textColor={colors.white} font={fonts.gotham.bold} textSize={24} textAutoResize="XY" />;
+	const rem = useRem();
+
+	return (
+		<Text
+			text={text}
+			textColor={colors.white}
+			font={fonts.gotham.bold}
+			textSize={rem(24, "pixel")}
+			textWrapped
+			size={UDim2.fromScale(1, 0.4)}
+			autoSize="XY"
+			textAutoResize="Y"
+		/>
+	);
 };
 
 type DescriptionProps = {
@@ -91,45 +127,96 @@ type DescriptionProps = {
 };
 
 const Description: FunctionComponent<DescriptionProps> = ({ text }) => {
-	return <Text text={text} textColor={colors.white} font={fonts.gotham.medium} textSize={16} textAutoResize="XY" />;
+	const rem = useRem();
+
+	return (
+		<Text
+			text={text}
+			textColor={colors.white}
+			font={fonts.gotham.medium}
+			textWrapped
+			textSize={rem(16, "pixel")}
+			size={UDim2.fromScale(1, 0)}
+			autoSize="Y"
+			//textAutoResize="XY"
+		/>
+	);
 };
 
 type RootProps = {
 	size?: UDim2;
 	color?: Color3;
+	gradient?: ColorSequence;
+	onClose?: () => void;
 };
 
-const Root: FunctionComponent<PropsWithChildren<RootProps>> = ({ children, size, color }) => {
+const Root: FunctionComponent<PropsWithChildren<RootProps>> = ({ children, size, color, gradient, onClose }) => {
+	const rem = useRem();
 	const [scale, setScale] = useMotion(0.1);
 	const [animatedTransparency, setAnimatedTransparency] = useMotion(1);
+	const [backdropTransparency, setBackdropTransparency] = useMotion(1);
 
 	useMountEffect(() => {
 		setAnimatedTransparency.spring(0);
-		setScale.spring(1, springs.responsive);
+		setBackdropTransparency.spring(0.5);
+		setScale.spring(1, {
+			...springs.responsive,
+			damping: 1,
+		});
 	});
 
 	return (
-		<CanvasGroup
-			position={UDim2.fromScale(0.5, 0.5)}
-			anchorPoint={new Vector2(0.5, 0.5)}
-			cornerRadius={new UDim(0.2, 8)}
-			autoSize="XY"
-			size={size}
-			backgroundTransparency={1}
-			groupTransparency={animatedTransparency}
+		<PopupContext.Provider
+			value={{
+				onClose: () => {
+					setAnimatedTransparency.spring(1);
+					setBackdropTransparency.spring(1);
+					setScale.spring(0.1, springs.responsive);
+					setScale.onComplete(() => {
+						onClose?.();
+					});
+				},
+			}}
 		>
-			<Frame size={UDim2.fromScale(1, 1)} cornerRadius={new UDim(0.2, 8)} backgroundColor={color ?? colors.black}>
-				{children}
+			<Button
+				size={UDim2.fromScale(1, 1)}
+				backgroundTransparency={backdropTransparency}
+				backgroundColor={colors.black}
+				zIndex={1}
+				onClick={() => {
+					setAnimatedTransparency.spring(1);
+					setBackdropTransparency.spring(1);
+					setScale.spring(0.1, springs.responsive);
+					setScale.onComplete(() => {
+						onClose?.();
+					});
+				}}
+			/>
+			<CanvasGroup
+				position={UDim2.fromScale(0.5, 0.5)}
+				anchorPoint={new Vector2(0.5, 0.5)}
+				cornerRadius={new UDim(0, 12)}
+				autoSize="XY"
+				size={size}
+				backgroundTransparency={1}
+				groupTransparency={animatedTransparency}
+				zIndex={2}
+			>
+				<Frame size={UDim2.fromScale(1, 1)} backgroundColor={color ?? !gradient ? colors.black : colors.white}>
+					{children}
 
-				<uipadding
-					PaddingLeft={new UDim(0, 16)}
-					PaddingRight={new UDim(0, 16)}
-					PaddingTop={new UDim(0, 16)}
-					PaddingBottom={new UDim(0, 16)}
-				/>
-			</Frame>
-			<uiscale Scale={scale} />
-		</CanvasGroup>
+					{gradient && <uigradient Rotation={90} Color={gradient} />}
+
+					<uipadding
+						PaddingLeft={new UDim(0, rem(16, "pixel"))}
+						PaddingRight={new UDim(0, rem(16, "pixel"))}
+						PaddingTop={new UDim(0, rem(16, "pixel"))}
+						PaddingBottom={new UDim(0, rem(16, "pixel"))}
+					/>
+				</Frame>
+				<uiscale Scale={scale} />
+			</CanvasGroup>
+		</PopupContext.Provider>
 	);
 };
 

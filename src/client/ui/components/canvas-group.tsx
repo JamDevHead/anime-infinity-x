@@ -22,6 +22,7 @@ export const CanvasGroup = forwardRef((props: CanvasGroupProps, ref: Ref<CanvasG
 			Visible={props.visible}
 			ZIndex={props.zIndex}
 			LayoutOrder={props.layoutOrder}
+			AutomaticSize={props.autoSize}
 			BorderSizePixel={0}
 			Event={props.event || {}}
 			Change={props.change || {}}

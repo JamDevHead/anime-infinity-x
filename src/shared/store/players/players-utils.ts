@@ -1,3 +1,4 @@
+import { $git } from "rbxts-transform-debug";
 import { PlayerData } from "@/shared/store/players/players-types";
 
 export const defaultPlayerData = {
@@ -25,5 +26,9 @@ export const defaultPlayerData = {
 		current: "NRT",
 		changing: false,
 		unlocked: ["NRT"],
+	},
+	info: {
+		firstTime: true,
+		version: $git("Commit").Commit,
 	},
 } satisfies PlayerData;

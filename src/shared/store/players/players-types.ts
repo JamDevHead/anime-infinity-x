@@ -9,6 +9,7 @@ export interface PlayerData {
 	boosts: PlayerBoosts;
 	settings: Record<string, boolean | number>;
 	zones: PlayerZones;
+	info: PlayerInfo;
 }
 
 export interface PlayerBalance {
@@ -38,7 +39,7 @@ export interface PlayerFighter {
 		dexterity: number;
 		level: number;
 		xp: number;
-		sellPrice: number;
+		sellPrice?: number;
 	};
 	rarity: number;
 }
@@ -55,4 +56,9 @@ export interface PlayerBoosts {
 export interface PlayerInventory {
 	maxStorage: number;
 	maxFighters: number;
+}
+
+export interface PlayerInfo {
+	firstTime: boolean;
+	version: string;
 }

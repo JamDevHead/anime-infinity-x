@@ -14,6 +14,10 @@ export const Windows: Record<string, Window> = {
 	teleport: {
 		title: "Teleport",
 	},
+	chooseFighter: {
+		title: "Choose Fighter",
+		size: UDim2.fromScale(0.6, 0.6),
+	},
 };
 
 export type WindowName = keyof typeof Windows;

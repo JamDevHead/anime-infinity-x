@@ -34,6 +34,10 @@ const remotes = createRemotes({
 	zone: namespace({
 		teleport: remote<Server, [zone: string]>(),
 	}),
+
+	firstTime: namespace({
+		select: remote<Server, [fighterName: string]>(),
+	}),
 });
 
 export default remotes;
