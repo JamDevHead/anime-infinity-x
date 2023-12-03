@@ -64,7 +64,16 @@ export function EnemyHealth({ enemy }: { enemy: Enemy | { instance: Instance; hu
 			});
 		});
 
+		const startingRatio = humanoid.Health / humanoid.MaxHealth;
 		setHealth(`${humanoid.Health}/${humanoid.MaxHealth}`);
+
+		healthBarMotion.spring(UDim2.fromScale(startingRatio, 1), springs.responsive);
+		task.delay(0.25, () => {
+			healthBarBackgroundMotion.spring(UDim2.fromScale(startingRatio, 1), {
+				...springs.responsive,
+				damping: 2,
+			});
+		});
 
 		return () => connection.Disconnect();
 	}, [healthBarBackgroundMotion, healthBarMotion, humanoid]);
