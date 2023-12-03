@@ -131,7 +131,7 @@ export class FighterModel
 		const root = this.humanoid.RootPart;
 		const distance = root.Position.sub(this.lastFighterPosition).Magnitude;
 
-		this.fighterVelocity = distance > 0.15 ? distance / dt : 0;
+		this.fighterVelocity = distance > 0.15 ? distance / math.max(dt, 0.02) : 0;
 		this.lastFighterPosition = root.Position;
 
 		const isFalling = !this.isGrounded();
