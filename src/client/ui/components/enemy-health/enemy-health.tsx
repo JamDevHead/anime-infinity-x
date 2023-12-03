@@ -57,7 +57,7 @@ export function EnemyHealth({ enemy }: { enemy: Enemy | { instance: Instance; hu
 
 			setHealth(`${currentHealth}/${maxHealth}`);
 			healthBarMotion.spring(UDim2.fromScale(newRatio, 1), springs.responsive);
-			task.wait(0.4);
+			task.wait(0.25);
 			healthBarBackgroundMotion.spring(UDim2.fromScale(currentRatio, 1), {
 				...springs.responsive,
 				damping: 2,
