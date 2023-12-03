@@ -1,6 +1,5 @@
-import { HttpService } from "@rbxts/services";
 import { ZirconEnumBuilder, ZirconFunctionBuilder } from "@rbxts/zircon";
-import { store } from "@/server/store";
+import { addFighterFor } from "@/server/utils/fighters";
 
 const ItemType = new ZirconEnumBuilder("ItemType").FromArray(["fighter", "item"]);
 
@@ -10,8 +9,7 @@ export const giveCommand = new ZirconFunctionBuilder("give")
 	.AddArgument("string", "Item id")
 	.AddArgument("unknown")
 	.Bind((context, itemType, entityName, ...args) => {
-		const playerId = context.GetExecutor().UserId;
-		const uuid = HttpService.GenerateGUID(false);
+		const player = context.GetExecutor();
 
 		itemType.match({
 			item: () => {
@@ -25,7 +23,7 @@ export const giveCommand = new ZirconFunctionBuilder("give")
 					return;
 				}
 
-				store.addFighter(tostring(playerId), uuid, {
+				addFighterFor(player, {
 					displayName: entityName,
 					name: entityName,
 					zone: zone.upper(),
@@ -38,7 +36,8 @@ export const giveCommand = new ZirconFunctionBuilder("give")
 					},
 					rarity: 1,
 				});
-				context.LogInfo(`Giving fighter ${entityName} to player ${playerId}`);
+
+				context.LogInfo(`Giving fighter ${entityName} to ${player.Name} ${player.UserId}`);
 			},
 		});
 	});
