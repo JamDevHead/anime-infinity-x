@@ -42,6 +42,7 @@ export class FighterModel
 	private fighterVelocity = 0;
 	private collidableParts = new Set<BasePart>();
 	private raycastParams = new RaycastParams();
+	private currentState: Enum.HumanoidStateType = Enum.HumanoidStateType.None;
 	private fighterStun = 0;
 	private attackState = 1;
 
@@ -142,21 +143,37 @@ export class FighterModel
 			return;
 		}
 
+		let newState = this.currentState;
+
 		switch (true) {
 			case isJumping:
-				animationTracker.swapAnimation("jump");
+				if (newState !== Enum.HumanoidStateType.Jumping) {
+					newState = Enum.HumanoidStateType.Jumping;
+					animationTracker.swapAnimation("jump");
+				}
 				break;
 			case isFalling:
-				animationTracker.swapAnimation("fall");
+				if (newState !== Enum.HumanoidStateType.FallingDown) {
+					newState = Enum.HumanoidStateType.FallingDown;
+					animationTracker.swapAnimation("fall");
+				}
 				break;
 			case isRunning:
-				animationTracker.getAnimationTrack("run")?.AdjustSpeed(this.fighterVelocity / 16);
-				animationTracker.swapAnimation("run");
+				if (newState !== Enum.HumanoidStateType.Running) {
+					newState = Enum.HumanoidStateType.Running;
+					animationTracker.getAnimationTrack("run")?.AdjustSpeed(this.fighterVelocity / 16);
+					animationTracker.swapAnimation("run");
+				}
 				break;
 			default:
-				animationTracker.swapAnimation("idle");
+				if (newState !== Enum.HumanoidStateType.Landed) {
+					newState = Enum.HumanoidStateType.Landed;
+					animationTracker.swapAnimation("idle");
+				}
 				break;
 		}
+
+		this.currentState = newState;
 	}
 
 	destroy() {
