@@ -53,6 +53,7 @@
     "@rbxts/log": "^0.6.3",
     "@rbxts/pretty-react-hooks": "^0.3.3",
     "@rbxts/profileservice": "^1.4.2",
+    "@rbxts/rbxts-hashlib": "^1.0.2",
     "@rbxts/react-reflex": "^0.2.0",
     "@rbxts/react-roblox": "^0.2.0",
     "@rbxts/reflex": "^4.2.2",

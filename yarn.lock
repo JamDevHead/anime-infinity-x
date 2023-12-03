@@ -1351,6 +1351,11 @@
   resolved "https://registry.yarnpkg.com/@rbxts/promise-forward/-/promise-forward-1.0.5.tgz#d7ca6f9617bf5eec20b7102e03ae434eed526312"
   integrity sha512-FrL3pIQDbRD1hKsUNH1Fwwd5jOuqU0vzKQI4Xo96AqzizYc4fb6vDkUg9Iq+IFki6FVlFvPN+YnvkCxGMjJw4Q==
 
+"@rbxts/rbxts-hashlib@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@rbxts/rbxts-hashlib/-/rbxts-hashlib-1.0.2.tgz#4a3ac60bfc45df5c8574359fef4b4c6aa1de69d7"
+  integrity sha512-AmczMFYxiVJbpWymYr1M5RemSOFagLg/TLJBY8RjK4Vg1gR0B8vI6E6+iOD5QmuFe849nBnEKHZ+uF/KSc5huA==
+
 "@rbxts/react-internal@^0.2.2":
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/@rbxts/react-internal/-/react-internal-0.2.2.tgz#f22dff4725f5d5611553ef396d3138b775206d14"
