@@ -8,7 +8,7 @@ import { RootProvider } from "@/client/ui/providers/root-provider";
 export = hoarcekat(() => {
 	return (
 		<RootProvider>
-			<Window title={Windows.chooseFighter.title} size={Windows.chooseFighter.size}>
+			<Window title={Windows.chooseFighter.title} size={Windows.chooseFighter.size} hiddenClose>
 				<ChooseFighter />
 			</Window>
 		</RootProvider>
