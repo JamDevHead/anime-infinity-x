@@ -29,7 +29,7 @@ const animationMap = {
 @Component({ tag: "Fighter" })
 export class FighterModel
 	extends BaseComponent<NonNullable<unknown>, IFighterModel>
-	implements OnStart, OnRender, OnPhysics
+	implements OnStart, OnPhysics, OnRender
 {
 	public fighterGoal!: FighterGoal;
 
@@ -39,7 +39,6 @@ export class FighterModel
 	private animationTracker = new AnimationTracker(this.animator, animationMap);
 	private trove = new Trove();
 	private lastFighterPosition = Vector3.zero;
-	private fighterVelocity = 0;
 	private collidableParts = new Set<BasePart>();
 	private raycastParams = new RaycastParams();
 	private currentState: Enum.HumanoidStateType = Enum.HumanoidStateType.None;
@@ -129,14 +128,15 @@ export class FighterModel
 		this.instance.PivotTo(this.fighterGoal.fighterPart.CFrame);
 
 		const root = this.humanoid.RootPart;
-		const distance = root.Position.sub(this.lastFighterPosition).Magnitude;
+		const rootDisplacement = root.Position.sub(this.lastFighterPosition);
+		const rootVelocity = rootDisplacement.div(dt);
+		const speed = rootVelocity.Magnitude;
 
-		this.fighterVelocity = distance > 0.15 ? distance / math.max(dt, 0.02) : 0;
 		this.lastFighterPosition = root.Position;
 
 		const isFalling = !this.isGrounded();
 		const isJumping = humanoid.Jump && this.fighterGoal.currentEnemy === undefined;
-		const isRunning = this.fighterVelocity > 0.2;
+		const isRunning = speed > 0.2;
 		const animationTracker = this.animationTracker;
 
 		if (animationTracker.isAnimationPlaying("soco1") || animationTracker.isAnimationPlaying("soco2")) {
@@ -161,7 +161,7 @@ export class FighterModel
 			case isRunning:
 				if (newState !== Enum.HumanoidStateType.Running) {
 					newState = Enum.HumanoidStateType.Running;
-					animationTracker.getAnimationTrack("run")?.AdjustSpeed(this.fighterVelocity / 16);
+					animationTracker.getAnimationTrack("run")?.AdjustSpeed(speed / 16);
 					animationTracker.swapAnimation("run");
 				}
 				break;
