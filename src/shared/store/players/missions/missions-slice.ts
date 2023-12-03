@@ -51,10 +51,18 @@ export const missionsSlice = createProducer(initialState, {
 		};
 	},
 
+	clearMissions: (state, playerId: string) => ({
+		...state,
+		[playerId]: {
+			all: [],
+			active: undefined,
+		},
+	}),
+
 	addTask: (state, playerId: string, missionId: Mission["id"], task: Task) => {
 		const playerMissions = state[playerId];
 
-		if (!playerMissions) {
+		if (!playerMissions || playerMissions.all.find((mission) => mission.id === missionId)) {
 			return state;
 		}
 
@@ -79,7 +87,7 @@ export const missionsSlice = createProducer(initialState, {
 	removeTask: (state, playerId: string, missionId: Mission["id"], taskId: Task["id"]) => {
 		const playerMissions = state[playerId];
 
-		if (!playerMissions) {
+		if (!playerMissions || !playerMissions.all.find((mission) => mission.id === missionId)) {
 			return state;
 		}
 
