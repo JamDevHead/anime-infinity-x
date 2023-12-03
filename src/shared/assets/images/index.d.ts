@@ -72,6 +72,7 @@ export const images: {
 		readonly sword_outline: string;
 		readonly rebirth: string;
 		readonly boost: string;
+		readonly boost_colored: string;
 		readonly inventory: string;
 		readonly settings: string;
 		readonly twitter: string;
@@ -82,6 +83,7 @@ export const images: {
 		readonly star: string;
 		readonly characters: string;
 		readonly gift: string;
+		readonly gift_colored: string;
 		readonly guide: string;
 		readonly store: string;
 		readonly search: string;
@@ -150,5 +152,6 @@ export const images: {
 		readonly option_background: string;
 		readonly shadow_star: string;
 		readonly click_effect: string;
+		readonly egg_background: string;
 	};
 };
