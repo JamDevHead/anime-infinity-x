@@ -2,7 +2,7 @@ import { hoarcekat, useCamera, useEventListener, useUpdate } from "@rbxts/pretty
 import { createPortal } from "@rbxts/react-roblox";
 import Roact, { useRef } from "@rbxts/roact";
 import { RunService, Workspace } from "@rbxts/services";
-import { EnemyHealth } from "@/client/ui/components/enemy-health/enemy-health";
+import { EnemyHealth } from "@/client/components/react/enemy-health/enemy-health";
 
 export = hoarcekat(() => {
 	const camera = useCamera();

@@ -1,6 +1,9 @@
 import { Component, Components } from "@flamework/components";
 import { OnStart } from "@flamework/core";
+import { createPortal, createRoot, Root } from "@rbxts/react-roblox";
+import Roact from "@rbxts/roact";
 import { ReplicatedStorage, TweenService } from "@rbxts/services";
+import { EnemyHealth } from "@/client/components/react/enemy-health/enemy-health";
 import { SoundController } from "@/client/controllers/sound-controller";
 import { store } from "@/client/store";
 import { getFighterByUid } from "@/client/utils/fighters";
@@ -20,6 +23,7 @@ export class Enemy extends EnemyComponent implements OnStart {
 	private animationTracker = new AnimationTracker(this.animator, animationMap);
 	private hurtHighlight = new Instance("Highlight");
 	private hurtParticle = new Instance("Part") as Part & { Particle: ParticleEmitter };
+	private healthComponentRoot?: Root;
 
 	constructor(
 		private readonly components: Components,
@@ -62,10 +66,20 @@ export class Enemy extends EnemyComponent implements OnStart {
 		});
 
 		this.animationTracker.playAnimationTrack("idle");
+
+		// Enemy health component
+		const head = this.instance.WaitForChild("Head");
+		const root = createRoot(new Instance("Folder"));
+
+		this.healthComponentRoot = root;
+
+		root.render(createPortal(<EnemyHealth enemy={this} />, head));
 	}
 
 	destroy() {
 		super.destroy();
+
+		this.healthComponentRoot?.unmount();
 
 		if (!this.instance.FindFirstChild("HumanoidRootPart")) {
 			this.animationTracker.destroy();

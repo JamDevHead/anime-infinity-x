@@ -1,8 +1,8 @@
 import Roact, { useEffect, useState } from "@rbxts/roact";
-import { Frame } from "../frame";
 import { Enemy } from "@/client/components/enemy-component";
 import { colors } from "@/client/constants/colors";
 import { springs } from "@/client/constants/springs";
+import { Frame } from "@/client/ui/components/frame";
 import { Image } from "@/client/ui/components/image";
 import { Stack } from "@/client/ui/components/stack";
 import { Text } from "@/client/ui/components/text";
@@ -64,11 +64,13 @@ export function EnemyHealth({ enemy }: { enemy: Enemy | { instance: Instance; hu
 			});
 		});
 
+		setHealth(`${humanoid.Health}/${humanoid.MaxHealth}`);
+
 		return () => connection.Disconnect();
 	}, [healthBarBackgroundMotion, healthBarMotion, humanoid]);
 
 	return (
-		<billboardgui Size={UDim2.fromScale(4, 1.25)} MaxDistance={300} StudsOffsetWorldSpace={Vector3.yAxis.mul(2)}>
+		<billboardgui Size={UDim2.fromScale(4, 1.25)} MaxDistance={300} StudsOffsetWorldSpace={Vector3.yAxis.mul(3)}>
 			<Stack
 				horizontalAlignment={"Center"}
 				fillDirection={Enum.FillDirection.Vertical}
