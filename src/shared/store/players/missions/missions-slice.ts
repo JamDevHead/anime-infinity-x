@@ -1,5 +1,5 @@
 import { createProducer } from "@rbxts/reflex";
-import { Mission } from "@/shared/store/players/missions/missions-types";
+import { Mission, Task } from "@/shared/store/players/missions/missions-types";
 import { PlayerData, PlayerMission } from "@/shared/store/players/players-types";
 
 export interface MissionsState {
@@ -29,8 +29,8 @@ export const missionsSlice = createProducer(initialState, {
 		return {
 			...state,
 			[playerId]: {
+				...playerMissions,
 				all: [...playerMissions.all, mission],
-				active: playerMissions.active,
 			},
 		};
 	},
@@ -46,7 +46,57 @@ export const missionsSlice = createProducer(initialState, {
 			...state,
 			[playerId]: {
 				all: playerMissions.all.filter((mission) => mission.id !== missionId),
-				active: playerMissions.active?.id === missionId ? undefined : playerMissions.active,
+				active: playerMissions.active === missionId ? undefined : playerMissions.active,
+			},
+		};
+	},
+
+	addTask: (state, playerId: string, missionId: Mission["id"], task: Task) => {
+		const playerMissions = state[playerId];
+
+		if (!playerMissions) {
+			return state;
+		}
+
+		return {
+			...state,
+			[playerId]: {
+				...playerMissions,
+				all: playerMissions.all.map((mission) => {
+					if (mission.id === missionId) {
+						return {
+							...mission,
+							tasks: [...mission.tasks, task],
+						};
+					}
+
+					return mission;
+				}),
+			},
+		};
+	},
+
+	removeTask: (state, playerId: string, missionId: Mission["id"], taskId: Task["id"]) => {
+		const playerMissions = state[playerId];
+
+		if (!playerMissions) {
+			return state;
+		}
+
+		return {
+			...state,
+			[playerId]: {
+				...playerMissions,
+				all: playerMissions.all.map((mission) => {
+					if (mission.id === missionId) {
+						return {
+							...mission,
+							tasks: mission.tasks.filter((task) => task.id !== taskId),
+						};
+					}
+
+					return mission;
+				}),
 			},
 		};
 	},

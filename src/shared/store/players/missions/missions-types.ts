@@ -1,9 +1,15 @@
-export type Mission = {
+export interface Mission {
+	id: string;
+	tasks: Task[];
+	completed: boolean;
+}
+
+export interface Task {
 	id: string;
 	title: string;
 	description: string;
-	completed: boolean;
+	done: boolean;
 	reward: number;
 	level: number;
 	type: string;
-};
+}
