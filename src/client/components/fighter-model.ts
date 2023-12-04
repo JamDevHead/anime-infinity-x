@@ -136,7 +136,7 @@ export class FighterModel
 
 		const isFalling = !this.isGrounded();
 		const isJumping = humanoid.Jump && this.fighterGoal.currentEnemy === undefined;
-		const isRunning = speed > 0.2;
+		const isRunning = speed > 5;
 		const animationTracker = this.animationTracker;
 
 		if (animationTracker.isAnimationPlaying("soco1") || animationTracker.isAnimationPlaying("soco2")) {
