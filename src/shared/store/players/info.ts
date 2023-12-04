@@ -17,4 +17,19 @@ export const infoSlice = createProducer(initialState, {
 		...state,
 		[playerId]: undefined,
 	}),
+	setFirstTime: (state, playerId: string, firstTime: boolean) => {
+		const playerInfo = state[playerId];
+
+		if (!playerInfo) {
+			return state;
+		}
+
+		return {
+			...state,
+			[playerId]: {
+				...playerInfo,
+				firstTime: firstTime,
+			},
+		};
+	},
 });

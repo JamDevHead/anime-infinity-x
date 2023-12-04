@@ -18,6 +18,7 @@ export class FirstTimeService implements OnStart {
 			if (!fighter) return;
 
 			addFighterFor(player, fighter);
+			store.setFirstTime(tostring(player.UserId), false);
 		});
 	}
 }
