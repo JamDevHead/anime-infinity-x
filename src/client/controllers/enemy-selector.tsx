@@ -27,6 +27,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 	private raycastParams = new RaycastParams();
 	private isActiveFightersEmpty = false;
 	private defaultCursorIcon = UserInputService.MouseIcon;
+	private clickTimer = 0;
 
 	constructor(
 		private readonly logger: Logger,
@@ -94,8 +95,22 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 		this.root = undefined;
 	}
 
-	onInputBegan(input: InputObject, gameProcessedEvent: boolean) {
+	onInputBegan(input: InputObject) {
+		if (!this.isValidInput(input) || this.isActiveFightersEmpty) {
+			return;
+		}
+
+		this.clickTimer = tick();
+	}
+
+	onInputEnded(input: InputObject, gameProcessedEvent: boolean) {
 		if (!this.isValidInput(input) || gameProcessedEvent || this.isActiveFightersEmpty) {
+			return;
+		}
+		const timer = this.clickTimer;
+		this.clickTimer = 0;
+
+		if (tick() - timer > 0.15) {
 			return;
 		}
 
@@ -120,7 +135,9 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 	}
 
 	private isValidInput(input: InputObject) {
-		return input.UserInputType === Enum.UserInputType.MouseButton1;
+		return (
+			input.UserInputType === Enum.UserInputType.MouseButton1 || input.UserInputType === Enum.UserInputType.Touch
+		);
 	}
 
 	private getEnemyModel(enemyPart: BasePart) {
