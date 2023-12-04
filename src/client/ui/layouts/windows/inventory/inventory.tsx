@@ -89,6 +89,7 @@ export const Inventory = () => {
 								headshot={fighter.name}
 								zone={fighter.zone}
 								rating={fighter.rarity}
+								discovered
 								onClick={() => {
 									setInventoryMenuPosition(new Vector2(mouse.getValue().X, mouse.getValue().Y));
 									setInventoryOpenedMenu(true);
