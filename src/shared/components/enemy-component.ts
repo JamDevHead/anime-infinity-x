@@ -7,6 +7,8 @@ export interface EnemyModel extends Model {
 
 interface EnemyAttributes {
 	Guid: string;
+	Type: "Level 1" | "Level 2" | "Level 3" | "Level 4" | "Boss";
+	Scale?: number;
 }
 
 @Component({ tag: "EnemyNPC" })
