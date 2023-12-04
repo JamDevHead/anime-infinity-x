@@ -49,8 +49,9 @@ export function EnemyDrop({ drop, soundTracker }: { drop: Drop; soundTracker: So
 		const x = RNG.NextNumber() * (max - min) + min;
 		const y = RNG.NextNumber() * (max - min) + min;
 		const height = enemy.GetBoundingBox()[1].Y;
+		const scale = enemy.GetScale();
 
-		const goal = origin.add(new Vector3(x, -height / 2, y));
+		const goal = origin.add(new Vector3(x, -height / 2.05 + 0.5 + (scale >= 5 ? (scale % 5) + 0.5 : 0), y));
 
 		positionMotion.spring(goal, { damping: 0.4, impulse: 0.009 });
 		task.delay(0.5, () => setTrailEnabled(true));
