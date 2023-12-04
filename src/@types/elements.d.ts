@@ -8,5 +8,6 @@ declare namespace JSX {
 		particleemitter: JSX.IntrinsicElement<ParticleEmitter>;
 		trail: JSX.IntrinsicElement<Trail>;
 		humanoid: JSX.IntrinsicElement<Humanoid>;
+		model: JSX.IntrinsicElement<Model>;
 	}
 }

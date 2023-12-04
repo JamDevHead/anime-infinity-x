@@ -1,4 +1,4 @@
-import Roact, { useEffect, useState } from "@rbxts/roact";
+import Roact, { PropsWithChildren, useEffect, useState } from "@rbxts/roact";
 import { Enemy } from "@/client/components/enemy-component";
 import { colors } from "@/client/constants/colors";
 import { springs } from "@/client/constants/springs";
@@ -14,13 +14,16 @@ function HealthBar({
 	color,
 	scaleType,
 	size,
+	position,
 	sizeConstraint,
 	zIndex,
-}: {
+	children,
+}: PropsWithChildren & {
 	image: string;
 	color?: Color3;
 	scaleType?: Roact.InferEnumNames<Enum.ScaleType>;
-	size?: UDim2;
+	size?: UDim2 | Roact.Binding<UDim2>;
+	position?: UDim2 | Roact.Binding<UDim2>;
 	sizeConstraint?: Roact.InferEnumNames<Enum.SizeConstraint>;
 	zIndex?: number;
 }) {
@@ -28,21 +31,24 @@ function HealthBar({
 		<Image
 			image={image}
 			size={size ?? UDim2.fromScale(6.4, 1)}
-			scaleType={scaleType ?? "Fit"}
-			sizeConstraint={sizeConstraint ?? "RelativeYY"}
+			position={position}
+			scaleType={scaleType ?? "Stretch"}
+			sizeConstraint={sizeConstraint ?? "RelativeXY"}
 			imageColor={color}
 			zIndex={zIndex}
 		>
+			{children}
 			<uigradient Rotation={90} Color={new ColorSequence(Color3.fromHex("#8f8f8f"), Color3.fromHex("#efefef"))} />
 		</Image>
 	);
 }
 
-export function EnemyHealth({ enemy }: { enemy: Enemy | { instance: Instance; humanoid: Humanoid } }) {
+export function EnemyHealth({ enemy }: { enemy: Enemy | { instance: Model; humanoid: Humanoid } }) {
 	const humanoid = enemy.humanoid;
 	const [healthBar, healthBarMotion] = useMotion(UDim2.fromScale(1, 1));
 	const [healthBarBackground, healthBarBackgroundMotion] = useMotion(UDim2.fromScale(1, 1));
 	const [health, setHealth] = useState("0/0");
+	const enemyScale = enemy.instance.GetScale();
 
 	useEffect(() => {
 		if (!humanoid) {
@@ -52,8 +58,8 @@ export function EnemyHealth({ enemy }: { enemy: Enemy | { instance: Instance; hu
 		const connection = humanoid.HealthChanged.Connect((newHealth) => {
 			const maxHealth = humanoid.MaxHealth;
 			const currentHealth = humanoid.Health;
-			const currentRatio = math.min(currentHealth / maxHealth, 0.977);
-			const newRatio = math.min(newHealth / maxHealth, 0.977);
+			const currentRatio = currentHealth / maxHealth;
+			const newRatio = newHealth / maxHealth;
 
 			setHealth(`${currentHealth}/${maxHealth}`);
 			healthBarMotion.spring(UDim2.fromScale(newRatio, 1), springs.responsive);
@@ -79,7 +85,12 @@ export function EnemyHealth({ enemy }: { enemy: Enemy | { instance: Instance; hu
 	}, [healthBarBackgroundMotion, healthBarMotion, humanoid]);
 
 	return (
-		<billboardgui Size={UDim2.fromScale(4, 1.25)} MaxDistance={300} StudsOffsetWorldSpace={Vector3.yAxis.mul(3)}>
+		<billboardgui
+			Size={UDim2.fromScale(4 * enemyScale, 1.25 * enemyScale)}
+			AlwaysOnTop
+			MaxDistance={30}
+			StudsOffsetWorldSpace={Vector3.yAxis.mul(3)}
+		>
 			<Stack
 				horizontalAlignment={"Center"}
 				fillDirection={Enum.FillDirection.Vertical}
@@ -104,13 +115,15 @@ export function EnemyHealth({ enemy }: { enemy: Enemy | { instance: Instance; hu
 					clipsDescendants={true}
 					zIndex={4}
 				>
-					<uisizeconstraint MaxSize={new Vector2(512, 160)} />
+					<uisizeconstraint MaxSize={new Vector2(512, 80)} />
 
 					<Frame key={"health"} backgroundTransparency={1} size={healthBar} clipsDescendants={true}>
 						<HealthBar
 							zIndex={3}
 							color={Color3.fromHex("#1ff27d")}
 							image={images.ui.enemy_health.health_bar_fill}
+							scaleType={"Fit"}
+							sizeConstraint={"RelativeYY"}
 						/>
 					</Frame>
 
@@ -120,14 +133,18 @@ export function EnemyHealth({ enemy }: { enemy: Enemy | { instance: Instance; hu
 						size={healthBarBackground}
 						clipsDescendants={true}
 					>
-						<HealthBar zIndex={2} image={images.ui.enemy_health.health_bar_fill} />
+						<HealthBar
+							zIndex={2}
+							image={images.ui.enemy_health.health_bar_fill}
+							scaleType={"Fit"}
+							sizeConstraint={"RelativeYY"}
+						/>
 					</Frame>
 
 					<HealthBar
+						key={"background"}
 						image={images.ui.enemy_health.health_bar_fill}
 						color={Color3.fromHex("#ee513c")}
-						sizeConstraint={"RelativeXY"}
-						scaleType={"Stretch"}
 						size={UDim2.fromScale(1, 1)}
 					/>
 
