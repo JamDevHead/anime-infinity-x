@@ -100,6 +100,10 @@ export const useMockData = (props?: MockDataProps): void => {
 				changing: false,
 				unlocked: ["nrt", "aot"],
 			},
+			info: {
+				firstTime: false,
+				version: "1.0.0",
+			},
 			...props?.customData,
 		});
 	});
