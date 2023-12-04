@@ -2,7 +2,7 @@ import { Component, Components } from "@flamework/components";
 import { OnStart } from "@flamework/core";
 import { createPortal, createRoot, Root } from "@rbxts/react-roblox";
 import Roact from "@rbxts/roact";
-import { ReplicatedStorage, TweenService } from "@rbxts/services";
+import { ReplicatedStorage, TweenService, Workspace } from "@rbxts/services";
 import { EnemyHealth } from "@/client/components/react/enemy-health/enemy-health";
 import { SoundController } from "@/client/controllers/sound-controller";
 import { store } from "@/client/store";
@@ -59,7 +59,7 @@ export class Enemy extends EnemyComponent implements OnStart {
 
 		this.humanoid.HealthChanged.Connect((health) => {
 			if (currentHealth > health && health > 0) {
-				this.hurt();
+				this.hurt(currentHealth, health);
 			}
 
 			currentHealth = health;
@@ -109,7 +109,7 @@ export class Enemy extends EnemyComponent implements OnStart {
 		this.animationTracker.destroy();
 	}
 
-	private hurt() {
+	private hurt(currentHealth: number, newHealth: number) {
 		if (!this.instance.FindFirstChild("HumanoidRootPart")) {
 			return;
 		}
@@ -122,6 +122,10 @@ export class Enemy extends EnemyComponent implements OnStart {
 		TweenService.Create(this.hurtHighlight, new TweenInfo(0.15), {
 			FillTransparency: 1,
 		}).Play();
+
+		// Spawn hurt particle
+		const damage = currentHealth - newHealth;
+		this.createHurtParticle(damage);
 
 		// Play particle
 		this.hurtParticle.Particle.Emit(1);
@@ -136,6 +140,49 @@ export class Enemy extends EnemyComponent implements OnStart {
 			const fighter = getFighterByUid(uid, this.components);
 
 			fighter?.attack();
+		});
+	}
+
+	private createHurtParticle(damage: number) {
+		const hurtPart = new Instance("Part");
+		const hurtBillboard = new Instance("BillboardGui");
+		const hurtLabel = new Instance("TextLabel");
+		const FORCE = 5;
+
+		hurtPart.Size = Vector3.one;
+		hurtPart.Transparency = 1;
+		hurtPart.Anchored = false;
+		hurtPart.Massless = true;
+		hurtPart.CanCollide = false;
+		hurtPart.CanQuery = false;
+		hurtPart.CanTouch = false;
+		hurtPart.CFrame = this.root.CFrame;
+
+		hurtBillboard.Size = UDim2.fromScale(1, 1);
+		hurtBillboard.AlwaysOnTop = true;
+
+		hurtLabel.BackgroundTransparency = 1;
+		hurtLabel.Size = UDim2.fromScale(1, 1);
+		hurtLabel.Text = `- ${damage}`;
+		hurtLabel.TextColor3 = Color3.fromHex("#f64e4e");
+		hurtLabel.TextScaled = true;
+		hurtLabel.TextStrokeColor3 = Color3.fromHex("#000");
+		hurtLabel.TextStrokeTransparency = 0.5;
+
+		hurtLabel.Parent = hurtBillboard;
+		hurtBillboard.Parent = hurtPart;
+		hurtPart.Parent = Workspace.Terrain;
+
+		hurtPart.ApplyImpulse(
+			new Vector3(
+				math.random(-FORCE, FORCE),
+				FORCE * 4 + math.sqrt(Workspace.Gravity),
+				math.random(-FORCE, FORCE),
+			),
+		);
+
+		task.delay(0.4, () => {
+			hurtPart.Destroy();
 		});
 	}
 }
