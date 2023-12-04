@@ -161,6 +161,7 @@ export class Enemy extends EnemyComponent implements OnStart {
 
 		hurtBillboard.Size = UDim2.fromScale(enemyScale * 1.25, enemyScale);
 		hurtBillboard.AlwaysOnTop = true;
+		hurtBillboard.MaxDistance = 30;
 
 		hurtLabel.BackgroundTransparency = 1;
 		hurtLabel.Size = UDim2.fromScale(1, 1);
