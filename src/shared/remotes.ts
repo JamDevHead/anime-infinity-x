@@ -38,6 +38,8 @@ const remotes = createRemotes({
 	firstTime: namespace({
 		select: remote<Server, [fighterName: string]>(),
 	}),
+
+	attackEnemy: remote<Server>(),
 });
 
 export default remotes;

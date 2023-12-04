@@ -70,4 +70,16 @@ export class Enemy extends EnemyComponent implements OnStart {
 			});
 		});
 	}
+
+	public takeDamage(damage: number) {
+		this.humanoid.TakeDamage(damage);
+
+		const isDead = this.humanoid.Health <= 0;
+
+		if (isDead) {
+			this.instance.RemoveTag("EnemyNPC");
+		}
+
+		return isDead;
+	}
 }

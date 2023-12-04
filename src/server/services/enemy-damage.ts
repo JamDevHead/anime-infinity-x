@@ -3,6 +3,9 @@ import { OnStart, OnTick, Service } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { Enemy } from "@/server/components/enemy";
 import { store } from "@/server/store";
+import { getEnemyByUid } from "@/server/utils/enemies";
+import remotes from "@/shared/remotes";
+import { selectSelectedEnemiesByPlayerId } from "@/shared/store/enemy-selection";
 import { FighterTargetSlice } from "@/shared/store/fighter-target";
 import { selectFightersTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
 import { selectPlayersFightersWithUid } from "@/shared/store/players/fighters";
@@ -43,6 +46,26 @@ export class EnemyDamage implements OnStart, OnTick {
 				}
 			}
 		});
+
+		remotes.attackEnemy.connect((player) => {
+			const userId = tostring(player.UserId);
+			const selectedEnemies = store.getState(selectSelectedEnemiesByPlayerId(userId));
+
+			if (!selectedEnemies) {
+				return;
+			}
+
+			selectedEnemies.forEach((enemyId) => {
+				const enemy = getEnemyByUid(enemyId, this.components);
+
+				if (!enemy) {
+					return;
+				}
+
+				// TODO: calculate player damage
+				enemy.takeDamage(1);
+			});
+		});
 	}
 
 	onTick(dt: number) {
@@ -80,10 +103,11 @@ export class EnemyDamage implements OnStart, OnTick {
 	}
 
 	private damageEnemies() {
-		for (const [fighterId, enemy] of this.fightersTargets) {
+		for (const [fighterId, enemy] of table.clone(this.fightersTargets)) {
 			const fighter = store.getState(selectPlayersFightersWithUid(fighterId));
 
 			if (!fighter) {
+				this.fightersTargets.delete(fighterId);
 				continue;
 			}
 
@@ -98,14 +122,13 @@ export class EnemyDamage implements OnStart, OnTick {
 
 			const damage = fighter.stats.damage;
 
-			enemy.humanoid.TakeDamage(damage);
+			const isDead = enemy.takeDamage(damage);
 
 			// 10 dexterity = 1 second stun, 100 dexterity = 0.1 second stun
 			this.fightersStuns.set(fighterId, calculateStun(fighter.stats.dexterity));
 
-			if (enemy.humanoid.Health <= 0) {
+			if (isDead) {
 				store.removeFighterTarget(fighterId);
-				enemy.instance.RemoveTag("EnemyNPC");
 			}
 		}
 	}
