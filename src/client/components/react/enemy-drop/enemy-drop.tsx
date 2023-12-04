@@ -1,7 +1,6 @@
-import { useDebounceCallback, useEventListener, useMountEffect } from "@rbxts/pretty-react-hooks";
-import Roact, { useMemo, useRef, useState } from "@rbxts/roact";
+import { useDebounceCallback, useEventListener } from "@rbxts/pretty-react-hooks";
+import Roact, { useEffect, useMemo, useRef, useState } from "@rbxts/roact";
 import { RunService } from "@rbxts/services";
-import { springs } from "@/client/constants/springs";
 import { store } from "@/client/store";
 import { Image } from "@/client/ui/components/image";
 import { useCharacter } from "@/client/ui/hooks/use-character";
@@ -10,11 +9,13 @@ import { images } from "@/shared/assets/images";
 import { SoundTracker } from "@/shared/lib/sound-tracker";
 import remotes from "@/shared/remotes";
 import { Drop } from "@/shared/store/enemies/drops";
+import { getEnemyModelByUid } from "@/shared/utils/enemies";
 
 const RNG = new Random();
 
 export function EnemyDrop({ drop, soundTracker }: { drop: Drop; soundTracker: SoundTracker }) {
 	const origin = useMemo(() => drop.origin, [drop]);
+	const enemy = useMemo(() => getEnemyModelByUid(drop.enemyId), [drop.enemyId]);
 	const [position, positionMotion] = useMotion(origin);
 	const character = useCharacter();
 	const partRef = useRef<Part>();
@@ -38,17 +39,23 @@ export function EnemyDrop({ drop, soundTracker }: { drop: Drop; soundTracker: So
 		{ wait: 3, leading: true, trailing: true, maxWait: 3 },
 	);
 
-	useMountEffect(() => {
+	useEffect(() => {
+		if (!enemy) {
+			return;
+		}
+
 		const max = 7;
 		const min = -7;
 		const x = RNG.NextNumber() * (max - min) + min;
 		const y = RNG.NextNumber() * (max - min) + min;
+		const height = enemy.GetBoundingBox()[1].Y;
+		const scale = enemy.GetScale();
 
-		const goal = origin.add(new Vector3(x, -4, y));
+		const goal = origin.add(new Vector3(x, -height / 2.05 + 0.5 + (scale >= 5 ? (scale % 5) + 0.5 : 0), y));
 
 		positionMotion.spring(goal, { damping: 0.4, impulse: 0.009 });
 		task.delay(0.5, () => setTrailEnabled(true));
-	});
+	}, [enemy, origin, positionMotion]);
 
 	useEventListener(RunService.Heartbeat, () => {
 		if (!root) {
@@ -62,7 +69,10 @@ export function EnemyDrop({ drop, soundTracker }: { drop: Drop; soundTracker: So
 			return;
 		}
 
-		positionMotion.spring(target, springs.gentle);
+		positionMotion.spring(target, {
+			tension: 400,
+			friction: 15,
+		});
 
 		if (distance < 1) {
 			collectDebounce.run();

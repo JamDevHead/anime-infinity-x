@@ -147,6 +147,7 @@ export class Enemy extends EnemyComponent implements OnStart {
 		const hurtPart = new Instance("Part");
 		const hurtBillboard = new Instance("BillboardGui");
 		const hurtLabel = new Instance("TextLabel");
+		const enemyScale = this.instance.GetScale();
 		const FORCE = 5;
 
 		hurtPart.Size = Vector3.one;
@@ -158,8 +159,9 @@ export class Enemy extends EnemyComponent implements OnStart {
 		hurtPart.CanTouch = false;
 		hurtPart.CFrame = this.root.CFrame;
 
-		hurtBillboard.Size = UDim2.fromScale(1, 1);
+		hurtBillboard.Size = UDim2.fromScale(enemyScale * 1.25, enemyScale);
 		hurtBillboard.AlwaysOnTop = true;
+		hurtBillboard.MaxDistance = 30;
 
 		hurtLabel.BackgroundTransparency = 1;
 		hurtLabel.Size = UDim2.fromScale(1, 1);
@@ -181,7 +183,7 @@ export class Enemy extends EnemyComponent implements OnStart {
 			),
 		);
 
-		task.delay(0.4, () => {
+		task.delay(enemyScale / 2, () => {
 			hurtPart.Destroy();
 		});
 	}
