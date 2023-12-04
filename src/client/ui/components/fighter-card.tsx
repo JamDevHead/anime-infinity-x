@@ -1,4 +1,4 @@
-import Roact, { FunctionComponent } from "@rbxts/roact";
+import Roact, { Binding, FunctionComponent } from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
 import { fonts } from "@/client/constants/fonts";
 import { Button } from "@/client/ui/components/button";
@@ -20,6 +20,9 @@ type FighterCardProps = {
 	onClick?: () => void;
 	description?: string;
 	discovered?: boolean;
+	size?: Binding<UDim2> | UDim2;
+	onHover?: () => void;
+	onLeave?: () => void;
 };
 
 export const FighterCard: FunctionComponent<FighterCardProps> = ({
@@ -31,6 +34,9 @@ export const FighterCard: FunctionComponent<FighterCardProps> = ({
 	padding,
 	discovered,
 	description,
+	size,
+	onHover,
+	onLeave,
 }) => {
 	const rem = useRem();
 
@@ -42,10 +48,14 @@ export const FighterCard: FunctionComponent<FighterCardProps> = ({
 
 	return (
 		<Button
-			size={UDim2.fromScale(1, 1)}
+			size={size ?? UDim2.fromScale(1, 1)}
 			backgroundTransparency={1}
 			cornerRadius={new UDim(0, 12)}
 			onClick={onClick}
+			event={{
+				MouseEnter: onHover,
+				MouseLeave: onLeave,
+			}}
 		>
 			<CanvasGroup size={UDim2.fromScale(1, 1)} cornerRadius={new UDim(0, 12)} backgroundTransparency={1}>
 				<Image
@@ -90,9 +100,9 @@ export const FighterCard: FunctionComponent<FighterCardProps> = ({
 										autoSize="XY"
 										font={fonts.gotham.bold}
 										textColor={colors.white}
-										textScaled={true}
-										textWrapped={true}
 										textXAlignment="Center"
+										textScaled
+										textWrapped
 									/>
 								)}
 							</Image>

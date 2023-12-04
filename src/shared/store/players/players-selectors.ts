@@ -41,6 +41,12 @@ export const selectPlayerInventory = (playerId: string) => {
 	};
 };
 
+export const selectPlayerInfo = (playerId: string) => {
+	return (state: SharedState) => {
+		return state.players.info[playerId];
+	};
+};
+
 export const selectPlayerData = (playerId: string) => {
 	return createSelector(
 		selectPlayerBalance(playerId),
@@ -49,12 +55,22 @@ export const selectPlayerData = (playerId: string) => {
 		selectPlayerMissions(playerId),
 		selectPlayerBoosts(playerId),
 		selectPlayerInventory(playerId),
-		(balance, zones, fighters, missions, boosts, inventory): PlayerData | undefined => {
-			if (!balance || !zones || !fighters || !missions || !boosts || !inventory) {
+		selectPlayerInfo(playerId),
+		(balance, zones, fighters, missions, boosts, inventory, info): PlayerData | undefined => {
+			if (!balance || !zones || !fighters || !missions || !boosts || !inventory || !info) {
 				return;
 			}
 
-			return { boosts, fighters, inventory, missions, settings: {}, balance, zones };
+			return {
+				boosts,
+				fighters,
+				inventory,
+				missions,
+				settings: {},
+				balance,
+				zones,
+				info,
+			};
 		},
 	);
 };
