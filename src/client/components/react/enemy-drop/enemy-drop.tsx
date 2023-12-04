@@ -1,6 +1,7 @@
 import { useDebounceCallback, useEventListener, useMountEffect } from "@rbxts/pretty-react-hooks";
 import Roact, { useMemo, useRef, useState } from "@rbxts/roact";
 import { RunService } from "@rbxts/services";
+import { springs } from "@/client/constants/springs";
 import { store } from "@/client/store";
 import { Image } from "@/client/ui/components/image";
 import { useCharacter } from "@/client/ui/hooks/use-character";
@@ -61,7 +62,7 @@ export function EnemyDrop({ drop, soundTracker }: { drop: Drop; soundTracker: So
 			return;
 		}
 
-		positionMotion.spring(target, { damping: 0.3, impulse: 0.002 });
+		positionMotion.spring(target, springs.gentle);
 
 		if (distance < 1) {
 			collectDebounce.run();
