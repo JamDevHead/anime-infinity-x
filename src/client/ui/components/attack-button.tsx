@@ -3,6 +3,7 @@ import { Button } from "@/client/ui/components/button";
 import { FrameProps } from "@/client/ui/components/frame";
 import { Image } from "@/client/ui/components/image";
 import { images } from "@/shared/assets/images";
+import remotes from "@/shared/remotes";
 
 interface AttackButtonProps extends PropsWithChildren, FrameProps {
 	color: Color3;
@@ -11,8 +12,13 @@ interface AttackButtonProps extends PropsWithChildren, FrameProps {
 }
 
 export function AttackButton({ children, position, size, color, onClick, icon, anchorPoint }: AttackButtonProps) {
+	function onMouseDown() {
+		remotes.attackEnemy.fire();
+	}
+
 	return (
 		<Button
+			onMouseDown={onMouseDown}
 			position={position}
 			size={size || UDim2.fromOffset(64, 64)}
 			onClick={onClick}
