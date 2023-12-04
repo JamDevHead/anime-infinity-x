@@ -87,9 +87,8 @@ export function EnemyHealth({ enemy }: { enemy: Enemy | { instance: Model; human
 	return (
 		<billboardgui
 			Size={UDim2.fromScale(4 * enemyScale, 1.25 * enemyScale)}
-			AlwaysOnTop
-			MaxDistance={30}
-			StudsOffsetWorldSpace={Vector3.yAxis.mul(3)}
+			MaxDistance={10 * enemyScale}
+			StudsOffsetWorldSpace={Vector3.yAxis.mul(3 * enemyScale)}
 		>
 			<Stack
 				horizontalAlignment={"Center"}
