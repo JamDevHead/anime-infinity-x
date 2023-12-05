@@ -7,6 +7,7 @@ import { useMotion } from "@/client/ui/hooks/use-motion";
 import { Codes } from "@/client/ui/layouts/windows/codes/codes";
 import { Inventory } from "@/client/ui/layouts/windows/inventory/inventory";
 import { Settings } from "@/client/ui/layouts/windows/settings/settings";
+import { Shop } from "@/client/ui/layouts/windows/shop/shop";
 import { Teleport } from "@/client/ui/layouts/windows/teleport/teleport";
 
 export const WindowManager = () => {
@@ -49,6 +50,8 @@ export const WindowManager = () => {
 				return <Inventory />;
 			case "teleport":
 				return <Teleport />;
+			case "shop":
+				return <Shop />;
 		}
 	};
 

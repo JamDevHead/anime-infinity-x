@@ -26,6 +26,7 @@ type ScrollViewProps = FrameProps<ScrollingFrame> & {
 	fillDirectionMaxCells?: number;
 	sortOrder?: Enum.SortOrder | "LayoutOrder" | "Name" | "Custom";
 	grid?: boolean;
+	margin?: { Left?: UDim; Right?: UDim; Top?: UDim; Bottom?: UDim };
 };
 
 export const ScrollView = forwardRef((props: ScrollViewProps, ref: Ref<ScrollingFrame>) => {
@@ -79,6 +80,15 @@ export const ScrollView = forwardRef((props: ScrollViewProps, ref: Ref<Scrolling
 					VerticalAlignment={props.verticalAlignment ?? Enum.VerticalAlignment.Top}
 					SortOrder={props.sortOrder ?? Enum.SortOrder.LayoutOrder}
 					Padding={props.padding ?? new UDim(0, 0)}
+				/>
+			)}
+			{props.margin && (
+				<uipadding
+					key="padding"
+					PaddingBottom={props.margin.Bottom}
+					PaddingLeft={props.margin.Left}
+					PaddingRight={props.margin.Right}
+					PaddingTop={props.margin.Top}
 				/>
 			)}
 			{props.cornerRadius && <uicorner key="corner" CornerRadius={props.cornerRadius} />}

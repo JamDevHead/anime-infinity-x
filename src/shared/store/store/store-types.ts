@@ -8,6 +8,7 @@ export interface ContentFighters {
 	id: string;
 	name: string;
 	zone: string;
+	price?: number;
 }
 
 export interface ContentInfo<T = "Fighters"> {

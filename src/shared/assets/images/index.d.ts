@@ -135,7 +135,8 @@ export const images: {
 			health_bar_outline: string;
 		};
 		readonly shop: {
-			featured_background: string;
+			readonly featured_background: string;
+			readonly redeem_background: string;
 		};
 		readonly blur: string;
 		readonly rounded_button_base: string;

@@ -146,6 +146,7 @@ return {
 			shadow_star = "rbxassetid://15450966260",
 			shop = {
 				featured_background = "rbxassetid://15549528373",
+				redeem_background = "rbxassetid://15554054844",
 			},
 			stats_bar_base = "rbxassetid://15303347451",
 			stats_bar_coin = "rbxassetid://15303347522",

@@ -10,7 +10,7 @@ const initialState: StoreSlice = {
 	featured: [
 		{
 			id: "1",
-			title: "Gaming card",
+			title: "Exclusive Space Egg",
 			contents: ["1", "2"],
 		},
 	],

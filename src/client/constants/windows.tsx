@@ -18,6 +18,10 @@ export const Windows: Record<string, Window> = {
 		title: "Choose Fighter",
 		size: UDim2.fromScale(0.6, 0.6),
 	},
+	shop: {
+		title: "Shop",
+		size: UDim2.fromScale(0.6, 0.6),
+	},
 };
 
 export type WindowName = keyof typeof Windows;
