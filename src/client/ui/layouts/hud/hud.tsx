@@ -1,18 +1,16 @@
-import { useSelectorCreator } from "@rbxts/react-reflex";
 import Roact from "@rbxts/roact";
+import { useRootSelector } from "@/client/store";
+import { selectHudVisible } from "@/client/store/hud/hud-selectors";
 import { Frame } from "@/client/ui/components/frame";
 import { Stack } from "@/client/ui/components/stack";
-import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { BottomHudButtons } from "@/client/ui/layouts/hud/bottom-hud-buttons";
 import { LeftSideHud } from "@/client/ui/layouts/hud/left-side-hud";
 import { RightSideHud } from "@/client/ui/layouts/hud/right-side-hud";
-import { selectPlayerInfo } from "@/shared/store/players";
 
 export const Hud = () => {
-	const playerId = usePlayerId();
-	const info = useSelectorCreator(selectPlayerInfo, playerId);
+	const hudVisible = useRootSelector(selectHudVisible);
 
-	if (info?.firstTime) return <></>;
+	if (!hudVisible) return <></>;
 
 	return (
 		<Frame size={new UDim2(1, 0, 1, 0)} backgroundTransparency={1}>
