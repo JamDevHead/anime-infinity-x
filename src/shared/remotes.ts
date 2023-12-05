@@ -1,6 +1,7 @@
 import { BroadcastAction } from "@rbxts/reflex";
 import { Client, createRemotes, namespace, remote, Server } from "@rbxts/remo";
 import { SharedState } from "@/shared/store";
+import { PlayerFighter } from "@/shared/store/players";
 
 const remotes = createRemotes({
 	store: namespace({
@@ -37,6 +38,10 @@ const remotes = createRemotes({
 
 	firstTime: namespace({
 		select: remote<Server, [fighterName: string]>(),
+	}),
+
+	eggs: namespace({
+		open: remote<Server, [eggZone: string]>().returns<PlayerFighter | undefined>(),
 	}),
 
 	attackEnemy: remote<Server>(),
