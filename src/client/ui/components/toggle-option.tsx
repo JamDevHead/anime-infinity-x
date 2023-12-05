@@ -5,17 +5,33 @@ import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
 
 type ToggleOptionProps = {
+	position?: UDim2;
+	size?: UDim2;
+	anchorPoint?: Vector2;
 	checked: boolean;
 	onChange?: (checked: boolean) => void;
+	onClick?: () => void;
 };
 
-export const ToggleOption: FunctionComponent<ToggleOptionProps> = ({ checked, onChange }) => {
+export const ToggleOption: FunctionComponent<ToggleOptionProps> = ({
+	checked,
+	onClick,
+	onChange,
+	position,
+	size,
+	anchorPoint,
+}) => {
 	const rem = useRem();
 
 	return (
 		<Button
-			size={UDim2.fromOffset(rem(96, "pixel"), rem(48, "pixel"))}
-			onClick={() => onChange?.(!checked)}
+			position={position ?? UDim2.fromScale(0.5, 0.5)}
+			size={size ?? UDim2.fromOffset(rem(96, "pixel"), rem(48, "pixel"))}
+			anchorPoint={anchorPoint}
+			onClick={() => {
+				onClick?.();
+				onChange?.(!checked);
+			}}
 			backgroundTransparency={1}
 		>
 			<Image

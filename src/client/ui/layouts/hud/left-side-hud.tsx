@@ -63,7 +63,11 @@ export const LeftSideHud = () => {
 				rows={6}
 				columns={2}
 			>
-				<SimpleButton color={Color3.fromHex("#68CA58")} icon={images.icons.store} />
+				<SimpleButton
+					color={Color3.fromHex("#68CA58")}
+					icon={images.icons.store}
+					onClick={() => toggleWindowVisible("shop")}
+				/>
 				<SimpleButton color={Color3.fromHex("#ff0000")} icon={images.icons.gift} />
 				<SimpleButton
 					color={Color3.fromHex("#E5E923")}
