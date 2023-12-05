@@ -8,9 +8,9 @@ import { selectPlayerZones } from "@/shared/store/players";
 @Controller()
 export class EggController implements OnStart, OnTick {
 	private zonesFolder = Workspace.WaitForChild("Zones") as ZonesFolder;
-	private distanceCheck: RBXScriptConnection | undefined;
 
-	private eggs?: Folder;
+	private eggOpen = false;
+	private eggs = [] as Model[];
 
 	constructor(private readonly logger: Logger) {}
 
@@ -21,28 +21,49 @@ export class EggController implements OnStart, OnTick {
 		}
 
 		store.subscribe(selectPlayerZones(tostring(Players.LocalPlayer.UserId)), (currentZones, oldZones) => {
-			print(currentZones, oldZones);
-
 			if (currentZones?.current === undefined) return;
-
-			if (currentZones?.current === oldZones?.current) return;
+			if (currentZones?.current === oldZones?.current && currentZones.changing) return;
 
 			const zone = this.zonesFolder.FindFirstChild(currentZones?.current);
 			if (!zone) return;
 
-			this.eggs = zone.WaitForChild("Eggs") as Folder;
+			const eggsFolder = zone.WaitForChild("Eggs") as Folder;
+
+			const eggConnection = eggsFolder.ChildAdded.Connect((egg) => {
+				if (egg.IsA("Model")) {
+					this.eggs.push(egg);
+				}
+			});
+
+			for (const egg of eggsFolder.GetChildren()) {
+				if (egg.IsA("Model")) {
+					this.eggs.push(egg);
+				}
+			}
+
+			return () => {
+				eggConnection.Disconnect();
+			};
 		});
 	}
 
 	onTick(): void {
-		this.eggs?.GetChildren().forEach((egg) => {
-			const position = (egg as Model).GetPivot().Position;
+		if (this.eggs.isEmpty()) {
+			return;
+		}
 
+		this.eggs.forEach((egg) => {
+			const position = egg.GetPivot().Position;
 			const distance = Players.LocalPlayer.DistanceFromCharacter(position);
+			const isClose = distance <= 10;
 
-			print(distance, distance <= 10);
-
-			store.setEggOpen(distance <= 10);
+			if (isClose && !this.eggOpen) {
+				this.eggOpen = true;
+				store.setEggOpen(true);
+			} else if (!isClose && this.eggOpen) {
+				this.eggOpen = false;
+				store.setEggOpen(false);
+			}
 		});
 	}
 }
