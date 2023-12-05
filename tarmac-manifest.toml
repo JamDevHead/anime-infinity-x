@@ -548,6 +548,11 @@ hash = "2756189f46e371dddb883a04fe2c2e63d2f604924a7534c0dfcc31eb6eea506d"
 id = 15450966260
 packable = false
 
+[inputs."assets/images/ui/shop/featured_background.png"]
+hash = "6ccb2218ecc6bf684f9d0e44efd828feec738d7cb5e0ba304b70ae2a4c928d2e"
+id = 15549528373
+packable = false
+
 [inputs."assets/images/ui/stats_bar_base.png"]
 hash = "006ed57fb749f9dd9a68641b58f3843078ee762addb24ace7a5b85bb461f3205"
 id = 15303347451
