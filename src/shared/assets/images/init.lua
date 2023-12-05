@@ -9,7 +9,7 @@ return {
 					eron = "rbxassetid://15485666479",
 					haunttitan = "rbxassetid://15485666546",
 					levo = "rbxassetid://15485666600",
-					mika = "rbxassetid://15485666656",
+					myhouse = "rbxassetid://15554692657",
 					ze = "rbxassetid://15485666720",
 				},
 				dbz = {
@@ -42,7 +42,7 @@ return {
 				one = {
 					blackbeard = "rbxassetid://15485668866",
 					firefeet = "rbxassetid://15485668985",
-					heaven = "rbxassetid://15485669092",
+					heavenstrawhat = "rbxassetid://15554710917",
 					luffo = "rbxassetid://15485669266",
 					mi = "rbxassetid://15485669355",
 					whitebeard = "rbxassetid://15485669406",

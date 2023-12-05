@@ -7,7 +7,7 @@ export const images: {
 				readonly eron: string;
 				readonly haunttitan: string;
 				readonly levo: string;
-				readonly mika: string;
+				readonly myhouse: string;
 				readonly ze: string;
 			};
 			readonly dbz: {
@@ -40,7 +40,7 @@ export const images: {
 			readonly one: {
 				readonly blackbeard: string;
 				readonly firefeet: string;
-				readonly heaven: string;
+				readonly heavenstrawhat: string;
 				readonly luffo: string;
 				readonly mi: string;
 				readonly whitebeard: string;

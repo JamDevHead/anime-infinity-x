@@ -23,9 +23,9 @@ hash = "23b2a0a3dd431bf95f2eb6c5b326034b5d60c5d5f4ba2011b7eccab7b7f3be8a"
 id = 15485666600
 packable = false
 
-[inputs."assets/images/characters/headshots/aot/mika.png"]
+[inputs."assets/images/characters/headshots/aot/myhouse.png"]
 hash = "e6cd4f781a5a3cb1317a55979730fdec380ccb120ed6111261f4614cfc4b7b46"
-id = 15485666656
+id = 15554692657
 packable = false
 
 [inputs."assets/images/characters/headshots/aot/ze.png"]
@@ -148,9 +148,9 @@ hash = "f012409becc4bcb925693e8472c02f21084724fc83697b559ba973255481263c"
 id = 15485668985
 packable = false
 
-[inputs."assets/images/characters/headshots/one/heaven.png"]
+[inputs."assets/images/characters/headshots/one/heavenstrawhat.png"]
 hash = "3bf658bd92fea62e6ef56d9cc852a9534a7a35eedd8b3dadcee77f375271f496"
-id = 15485669092
+id = 15554710917
 packable = false
 
 [inputs."assets/images/characters/headshots/one/luffo.png"]
