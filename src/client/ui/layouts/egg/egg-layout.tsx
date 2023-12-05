@@ -1,12 +1,19 @@
+import Object from "@rbxts/object-utils";
+import { useSelectorCreator } from "@rbxts/react-reflex";
 import Roact, { FunctionComponent } from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
+import { useRootSelector } from "@/client/store";
 import { BindingButton } from "@/client/ui/components/binding-button";
 import { FighterCard } from "@/client/ui/components/fighter-card";
 import { Frame } from "@/client/ui/components/frame";
 import { Grid } from "@/client/ui/components/grid";
 import { Image } from "@/client/ui/components/image";
 import { Stack } from "@/client/ui/components/stack";
+import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { images } from "@/shared/assets/images";
+import { FighterRarity } from "@/shared/constants/rarity";
+import remotes from "@/shared/remotes";
+import { selectPlayerZones } from "@/shared/store/players";
 
 type EggLayoutProps = {
 	size?: UDim2;
@@ -14,8 +21,21 @@ type EggLayoutProps = {
 };
 
 export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position }) => {
-	return (
-		<Frame anchorPoint={new Vector2(0.5, 0.5)} backgroundTransparency={1} position={position} size={size}>
+	const userId = usePlayerId();
+	const zones = useSelectorCreator(selectPlayerZones, userId);
+	const { opened } = useRootSelector((store) => store.egg);
+
+	const rarityByZone = FighterRarity[(zones?.current?.lower() ?? "nrt") as keyof typeof FighterRarity];
+
+	print(opened);
+
+	return opened ? (
+		<Frame
+			anchorPoint={new Vector2(0.5, 0.5)}
+			backgroundTransparency={1}
+			position={position ?? UDim2.fromScale(0.5, 0.3)}
+			size={size ?? UDim2.fromOffset(400, 400)}
+		>
 			<Stack fillDirection="Vertical" size={UDim2.fromScale(1, 1)}>
 				<Image
 					anchorPoint={new Vector2(0.5, 0.5)}
@@ -35,15 +55,17 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position })
 						horizontalAlignment="Center"
 						verticalAlignment="Center"
 					>
-						<FighterCard headshot={"Naro"} zone={"NRT"} padding={4} description={"2.21%"} />
-						<FighterCard headshot={"Naro"} zone={"NRT"} padding={4} description={"2.21%"} />
-						<FighterCard headshot={"Naro"} zone={"NRT"} padding={4} description={"2.21%"} />
-						<FighterCard headshot={"Naro"} zone={"NRT"} padding={4} description={"2.21%"} />
-						<FighterCard headshot={"Naro"} zone={"NRT"} padding={4} description={"2.21%"} />
-						<FighterCard headshot={"Naro"} zone={"NRT"} padding={4} description={"2.21%"} />
-						<FighterCard headshot={"Naro"} zone={"NRT"} padding={4} description={"2.21%"} />
-						<FighterCard headshot={"Naro"} zone={"NRT"} padding={4} description={"2.21%"} />
-						<FighterCard headshot={"Naro"} zone={"NRT"} padding={4} discovered description={"2.21%"} />
+						{Object.entries(rarityByZone).map(([key, value]) => {
+							return (
+								<FighterCard
+									headshot={key as string}
+									zone={zones?.current ?? "nrt"}
+									padding={4}
+									discovered
+									description={`${value}%`}
+								/>
+							);
+						})}
 						<uistroke Color={colors.white} Thickness={4}>
 							<uigradient
 								Transparency={
@@ -81,7 +103,12 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position })
 				padding={new UDim(0, 12)}
 				sortOrder={Enum.SortOrder.LayoutOrder}
 			>
-				<BindingButton text="Open" binding={Enum.KeyCode.E} size={UDim2.fromOffset(72, 72)} />
+				<BindingButton
+					text="Open"
+					binding={Enum.KeyCode.E}
+					onClick={() => remotes.eggs.open.fire(zones?.current ?? "nrt")}
+					size={UDim2.fromOffset(72, 72)}
+				/>
 				<BindingButton text="Auto" binding={Enum.KeyCode.Q} size={UDim2.fromOffset(72, 72)} />
 				<BindingButton
 					icon={images.icons.boost_colored}
@@ -100,5 +127,7 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position })
 				/>
 			</Stack>
 		</Frame>
+	) : (
+		<></>
 	);
 };

@@ -39,6 +39,10 @@ const remotes = createRemotes({
 		select: remote<Server, [fighterName: string]>(),
 	}),
 
+	eggs: namespace({
+		open: remote<Server, [eggId: string]>(),
+	}),
+
 	attackEnemy: remote<Server>(),
 });
 

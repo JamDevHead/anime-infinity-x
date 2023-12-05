@@ -32,11 +32,11 @@ return {
 				},
 				nrt = {
 					bro = "rbxassetid://15485667974",
-					gold_ninja = "rbxassetid://15485668164",
-					guro = "rbxassetid://15485668277",
+					goldninja = "rbxassetid://15549845748",
 					jiro = "rbxassetid://15485668444",
 					naro = "rbxassetid://15485668597",
 					oro = "rbxassetid://15485668652",
+					peanutman = "rbxassetid://15549845807",
 					rock = "rbxassetid://15485668743",
 				},
 				one = {

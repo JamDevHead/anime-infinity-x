@@ -7,6 +7,7 @@ import { receiverMiddleware } from "./middleware/receiver";
 import { settingsSlice } from "./settings";
 import { windowSlice } from "./window";
 import { blurSlice } from "@/client/store/blur";
+import { eggSlice } from "@/client/store/egg";
 import { enemyHoverSlice } from "@/client/store/enemy-hover";
 import { inventorySlice } from "@/client/store/inventory";
 import { loadingSlice } from "@/client/store/loading";
@@ -27,6 +28,7 @@ export function createStore() {
 		enemyHover: enemyHoverSlice,
 		loading: loadingSlice,
 		blur: blurSlice,
+		egg: eggSlice,
 	});
 
 	store.applyMiddleware(profilerMiddleware, devToolsMiddleware, receiverMiddleware(store));

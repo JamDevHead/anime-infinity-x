@@ -108,14 +108,9 @@ hash = "ff1fea2918afac768b94a1162f31d74eeb8288fd2bb2eb8256c65f1955a9a19b"
 id = 15485667974
 packable = false
 
-[inputs."assets/images/characters/headshots/nrt/gold_ninja.png"]
+[inputs."assets/images/characters/headshots/nrt/goldninja.png"]
 hash = "48726c23afe4b6be8c8852af017f3b86d805d3b6d56236e35c01e99f648a729d"
-id = 15485668164
-packable = false
-
-[inputs."assets/images/characters/headshots/nrt/guro.png"]
-hash = "c422a3ec64ee8e9237db7a43527135c8ead6973bd65087b7763a8cc49019a676"
-id = 15485668277
+id = 15549845748
 packable = false
 
 [inputs."assets/images/characters/headshots/nrt/jiro.png"]
@@ -131,6 +126,11 @@ packable = false
 [inputs."assets/images/characters/headshots/nrt/oro.png"]
 hash = "8f0b2fa9b211f10d4378afbcaaca19d3f8aa979af3900a5aadc97a5c52a0726d"
 id = 15485668652
+packable = false
+
+[inputs."assets/images/characters/headshots/nrt/peanutman.png"]
+hash = "c422a3ec64ee8e9237db7a43527135c8ead6973bd65087b7763a8cc49019a676"
+id = 15549845807
 packable = false
 
 [inputs."assets/images/characters/headshots/nrt/rock.png"]

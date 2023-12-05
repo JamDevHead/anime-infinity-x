@@ -30,8 +30,8 @@ export const images: {
 			};
 			readonly nrt: {
 				readonly bro: string;
-				readonly gold_ninja: string;
-				readonly guro: string;
+				readonly goldninja: string;
+				readonly peanutman: string;
 				readonly jiro: string;
 				readonly naro: string;
 				readonly oro: string;
