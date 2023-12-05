@@ -12,7 +12,7 @@ export class EggService implements OnStart {
 	onStart(): void {
 		this.logger.Info("EggService started");
 
-		remotes.eggs.open.connect((player, zone) => {
+		remotes.eggs.open.onRequest((player, zone) => {
 			this.logger.Info(`Player ${player.Name} opened egg ${zone}`);
 
 			const rarityByZone = FighterRarity[(zone.lower() ?? "nrt") as keyof typeof FighterRarity];
@@ -27,7 +27,7 @@ export class EggService implements OnStart {
 
 			this.logger.Info(`Player ${player.Name} got ${rarity[0]} from egg ${zone}`);
 
-			addFighterFor(player, {
+			return addFighterFor(player, {
 				name: rarity[0],
 				displayName: rarity[0],
 				rarity: 1,

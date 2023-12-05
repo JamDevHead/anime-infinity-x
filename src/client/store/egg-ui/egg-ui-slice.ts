@@ -1,14 +1,14 @@
 import { createProducer } from "@rbxts/reflex";
 
-interface EggState {
+interface EggUiState {
 	opened: boolean;
 }
 
-const initialState: EggState = {
+const initialState: EggUiState = {
 	opened: false,
 };
 
-export const eggSlice = createProducer(initialState, {
+export const eggUiSlice = createProducer(initialState, {
 	setEggOpen: (state, opened: boolean) => ({
 		...state,
 		opened,

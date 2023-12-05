@@ -22,4 +22,9 @@ export function addFighterFor(player: Player, fighterData: Omit<PlayerFighter, "
 	const fighterUid = HttpService.GenerateGUID(false);
 
 	store.addFighter(userId, fighterUid, { ...fighterData, characterUid });
+	return {
+		...fighterData,
+		uid: fighterUid,
+		characterUid,
+	} as PlayerFighter;
 }

@@ -1,8 +1,10 @@
 import Object from "@rbxts/object-utils";
 import { useSelectorCreator } from "@rbxts/react-reflex";
-import Roact, { FunctionComponent } from "@rbxts/roact";
+import Roact, { FunctionComponent, useMemo } from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
-import { useRootSelector } from "@/client/store";
+import { store, useRootSelector } from "@/client/store";
+import { selectEggUiStatus } from "@/client/store/egg-ui/egg-ui-selectors";
+import { selectHudVisible } from "@/client/store/hud/hud-selectors";
 import { BindingButton } from "@/client/ui/components/binding-button";
 import { FighterCard } from "@/client/ui/components/fighter-card";
 import { Frame } from "@/client/ui/components/frame";
@@ -12,7 +14,6 @@ import { Stack } from "@/client/ui/components/stack";
 import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { images } from "@/shared/assets/images";
 import { FighterRarity } from "@/shared/constants/rarity";
-import remotes from "@/shared/remotes";
 import { selectPlayerZones } from "@/shared/store/players";
 
 type EggLayoutProps = {
@@ -23,13 +24,24 @@ type EggLayoutProps = {
 export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position }) => {
 	const userId = usePlayerId();
 	const zones = useSelectorCreator(selectPlayerZones, userId);
-	const { opened } = useRootSelector((store) => store.egg);
+	const opened = useRootSelector(selectEggUiStatus);
 
-	const rarityByZone = FighterRarity[(zones?.current?.lower() ?? "nrt") as keyof typeof FighterRarity];
+	const rarityByZone = useMemo(
+		() => FighterRarity[(zones?.current?.lower() ?? "nrt") as keyof typeof FighterRarity],
+		[zones],
+	);
 
-	print(opened);
+	const hudVisible = useRootSelector(selectHudVisible);
 
-	return opened ? (
+	if (!hudVisible) {
+		return <></>;
+	}
+
+	if (!opened) {
+		return <></>;
+	}
+
+	return (
 		<Frame
 			anchorPoint={new Vector2(0.5, 0.5)}
 			backgroundTransparency={1}
@@ -106,7 +118,7 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position })
 				<BindingButton
 					text="Open"
 					binding={Enum.KeyCode.E}
-					onClick={() => remotes.eggs.open.fire(zones?.current ?? "nrt")}
+					onClick={() => store.addToEggQueue(zones?.current ?? "nrt")}
 					size={UDim2.fromOffset(72, 72)}
 				/>
 				<BindingButton text="Auto" binding={Enum.KeyCode.Q} size={UDim2.fromOffset(72, 72)} />
@@ -127,7 +139,5 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position })
 				/>
 			</Stack>
 		</Frame>
-	) : (
-		<></>
 	);
 };
