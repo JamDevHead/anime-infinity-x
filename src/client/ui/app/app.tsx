@@ -6,12 +6,14 @@ import { Layer } from "@/client/ui/components/layer";
 import { WindowManager } from "@/client/ui/components/window-manager";
 import { FirstTime } from "@/client/ui/layouts/first-time/first-time";
 import { Hud } from "@/client/ui/layouts/hud/hud";
+import { Layouts } from "@/client/ui/layouts/layouts";
 
 export const App = () => {
 	return (
 		<Layer>
 			<FirstTime />
 			<Hud />
+			<Layouts />
 			<WindowManager />
 			<GlobalContextMenu />
 			<BlurEffect />

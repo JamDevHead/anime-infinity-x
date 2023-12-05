@@ -30,7 +30,13 @@ export class FirstTimeController implements OnStart, OnCharacterAdd {
 		this.setupCamera();
 
 		store.subscribe(selectPlayerInfo(tostring(Players.LocalPlayer.UserId)), (playerInfo) => {
-			playerInfo?.firstTime ? this.setupCamera() : this.restoreCamera();
+			if (playerInfo?.firstTime) {
+				this.setupCamera();
+				store.setHudVisible(false);
+			} else {
+				this.restoreCamera();
+				store.setHudVisible(true);
+			}
 		});
 	}
 

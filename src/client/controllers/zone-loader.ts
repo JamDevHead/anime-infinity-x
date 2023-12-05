@@ -1,19 +1,8 @@
 import { Controller, OnStart } from "@flamework/core";
 import { Players, Workspace } from "@rbxts/services";
+import { Zone, ZonesFolder } from "@/@types/models/zone";
 import { store } from "@/client/store";
 import { PlayerZones, selectPlayerZones } from "@/shared/store/players";
-
-interface Zone extends Instance {
-	Map: Folder;
-	Spawn: Part;
-	Nodes: {
-		GetChildren(): Part[];
-	} & Folder;
-}
-
-interface ZonesFolder extends Folder {
-	GetChildren(): (Zone & Instance)[];
-}
 
 @Controller()
 export class ZoneLoader implements OnStart {

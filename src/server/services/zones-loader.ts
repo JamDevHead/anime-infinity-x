@@ -1,22 +1,11 @@
 import { OnStart, Service } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { ReplicatedStorage, Workspace } from "@rbxts/services";
+import { Zone, ZonesFolder } from "@/@types/models/zone";
 import { OnCharacterAdd } from "@/server/services/lifecycles/on-character-add";
 import { OnPlayerAdd } from "@/server/services/lifecycles/on-player-add";
 import { store } from "@/server/store";
 import { selectPlayerZones } from "@/shared/store/players";
-
-interface Zone {
-	Map: Folder;
-	Spawn: Part;
-	Nodes: {
-		GetChildren(): Part[];
-	} & Folder;
-}
-
-interface ZonesFolder extends Folder {
-	GetChildren(): (Zone & Instance)[];
-}
 
 @Service()
 export class ZonesLoader implements OnStart, OnPlayerAdd, OnCharacterAdd {
