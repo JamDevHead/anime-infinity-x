@@ -15,9 +15,7 @@ export class ActiveFighters {
 	constructor(private tracker: Tracker) {
 		this.goalContainer = tracker.fightersTracker.goalContainer;
 
-		this.trove.add(
-			store.observe(selectActivePlayerFighters(tracker.localUserId), (uid) => this.onActiveFighter(uid)),
-		);
+		this.trove.add(store.observe(selectActivePlayerFighters(tracker.userId), (uid) => this.onActiveFighter(uid)));
 	}
 
 	public createFighterGoal(uid: string) {

@@ -3,11 +3,15 @@ import { ActiveFighters } from "@/client/controllers/fighters-tracker/active-fig
 import { FightersTracker } from "@/client/controllers/fighters-tracker/index";
 import { store } from "@/client/store";
 import { selectSelectedEnemiesByPlayerId } from "@/shared/store/enemy-selection";
-import { selectFighterTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
-import { selectActivePlayerFighters } from "@/shared/store/players/fighters";
+import {
+	selectFighterTarget,
+	selectPlayerFightersTarget,
+} from "@/shared/store/fighter-target/fighter-target-selectors";
+import { Players } from "@rbxts/services";
 
 export class Tracker {
-	public readonly localUserId: string;
+	public readonly userId: string;
+	private readonly localUserId = tostring(Players.LocalPlayer.UserId);
 
 	private activeFighters: ActiveFighters;
 	private trove = new Trove();
@@ -17,7 +21,7 @@ export class Tracker {
 		player: Player,
 		public fightersTracker: FightersTracker,
 	) {
-		this.localUserId = tostring(player.UserId);
+		this.userId = tostring(player.UserId);
 		this.activeFighters = this.trove.add(new ActiveFighters(this));
 
 		task.spawn(() => {
@@ -32,13 +36,23 @@ export class Tracker {
 		// 		this.updateActiveFighters(activeFighters, previousActiveFighters),
 		// 	),
 		// );
-		this.trove.add(
-			store.subscribe(
-				selectSelectedEnemiesByPlayerId(this.localUserId),
-				(selectedEnemies, previousSelectedEnemies) =>
-					this.updateSelectedEnemies(selectedEnemies, previousSelectedEnemies),
-			),
-		);
+
+		if (this.userId === this.localUserId) {
+			this.trove.add(
+				store.subscribe(
+					selectSelectedEnemiesByPlayerId(this.userId),
+					(selectedEnemies, previousSelectedEnemies) =>
+						this.updateSelectedEnemies(selectedEnemies, previousSelectedEnemies),
+				),
+			);
+		} else {
+			this.trove.add(
+				store.observe(selectPlayerFightersTarget(this.userId), (fighter) => {
+					print("fighter target changed", fighter);
+					this.updateFighters();
+				}),
+			);
+		}
 	}
 
 	public destroy() {
@@ -73,7 +87,7 @@ export class Tracker {
 			goalAttachment.WorldPosition = this.root.Position.add(fighterOffset);
 			goalAttachment.SetAttribute("Offset", fighterOffset);
 			goalAttachment.SetAttribute("UID", uid);
-			goalAttachment.SetAttribute("OwnerId", this.localUserId);
+			goalAttachment.SetAttribute("OwnerId", this.userId);
 			goalAttachment.AddTag("FighterGoal");
 		}
 	}
@@ -94,7 +108,6 @@ export class Tracker {
 			return enemies?.includes(enemyUid) === false;
 		};
 
-		// eslint-disable-next-line roblox-ts/no-array-pairs
 		for (const [enemyIndex, enemyUid] of pairs(selectedEnemies)) {
 			if (previousSelectedEnemies?.[enemyIndex] !== undefined) {
 				continue;
@@ -103,32 +116,7 @@ export class Tracker {
 			const cleanup = this.onSelectedEnemy(enemyUid);
 
 			this.trove.add(
-				store.once(selectSelectedEnemiesByPlayerId(this.localUserId), doesNotHaveTarget(enemyUid), cleanup),
-			);
-		}
-	}
-
-	private updateActiveFighters(activeFighters: string[] | undefined, previousActiveFighters: string[] | undefined) {
-		print("updateActiveFighters", activeFighters, previousActiveFighters);
-
-		if (!activeFighters) {
-			return;
-		}
-
-		const doesNotHaveFighter = (fighterUid: string) => (fighters: string[] | undefined) => {
-			return fighters?.includes(fighterUid) === false;
-		};
-
-		// eslint-disable-next-line roblox-ts/no-array-pairs
-		for (const [fighterIndex, fighterUid] of pairs(activeFighters)) {
-			if (previousActiveFighters?.[fighterIndex] !== undefined) {
-				continue;
-			}
-
-			const cleanup = this.onActiveFighter(fighterUid);
-
-			this.trove.add(
-				store.once(selectActivePlayerFighters(this.localUserId), doesNotHaveFighter(fighterUid), cleanup),
+				store.once(selectSelectedEnemiesByPlayerId(this.userId), doesNotHaveTarget(enemyUid), cleanup),
 			);
 		}
 	}
