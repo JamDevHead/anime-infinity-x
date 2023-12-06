@@ -87,7 +87,7 @@ export function EnemyHealth({ enemy }: { enemy: Enemy | { instance: Model; human
 	return (
 		<billboardgui
 			Size={UDim2.fromScale(4 * enemyScale, 1.25 * enemyScale)}
-			MaxDistance={10 * enemyScale}
+			MaxDistance={40 * enemyScale}
 			StudsOffsetWorldSpace={Vector3.yAxis.mul(3 * enemyScale)}
 		>
 			<Stack
