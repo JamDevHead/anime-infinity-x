@@ -6,6 +6,7 @@ import { ReplicatedStorage, TweenService, Workspace } from "@rbxts/services";
 import { EnemyHealth } from "@/client/components/react/enemy-health/enemy-health";
 import { SoundController } from "@/client/controllers/sound-controller";
 import { store } from "@/client/store";
+import { useAbbreviator } from "@/client/ui/hooks/use-abbreviator";
 import { getFighterByUid } from "@/client/utils/fighters";
 import { EnemyComponent } from "@/shared/components/enemy-component";
 import { AnimationMap, AnimationTracker } from "@/shared/lib/animation-tracker";
@@ -24,6 +25,7 @@ export class Enemy extends EnemyComponent implements OnStart {
 	private hurtHighlight = new Instance("Highlight");
 	private hurtParticle = new Instance("Part") as Part & { Particle: ParticleEmitter };
 	private healthComponentRoot?: Root;
+	private abbreviator = useAbbreviator();
 
 	constructor(
 		private readonly components: Components,
@@ -150,6 +152,8 @@ export class Enemy extends EnemyComponent implements OnStart {
 		const enemyScale = this.instance.GetScale();
 		const FORCE = 5;
 
+		const damageAbbreviated = this.abbreviator.numberToString(damage);
+
 		hurtPart.Size = Vector3.one;
 		hurtPart.Transparency = 1;
 		hurtPart.Anchored = false;
@@ -165,7 +169,7 @@ export class Enemy extends EnemyComponent implements OnStart {
 
 		hurtLabel.BackgroundTransparency = 1;
 		hurtLabel.Size = UDim2.fromScale(1, 1);
-		hurtLabel.Text = `- ${damage}`;
+		hurtLabel.Text = `- ${damageAbbreviated}`;
 		hurtLabel.TextColor3 = Color3.fromHex("#f64e4e");
 		hurtLabel.TextScaled = true;
 		hurtLabel.TextStrokeColor3 = Color3.fromHex("#000");
