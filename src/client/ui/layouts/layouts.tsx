@@ -1,6 +1,7 @@
 import Roact from "@rbxts/roact";
 import { Frame } from "@/client/ui/components/frame";
 import { EggLayout } from "@/client/ui/layouts/egg/egg-layout";
+import { PortalPopup } from "@/client/ui/layouts/portal/portal-popup";
 
 export const Layouts = () => {
 	return (
@@ -11,6 +12,7 @@ export const Layouts = () => {
 			backgroundTransparency={1}
 		>
 			<EggLayout />
+			<PortalPopup />
 		</Frame>
 	);
 };

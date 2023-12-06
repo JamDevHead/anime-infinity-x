@@ -34,6 +34,7 @@ const remotes = createRemotes({
 
 	zone: namespace({
 		teleport: remote<Server, [zone: string]>(),
+		buy: remote<Server, [zone: string]>(),
 	}),
 
 	firstTime: namespace({

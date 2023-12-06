@@ -121,7 +121,11 @@ export const ChooseFighter = () => {
 					}}
 				>
 					<Popup.Body>
-						<Popup.Title text="Are you sure you want to choose this fighter?" />
+						<Popup.Title
+							size={UDim2.fromScale(1, 0.4)}
+							autoSize={"Y"}
+							text="Are you sure you want to choose\nthis fighter?"
+						/>
 						<Popup.Description text="You can't change your fighter after this." />
 					</Popup.Body>
 					<Popup.Actions>

@@ -1,6 +1,8 @@
 import { OnInit, Service } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { ZirconServer } from "@rbxts/zircon";
+import { ZirconNamespace } from "@rbxts/zircon/out/Class/ZirconNamespace";
+import { balanceCommands } from "@/server/commands/balance";
 import { giveCommand } from "@/server/commands/give";
 import { ZirconServerConfig } from "@/server/constants/zircon-server-config";
 
@@ -11,6 +13,10 @@ export class Zircon implements OnInit {
 	onInit(): void | Promise<void> {
 		this.logger.Info("Zircon service initialized");
 
-		ZirconServer.Registry.Init(ZirconServerConfig.AddFunction(giveCommand, ["Devs"]).Build());
+		ZirconServer.Registry.Init(
+			ZirconServerConfig.AddNamespace(new ZirconNamespace("balance", balanceCommands), ["Devs"])
+				.AddFunction(giveCommand, ["Devs"])
+				.Build(),
+		);
 	}
 }

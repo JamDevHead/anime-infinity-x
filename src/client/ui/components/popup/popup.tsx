@@ -103,9 +103,12 @@ const Body: FunctionComponent<PropsWithChildren> = ({ children }) => {
 
 type TitleProps = {
 	text: string;
+	size?: UDim2;
+	autoSize?: "X" | "Y" | "XY";
+	wrapped?: boolean;
 };
 
-const Title: FunctionComponent<TitleProps> = ({ text }) => {
+const Title: FunctionComponent<TitleProps> = ({ text, size, autoSize, wrapped }) => {
 	const rem = useRem();
 
 	return (
@@ -114,19 +117,21 @@ const Title: FunctionComponent<TitleProps> = ({ text }) => {
 			textColor={colors.white}
 			font={fonts.gotham.bold}
 			textSize={rem(24, "pixel")}
-			textWrapped
-			size={UDim2.fromScale(1, 0.4)}
-			autoSize="XY"
-			textAutoResize="Y"
+			textWrapped={wrapped ?? true}
+			size={size ?? UDim2.fromScale(1, 0)}
+			textAutoResize={autoSize ?? "XY"}
 		/>
 	);
 };
 
 type DescriptionProps = {
 	text: string;
+	size?: UDim2;
+	autoSize?: "X" | "Y" | "XY";
+	wrapped?: boolean;
 };
 
-const Description: FunctionComponent<DescriptionProps> = ({ text }) => {
+const Description: FunctionComponent<DescriptionProps> = ({ text, size, autoSize, wrapped }) => {
 	const rem = useRem();
 
 	return (
@@ -134,11 +139,10 @@ const Description: FunctionComponent<DescriptionProps> = ({ text }) => {
 			text={text}
 			textColor={colors.white}
 			font={fonts.gotham.medium}
-			textWrapped
+			textWrapped={wrapped ?? true}
 			textSize={rem(16, "pixel")}
-			size={UDim2.fromScale(1, 0)}
-			autoSize="Y"
-			//textAutoResize="XY"
+			size={size ?? UDim2.fromScale(1, 0)}
+			textAutoResize={autoSize ?? "XY"}
 		/>
 	);
 };
