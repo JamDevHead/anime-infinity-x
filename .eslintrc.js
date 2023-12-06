@@ -18,6 +18,7 @@ module.exports = {
 	ignorePatterns: ["/out"],
 	rules: {
 		"no-restricted-globals": "off",
+		"roblox-ts/no-array-pairs": "off",
 		"@typescript-eslint/no-unused-vars": [
 			"warn",
 			{
