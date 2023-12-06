@@ -17,6 +17,11 @@ export class EnemyDrops implements OnStart {
 				return;
 			}
 
+			if (collectable.owner !== tostring(player.UserId)) {
+				this.logger.Warn("Player {player} does not own collectable {id}", player, collectableId);
+				return;
+			}
+
 			store.removeDrop(collectableId);
 			store.addBalance(tostring(player.UserId), "coins", collectable.quantity);
 		});

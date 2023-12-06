@@ -41,10 +41,10 @@ export class Enemy extends EnemyComponent implements OnStart {
 		for (const [playerId, enemies] of pairs(enemiesSelected)) {
 			if (enemies?.includes(this.attributes.Guid)) {
 				store.removeSelectedEnemy(playerId as string, this.attributes.Guid);
-			}
 
-			if (!killers.has(playerId as string)) {
-				killers.add(playerId as string);
+				if (!killers.has(playerId as string)) {
+					killers.add(playerId as string);
+				}
 			}
 		}
 
