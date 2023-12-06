@@ -1,4 +1,4 @@
-import { useDebounceCallback, useEventListener } from "@rbxts/pretty-react-hooks";
+import { useDebounceCallback, useEventListener, useLifetime } from "@rbxts/pretty-react-hooks";
 import Roact, { useEffect, useMemo, useRef, useState } from "@rbxts/roact";
 import { RunService } from "@rbxts/services";
 import { store } from "@/client/store";
@@ -21,6 +21,7 @@ export function EnemyDrop({ drop, soundTracker }: { drop: Drop; soundTracker: So
 	const partRef = useRef<Part>();
 	const attachment0Ref = useRef<Attachment>();
 	const attachment1Ref = useRef<Attachment>();
+	const lifetime = useLifetime();
 	const [trailEnabled, setTrailEnabled] = useState(false);
 	const root = useMemo(
 		() => character.getValue()?.FindFirstChild("HumanoidRootPart") as Part | undefined,
@@ -59,6 +60,10 @@ export function EnemyDrop({ drop, soundTracker }: { drop: Drop; soundTracker: So
 
 	useEventListener(RunService.Heartbeat, () => {
 		if (!root) {
+			return;
+		}
+
+		if (lifetime.getValue() < 0.8) {
 			return;
 		}
 
