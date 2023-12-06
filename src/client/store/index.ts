@@ -1,5 +1,6 @@
 import { useProducer, UseProducerHook, useSelector, UseSelectorHook } from "@rbxts/react-reflex";
 import { combineProducers, InferState } from "@rbxts/reflex";
+import { eggUiSlice } from "client/store/egg-ui";
 import { dpsSlice } from "./dps";
 import { hudSlice } from "./hud";
 import { devToolsMiddleware } from "./middleware/devtools";
@@ -7,7 +8,7 @@ import { receiverMiddleware } from "./middleware/receiver";
 import { settingsSlice } from "./settings";
 import { windowSlice } from "./window";
 import { blurSlice } from "@/client/store/blur";
-import { eggSlice } from "@/client/store/egg";
+import { eggQueueSlice } from "@/client/store/egg-queue";
 import { enemyHoverSlice } from "@/client/store/enemy-hover";
 import { inventorySlice } from "@/client/store/inventory";
 import { loadingSlice } from "@/client/store/loading";
@@ -29,8 +30,9 @@ export function createStore() {
 		enemyHover: enemyHoverSlice,
 		loading: loadingSlice,
 		blur: blurSlice,
-		egg: eggSlice,
-		portal: portalSlice,
+    portal: portalSlice,
+    eggUi: eggUiSlice,
+    eggQueue: eggQueueSlice,
 	});
 
 	store.applyMiddleware(profilerMiddleware, devToolsMiddleware, receiverMiddleware(store));

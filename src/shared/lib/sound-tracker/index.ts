@@ -1,3 +1,4 @@
+import { SoundService } from "@rbxts/services";
 import { SoundCache } from "@/shared/lib/sound-tracker/sound-cache";
 
 export type SoundId = `rbxassetid://${number}`;
@@ -17,6 +18,7 @@ export class SoundTracker {
 		RollOffMinDistance: 5,
 	};
 
+	private globalEnvironment = SoundService;
 	private soundStore = new Map<string, SoundCache>();
 
 	constructor(soundMap?: { [key: string]: SoundMap }) {
@@ -35,7 +37,7 @@ export class SoundTracker {
 		this.soundStore.set(name, soundCache);
 	}
 
-	public play(name: string, at: Instance, options?: SoundProps) {
+	public play(name: string, at: Instance = this.globalEnvironment, options?: SoundProps) {
 		const soundCache = this.soundStore.get(name);
 
 		if (!soundCache) {
