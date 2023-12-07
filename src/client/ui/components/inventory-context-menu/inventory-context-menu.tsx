@@ -2,6 +2,7 @@ import { useSelectorCreator } from "@rbxts/react-reflex";
 import Roact, { useEffect } from "@rbxts/roact";
 import { useRootSelector, useRootStore } from "@/client/store";
 import { ContextMenu } from "@/client/ui/components/context-menu/context-menu";
+import { useAbbreviator } from "@/client/ui/hooks/use-abbreviator";
 import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { images } from "@/shared/assets/images";
 import remotes from "@/shared/remotes";
@@ -9,6 +10,7 @@ import { selectPlayerFighter, selectPlayerFighters } from "@/shared/store/player
 
 export const InventoryContextMenu = () => {
 	const userId = usePlayerId();
+	const abbreviator = useAbbreviator();
 
 	const { setInventoryOpenedMenu } = useRootStore();
 	const { openedContextMenu, menuPosition, selectedItem } = useRootSelector((state) => state.inventory);
@@ -65,12 +67,9 @@ export const InventoryContextMenu = () => {
 						new ColorSequenceKeypoint(1, Color3.fromHex("#9909B2")),
 					])
 				}
-				onClick={() => {
-					print("Use");
-				}}
 			/>
 			<ContextMenu.ButtonItem
-				text="Sell"
+				text={`Sell (${abbreviator.numberToString(fighter?.stats.sellPrice ?? 0, true)} yens)`}
 				gradient={
 					new ColorSequence([
 						new ColorSequenceKeypoint(0, Color3.fromHex("#FFD600")),
@@ -79,7 +78,9 @@ export const InventoryContextMenu = () => {
 				}
 				icon={images.icons.cash}
 				onClick={() => {
-					print("Sell");
+					if (!fighter) return;
+					remotes.inventory.sellFighter.fire(fighter.uid);
+					setInventoryOpenedMenu(false);
 				}}
 			/>
 			<ContextMenu.ButtonItem
