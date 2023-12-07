@@ -1290,6 +1290,11 @@
   resolved "https://registry.yarnpkg.com/@rbxts/flipper/-/flipper-2.0.1.tgz#25bd840441055da419c234a9d045309e40ac3ad2"
   integrity sha512-kxb5AZizP05XSmo3waS/QkcfNMD5b6HX4gGwyHOyBow260R5MIT4L/ZUPLvleXXyb9b67X4NVmHoac1tPXOLNA==
 
+"@rbxts/gameanalytics@^2.2.3-ts.1":
+  version "2.2.3-ts.1"
+  resolved "https://registry.yarnpkg.com/@rbxts/gameanalytics/-/gameanalytics-2.2.3-ts.1.tgz#cb810505d71b8aa03ed70950d3cf5da558d1b8be"
+  integrity sha512-+aRtngajFZynjScMTbLRTTUVROOo+LG8jP5ZnmUbGZI3rpRmtkGWc2vPMoV7b/45KUna2ut1eLqaerLpK2kzdw==
+
 "@rbxts/gizmo@git+https://github.com/JamDevHead/gizmo.git":
   version "2.0.5"
   resolved "git+https://github.com/JamDevHead/gizmo.git#ca885640f2bb634f0563ec0d8a347253c8425878"
