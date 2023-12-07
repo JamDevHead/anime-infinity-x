@@ -10,9 +10,13 @@ const unlock = new ZirconFunctionBuilder("unlock")
 
 		const zoneData = ZONES[zone.lower() as keyof typeof ZONES];
 
-		if (zoneData === undefined) return;
+		if (zoneData === undefined) {
+			context.LogError("Invalid zone");
+			return;
+		}
 
 		store.unlockZone(tostring(player.UserId), zone.upper());
+		store.setCurrentZone(tostring(player.UserId), zone.upper());
 
 		context.LogInfo(`Unlocked zone ${zone}`);
 	});
