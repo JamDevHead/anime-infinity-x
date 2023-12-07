@@ -1,4 +1,4 @@
-import Roact, { FunctionComponent } from "@rbxts/roact";
+import Roact, { forwardRef } from "@rbxts/roact";
 import { Frame, FrameProps } from "@/client/ui/components/frame";
 
 interface FlexBoxProps extends FrameProps {
@@ -9,10 +9,10 @@ interface FlexBoxProps extends FrameProps {
 	padding?: UDim;
 }
 
-export const Stack: FunctionComponent<FlexBoxProps> = (props) => {
+export const Stack = forwardRef<FlexBoxProps, Frame>((props, ref) => {
 	return (
 		<Frame
-			ref={props.ref}
+			ref={ref}
 			size={props.size}
 			position={props.position}
 			anchorPoint={props.anchorPoint}
@@ -37,4 +37,4 @@ export const Stack: FunctionComponent<FlexBoxProps> = (props) => {
 			{props.children}
 		</Frame>
 	);
-};
+});

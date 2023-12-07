@@ -1,11 +1,13 @@
-import Roact, { FunctionComponent, PropsWithChildren } from "@rbxts/roact";
+import Roact, { FunctionComponent, PropsWithChildren, useEffect, useRef } from "@rbxts/roact";
 import { fonts } from "@/client/constants/fonts";
+import { springs } from "@/client/constants/springs";
 import { Button } from "@/client/ui/components/button";
 import { Checkbox } from "@/client/ui/components/checkbox";
 import { FadingFrame } from "@/client/ui/components/fading-frame";
 import { Image } from "@/client/ui/components/image";
 import { Stack } from "@/client/ui/components/stack";
 import { Text } from "@/client/ui/components/text";
+import { useMotion } from "@/client/ui/hooks/use-motion";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
 
@@ -68,6 +70,11 @@ type DropdownProps = {
 
 const Dropdown: FunctionComponent<DropdownProps> = ({ onClick, closed }) => {
 	const rem = useRem();
+	const [rotation, setRotation] = useMotion(0);
+
+	useEffect(() => {
+		setRotation.spring(closed ? 90 : 0, springs.responsive);
+	}, [closed, setRotation]);
 
 	return (
 		<Button
@@ -75,7 +82,7 @@ const Dropdown: FunctionComponent<DropdownProps> = ({ onClick, closed }) => {
 			backgroundTransparency={1}
 			onClick={onClick}
 		>
-			<Image image={images.ui.hud_arrow} size={UDim2.fromScale(1, 1)} rotation={closed ? 90 : 0} />
+			<Image image={images.ui.hud_arrow} size={UDim2.fromScale(1, 1)} rotation={rotation} />
 		</Button>
 	);
 };
@@ -177,15 +184,32 @@ type ListProps = {
 };
 
 const List: FunctionComponent<PropsWithChildren<ListProps>> = ({ children, visible }) => {
+	const ref = useRef<Frame>();
 	const rem = useRem();
+	const [size, setSize] = useMotion(new UDim2());
+
+	useEffect(() => {
+		if (!ref.current) return;
+
+		let height = 0;
+		for (const child of ref.current.GetChildren() as Array<Frame>) {
+			if (!child.IsA("Frame")) continue;
+
+			height += child.AbsoluteSize.Y + rem(1);
+		}
+
+		setSize.spring(visible ? UDim2.fromOffset(0, height) : UDim2.fromOffset(0, 0));
+	}, [ref, rem, setSize, visible]);
 
 	return (
 		<Stack
+			ref={ref}
 			fillDirection={Enum.FillDirection.Vertical}
 			horizontalAlignment={Enum.HorizontalAlignment.Right}
-			autoSize={Enum.AutomaticSize.XY}
 			padding={new UDim(0, rem(1))}
-			visible={visible}
+			size={size}
+			autoSize="X"
+			clipsDescendants
 		>
 			{children}
 			<uipadding PaddingLeft={new UDim(0, rem(1))} PaddingRight={new UDim(0, rem(1))} />
