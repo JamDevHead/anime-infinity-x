@@ -113,8 +113,19 @@ export function EnemyDrop({ drop, soundTracker }: { drop: Drop; soundTracker: So
 				Attachment1={attachment1Ref}
 				FaceCamera={true}
 				Lifetime={0.5}
+				Transparency={new NumberSequence(0.3)}
+				Color={
+					new ColorSequence([
+						new ColorSequenceKeypoint(0, Color3.fromHex("#ffeb10")),
+						new ColorSequenceKeypoint(1, Color3.fromHex("#ffe621")),
+					])
+				}
 				WidthScale={
-					new NumberSequence([new NumberSequenceKeypoint(0, 0.5), new NumberSequenceKeypoint(1, 0.5)])
+					new NumberSequence([
+						new NumberSequenceKeypoint(0, 0.05),
+						new NumberSequenceKeypoint(0.5, 0.5),
+						new NumberSequenceKeypoint(1, 0.05),
+					])
 				}
 			/>
 
