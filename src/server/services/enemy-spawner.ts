@@ -2,10 +2,13 @@ import { OnStart, Service } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { ServerStorage, Workspace } from "@rbxts/services";
 import { ZonesLoader } from "./zones-loader";
+import { Zone } from "@/@types/models/zone";
 
 @Service()
 export class EnemySpawner implements OnStart {
 	public enemiesFolder = new Instance("Folder");
+
+	private npcModels = ServerStorage.assets.Avatars.NPCsModels;
 
 	constructor(
 		private logger: Logger,
@@ -13,30 +16,36 @@ export class EnemySpawner implements OnStart {
 	) {}
 
 	onStart() {
-		const npcModels = ServerStorage.assets.Avatars.NPCsModels;
-
 		this.enemiesFolder.Name = "Enemies";
 		this.enemiesFolder.Parent = Workspace;
 
 		for (const zone of this.zonesLoader.zonesFolder.GetChildren()) {
-			const npcZone = npcModels.FindFirstChild(zone.Name);
+			this.setupZone(zone);
+		}
 
-			if (npcZone === undefined) {
-				this.logger.Warn("Failed to find npc zone {npcZone}", zone.Name);
-				continue;
-			}
+		this.zonesLoader.zonesFolder.ChildAdded.Connect((zone) => {
+			this.setupZone(zone as Zone);
+		});
+	}
 
-			const nodesFolder = zone.FindFirstChild("Nodes") as (typeof zone)["Nodes"] | undefined;
+	private setupZone(zone: Zone) {
+		const npcZone = this.npcModels.FindFirstChild(zone.Name);
 
-			if (nodesFolder === undefined) {
-				this.logger.Warn("Zone {zone} doesn't have a nodes folder", zone.Name);
-				continue;
-			}
+		if (npcZone === undefined) {
+			this.logger.Warn("Failed to find npc zone {npcZone}", zone.Name);
+			return;
+		}
 
-			for (const node of nodesFolder.GetChildren()) {
-				node.SetAttribute("EnemyZone", zone.Name);
-				node.AddTag("EnemySpawner");
-			}
+		const nodesFolder = zone.FindFirstChild("Nodes") as Zone["Nodes"] | undefined;
+
+		if (nodesFolder === undefined) {
+			this.logger.Warn("Zone {zone} doesn't have a nodes folder", zone.Name);
+			return;
+		}
+
+		for (const node of nodesFolder.GetChildren()) {
+			node.SetAttribute("EnemyZone", zone.Name);
+			node.AddTag("EnemySpawner");
 		}
 	}
 }
