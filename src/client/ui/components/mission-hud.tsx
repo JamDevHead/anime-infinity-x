@@ -109,13 +109,15 @@ const Card: FunctionComponent<PropsWithChildren> = ({ children }) => {
 };
 
 const CardRoot: FunctionComponent<PropsWithChildren> = ({ children }) => {
+	const rem = useRem();
+
 	return (
 		<Stack
 			fillDirection={Enum.FillDirection.Horizontal}
 			horizontalAlignment={Enum.HorizontalAlignment.Right}
 			verticalAlignment={Enum.VerticalAlignment.Center}
 			autoSize={Enum.AutomaticSize.XY}
-			padding={new UDim(0, 8)}
+			padding={new UDim(0, rem(8, "pixel"))}
 		>
 			{children}
 		</Stack>

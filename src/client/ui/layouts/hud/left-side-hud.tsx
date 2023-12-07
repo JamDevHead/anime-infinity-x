@@ -4,7 +4,6 @@ import { Grid } from "@/client/ui/components/grid";
 import { SimpleButton } from "@/client/ui/components/simple-button";
 import { Stack } from "@/client/ui/components/stack";
 import { Stats } from "@/client/ui/components/stats";
-import { UiScaleAspectRatio } from "@/client/ui/components/ui-scale-aspect-ratio";
 import { useAbbreviator } from "@/client/ui/hooks/use-abbreviator";
 import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { useRem } from "@/client/ui/hooks/use-rem";
@@ -27,7 +26,7 @@ export const LeftSideHud = () => {
 			verticalAlignment={Enum.VerticalAlignment.Center}
 			size={UDim2.fromScale(0, 1)}
 			autoSize={Enum.AutomaticSize.XY}
-			padding={new UDim(0, 12)}
+			padding={new UDim(0, rem(12, "pixel"))}
 		>
 			<Stats.Root>
 				<Stats.Item color={Color3.fromHex("fde9a4")}>
@@ -50,7 +49,6 @@ export const LeftSideHud = () => {
 						}}
 					/>
 				</Stats.Item>
-				<UiScaleAspectRatio />
 			</Stats.Root>
 
 			<Grid
@@ -75,7 +73,6 @@ export const LeftSideHud = () => {
 					onClick={() => toggleWindowVisible("inventory")}
 				/>
 				<SimpleButton color={Color3.fromHex("#c7480e")} icon={images.icons.inventory} />
-				<UiScaleAspectRatio />
 			</Grid>
 
 			<uipadding PaddingLeft={new UDim(0, rem(1))} PaddingRight={new UDim(0, rem(2))} />
