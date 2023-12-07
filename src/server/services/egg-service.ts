@@ -1,8 +1,8 @@
 import { OnStart, Service } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import Object from "@rbxts/object-utils";
-import { addFighterFor } from "@/server/utils/fighters";
-import { FighterRarity } from "@/shared/constants/rarity";
+import { addFighterFor, generateStats } from "@/server/utils/fighters";
+import { FighterRarity, Rarity } from "@/shared/constants/rarity";
 import remotes from "@/shared/remotes";
 
 @Service()
@@ -30,16 +30,14 @@ export class EggService implements OnStart {
 			return addFighterFor(player, {
 				name: rarity[0],
 				displayName: rarity[0],
-				rarity: rarity[1],
-				stats: {
-					damage: math.random() * rarity[1] * 10,
-					dexterity: math.random() * rarity[1] * 10,
-					sellPrice: math.random() * rarity[1] * 100,
-					level: math.random(1, 3),
-					xp: 0,
-				},
+				rarity: this.getRarityByEnum(rarity[1]) ?? 1,
+				stats: generateStats(rarity[1]),
 				zone,
 			});
 		});
+	}
+
+	getRarityByEnum(rarity: number) {
+		return tonumber(Rarity[rarity].split("_")[1]);
 	}
 }

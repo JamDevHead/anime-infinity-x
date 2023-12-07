@@ -1,5 +1,6 @@
 import { md5 } from "@rbxts/rbxts-hashlib";
 import { HttpService, ReplicatedStorage } from "@rbxts/services";
+import { FighterStats } from "@/server/constants/fighter-stats";
 import { store } from "@/server/store";
 import { PlayerFighter } from "@/shared/store/players";
 import { selectPlayerFighter } from "@/shared/store/players/fighters";
@@ -28,3 +29,13 @@ export function addFighterFor(player: Player, fighterData: Omit<PlayerFighter, "
 		characterUid,
 	} as PlayerFighter;
 }
+
+export const generateStats = (rarity: number) => {
+	const damage = math.random() * rarity * FighterStats.damageMultiplier;
+	const dexterity = math.random() * rarity * FighterStats.dexterityMultiplier;
+	const sellPrice = math.random() * rarity * FighterStats.sellPriceMultiplier;
+	const level = math.random(1, 3);
+	const xp = 0;
+
+	return { damage, dexterity, sellPrice, level, xp };
+};
