@@ -1,5 +1,5 @@
 import { useSelectorCreator } from "@rbxts/react-reflex";
-import Roact from "@rbxts/roact";
+import Roact, { useEffect } from "@rbxts/roact";
 import { useRootSelector, useRootStore } from "@/client/store";
 import { ContextMenu } from "@/client/ui/components/context-menu/context-menu";
 import { usePlayerId } from "@/client/ui/hooks/use-player-id";
@@ -14,6 +14,12 @@ export const InventoryContextMenu = () => {
 	const { openedContextMenu, menuPosition, selectedItem } = useRootSelector((state) => state.inventory);
 	const playerFighters = useRootSelector(selectPlayerFighters(userId));
 	const fighter = useSelectorCreator(selectPlayerFighter, userId, selectedItem ?? "");
+
+	useEffect(() => {
+		if (fighter) return;
+
+		setInventoryOpenedMenu(false);
+	}, [fighter, setInventoryOpenedMenu]);
 
 	return (
 		<ContextMenu.Root position={UDim2.fromOffset(menuPosition?.X, menuPosition?.Y ?? 0)} opened={openedContextMenu}>
@@ -30,6 +36,7 @@ export const InventoryContextMenu = () => {
 					onClick={() => {
 						if (!fighter) return;
 						remotes.inventory.unequipFighter.fire(fighter.uid);
+						setInventoryOpenedMenu(false);
 					}}
 				/>
 			) : (
@@ -45,6 +52,7 @@ export const InventoryContextMenu = () => {
 					onClick={() => {
 						if (!fighter) return;
 						remotes.inventory.equipFighter.fire(fighter.uid);
+						setInventoryOpenedMenu(false);
 					}}
 				/>
 			)}
