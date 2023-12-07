@@ -1,4 +1,4 @@
-import { Controller, OnTick } from "@flamework/core";
+import { Controller, OnStart, OnTick } from "@flamework/core";
 import { Workspace } from "@rbxts/services";
 import { WindLine } from "@/client/controllers/wind-controller/wind-line";
 
@@ -6,17 +6,23 @@ const SPAWN_RATE = 1 / 10;
 const LIFETIME = 1.5;
 
 @Controller()
-export class WindController implements OnTick {
+export class WindController implements OnStart, OnTick {
 	private lines = table.create(10) as WindLine[];
 	private spawn_timer = 0;
 	private camera = Workspace.CurrentCamera as Camera;
+	private container = new Instance("Attachment");
+
+	onStart() {
+		this.container.Name = "WindContainer";
+		this.container.Parent = Workspace.Terrain;
+	}
 
 	onTick(dt: number) {
 		this.spawn_timer += dt;
 
 		if (this.spawn_timer >= SPAWN_RATE) {
 			this.spawn_timer = 0;
-			this.lines.push(new WindLine(LIFETIME, this.getWindLinePosition()));
+			this.lines.push(new WindLine(this.container, LIFETIME, this.getWindLinePosition()));
 		}
 
 		this.lines.forEach((line, index) => {
