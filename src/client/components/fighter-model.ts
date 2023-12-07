@@ -205,6 +205,6 @@ export class FighterModel
 		this.fighterStun = calculateStun(dexterity);
 
 		this.attackState = this.attackState === 1 ? 2 : 1;
-		this.animationTracker.swapAnimation(`soco${this.attackState}`);
+		this.animationTracker.playAnimationTrack(`soco${this.attackState}`);
 	}
 }
