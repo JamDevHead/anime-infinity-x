@@ -2,7 +2,7 @@ local fs = require("@lune/fs")
 local process = require("@lune/process")
 local roblox = require("@lune/roblox")
 
-local place = require("modules/place")
+local place = require("modules/placev1")
 local utils = require("modules/utils")
 local syncManager = require("modules/syncManager")
 local config = require("modules/configManager"):getConfig()
