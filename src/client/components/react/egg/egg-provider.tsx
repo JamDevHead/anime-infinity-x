@@ -55,8 +55,6 @@ export function EggProvider({ soundController }: { soundController: SoundControl
 	);
 
 	useEffect(() => {
-		print("egg queue changed", eggQueue, queueList.current);
-
 		onEggQueueChanged(eggQueue, queueList.current ?? []);
 		queueList.current = eggQueue;
 	}, [dispatcher, eggQueue, onEggQueueChanged]);
