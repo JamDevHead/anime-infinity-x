@@ -30,7 +30,7 @@ export class EggService implements OnStart {
 			return addFighterFor(player, {
 				name: rarity[0],
 				displayName: rarity[0],
-				rarity: 1,
+				rarity: rarity[1],
 				stats: {
 					damage: math.random() * rarity[1] * 10,
 					dexterity: math.random() * rarity[1] * 10,
