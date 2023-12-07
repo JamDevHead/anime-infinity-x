@@ -34,7 +34,7 @@ export const RightSideHud = () => {
 					<MissionHud.Card>
 						<MissionHud.MissionText
 							text={`${playerMissions?.all
-								.filter((mission) => mission.completed === true)
+								.filter((mission) => mission.completed)
 								.size()}/${playerMissions?.all.size()}`}
 						/>
 						<MissionHud.Title text={playerMissions?.all[0]?.title ?? "None"} />
