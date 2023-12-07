@@ -10,7 +10,8 @@ import { selectSelectedEnemies } from "@/shared/store/enemy-selection";
 export class Enemy extends EnemyComponent implements OnStart {
 	onStart() {
 		const level = this.attributes.Type === "Boss" ? 5 : tonumber(this.attributes.Type.sub(-1)) ?? 1;
-		const calculatedHealth = math.max(level - 1, 0) * 10 + 100;
+		const calculatedHealth = math.max(level * 2, 1) * 100;
+
 		this.humanoid.MaxHealth = calculatedHealth;
 		this.humanoid.Health = calculatedHealth;
 		this.humanoid.BreakJointsOnDeath = false;
