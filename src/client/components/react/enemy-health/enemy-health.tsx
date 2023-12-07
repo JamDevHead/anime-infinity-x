@@ -1,4 +1,4 @@
-import Roact, { PropsWithChildren, useEffect, useState } from "@rbxts/roact";
+import Roact, { PropsWithChildren, useCallback, useEffect, useState } from "@rbxts/roact";
 import { Enemy } from "@/client/components/enemy-component";
 import { colors } from "@/client/constants/colors";
 import { springs } from "@/client/constants/springs";
@@ -6,6 +6,7 @@ import { Frame } from "@/client/ui/components/frame";
 import { Image } from "@/client/ui/components/image";
 import { Stack } from "@/client/ui/components/stack";
 import { Text } from "@/client/ui/components/text";
+import { useAbbreviator } from "@/client/ui/hooks/use-abbreviator";
 import { useMotion } from "@/client/ui/hooks/use-motion";
 import { images } from "@/shared/assets/images";
 
@@ -47,8 +48,16 @@ export function EnemyHealth({ enemy }: { enemy: Enemy | { instance: Model; human
 	const humanoid = enemy.humanoid;
 	const [healthBar, healthBarMotion] = useMotion(UDim2.fromScale(1, 1));
 	const [healthBarBackground, healthBarBackgroundMotion] = useMotion(UDim2.fromScale(1, 1));
-	const [health, setHealth] = useState("0/0");
+	const [healthText, setHealthText] = useState("0/0");
 	const enemyScale = enemy.instance.GetScale();
+	const abbreviator = useAbbreviator({ defaultDecimalPlaces: 0 });
+
+	const updateHealthText = useCallback(() => {
+		const maxHealth = humanoid.MaxHealth;
+		const health = humanoid.Health;
+
+		setHealthText(`${abbreviator.numberToString(health)} / ${abbreviator.numberToString(maxHealth)}`);
+	}, [abbreviator, humanoid.Health, humanoid.MaxHealth]);
 
 	useEffect(() => {
 		if (!humanoid) {
@@ -61,7 +70,7 @@ export function EnemyHealth({ enemy }: { enemy: Enemy | { instance: Model; human
 			const currentRatio = currentHealth / maxHealth;
 			const newRatio = newHealth / maxHealth;
 
-			setHealth(`${currentHealth}/${maxHealth}`);
+			updateHealthText();
 			healthBarMotion.spring(UDim2.fromScale(newRatio, 1), springs.responsive);
 			task.wait(0.25);
 			healthBarBackgroundMotion.spring(UDim2.fromScale(currentRatio, 1), {
@@ -71,7 +80,7 @@ export function EnemyHealth({ enemy }: { enemy: Enemy | { instance: Model; human
 		});
 
 		const startingRatio = humanoid.Health / humanoid.MaxHealth;
-		setHealth(`${humanoid.Health}/${humanoid.MaxHealth}`);
+		updateHealthText();
 
 		healthBarMotion.spring(UDim2.fromScale(startingRatio, 1), springs.responsive);
 		task.delay(0.25, () => {
@@ -82,7 +91,7 @@ export function EnemyHealth({ enemy }: { enemy: Enemy | { instance: Model; human
 		});
 
 		return () => connection.Disconnect();
-	}, [healthBarBackgroundMotion, healthBarMotion, humanoid]);
+	}, [healthBarBackgroundMotion, healthBarMotion, humanoid, updateHealthText]);
 
 	return (
 		<billboardgui
@@ -148,7 +157,7 @@ export function EnemyHealth({ enemy }: { enemy: Enemy | { instance: Model; human
 					/>
 
 					<Text
-						text={health}
+						text={healthText}
 						font={Font.fromName("GothamSSm", Enum.FontWeight.Heavy)}
 						size={UDim2.fromScale(0.8, 0.65)}
 						position={UDim2.fromScale(0.5, 0.5)}
