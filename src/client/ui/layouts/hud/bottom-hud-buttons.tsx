@@ -10,7 +10,6 @@ import { Image } from "@/client/ui/components/image";
 import { SimpleButton } from "@/client/ui/components/simple-button";
 import { Stack } from "@/client/ui/components/stack";
 import { Text } from "@/client/ui/components/text";
-import { UiScaleAspectRatio } from "@/client/ui/components/ui-scale-aspect-ratio";
 import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
@@ -51,51 +50,50 @@ export const BottomHudButtons = () => {
 				<Image
 					ref={imageRef}
 					anchorPoint={new Vector2(0.5, 0.5)}
-					size={UDim2.fromOffset(312, 40)}
+					size={UDim2.fromOffset(rem(312, "pixel"), rem(40, "pixel"))}
 					image={images.ui.hud_bottom_curve}
 				>
 					<SimpleButton
-						position={UDim2.fromScale(0, rem(-0.1))}
+						position={UDim2.fromScale(0, -0.8)}
 						anchorPoint={new Vector2(0.5, 0.5)}
-						size={UDim2.fromOffset(96, 96)}
+						size={UDim2.fromOffset(rem(96, "pixel"), rem(96, "pixel"))}
 						color={Color3.fromRGB(255, 0, 0)}
 						icon={images.icons.hand_click}
 					>
 						<Image
 							position={UDim2.fromScale(1, 1)}
-							size={UDim2.fromOffset(38, 38)}
+							size={UDim2.fromOffset(rem(38, "pixel"), rem(38, "pixel"))}
 							anchorPoint={new Vector2(1, 1)}
 							image={images.icons.rebirth}
 						/>
 					</SimpleButton>
 					<AttackButton
-						position={UDim2.fromScale(0.5, rem(-0.2))}
+						position={UDim2.fromScale(0.5, -1.7)}
 						anchorPoint={new Vector2(0.5, 0.5)}
-						size={UDim2.fromOffset(120, 120)}
+						size={UDim2.fromOffset(rem(120, "pixel"), rem(120, "pixel"))}
 						color={Color3.fromRGB(255, 255, 255)}
 						icon={images.icons.hand_click}
 					/>
 					<SimpleButton
-						position={UDim2.fromScale(1, rem(-0.1))}
+						position={UDim2.fromScale(1, -0.8)}
 						anchorPoint={new Vector2(0.5, 0.5)}
-						size={UDim2.fromOffset(96, 96)}
+						size={UDim2.fromOffset(rem(96, "pixel"), rem(96, "pixel"))}
 						color={Color3.fromRGB(36, 166, 15)}
 						icon={images.icons.sword_outline}
 					>
 						<Image
 							position={UDim2.fromScale(1, 1)}
-							size={UDim2.fromOffset(38, 38)}
+							size={UDim2.fromOffset(rem(38, "pixel"), rem(38, "pixel"))}
 							anchorPoint={new Vector2(1, 1)}
 							image={images.icons.rebirth}
 						/>
 					</SimpleButton>
-					<UiScaleAspectRatio />
 				</Image>
 				<uipadding
-					PaddingBottom={new UDim(0, 16)}
-					PaddingLeft={new UDim(0, 16)}
-					PaddingRight={new UDim(0, 16)}
-					PaddingTop={new UDim(0, 16)}
+					PaddingBottom={new UDim(0, rem(16, "pixel"))}
+					PaddingLeft={new UDim(0, rem(16, "pixel"))}
+					PaddingRight={new UDim(0, rem(16, "pixel"))}
+					PaddingTop={new UDim(0, rem(16, "pixel"))}
 				/>
 			</Stack>
 
@@ -109,7 +107,7 @@ export const BottomHudButtons = () => {
 						fillDirection={Enum.FillDirection.Horizontal}
 						horizontalAlignment={Enum.HorizontalAlignment.Left}
 						verticalAlignment={Enum.VerticalAlignment.Bottom}
-						padding={new UDim(0, 16)}
+						padding={new UDim(0, rem(16, "pixel"))}
 						size={UDim2.fromScale(0, 1)}
 					>
 						{boosts?.all.map((boost, index) => (
@@ -138,7 +136,6 @@ export const BottomHudButtons = () => {
 								</Boost.Icon>
 							</Boost.Root>
 						))}
-						<UiScaleAspectRatio />
 					</Stack>
 
 					<Stack
@@ -154,26 +151,25 @@ export const BottomHudButtons = () => {
 						verticalAlignment={Enum.VerticalAlignment.Bottom}
 					>
 						<FadingFrame
-							size={UDim2.fromOffset(200, 40)}
+							size={UDim2.fromOffset(rem(200, "pixel"), rem(40, "pixel"))}
 							anchorPoint={new Vector2(0.5, 0.5)}
 							position={UDim2.fromScale(0.5, 0.5)}
 						>
 							<Text
 								text={`${dps} DPS`}
 								textColor={Color3.fromRGB(255, 255, 255)}
-								textSize={24}
+								textSize={rem(24, "pixel")}
 								size={UDim2.fromScale(1, 1)}
 								anchorPoint={new Vector2(0.5, 0.5)}
 								position={UDim2.fromScale(0.5, 0.5)}
 							/>
 						</FadingFrame>
-						<UiScaleAspectRatio />
 					</Stack>
 					<uipadding
-						PaddingBottom={new UDim(0, 16)}
-						PaddingLeft={new UDim(0, 16)}
-						PaddingRight={new UDim(0, 16)}
-						PaddingTop={new UDim(0, 16)}
+						PaddingBottom={new UDim(0, rem(16, "pixel"))}
+						PaddingLeft={new UDim(0, rem(16, "pixel"))}
+						PaddingRight={new UDim(0, rem(16, "pixel"))}
+						PaddingTop={new UDim(0, rem(16, "pixel"))}
 					/>
 				</Stack>
 			</Frame>

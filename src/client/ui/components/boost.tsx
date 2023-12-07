@@ -51,8 +51,14 @@ const Icon: FunctionComponent<IconProps> = ({ image, children, onMouseEnter, onM
 };
 
 const Root: FunctionComponent<PropsWithChildren> = ({ children }) => {
+	const rem = useRem();
+
 	return (
-		<Frame size={UDim2.fromOffset(64, 64)} backgroundTransparency={1} anchorPoint={new Vector2(0.5, 0.5)}>
+		<Frame
+			size={UDim2.fromOffset(rem(64, "pixel"), rem(64, "pixel"))}
+			backgroundTransparency={1}
+			anchorPoint={new Vector2(0.5, 0.5)}
+		>
 			{children}
 		</Frame>
 	);

@@ -1,10 +1,10 @@
 import Roact from "@rbxts/roact";
+import { colors } from "@/client/constants/colors";
 import { useRootSelector, useRootStore } from "@/client/store";
 import { MissionHud } from "@/client/ui/components/mission-hud";
 import { SideGroupButtons } from "@/client/ui/components/side-group-buttons";
 import { SimpleButton } from "@/client/ui/components/simple-button";
 import { Stack } from "@/client/ui/components/stack";
-import { UiScaleAspectRatio } from "@/client/ui/components/ui-scale-aspect-ratio";
 import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
@@ -24,7 +24,7 @@ export const RightSideHud = () => {
 			fillDirection={Enum.FillDirection.Vertical}
 			horizontalAlignment={Enum.HorizontalAlignment.Right}
 			verticalAlignment={Enum.VerticalAlignment.Center}
-			size={UDim2.fromScale(0, 1)}
+			size={UDim2.fromScale(1, 1)}
 			autoSize={Enum.AutomaticSize.XY}
 			padding={new UDim(0, rem(1))}
 		>
@@ -49,14 +49,13 @@ export const RightSideHud = () => {
 						</MissionHud.ListItem>
 					))}
 				</MissionHud.List>
-				<UiScaleAspectRatio factor={1} />
 			</MissionHud.Root>
 			<Stack
 				fillDirection={Enum.FillDirection.Horizontal}
 				horizontalAlignment={Enum.HorizontalAlignment.Right}
 				verticalAlignment={Enum.VerticalAlignment.Center}
-				autoSize={Enum.AutomaticSize.XY}
 				sortOrder={Enum.SortOrder.Name}
+				autoSize="XY"
 			>
 				<SideGroupButtons.Root>
 					<SimpleButton color={Color3.fromHex("#BF07FF")} icon={images.icons.daily_rewards} />
@@ -72,12 +71,11 @@ export const RightSideHud = () => {
 						onClick={() => toggleWindowVisible("codes")}
 					/>
 					<SimpleButton
-						color={new Color3(1, 1, 1)}
+						color={colors.white}
 						icon={images.icons.settings}
 						onClick={() => toggleWindowVisible("settings")}
 					/>
 				</SideGroupButtons.Root>
-				<UiScaleAspectRatio />
 			</Stack>
 
 			<uipadding PaddingLeft={new UDim(0, rem(1))} PaddingRight={new UDim(0, rem(2))} />

@@ -17,7 +17,7 @@ export function SimpleButton({ children, position, size, color, onClick, icon, a
 	return (
 		<Button
 			position={position}
-			size={size || UDim2.fromOffset(64, 64)}
+			size={size || UDim2.fromOffset(rem(6), rem(6))}
 			onClick={onClick}
 			cornerRadius={new UDim(1, 0)}
 			backgroundTransparency={1}
