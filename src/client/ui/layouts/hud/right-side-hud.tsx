@@ -44,7 +44,7 @@ export const RightSideHud = () => {
 				<MissionHud.List visible={missionVisible}>
 					{playerMissions?.all.map((mission) => (
 						<MissionHud.ListItem>
-							<MissionHud.ListItemText text={mission.title} />
+							<MissionHud.ListItemText text={mission.title} completed={mission.completed} />
 							<MissionHud.ListCheckbox checked={mission.completed} />
 						</MissionHud.ListItem>
 					))}

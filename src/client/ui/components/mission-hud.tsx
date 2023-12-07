@@ -1,9 +1,11 @@
 import Roact, { FunctionComponent, PropsWithChildren, useEffect, useRef } from "@rbxts/roact";
+import { colors } from "@/client/constants/colors";
 import { fonts } from "@/client/constants/fonts";
 import { springs } from "@/client/constants/springs";
 import { Button } from "@/client/ui/components/button";
 import { Checkbox } from "@/client/ui/components/checkbox";
 import { FadingFrame } from "@/client/ui/components/fading-frame";
+import { Frame } from "@/client/ui/components/frame";
 import { Image } from "@/client/ui/components/image";
 import { Stack } from "@/client/ui/components/stack";
 import { Text } from "@/client/ui/components/text";
@@ -150,10 +152,16 @@ const ListItem: FunctionComponent<PropsWithChildren> = ({ children }) => {
 
 type ListItemTextProps = {
 	text: string;
+	completed?: boolean;
 };
 
-const ListItemText: FunctionComponent<ListItemTextProps> = ({ text }) => {
+const ListItemText: FunctionComponent<ListItemTextProps> = ({ text, completed }) => {
 	const rem = useRem();
+	const [completedSize, setCompletedSizeMotion] = useMotion(0);
+
+	useEffect(() => {
+		setCompletedSizeMotion.spring(completed ? 1 : 0, springs.responsive);
+	}, [completed, setCompletedSizeMotion]);
 
 	return (
 		<Text
@@ -163,10 +171,14 @@ const ListItemText: FunctionComponent<ListItemTextProps> = ({ text }) => {
 			textAutoResize="XY"
 			textWrapped={true}
 			textXAlignment="Right"
-			size={UDim2.fromScale(1, 0)}
 			textColor={new Color3(1, 1, 1)}
 		>
 			<uistroke Color={new Color3(0, 0, 0)} Transparency={0.5} Thickness={rem(0.1)} />
+			<Frame
+				size={UDim2.fromScale(completedSize.getValue(), 0.1)}
+				backgroundColor={colors.white}
+				position={UDim2.fromScale(0, 0.5)}
+			/>
 		</Text>
 	);
 };
