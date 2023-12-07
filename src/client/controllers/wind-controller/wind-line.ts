@@ -1,5 +1,3 @@
-import { Workspace } from "@rbxts/services";
-
 export class WindLine {
 	public timer = 0;
 
@@ -8,6 +6,7 @@ export class WindLine {
 	private attachment1: Attachment;
 
 	constructor(
+		container: Instance,
 		private lifetime: number,
 		origin: Vector3,
 		private seed = math.random(1, 1000) * 0.1,
@@ -17,8 +16,8 @@ export class WindLine {
 		const attachment0 = new Instance("Attachment");
 		const attachment1 = new Instance("Attachment");
 
-		attachment0.Parent = Workspace.Terrain;
-		attachment1.Parent = Workspace.Terrain;
+		attachment0.Parent = container;
+		attachment1.Parent = container;
 
 		attachment0.Position = origin;
 		attachment1.Position = origin.add(Vector3.yAxis);
