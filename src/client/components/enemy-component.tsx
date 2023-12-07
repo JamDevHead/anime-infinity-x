@@ -35,8 +35,6 @@ export class Enemy extends EnemyComponent implements OnStart {
 	}
 
 	onStart() {
-		let currentHealth = this.humanoid.Health;
-
 		this.hurtHighlight.DepthMode = Enum.HighlightDepthMode.Occluded;
 		this.hurtHighlight.FillColor = Color3.fromHex("#000");
 		this.hurtHighlight.FillTransparency = 1;
@@ -59,14 +57,6 @@ export class Enemy extends EnemyComponent implements OnStart {
 
 		this.hurtParticle.Parent = this.instance;
 
-		this.humanoid.HealthChanged.Connect((health) => {
-			if (currentHealth > health && health > 0) {
-				this.hurt(currentHealth, health);
-			}
-
-			currentHealth = health;
-		});
-
 		this.animationTracker.playAnimationTrack("idle");
 
 		// Enemy health component
@@ -78,9 +68,7 @@ export class Enemy extends EnemyComponent implements OnStart {
 		root.render(createPortal(<EnemyHealth enemy={this} />, head));
 	}
 
-	destroy() {
-		super.destroy();
-
+	onDestroy() {
 		this.healthComponentRoot?.unmount();
 
 		if (!this.instance.FindFirstChild("HumanoidRootPart")) {
@@ -109,6 +97,12 @@ export class Enemy extends EnemyComponent implements OnStart {
 		});
 
 		this.animationTracker.destroy();
+	}
+
+	onHealthChanged(currentHealth: number, newHealth: number) {
+		if (currentHealth > newHealth && newHealth > 0) {
+			this.hurt(currentHealth, newHealth);
+		}
 	}
 
 	private hurt(currentHealth: number, newHealth: number) {

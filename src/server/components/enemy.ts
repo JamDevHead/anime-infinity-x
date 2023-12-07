@@ -32,9 +32,7 @@ export class Enemy extends EnemyComponent implements OnStart {
 		});
 	}
 
-	destroy() {
-		super.destroy();
-
+	onDestroy() {
 		const enemiesSelected = store.getState(selectSelectedEnemies);
 		const killers = new Set<string>();
 

@@ -6,10 +6,15 @@ import { doesPlayerHasFighter } from "@/server/utils/fighters";
 import remotes from "@/shared/remotes";
 import { selectFighterTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
 import { selectActivePlayerFighters } from "@/shared/store/players/fighters";
+import { getEnemyByUid } from "@/server/utils/enemies";
+import { Components } from "@flamework/components";
 
 @Service()
 export class FightersTarget implements OnStart, OnPlayerAdd {
-	constructor(private readonly logger: Logger) {}
+	constructor(
+		private readonly logger: Logger,
+		private readonly components: Components,
+	) {}
 
 	onStart() {
 		remotes.fighterTarget.set.connect((player, fighterUid, targetUid) => {
@@ -19,6 +24,18 @@ export class FightersTarget implements OnStart, OnPlayerAdd {
 				this.logger.Warn(
 					`Player ${userId} tried to set target for fighter ${fighterUid} but they don't own it`,
 				);
+				return;
+			}
+
+			const enemy = getEnemyByUid(targetUid, this.components);
+
+			if (enemy === undefined) {
+				this.logger.Warn(`Player ${userId} was trying to attack an enemy that doesn't exist`);
+				return;
+			}
+
+			if (enemy.isDead) {
+				this.logger.Warn(`Player ${userId} was trying to attack a dead enemy`);
 				return;
 			}
 
