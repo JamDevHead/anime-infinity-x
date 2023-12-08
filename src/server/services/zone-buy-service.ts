@@ -2,7 +2,8 @@ import { OnStart, Service } from "@flamework/core";
 import { store } from "@/server/store";
 import { ZONES } from "@/shared/constants/zones";
 import remotes from "@/shared/remotes";
-import { selectPlayerBalance, selectPlayerZones } from "@/shared/store/players";
+import { selectPlayerBalance } from "@/shared/store/players";
+import { selectPlayerZones } from "@/shared/store/players/zones";
 
 @Service()
 export class ZoneBuyService implements OnStart {

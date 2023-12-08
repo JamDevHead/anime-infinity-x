@@ -9,7 +9,7 @@ import { store } from "@/client/store";
 import { selectEggQueue } from "@/client/store/egg-queue/egg-queue-selectors";
 import { RootProvider } from "@/client/ui/providers/root-provider";
 import remotes from "@/shared/remotes";
-import { PlayerZones, selectPlayerZones } from "@/shared/store/players";
+import { selectPlayerCurrentZone } from "@/shared/store/players/zones/zones-selectors";
 
 @Controller()
 export class EggController implements OnStart, OnTick {
@@ -50,12 +50,12 @@ export class EggController implements OnStart, OnTick {
 			};
 		});
 
-		store.subscribe(selectPlayerZones(tostring(Players.LocalPlayer.UserId)), (currentZones, oldZones) =>
-			this.onZoneChange(currentZones, oldZones),
+		store.subscribe(selectPlayerCurrentZone(tostring(Players.LocalPlayer.UserId)), (currentZone) =>
+			this.onZoneChange(currentZone),
 		);
 
-		const zones = store.getState(selectPlayerZones(tostring(Players.LocalPlayer.UserId)));
-		this.onZoneChange(zones, undefined);
+		const zone = store.getState(selectPlayerCurrentZone(tostring(Players.LocalPlayer.UserId)));
+		this.onZoneChange(zone);
 	}
 
 	onTick(): void {
@@ -78,11 +78,10 @@ export class EggController implements OnStart, OnTick {
 		});
 	}
 
-	private onZoneChange(currentZones: PlayerZones | undefined, oldZones: PlayerZones | undefined) {
-		if (currentZones?.current === undefined) return;
-		if (currentZones?.current === oldZones?.current && currentZones.changing) return;
+	private onZoneChange(currentZone: string | undefined) {
+		if (currentZone === undefined) return;
 
-		const zone = this.zonesFolder.FindFirstChild(currentZones?.current);
+		const zone = this.zonesFolder.FindFirstChild(currentZone);
 		if (!zone) return;
 
 		const eggsFolder = zone.WaitForChild("Eggs") as Folder;

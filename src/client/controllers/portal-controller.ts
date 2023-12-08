@@ -2,7 +2,7 @@ import { Controller, OnStart, OnTick } from "@flamework/core";
 import { Players, Workspace } from "@rbxts/services";
 import { ZonesFolder } from "@/@types/models/zone";
 import { store } from "@/client/store";
-import { selectPlayerZones } from "@/shared/store/players";
+import { selectPlayerCurrentZone } from "@/shared/store/players/zones/zones-selectors";
 
 @Controller()
 export class PortalController implements OnStart, OnTick {
@@ -12,11 +12,12 @@ export class PortalController implements OnStart, OnTick {
 	private portals: Model[] = [];
 
 	onStart(): void {
-		store.subscribe(selectPlayerZones(tostring(Players.LocalPlayer.UserId)), (currentZones, oldZones) => {
-			if (currentZones?.current === undefined) return;
-			if (currentZones?.current === oldZones?.current && currentZones.changing) return;
+		store.subscribe(selectPlayerCurrentZone(tostring(Players.LocalPlayer.UserId)), (currentZone) => {
+			if (currentZone === undefined) {
+				return;
+			}
 
-			const zone = this.zonesFolder.FindFirstChild(currentZones?.current);
+			const zone = this.zonesFolder.FindFirstChild(currentZone);
 			if (!zone) return;
 
 			const portalsFolder = zone.WaitForChild("Portals");

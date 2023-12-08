@@ -5,7 +5,7 @@ import { Zone, ZonesFolder } from "@/@types/models/zone";
 import { OnCharacterAdd } from "@/server/services/lifecycles/on-character-add";
 import { OnPlayerAdd } from "@/server/services/lifecycles/on-player-add";
 import { store } from "@/server/store";
-import { selectPlayerZones } from "@/shared/store/players";
+import { selectPlayerCurrentZone } from "@/shared/store/players/zones/zones-selectors";
 
 @Service()
 export class ZonesLoader implements OnStart, OnPlayerAdd, OnCharacterAdd {
@@ -60,12 +60,13 @@ export class ZonesLoader implements OnStart, OnPlayerAdd, OnCharacterAdd {
 	}
 
 	onPlayerAdded(player: Player) {
-		const unsubscribe = store.subscribe(selectPlayerZones(tostring(player.UserId)), (zones) => {
-			if (zones?.current === undefined || !player.Character) {
+		const unsubscribe = store.subscribe(selectPlayerCurrentZone(tostring(player.UserId)), (currentZone) => {
+			if (currentZone === undefined || !player.Character) {
 				return;
 			}
 
-			this.spawnOnZone(player, player.Character, zones.current);
+			print(player.Name, "changed zone", currentZone);
+			this.spawnOnZone(player, player.Character, currentZone);
 		});
 
 		this.zonesSubscriptions.set(player, unsubscribe);
@@ -77,15 +78,15 @@ export class ZonesLoader implements OnStart, OnPlayerAdd, OnCharacterAdd {
 	}
 
 	onCharacterAdded(player: Player, character: Model) {
-		const zones = store.getState(selectPlayerZones(tostring(player.UserId)));
+		const currentZone = store.getState(selectPlayerCurrentZone(tostring(player.UserId)));
 
-		this.logger.Debug(`Player ${player.Name} is on zone ${zones?.current}`);
+		this.logger.Debug(`Player ${player.Name} is on zone ${currentZone}`);
 
-		if (!zones || zones.current === undefined) {
+		if (currentZone === undefined) {
 			return;
 		}
 
-		this.spawnOnZone(player, character, zones.current);
+		this.spawnOnZone(player, character, currentZone);
 	}
 
 	spawnOnZone(player: Player, character: Model, zoneName: string) {

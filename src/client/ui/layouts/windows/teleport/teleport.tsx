@@ -1,8 +1,9 @@
 import Object from "@rbxts/object-utils";
+import { useSelectorCreator } from "@rbxts/react-reflex";
 import Roact, { FunctionComponent } from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
 import { fonts } from "@/client/constants/fonts";
-import { useRootSelector, useRootStore } from "@/client/store";
+import { useRootStore } from "@/client/store";
 import { Button } from "@/client/ui/components/button";
 import { CanvasGroup } from "@/client/ui/components/canvas-group";
 import { Frame } from "@/client/ui/components/frame";
@@ -16,7 +17,7 @@ import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
 import { ZONES } from "@/shared/constants/zones";
 import remotes from "@/shared/remotes";
-import { selectPlayerZones } from "@/shared/store/players";
+import { selectPlayerZones } from "@/shared/store/players/zones";
 
 type TeleportCardProps = {
 	image: string;
@@ -110,7 +111,7 @@ export const Teleport = () => {
 	const rem = useRem();
 	const userId = usePlayerId();
 
-	const zones = useRootSelector(selectPlayerZones(userId));
+	const zones = useSelectorCreator(selectPlayerZones, userId);
 	const dispatcher = useRootStore();
 
 	const unlockedZone = (zone: string) => {

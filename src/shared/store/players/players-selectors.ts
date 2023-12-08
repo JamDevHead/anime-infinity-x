@@ -1,26 +1,13 @@
-import { createSelector, shallowEqual } from "@rbxts/reflex";
+import { createSelector } from "@rbxts/reflex";
 import { SharedState } from "@/shared/store";
 import { selectPlayerFighters } from "@/shared/store/players/fighters";
 import { PlayerData } from "@/shared/store/players/players-types";
-
-export const selectPlayersZones = (state: SharedState) => {
-	return state.players.zones;
-};
+import { selectPlayerZones } from "@/shared/store/players/zones";
 
 export const selectPlayerBalance = (playerId: string) => {
 	return (state: SharedState) => {
 		return state.players.balance[playerId];
 	};
-};
-
-export const selectPlayerZones = (playerId: string) => {
-	return createSelector(
-		selectPlayersZones,
-		(zones) => {
-			return zones[playerId];
-		},
-		{ resultEqualityCheck: shallowEqual },
-	);
 };
 
 export const selectPlayerMissions = (playerId: string) => {

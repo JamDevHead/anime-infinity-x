@@ -14,7 +14,7 @@ import { Stack } from "@/client/ui/components/stack";
 import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { images } from "@/shared/assets/images";
 import { FighterRarity } from "@/shared/constants/rarity";
-import { selectPlayerZones } from "@/shared/store/players";
+import { selectPlayerCurrentZone } from "@/shared/store/players/zones/zones-selectors";
 
 type EggLayoutProps = {
 	size?: UDim2;
@@ -23,17 +23,17 @@ type EggLayoutProps = {
 
 export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position }) => {
 	const userId = usePlayerId();
-	const zones = useSelectorCreator(selectPlayerZones, userId);
+	const currentZone = useSelectorCreator(selectPlayerCurrentZone, userId);
 	const dispatcher = useRootStore();
 	const opened = useRootSelector(selectEggUiStatus);
 	const hudVisible = useRootSelector(selectHudVisible);
 
 	const rarityByZone = useMemo(
-		() => FighterRarity[(zones?.current?.lower() ?? "nrt") as keyof typeof FighterRarity],
-		[zones],
+		() => FighterRarity[(currentZone?.lower() ?? "nrt") as keyof typeof FighterRarity],
+		[currentZone],
 	);
 
-	const buyEgg = () => dispatcher.addToEggQueue(zones?.current ?? "NRT");
+	const buyEgg = () => dispatcher.addToEggQueue(currentZone ?? "NRT");
 
 	if (!hudVisible || !opened) {
 		return <></>;
@@ -69,7 +69,7 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position })
 							return (
 								<FighterCard
 									headshot={key as string}
-									zone={zones?.current ?? "nrt"}
+									zone={currentZone ?? "nrt"}
 									padding={4}
 									discovered
 									description={`${value}%`}

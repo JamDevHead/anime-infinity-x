@@ -7,7 +7,7 @@ import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { ZONES, ZONES_KEYS } from "@/shared/constants/zones";
 import remotes from "@/shared/remotes";
-import { selectPlayerZones } from "@/shared/store/players";
+import { selectPlayerZones } from "@/shared/store/players/zones";
 
 export const PortalPopup = () => {
 	const playerId = usePlayerId();

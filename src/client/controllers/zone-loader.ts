@@ -2,7 +2,8 @@ import { Controller, OnStart } from "@flamework/core";
 import { Players, Workspace } from "@rbxts/services";
 import { Zone, ZonesFolder } from "@/@types/models/zone";
 import { store } from "@/client/store";
-import { PlayerZones, selectPlayerZones } from "@/shared/store/players";
+import { PlayerZones } from "@/shared/store/players";
+import { selectPlayerZones } from "@/shared/store/players/zones";
 
 @Controller()
 export class ZoneLoader implements OnStart {
@@ -26,7 +27,6 @@ export class ZoneLoader implements OnStart {
 		if (
 			zones?.current === undefined ||
 			!this.player.Character ||
-			// eslint-disable-next-line roblox-ts/lua-truthiness
 			(zones.current === previousZone?.current && !zones.changing)
 		) {
 			return;
