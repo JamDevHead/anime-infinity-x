@@ -18,7 +18,7 @@ export function ShopFeaturedCard({ card }: { card: StoreCard }) {
 					textScaled
 					textColor={Color3.fromHex("#fff")}
 					font={fonts.gotham.bold}
-					size={new UDim2(1, 0, 0, 35)}
+					size={new UDim2(1, 0, 0, rem(35, "pixel"))}
 					text={`・${card.title}・`}
 				>
 					<uitextsizeconstraint MaxTextSize={23} />
