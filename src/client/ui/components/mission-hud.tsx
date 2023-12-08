@@ -1,11 +1,15 @@
-import Roact, { FunctionComponent, PropsWithChildren } from "@rbxts/roact";
+import Roact, { FunctionComponent, PropsWithChildren, useEffect, useRef } from "@rbxts/roact";
+import { colors } from "@/client/constants/colors";
 import { fonts } from "@/client/constants/fonts";
+import { springs } from "@/client/constants/springs";
 import { Button } from "@/client/ui/components/button";
 import { Checkbox } from "@/client/ui/components/checkbox";
 import { FadingFrame } from "@/client/ui/components/fading-frame";
+import { Frame } from "@/client/ui/components/frame";
 import { Image } from "@/client/ui/components/image";
 import { Stack } from "@/client/ui/components/stack";
 import { Text } from "@/client/ui/components/text";
+import { useMotion } from "@/client/ui/hooks/use-motion";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
 
@@ -68,6 +72,11 @@ type DropdownProps = {
 
 const Dropdown: FunctionComponent<DropdownProps> = ({ onClick, closed }) => {
 	const rem = useRem();
+	const [rotation, setRotation] = useMotion(0);
+
+	useEffect(() => {
+		setRotation.spring(closed ? 90 : 0, springs.responsive);
+	}, [closed, setRotation]);
 
 	return (
 		<Button
@@ -75,7 +84,7 @@ const Dropdown: FunctionComponent<DropdownProps> = ({ onClick, closed }) => {
 			backgroundTransparency={1}
 			onClick={onClick}
 		>
-			<Image image={images.ui.hud_arrow} size={UDim2.fromScale(1, 1)} rotation={closed ? 90 : 0} />
+			<Image image={images.ui.hud_arrow} size={UDim2.fromScale(1, 1)} rotation={rotation} />
 		</Button>
 	);
 };
@@ -143,10 +152,16 @@ const ListItem: FunctionComponent<PropsWithChildren> = ({ children }) => {
 
 type ListItemTextProps = {
 	text: string;
+	completed?: boolean;
 };
 
-const ListItemText: FunctionComponent<ListItemTextProps> = ({ text }) => {
+const ListItemText: FunctionComponent<ListItemTextProps> = ({ text, completed }) => {
 	const rem = useRem();
+	const [completedSize, setCompletedSizeMotion] = useMotion(0);
+
+	useEffect(() => {
+		setCompletedSizeMotion.spring(completed ? 1 : 0, springs.responsive);
+	}, [completed, setCompletedSizeMotion]);
 
 	return (
 		<Text
@@ -156,10 +171,14 @@ const ListItemText: FunctionComponent<ListItemTextProps> = ({ text }) => {
 			textAutoResize="XY"
 			textWrapped={true}
 			textXAlignment="Right"
-			size={UDim2.fromScale(1, 0)}
 			textColor={new Color3(1, 1, 1)}
 		>
 			<uistroke Color={new Color3(0, 0, 0)} Transparency={0.5} Thickness={rem(0.1)} />
+			<Frame
+				size={UDim2.fromScale(completedSize.getValue(), 0.1)}
+				backgroundColor={colors.white}
+				position={UDim2.fromScale(0, 0.5)}
+			/>
 		</Text>
 	);
 };
@@ -177,15 +196,32 @@ type ListProps = {
 };
 
 const List: FunctionComponent<PropsWithChildren<ListProps>> = ({ children, visible }) => {
+	const ref = useRef<Frame>();
 	const rem = useRem();
+	const [size, setSize] = useMotion(new UDim2());
+
+	useEffect(() => {
+		if (!ref.current) return;
+
+		let height = 0;
+		for (const child of ref.current.GetChildren() as Array<Frame>) {
+			if (!child.IsA("Frame")) continue;
+
+			height += child.AbsoluteSize.Y + rem(1);
+		}
+
+		setSize.spring(visible ? UDim2.fromOffset(0, height) : UDim2.fromOffset(0, 0));
+	}, [ref, rem, setSize, visible]);
 
 	return (
 		<Stack
+			ref={ref}
 			fillDirection={Enum.FillDirection.Vertical}
 			horizontalAlignment={Enum.HorizontalAlignment.Right}
-			autoSize={Enum.AutomaticSize.XY}
 			padding={new UDim(0, rem(1))}
-			visible={visible}
+			size={size}
+			autoSize="X"
+			clipsDescendants
 		>
 			{children}
 			<uipadding PaddingLeft={new UDim(0, rem(1))} PaddingRight={new UDim(0, rem(1))} />
