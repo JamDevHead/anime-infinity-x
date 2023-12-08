@@ -639,6 +639,16 @@ id = 15340127871
 packable = false
 
 [inputs."assets/images/ui/window_title.png"]
-hash = "cc8c3f673369039e51490a44f60e56c2bd8bec64fd9f1ed0ffb9e8f7627033c2"
-id = 15341232363
+hash = "a9a86adfab6d4f12ad3f7d59fccd199f20aeb3403868379b771e64b0c0a54660"
+id = 15572771830
+packable = false
+
+[inputs."assets/images/ui/window_title_inline.png"]
+hash = "93b6765e7f4c5a0f696025db4eb70458de30fb07f303d858bba52191c82bd569"
+id = 15572818753
+packable = false
+
+[inputs."assets/images/ui/window_title_outline.png"]
+hash = "d73829bb7fde3649ba56d57f95cabcc88312babb987fd5e53f81c6cad9f9ebac"
+id = 15572818826
 packable = false
