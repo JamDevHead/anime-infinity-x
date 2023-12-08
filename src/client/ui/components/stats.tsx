@@ -53,7 +53,7 @@ const ItemText: FunctionComponent<ItemTextProps> = ({ text, gradiant }) => {
 	const rem = useRem();
 	return (
 		<Text
-			font={fonts.inter.bold}
+			font={fonts.fredokaOne.bold}
 			text={text}
 			size={UDim2.fromScale(0.8, 1)}
 			position={UDim2.fromScale(1, 0.5)}

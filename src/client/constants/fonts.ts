@@ -12,4 +12,8 @@ export const fonts = {
 		medium: Font.fromEnum(Enum.Font.GothamMedium),
 		bold: Font.fromEnum(Enum.Font.GothamBold),
 	},
+	fredokaOne: {
+		regular: Font.fromEnum(Enum.Font.FredokaOne),
+		bold: Font.fromName("FredokaOne", Enum.FontWeight.Bold),
+	},
 };

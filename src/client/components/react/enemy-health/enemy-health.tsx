@@ -1,6 +1,7 @@
 import Roact, { PropsWithChildren, useCallback, useEffect, useState } from "@rbxts/roact";
 import { Enemy } from "@/client/components/enemy-component";
 import { colors } from "@/client/constants/colors";
+import { fonts } from "@/client/constants/fonts";
 import { springs } from "@/client/constants/springs";
 import { Frame } from "@/client/ui/components/frame";
 import { Image } from "@/client/ui/components/image";
@@ -107,7 +108,7 @@ export function EnemyHealth({ enemy }: { enemy: Enemy | { instance: Model; human
 			>
 				<Text
 					text={enemy.instance.Name}
-					font={Font.fromName("SourceSansPro", Enum.FontWeight.Heavy)}
+					font={fonts.fredokaOne.bold}
 					size={UDim2.fromScale(1, 0.4)}
 					textColor={colors.white}
 					textStroke={Color3.fromHex("#140526")}
@@ -117,7 +118,6 @@ export function EnemyHealth({ enemy }: { enemy: Enemy | { instance: Model; human
 				/>
 				<Image
 					imageColor={Color3.fromHex("#140526")}
-					key={"outline"}
 					image={images.ui.enemy_health.health_bar_outline}
 					size={UDim2.fromScale(1, 0.5)}
 					clipsDescendants={true}
