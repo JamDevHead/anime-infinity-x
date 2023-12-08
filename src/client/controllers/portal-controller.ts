@@ -12,32 +12,12 @@ export class PortalController implements OnStart, OnTick {
 	private portals: Model[] = [];
 
 	onStart(): void {
-		store.subscribe(selectPlayerCurrentZone(tostring(Players.LocalPlayer.UserId)), (currentZone) => {
-			if (currentZone === undefined) {
-				return;
-			}
+		const selectCurrentZone = selectPlayerCurrentZone(tostring(Players.LocalPlayer.UserId));
 
-			const zone = this.zonesFolder.FindFirstChild(currentZone);
-			if (!zone) return;
-
-			const portalsFolder = zone.WaitForChild("Portals");
-
-			const portalsConnection = portalsFolder.ChildAdded.Connect((portal) => {
-				if (portal.IsA("Model")) {
-					this.portals.push(portal);
-				}
-			});
-
-			for (const portal of portalsFolder.GetChildren()) {
-				if (portal.IsA("Model")) {
-					this.portals.push(portal);
-				}
-			}
-
-			return () => {
-				portalsConnection.Disconnect();
-			};
-		});
+		this.onZoneChange(store.getState(selectCurrentZone));
+		store.subscribe(selectPlayerCurrentZone(tostring(Players.LocalPlayer.UserId)), (currentZone) =>
+			this.onZoneChange(currentZone),
+		);
 	}
 
 	onTick(): void {
@@ -46,7 +26,7 @@ export class PortalController implements OnStart, OnTick {
 		this.portals.forEach((portal) => {
 			const position = portal.GetPivot().Position;
 			const distance = Players.LocalPlayer.DistanceFromCharacter(position);
-			const isClose = distance <= 10;
+			const isClose = distance !== 0 && distance <= 10;
 
 			if (isClose && !this.openedMenu) {
 				this.openedMenu = true;
@@ -56,5 +36,34 @@ export class PortalController implements OnStart, OnTick {
 				store.setPortalVisible(false);
 			}
 		});
+	}
+
+	private onZoneChange(currentZone: string | undefined) {
+		if (currentZone === undefined) {
+			return;
+		}
+
+		const zone = this.zonesFolder.WaitForChild(currentZone, 30);
+		if (!zone) return;
+
+		this.portals.clear();
+
+		const portalsFolder = zone.WaitForChild("Portals");
+
+		const portalsConnection = portalsFolder.ChildAdded.Connect((portal) => {
+			if (portal.IsA("Model")) {
+				this.portals.push(portal);
+			}
+		});
+
+		for (const portal of portalsFolder.GetChildren()) {
+			if (portal.IsA("Model")) {
+				this.portals.push(portal);
+			}
+		}
+
+		return () => {
+			portalsConnection.Disconnect();
+		};
 	}
 }
