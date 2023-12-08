@@ -6,6 +6,7 @@ import { Button } from "@/client/ui/components/button";
 import { Frame } from "@/client/ui/components/frame";
 import { Image } from "@/client/ui/components/image";
 import { Text } from "@/client/ui/components/text";
+import { useRem } from "@/client/ui/hooks/use-rem";
 
 type BindingButtonProps = {
 	text?: string;
@@ -30,6 +31,8 @@ export const BindingButton: FunctionComponent<BindingButtonProps> = ({
 	iconRotation,
 	borderColor,
 }) => {
+	const rem = useRem();
+
 	useEffect(() => {
 		const inputBegan = (inputObject: InputObject, gameProcessedEvent: boolean) => {
 			if (gameProcessedEvent) return;
@@ -49,11 +52,11 @@ export const BindingButton: FunctionComponent<BindingButtonProps> = ({
 	return (
 		<Button
 			position={position ?? UDim2.fromScale(0.5, 0.5)}
-			size={size ?? UDim2.fromOffset(72, 72)}
+			size={size ?? UDim2.fromOffset(rem(72, "pixel"), rem(72, "pixel"))}
 			anchorPoint={new Vector2(0.5, 0.5)}
 			backgroundTransparency={0}
 			backgroundColor={colors.white}
-			cornerRadius={new UDim(0, 12)}
+			cornerRadius={new UDim(0, rem(12, "pixel"))}
 			onClick={onClick}
 		>
 			{text !== undefined ? (
@@ -101,7 +104,7 @@ export const BindingButton: FunctionComponent<BindingButtonProps> = ({
 				/>
 			</Frame>
 			<Frame
-				size={UDim2.fromOffset(32, 32)}
+				size={UDim2.fromOffset(rem(32, "pixel"), rem(32, "pixel"))}
 				anchorPoint={new Vector2(0.5, 0.5)}
 				position={UDim2.fromScale(1, 1)}
 				cornerRadius={new UDim(1, 0)}
@@ -116,10 +119,10 @@ export const BindingButton: FunctionComponent<BindingButtonProps> = ({
 				/>
 			</Frame>
 			<uipadding
-				PaddingBottom={new UDim(0, 8)}
-				PaddingLeft={new UDim(0, 8)}
-				PaddingRight={new UDim(0, 8)}
-				PaddingTop={new UDim(0, 8)}
+				PaddingBottom={new UDim(0, rem(8, "pixel"))}
+				PaddingLeft={new UDim(0, rem(8, "pixel"))}
+				PaddingRight={new UDim(0, rem(8, "pixel"))}
+				PaddingTop={new UDim(0, rem(8, "pixel"))}
 			/>
 		</Button>
 	);

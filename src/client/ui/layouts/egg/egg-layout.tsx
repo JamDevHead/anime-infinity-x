@@ -12,6 +12,7 @@ import { Grid } from "@/client/ui/components/grid";
 import { Image } from "@/client/ui/components/image";
 import { Stack } from "@/client/ui/components/stack";
 import { usePlayerId } from "@/client/ui/hooks/use-player-id";
+import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
 import { FighterRarity } from "@/shared/constants/rarity";
 import { selectPlayerCurrentZone } from "@/shared/store/players/zones/zones-selectors";
@@ -22,6 +23,7 @@ type EggLayoutProps = {
 };
 
 export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position }) => {
+	const rem = useRem();
 	const userId = usePlayerId();
 	const currentZone = useSelectorCreator(selectPlayerCurrentZone, userId);
 	const dispatcher = useRootStore();
@@ -44,7 +46,7 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position })
 			anchorPoint={new Vector2(0.5, 0.5)}
 			backgroundTransparency={1}
 			position={position ?? UDim2.fromScale(0.5, 0.3)}
-			size={size ?? UDim2.fromOffset(400, 400)}
+			size={size ?? UDim2.fromOffset(rem(400, "pixel"), rem(400, "pixel"))}
 		>
 			<Stack fillDirection="Vertical" size={UDim2.fromScale(1, 1)}>
 				<Image
@@ -62,6 +64,7 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position })
 						position={UDim2.fromScale(0.5, 0.5)}
 						size={UDim2.fromScale(1, 1)}
 						cornerRadius={new UDim(0, 4)}
+						cellSize={UDim2.fromOffset(rem(96, "pixel"), rem(96, "pixel"))}
 						horizontalAlignment="Center"
 						verticalAlignment="Center"
 					>
@@ -90,18 +93,18 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position })
 						</uistroke>
 					</Grid>
 					<uipadding
-						PaddingBottom={new UDim(0, 4)}
-						PaddingLeft={new UDim(0, 4)}
-						PaddingRight={new UDim(0, 4)}
-						PaddingTop={new UDim(0, 4)}
+						PaddingBottom={new UDim(0, rem(4, "pixel"))}
+						PaddingLeft={new UDim(0, rem(4, "pixel"))}
+						PaddingRight={new UDim(0, rem(4, "pixel"))}
+						PaddingTop={new UDim(0, rem(4, "pixel"))}
 					/>
 				</Image>
 
 				<uipadding
-					PaddingBottom={new UDim(0, 20)}
-					PaddingLeft={new UDim(0, 20)}
-					PaddingRight={new UDim(0, 20)}
-					PaddingTop={new UDim(0, 20)}
+					PaddingBottom={new UDim(0, rem(20, "pixel"))}
+					PaddingLeft={new UDim(0, rem(20, "pixel"))}
+					PaddingRight={new UDim(0, rem(20, "pixel"))}
+					PaddingTop={new UDim(0, rem(20, "pixel"))}
 				/>
 			</Stack>
 
@@ -110,25 +113,34 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position })
 				horizontalAlignment="Center"
 				verticalAlignment="Bottom"
 				position={UDim2.fromScale(0.5, 1.2)}
-				padding={new UDim(0, 12)}
+				padding={new UDim(0, rem(12, "pixel"))}
 				sortOrder={Enum.SortOrder.LayoutOrder}
 			>
-				<BindingButton text="Open" binding={Enum.KeyCode.E} onClick={buyEgg} size={UDim2.fromOffset(72, 72)} />
-				<BindingButton text="Auto" binding={Enum.KeyCode.Q} size={UDim2.fromOffset(72, 72)} />
+				<BindingButton
+					text="Open"
+					binding={Enum.KeyCode.E}
+					onClick={buyEgg}
+					size={UDim2.fromOffset(rem(72, "pixel"), rem(72, "pixel"))}
+				/>
+				<BindingButton
+					text="Auto"
+					binding={Enum.KeyCode.Q}
+					size={UDim2.fromOffset(rem(72, "pixel"), rem(72, "pixel"))}
+				/>
 				<BindingButton
 					icon={images.icons.boost_colored}
 					color={"#132913"}
 					borderColor={"#65d666"}
 					iconRotation={45}
 					binding={Enum.KeyCode.R}
-					size={UDim2.fromOffset(72, 72)}
+					size={UDim2.fromOffset(rem(72, "pixel"), rem(72, "pixel"))}
 				/>
 				<BindingButton
 					icon={images.icons.gift_colored}
 					color={"#291316"}
 					borderColor={"#e62e49"}
 					binding={Enum.KeyCode.T}
-					size={UDim2.fromOffset(72, 72)}
+					size={UDim2.fromOffset(rem(72, "pixel"), rem(72, "pixel"))}
 				/>
 			</Stack>
 		</Frame>
