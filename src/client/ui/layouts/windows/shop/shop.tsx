@@ -227,45 +227,54 @@ export function Shop() {
 				>
 					<uitextsizeconstraint MaxTextSize={17} />
 				</Text>
-				<Grid
-					autoSize="Y"
+				<Stack
 					size={UDim2.fromScale(1, 0)}
-					cellSize={
-						breakpoint === "mobile"
-							? UDim2.fromOffset(rem(400, "pixel"), rem(192, "pixel"))
-							: UDim2.fromOffset(rem(300, "pixel"), rem(192, "pixel"))
-					}
-					cellPadding={UDim2.fromOffset(rem(18, "pixel"), rem(18, "pixel"))}
+					fillDirection="Vertical"
 					horizontalAlignment="Center"
-					rows={2}
+					verticalAlignment="Center"
+					autoSize="XY"
+					padding={new UDim(0, rem(24, "pixel"))}
 				>
-					<BigCard
-						icon={images.icons.vip_mvp}
-						title="MVP"
-						description="Your fighter, chat tag and packs discount!"
-						gradient={new ColorSequence(Color3.fromHex("#ffd600"), Color3.fromHex("#ff9900"))}
-						price={1000}
-					/>
-					<BigCard
-						icon={images.icons.dummy}
-						title="Extra Equip"
-						description="Equip 6 fighters instead of 3!"
-						gradient={new ColorSequence(Color3.fromHex("#00fff0"), Color3.fromHex("#45b1ff"))}
-						price={250}
-					/>
-				</Grid>
-				<Grid
-					autoSize="Y"
-					size={UDim2.fromScale(1, 0)}
-					cellSize={UDim2.fromOffset(rem(192, "pixel"), rem(192, "pixel"))}
-					cellPadding={UDim2.fromOffset(rem(18, "pixel"), rem(18, "pixel"))}
-					horizontalAlignment="Center"
-					rows={3}
-				>
-					<SimpleCard icon={images.icons.boosts.lucky_boost} title="Lucky" description="Lucky" />
-					<SimpleCard icon={images.icons.boosts.lucky_boost} title="Lucky" description="Lucky" />
-					<SimpleCard icon={images.icons.boosts.lucky_boost} title="Lucky" description="Lucky" />
-				</Grid>
+					<Grid
+						autoSize="Y"
+						size={UDim2.fromScale(1, 0)}
+						cellSize={
+							breakpoint === "mobile"
+								? UDim2.fromOffset(rem(400, "pixel"), rem(192, "pixel"))
+								: UDim2.fromOffset(rem(300, "pixel"), rem(192, "pixel"))
+						}
+						cellPadding={UDim2.fromOffset(rem(24, "pixel"), rem(24, "pixel"))}
+						horizontalAlignment="Center"
+						rows={2}
+					>
+						<BigCard
+							icon={images.icons.vip_mvp}
+							title="MVP"
+							description="Your fighter, chat tag and packs discount!"
+							gradient={new ColorSequence(Color3.fromHex("#ffd600"), Color3.fromHex("#ff9900"))}
+							price={1000}
+						/>
+						<BigCard
+							icon={images.icons.dummy}
+							title="Extra Equip"
+							description="Equip 6 fighters instead of 3!"
+							gradient={new ColorSequence(Color3.fromHex("#00fff0"), Color3.fromHex("#45b1ff"))}
+							price={250}
+						/>
+					</Grid>
+					<Grid
+						autoSize="Y"
+						size={UDim2.fromScale(1, 0)}
+						cellSize={UDim2.fromOffset(rem(192, "pixel"), rem(192, "pixel"))}
+						cellPadding={UDim2.fromOffset(rem(24, "pixel"), rem(24, "pixel"))}
+						horizontalAlignment="Center"
+						rows={3}
+					>
+						<SimpleCard icon={images.icons.boosts.lucky_boost} title="Lucky" description="Lucky" />
+						<SimpleCard icon={images.icons.boosts.lucky_boost} title="Lucky" description="Lucky" />
+						<SimpleCard icon={images.icons.boosts.lucky_boost} title="Lucky" description="Lucky" />
+					</Grid>
+				</Stack>
 			</ScrollView>
 		</Stack>
 	);
