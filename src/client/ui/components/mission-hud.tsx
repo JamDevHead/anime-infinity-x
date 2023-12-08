@@ -211,6 +211,27 @@ const List: FunctionComponent<PropsWithChildren<ListProps>> = ({ children, visib
 		}
 
 		setSize.spring(visible ? UDim2.fromOffset(0, height) : UDim2.fromOffset(0, 0));
+
+		const connectionChildrenChanged = ref.current?.ChildAdded.Connect((child) => {
+			if (!child.IsA("Frame")) return;
+
+			height += child.AbsoluteSize.Y + rem(1);
+
+			setSize.spring(visible ? UDim2.fromOffset(0, height) : UDim2.fromOffset(0, 0));
+		});
+
+		const connectionChildrenRemoved = ref.current?.ChildRemoved.Connect((child) => {
+			if (!child.IsA("Frame")) return;
+
+			height -= child.AbsoluteSize.Y + rem(1);
+
+			setSize.spring(visible ? UDim2.fromOffset(0, height) : UDim2.fromOffset(0, 0));
+		});
+
+		return () => {
+			connectionChildrenChanged?.Disconnect();
+			connectionChildrenRemoved?.Disconnect();
+		};
 	}, [ref, rem, setSize, visible]);
 
 	return (
