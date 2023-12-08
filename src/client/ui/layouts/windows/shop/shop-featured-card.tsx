@@ -11,8 +11,6 @@ import { StoreCard } from "@/shared/store/store/store-types";
 export function ShopFeaturedCard({ card }: { card: StoreCard }) {
 	const rem = useRem();
 
-	print(card.contents);
-
 	return (
 		<Image size={new UDim2(1, 0, 0, rem(256, "pixel"))} image={images.ui.shop.featured_background}>
 			<Stack fillDirection="Vertical" autoSize="Y" size={UDim2.fromScale(1, 1)}>
