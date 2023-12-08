@@ -155,6 +155,8 @@ export const images: {
 		readonly window_background: string;
 		readonly window_container: string;
 		readonly window_title: string;
+		readonly window_title_inline: string;
+		readonly window_title_outline: string;
 		readonly window_close: string;
 		readonly confirm_button: string;
 		readonly text_field: string;

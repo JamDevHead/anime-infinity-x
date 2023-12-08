@@ -1,4 +1,5 @@
 import Roact, { FunctionComponent, PropsWithChildren } from "@rbxts/roact";
+import { colors } from "@/client/constants/colors";
 import { fonts } from "@/client/constants/fonts";
 import { Button } from "@/client/ui/components/button";
 import { Frame, FrameProps } from "@/client/ui/components/frame";
@@ -75,39 +76,73 @@ export const Window: FunctionComponent<PropsWithChildren<WindowProps>> = ({
 					</uistroke>
 				</Image>
 
-				<Image
-					image={images.ui.window_title}
-					position={UDim2.fromScale(0.01, 0.05)}
+				<Frame
+					position={UDim2.fromScale(0.01, 0.02)}
 					autoSize={Enum.AutomaticSize.XY}
-					rotation={-3}
+					backgroundTransparency={1}
 				>
-					<Text
-						text={title}
-						textSize={rem(2)}
-						font={fonts.inter.bold}
-						textColor={Color3.fromRGB(255, 255, 255)}
-						backgroundTransparency={1}
-						textAutoResize="XY"
+					<Image
+						image={images.ui.window_title}
+						size={UDim2.fromScale(1, 1)}
+						scaleType={"Slice"}
+						sliceCenter={new Rect(42, 0, 46, 0)}
+						rotation={-3}
 					>
-						<uistroke Thickness={2} Color={Color3.fromRGB(0, 0, 0)}>
-							<uigradient
-								Transparency={
-									new NumberSequence([
-										new NumberSequenceKeypoint(0, 0),
-										new NumberSequenceKeypoint(1, 0.7),
-									])
-								}
-								Rotation={90}
-							/>
-						</uistroke>
-					</Text>
-					<uipadding
-						PaddingLeft={new UDim(0, rem(18, "pixel"))}
-						PaddingRight={new UDim(0, rem(18, "pixel"))}
-						PaddingTop={new UDim(0, rem(12, "pixel"))}
-						PaddingBottom={new UDim(0, rem(12, "pixel"))}
+						<Text
+							text={title}
+							textSize={rem(2)}
+							font={fonts.inter.bold}
+							textColor={Color3.fromRGB(255, 255, 255)}
+							backgroundTransparency={1}
+							textAutoResize="XY"
+						>
+							<uistroke Thickness={2} Color={Color3.fromRGB(0, 0, 0)}>
+								<uigradient
+									Transparency={
+										new NumberSequence([
+											new NumberSequenceKeypoint(0, 0),
+											new NumberSequenceKeypoint(1, 0.7),
+										])
+									}
+									Rotation={90}
+								/>
+							</uistroke>
+						</Text>
+						<uipadding
+							PaddingLeft={new UDim(0, rem(48, "pixel"))}
+							PaddingRight={new UDim(0, rem(48, "pixel"))}
+							PaddingTop={new UDim(0, rem(24, "pixel"))}
+							PaddingBottom={new UDim(0, rem(24, "pixel"))}
+						/>
+						<uigradient
+							Color={new ColorSequence(Color3.fromHex("#2840be"), Color3.fromHex("#1a35c1"))}
+							Rotation={90}
+						/>
+					</Image>
+					<Image
+						image={images.ui.window_title_inline}
+						imageColor={colors.black}
+						rotation={-3}
+						position={UDim2.fromScale(0.01, 0.02)}
+						size={UDim2.fromScale(1, 1)}
+						scaleType={"Slice"}
+						sliceCenter={new Rect(42, 0, 46, 0)}
 					/>
-				</Image>
+					<Image
+						image={images.ui.window_title_outline}
+						imageColor={colors.white}
+						rotation={-3}
+						position={UDim2.fromScale(0.01, 0.02)}
+						size={UDim2.fromScale(1, 1)}
+						scaleType={"Slice"}
+						sliceCenter={new Rect(42, 0, 46, 0)}
+					>
+						<uigradient
+							Color={new ColorSequence(Color3.fromHex("#ffd600"), Color3.fromHex("#ff9900"))}
+							Rotation={90}
+						/>
+					</Image>
+				</Frame>
 				{!hiddenClose && (
 					<Button
 						onClick={onClose}

@@ -166,7 +166,9 @@ return {
 			window_background = "rbxassetid://15340127119",
 			window_close = "rbxassetid://15349268736",
 			window_container = "rbxassetid://15340127871",
-			window_title = "rbxassetid://15341232363",
+			window_title = "rbxassetid://15572771830",
+			window_title_inline = "rbxassetid://15572818753",
+			window_title_outline = "rbxassetid://15572818826",
 		},
 	},
 }
