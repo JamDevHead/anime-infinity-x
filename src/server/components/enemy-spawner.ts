@@ -41,7 +41,10 @@ export class Enemy extends BaseComponent<EnemyAttributes, Part> implements OnSta
 	}
 
 	getEnemy(tries?: number): EnemyModel | undefined {
-		let enemies = this.enemiesZone?.GetChildren() ?? [];
+		let enemies =
+			this.enemiesZone
+				?.GetChildren()
+				.filter((enemy) => enemy.GetAttribute("Type") !== "" && enemy.GetAttribute("Type") !== undefined) ?? [];
 
 		if (this.attributes.AllowedEnemies !== undefined) {
 			const allowedEnemies = this.attributes.AllowedEnemies.split(",");
