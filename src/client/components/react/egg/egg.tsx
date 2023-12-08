@@ -1,27 +1,30 @@
 import { useBindingListener, useCamera, useEventListener, useUnmountEffect } from "@rbxts/pretty-react-hooks";
-import Roact, { useEffect, useMemo } from "@rbxts/roact";
+import Roact, { useEffect, useMemo, useState } from "@rbxts/roact";
 import { ReplicatedStorage, RunService } from "@rbxts/services";
 import { setInterval } from "@rbxts/set-timeout";
+import { FighterModelCard } from "@/client/components/react/fighter-model-card/fighter-model-card";
 import { springs } from "@/client/constants/springs";
 import { useRootStore } from "@/client/store";
 import { useMotion } from "@/client/ui/hooks/use-motion";
+import { PlayerFighter } from "@/shared/store/players";
 
 const zonesFolder = ReplicatedStorage.assets.Zones;
 
-export function Egg({ eggZoneName }: { eggZoneName: string }) {
+export function Egg({ fighter }: { fighter: PlayerFighter }) {
 	const dispatcher = useRootStore();
 	const camera = useCamera();
 	const [rotation, rotationMotion] = useMotion(0);
 	const [size, sizeMotion] = useMotion(0);
 	const [transparency, transparencyMotion] = useMotion(0);
-	const eggZone = useMemo(() => zonesFolder.FindFirstChild(eggZoneName) as Folder | undefined, [eggZoneName]);
-	const eggModel = useMemo(
-		() =>
-			eggZone?.FindFirstChild("Eggs")?.FindFirstChild("Incubadora")?.FindFirstChild("Egg")?.Clone() as
-				| Model
-				| undefined,
-		[eggZone],
-	);
+	const [animationFinished, setAnimationFinished] = useState(false);
+
+	const eggModel = useMemo(() => {
+		const eggZone = zonesFolder.FindFirstChild(fighter.zone);
+		const eggs = eggZone?.FindFirstChild("Eggs");
+		const incubator = eggs?.FindFirstChild("Incubadora");
+
+		return incubator?.FindFirstChild("Egg")?.Clone() as Model | undefined;
+	}, [fighter.zone]);
 
 	useEffect(() => {
 		if (!eggModel) {
@@ -51,21 +54,20 @@ export function Egg({ eggZoneName }: { eggZoneName: string }) {
 				rotationMotion.set(0);
 				transparencyMotion.spring(1, springs.wobbly);
 				sizeMotion.spring(0.01, springs.responsive);
-				task.delay(0.7, () => {
-					dispatcher.removeFromEggQueue(eggZoneName);
-				});
+				setAnimationFinished(true);
+				dispatcher.removeFromEggQueue(fighter.zone);
 				cleanup();
 			}
 		}, 0.1);
 
 		return cleanup;
-	}, [eggModel, camera, rotationMotion, transparencyMotion, sizeMotion, dispatcher, eggZoneName]);
+	}, [eggModel, camera, rotationMotion, transparencyMotion, sizeMotion, dispatcher, fighter.zone]);
 
 	useEventListener(
 		RunService.RenderStepped,
 		() => {
 			const scale = 0.06;
-			const offset = new Vector3(0, -0.5, -6);
+			const offset = new Vector3(0, -0.5, -10);
 			const cameraOffset = new CFrame(offset.mul(scale));
 			const eggCFrame = camera.CFrame.mul(cameraOffset).mul(CFrame.Angles(0, math.rad(-90), 0));
 
@@ -94,5 +96,5 @@ export function Egg({ eggZoneName }: { eggZoneName: string }) {
 		eggModel?.Destroy();
 	});
 
-	return <></>;
+	return <>{animationFinished && <FighterModelCard fighter={fighter} />}</>;
 }

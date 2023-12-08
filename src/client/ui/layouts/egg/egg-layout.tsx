@@ -2,7 +2,7 @@ import Object from "@rbxts/object-utils";
 import { useSelectorCreator } from "@rbxts/react-reflex";
 import Roact, { FunctionComponent, useMemo } from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
-import { store, useRootSelector } from "@/client/store";
+import { useRootSelector, useRootStore } from "@/client/store";
 import { selectEggUiStatus } from "@/client/store/egg-ui/egg-ui-selectors";
 import { selectHudVisible } from "@/client/store/hud/hud-selectors";
 import { BindingButton } from "@/client/ui/components/binding-button";
@@ -24,20 +24,18 @@ type EggLayoutProps = {
 export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position }) => {
 	const userId = usePlayerId();
 	const zones = useSelectorCreator(selectPlayerZones, userId);
+	const dispatcher = useRootStore();
 	const opened = useRootSelector(selectEggUiStatus);
+	const hudVisible = useRootSelector(selectHudVisible);
 
 	const rarityByZone = useMemo(
 		() => FighterRarity[(zones?.current?.lower() ?? "nrt") as keyof typeof FighterRarity],
 		[zones],
 	);
 
-	const hudVisible = useRootSelector(selectHudVisible);
+	const buyEgg = () => dispatcher.addToEggQueue(zones?.current ?? "NRT");
 
-	if (!hudVisible) {
-		return <></>;
-	}
-
-	if (!opened) {
+	if (!hudVisible || !opened) {
 		return <></>;
 	}
 
@@ -115,12 +113,7 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position })
 				padding={new UDim(0, 12)}
 				sortOrder={Enum.SortOrder.LayoutOrder}
 			>
-				<BindingButton
-					text="Open"
-					binding={Enum.KeyCode.E}
-					onClick={() => store.addToEggQueue(zones?.current ?? "nrt")}
-					size={UDim2.fromOffset(72, 72)}
-				/>
+				<BindingButton text="Open" binding={Enum.KeyCode.E} onClick={buyEgg} size={UDim2.fromOffset(72, 72)} />
 				<BindingButton text="Auto" binding={Enum.KeyCode.Q} size={UDim2.fromOffset(72, 72)} />
 				<BindingButton
 					icon={images.icons.boost_colored}
