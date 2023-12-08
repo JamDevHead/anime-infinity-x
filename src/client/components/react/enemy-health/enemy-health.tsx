@@ -48,7 +48,7 @@ export function EnemyHealth({ enemy }: { enemy: Enemy | { instance: Model; human
 	const humanoid = enemy.humanoid;
 	const [healthBar, healthBarMotion] = useMotion(UDim2.fromScale(1, 1));
 	const [healthBarBackground, healthBarBackgroundMotion] = useMotion(UDim2.fromScale(1, 1));
-	const [healthText, setHealthText] = useState("0/0");
+	const [healthText, setHealthText] = useState("0/0 hp");
 	const enemyScale = enemy.instance.GetScale();
 	const abbreviator = useAbbreviator({ defaultDecimalPlaces: 0 });
 
@@ -56,7 +56,7 @@ export function EnemyHealth({ enemy }: { enemy: Enemy | { instance: Model; human
 		const maxHealth = humanoid.MaxHealth;
 		const health = humanoid.Health;
 
-		setHealthText(`${abbreviator.numberToString(health)} / ${abbreviator.numberToString(maxHealth)}`);
+		setHealthText(`${abbreviator.numberToString(health)} / ${abbreviator.numberToString(maxHealth)} hp`);
 	}, [abbreviator, humanoid.Health, humanoid.MaxHealth]);
 
 	useEffect(() => {
