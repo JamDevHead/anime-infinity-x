@@ -81,7 +81,7 @@ export class EggController implements OnStart, OnTick {
 	private onZoneChange(currentZone: string | undefined) {
 		if (currentZone === undefined) return;
 
-		const zone = this.zonesFolder.FindFirstChild(currentZone);
+		const zone = this.zonesFolder.WaitForChild(currentZone, 30);
 		if (!zone) return;
 
 		const eggsFolder = zone.WaitForChild("Eggs") as Folder;
