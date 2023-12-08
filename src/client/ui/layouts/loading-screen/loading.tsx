@@ -126,7 +126,7 @@ export const Loading = () => {
 	const dispatcher = useRootStore();
 	const { isLoading, progress, maxProgress } = useRootSelector((state) => state.loading);
 
-	useUpdateEffect(() => {
+	useEffect(() => {
 		if (!isLoading) return;
 
 		if (internalProgress >= 1) {
@@ -135,9 +135,11 @@ export const Loading = () => {
 			setInternalProgress(0);
 			setActives(table.create(letters.size(), false));
 		}
-	}, [internalProgress, isLoading, progress, maxProgress]);
+	}, [dispatcher, internalProgress, isLoading]);
 
-	useEffect(() => {
+	useUpdateEffect(() => {
+		if (!isLoading) return;
+
 		const newActives = [...actives];
 		const activeCount = math.floor((progress / maxProgress) * letters.size());
 		task.spawn(() => {
