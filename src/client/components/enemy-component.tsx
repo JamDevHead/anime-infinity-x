@@ -4,6 +4,7 @@ import { createPortal, createRoot, Root } from "@rbxts/react-roblox";
 import Roact from "@rbxts/roact";
 import { ReplicatedStorage, TweenService, Workspace } from "@rbxts/services";
 import { EnemyHealth } from "@/client/components/react/enemy-health/enemy-health";
+import { fonts } from "@/client/constants/fonts";
 import { SoundController } from "@/client/controllers/sound-controller";
 import { store } from "@/client/store";
 import { useAbbreviator } from "@/client/ui/hooks/use-abbreviator";
@@ -164,6 +165,7 @@ export class Enemy extends EnemyComponent implements OnStart {
 		hurtLabel.BackgroundTransparency = 1;
 		hurtLabel.Size = UDim2.fromScale(1, 1);
 		hurtLabel.Text = `- ${damageAbbreviated}`;
+		hurtLabel.FontFace = fonts.fredokaOne.bold;
 		hurtLabel.TextColor3 = Color3.fromHex("#f64e4e");
 		hurtLabel.TextScaled = true;
 		hurtLabel.TextStrokeColor3 = Color3.fromHex("#000");
