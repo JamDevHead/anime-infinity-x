@@ -62,7 +62,7 @@ const TeleportCard: FunctionComponent<TeleportCardProps> = ({ text, image, locke
 				>
 					<Text
 						text={text}
-						textSize={32}
+						textSize={rem(32, "pixel")}
 						textColor={colors.white}
 						font={fonts.inter.bold}
 						textAutoResize="XY"

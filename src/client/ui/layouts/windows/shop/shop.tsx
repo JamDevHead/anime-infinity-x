@@ -10,6 +10,7 @@ import { Stack } from "@/client/ui/components/stack";
 import { Text } from "@/client/ui/components/text";
 import { ToggleOption } from "@/client/ui/components/toggle-option";
 import { useAbbreviator } from "@/client/ui/hooks/use-abbreviator";
+import { useBreakpoint } from "@/client/ui/hooks/use-breakpoint";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { ShopFeaturedCard } from "@/client/ui/layouts/windows/shop/shop-featured-card";
 import { images } from "@/shared/assets/images";
@@ -48,7 +49,7 @@ const BigCard: FunctionComponent<BigCardProps> = ({ icon, price, title, descript
 							textColor={Color3.fromHex("#fff")}
 							font={fonts.gotham.bold}
 							textAutoResize="X"
-							size={new UDim2(0, 0, 0, 35)}
+							size={new UDim2(0, 0, 0, rem(35, "pixel"))}
 							textSize={rem(32, "pixel")}
 							text={` ${abbreviator.numberToString(price ?? 0)}`}
 						>
@@ -178,22 +179,23 @@ const SimpleCard: FunctionComponent<SimpleCardProps> = ({ icon, price, title, de
 };
 
 export function Shop() {
+	const breakpoint = useBreakpoint();
 	const rem = useRem();
 	const featured = useRootSelector(selectStoreFeatured);
 
 	const { toggleWindowVisible } = useRootStore();
 
 	return (
-		<Stack size={new UDim2(1, 0, 1, 0)} fillDirection={"Vertical"} clipsDescendants>
+		<Stack size={UDim2.fromScale(1, 1)} fillDirection={"Vertical"} clipsDescendants>
 			<ScrollView
 				backgroundTransparency={1}
 				size={UDim2.fromScale(1, 1)}
-				padding={new UDim(0, 12)}
+				padding={new UDim(0, rem(12, "pixel"))}
 				margin={{
-					Top: new UDim(0, 12),
-					Bottom: new UDim(0, 12),
-					Left: new UDim(0, 12),
-					Right: new UDim(0, 24),
+					Top: new UDim(0, rem(12, "pixel")),
+					Bottom: new UDim(0, rem(12, "pixel")),
+					Left: new UDim(0, rem(12, "pixel")),
+					Right: new UDim(0, rem(24, "pixel")),
 				}}
 			>
 				<Text
@@ -220,46 +222,59 @@ export function Shop() {
 					textScaled
 					textColor={Color3.fromHex("#fff")}
 					font={Font.fromName("GothamSSm", Enum.FontWeight.Heavy)}
-					size={new UDim2(1, 0, 0, 35)}
+					size={new UDim2(1, 0, 0, rem(35, "pixel"))}
 					text="~ Gamepasses ~"
 				>
 					<uitextsizeconstraint MaxTextSize={17} />
 				</Text>
-				<Grid
-					autoSize="Y"
+				<Stack
 					size={UDim2.fromScale(1, 0)}
-					cellSize={UDim2.fromOffset(rem(300, "pixel"), rem(192, "pixel"))}
-					cellPadding={UDim2.fromOffset(rem(18, "pixel"), rem(18, "pixel"))}
+					fillDirection="Vertical"
 					horizontalAlignment="Center"
-					rows={2}
+					verticalAlignment="Center"
+					autoSize="XY"
+					padding={new UDim(0, rem(24, "pixel"))}
 				>
-					<BigCard
-						icon={images.icons.vip_mvp}
-						title="MVP"
-						description="Your fighter, chat tag and packs discount!"
-						gradient={new ColorSequence(Color3.fromHex("#ffd600"), Color3.fromHex("#ff9900"))}
-						price={1000}
-					/>
-					<BigCard
-						icon={images.icons.dummy}
-						title="Extra Equip"
-						description="Equip 6 fighters instead of 3!"
-						gradient={new ColorSequence(Color3.fromHex("#00fff0"), Color3.fromHex("#45b1ff"))}
-						price={250}
-					/>
-				</Grid>
-				<Grid
-					autoSize="Y"
-					size={UDim2.fromScale(1, 0)}
-					cellSize={UDim2.fromOffset(rem(192, "pixel"), rem(192, "pixel"))}
-					cellPadding={UDim2.fromOffset(rem(18, "pixel"), rem(18, "pixel"))}
-					horizontalAlignment="Center"
-					rows={3}
-				>
-					<SimpleCard icon={images.icons.boosts.lucky_boost} title="Lucky" description="Lucky" />
-					<SimpleCard icon={images.icons.boosts.lucky_boost} title="Lucky" description="Lucky" />
-					<SimpleCard icon={images.icons.boosts.lucky_boost} title="Lucky" description="Lucky" />
-				</Grid>
+					<Grid
+						autoSize="Y"
+						size={UDim2.fromScale(1, 0)}
+						cellSize={
+							breakpoint === "mobile"
+								? UDim2.fromOffset(rem(400, "pixel"), rem(192, "pixel"))
+								: UDim2.fromOffset(rem(300, "pixel"), rem(192, "pixel"))
+						}
+						cellPadding={UDim2.fromOffset(rem(24, "pixel"), rem(24, "pixel"))}
+						horizontalAlignment="Center"
+						rows={2}
+					>
+						<BigCard
+							icon={images.icons.vip_mvp}
+							title="MVP"
+							description="Your fighter, chat tag and packs discount!"
+							gradient={new ColorSequence(Color3.fromHex("#ffd600"), Color3.fromHex("#ff9900"))}
+							price={1000}
+						/>
+						<BigCard
+							icon={images.icons.dummy}
+							title="Extra Equip"
+							description="Equip 6 fighters instead of 3!"
+							gradient={new ColorSequence(Color3.fromHex("#00fff0"), Color3.fromHex("#45b1ff"))}
+							price={250}
+						/>
+					</Grid>
+					<Grid
+						autoSize="Y"
+						size={UDim2.fromScale(1, 0)}
+						cellSize={UDim2.fromOffset(rem(192, "pixel"), rem(192, "pixel"))}
+						cellPadding={UDim2.fromOffset(rem(24, "pixel"), rem(24, "pixel"))}
+						horizontalAlignment="Center"
+						rows={3}
+					>
+						<SimpleCard icon={images.icons.boosts.lucky_boost} title="Lucky" description="Lucky" />
+						<SimpleCard icon={images.icons.boosts.lucky_boost} title="Lucky" description="Lucky" />
+						<SimpleCard icon={images.icons.boosts.lucky_boost} title="Lucky" description="Lucky" />
+					</Grid>
+				</Stack>
 			</ScrollView>
 		</Stack>
 	);
