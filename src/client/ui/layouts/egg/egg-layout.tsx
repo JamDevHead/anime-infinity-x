@@ -43,7 +43,7 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size }) => {
 		setPositionMotion.spring(opened ? UDim2.fromScale(0.5, 0.3) : UDim2.fromScale(0.5, -1));
 	}, [opened, setPositionMotion]);
 
-	if ((!hudVisible || !opened) && !setPositionMotion.isComplete()) {
+	if (!hudVisible || (!opened && !setPositionMotion.isComplete())) {
 		return <></>;
 	}
 
