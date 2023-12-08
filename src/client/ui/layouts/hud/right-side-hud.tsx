@@ -34,7 +34,7 @@ export const RightSideHud = () => {
 					<MissionHud.Card>
 						<MissionHud.MissionText
 							text={`${playerMissions?.all
-								.filter((mission) => mission.completed === true)
+								.filter((mission) => mission.completed)
 								.size()}/${playerMissions?.all.size()}`}
 						/>
 						<MissionHud.Title
@@ -48,7 +48,7 @@ export const RightSideHud = () => {
 				<MissionHud.List visible={missionVisible}>
 					{playerMissions?.all.map((mission) => (
 						<MissionHud.ListItem>
-							<MissionHud.ListItemText text={mission.title} />
+							<MissionHud.ListItemText text={mission.title} completed={mission.completed} />
 							<MissionHud.ListCheckbox checked={mission.completed} />
 						</MissionHud.ListItem>
 					))}

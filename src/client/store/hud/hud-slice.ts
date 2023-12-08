@@ -6,7 +6,7 @@ type HudState = {
 };
 
 const initialState: HudState = {
-	missionVisible: true,
+	missionVisible: false,
 	visible: true,
 };
 
