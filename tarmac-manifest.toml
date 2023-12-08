@@ -288,6 +288,11 @@ hash = "f76a373f68f92ed0635fac306bd73663c5b9d58e9b405f78d2721184104c7625"
 id = 15302168729
 packable = false
 
+[inputs."assets/images/icons/dummy.png"]
+hash = "c7c29e5f063b8131e0432686c6a1673581a87198b5c569f87b93ac4f07994045"
+id = 15572391730
+packable = false
+
 [inputs."assets/images/icons/filter.png"]
 hash = "aba732d1e080f047ec56223e06e4c336320c95c2055d2e80897a00f0e6d10854"
 id = 15434347314
@@ -386,6 +391,11 @@ packable = false
 [inputs."assets/images/icons/twitter.png"]
 hash = "1c28f9f671cdfe61781c27f90fcd6a3507c12e071e0cedd682605a6187b9879e"
 id = 15302169045
+packable = false
+
+[inputs."assets/images/icons/vip_mvp.png"]
+hash = "6e677999d9dba9311484f4b3c0314696f030f84a35adbe653fb1ffbb06cd3bbe"
+id = 15572391768
 packable = false
 
 [inputs."assets/images/ui/attack_button_base.png"]
@@ -551,6 +561,11 @@ packable = false
 [inputs."assets/images/ui/shop/featured_background.png"]
 hash = "6ccb2218ecc6bf684f9d0e44efd828feec738d7cb5e0ba304b70ae2a4c928d2e"
 id = 15549528373
+packable = false
+
+[inputs."assets/images/ui/shop/placeholder_card.png"]
+hash = "8db3ea2a2f42628560c637ed031f101443f579cb33bd13b5bb209f5747f37f7a"
+id = 15572463592
 packable = false
 
 [inputs."assets/images/ui/shop/redeem_background.png"]

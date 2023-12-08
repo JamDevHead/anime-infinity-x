@@ -11,7 +11,7 @@ const initialState: StoreSlice = {
 		{
 			id: "1",
 			title: "Exclusive Space Egg",
-			contents: ["1", "2"],
+			contents: ["1", "2", "3"],
 		},
 	],
 	contents: [
@@ -19,8 +19,24 @@ const initialState: StoreSlice = {
 			type: "Fighters",
 			content: {
 				id: "1",
-				name: "Naro",
+				name: "GoldNinja",
 				zone: "NRT",
+			},
+		},
+		{
+			type: "Fighters",
+			content: {
+				id: "2",
+				name: "HeavenStrawHat",
+				zone: "ONE",
+			},
+		},
+		{
+			type: "Fighters",
+			content: {
+				id: "3",
+				name: "FullDrip",
+				zone: "DBZ",
 			},
 		},
 	],

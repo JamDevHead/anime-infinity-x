@@ -98,6 +98,8 @@ export const images: {
 		readonly cash: string;
 		readonly book: string;
 		readonly lock: string;
+		readonly dummy: string;
+		readonly vip_mvp: string;
 	};
 	readonly ui: {
 		readonly cards: {
@@ -138,6 +140,7 @@ export const images: {
 		readonly shop: {
 			readonly featured_background: string;
 			readonly redeem_background: string;
+			readonly placeholder_card: string;
 		};
 		readonly blur: string;
 		readonly rounded_button_base: string;

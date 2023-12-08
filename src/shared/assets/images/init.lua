@@ -80,6 +80,7 @@ return {
 			characters = "rbxassetid://15303915032",
 			coin = "rbxassetid://15303269882",
 			daily_rewards = "rbxassetid://15302168729",
+			dummy = "rbxassetid://15572391730",
 			filter = "rbxassetid://15434347314",
 			fish = "rbxassetid://15302657608",
 			gift = "rbxassetid://15303915072",
@@ -100,6 +101,7 @@ return {
 			sword = "rbxassetid://15472647561",
 			sword_outline = "rbxassetid://15277603950",
 			twitter = "rbxassetid://15302169045",
+			vip_mvp = "rbxassetid://15572391768",
 		},
 		ui = {
 			attack_button_base = "rbxassetid://15281857202",
@@ -146,6 +148,7 @@ return {
 			shadow_star = "rbxassetid://15450966260",
 			shop = {
 				featured_background = "rbxassetid://15549528373",
+				placeholder_card = "rbxassetid://15572463592",
 				redeem_background = "rbxassetid://15554054844",
 			},
 			stats_bar_base = "rbxassetid://15303347451",
