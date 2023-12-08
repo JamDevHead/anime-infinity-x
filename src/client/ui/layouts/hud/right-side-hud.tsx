@@ -63,16 +63,12 @@ export const RightSideHud = () => {
 			>
 				<SideGroupButtons.Root>
 					<SimpleButton color={Color3.fromHex("#BF07FF")} icon={images.icons.daily_rewards} />
-					<SimpleButton
-						color={Color3.fromHex("#076AFF")}
-						icon={images.icons.book}
-						onClick={() => toggleWindowVisible("teleport")}
-					/>
+					<SimpleButton color={Color3.fromHex("#076AFF")} icon={images.icons.book} />
 					<SimpleButton color={Color3.fromHex("#16792C")} icon={images.icons.boost} />
 					<SimpleButton
-						color={Color3.fromHex("#07A6FF")}
-						icon={images.icons.twitter}
-						onClick={() => toggleWindowVisible("codes")}
+						color={Color3.fromHex("#ff0707")}
+						icon={images.icons.portal}
+						onClick={() => toggleWindowVisible("teleport")}
 					/>
 					<SimpleButton
 						color={colors.white}
