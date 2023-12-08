@@ -1,6 +1,7 @@
 import { Component } from "@flamework/components";
 import { OnStart } from "@flamework/core";
 import { HttpService } from "@rbxts/services";
+import { playerKilledEnemy } from "@/server/mission-events";
 import { store } from "@/server/store";
 import { EnemyComponent } from "@/shared/components/enemy-component";
 import { selectEnemyDrops } from "@/shared/store/enemies/enemies-selectors";
@@ -48,6 +49,8 @@ export class Enemy extends EnemyComponent implements OnStart {
 		}
 
 		killers.forEach((killerId) => {
+			playerKilledEnemy(killerId, this);
+
 			for (const _ of $range(1, 20)) {
 				const id = HttpService.GenerateGUID(false);
 

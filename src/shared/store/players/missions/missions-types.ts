@@ -1,17 +1,17 @@
+import { MissionTypes } from "server/mission-events";
+
 export interface Mission {
 	id: string;
 	title: string;
 	description?: string;
+	type: MissionTypes;
 	tasks: Task[];
-	completed: boolean;
 }
 
 export interface Task {
 	id: string;
 	title: string;
 	description: string;
-	done: boolean;
-	reward: number;
-	level: number;
-	type: string;
+	progress: number;
+	maxProgress: number;
 }
