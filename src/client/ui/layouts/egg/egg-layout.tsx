@@ -1,6 +1,6 @@
 import Object from "@rbxts/object-utils";
 import { useSelectorCreator } from "@rbxts/react-reflex";
-import Roact, { FunctionComponent, useMemo } from "@rbxts/roact";
+import Roact, { FunctionComponent, useEffect, useMemo } from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
 import { useRootSelector, useRootStore } from "@/client/store";
 import { selectEggUiStatus } from "@/client/store/egg-ui/egg-ui-selectors";
@@ -11,6 +11,7 @@ import { Frame } from "@/client/ui/components/frame";
 import { Grid } from "@/client/ui/components/grid";
 import { Image } from "@/client/ui/components/image";
 import { Stack } from "@/client/ui/components/stack";
+import { useMotion } from "@/client/ui/hooks/use-motion";
 import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
@@ -30,6 +31,8 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position })
 	const opened = useRootSelector(selectEggUiStatus);
 	const hudVisible = useRootSelector(selectHudVisible);
 
+	const [positionMotion, setPositionMotion] = useMotion<UDim2>(UDim2.fromScale(0.5, -1));
+
 	const rarityByZone = useMemo(
 		() => FighterRarity[(currentZone?.lower() ?? "nrt") as keyof typeof FighterRarity],
 		[currentZone],
@@ -37,7 +40,11 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position })
 
 	const buyEgg = () => dispatcher.addToEggQueue(currentZone ?? "NRT");
 
-	if (!hudVisible || !opened) {
+	useEffect(() => {
+		setPositionMotion.spring(opened ? UDim2.fromScale(0.5, 0.3) : UDim2.fromScale(0.5, -1));
+	}, [opened, setPositionMotion]);
+
+	if ((!hudVisible || !opened) && !setPositionMotion.isComplete()) {
 		return <></>;
 	}
 
@@ -45,7 +52,7 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position })
 		<Frame
 			anchorPoint={new Vector2(0.5, 0.5)}
 			backgroundTransparency={1}
-			position={position ?? UDim2.fromScale(0.5, 0.3)}
+			position={positionMotion}
 			size={size ?? UDim2.fromOffset(rem(400, "pixel"), rem(400, "pixel"))}
 		>
 			<Stack fillDirection="Vertical" size={UDim2.fromScale(1, 1)}>
