@@ -1,3 +1,4 @@
+import { Players } from "@rbxts/services";
 import { Trove } from "@rbxts/trove";
 import { ActiveFighters } from "@/client/controllers/fighters-tracker/active-fighters";
 import { FightersTracker } from "@/client/controllers/fighters-tracker/index";
@@ -7,7 +8,6 @@ import {
 	selectFighterTarget,
 	selectPlayerFightersTarget,
 } from "@/shared/store/fighter-target/fighter-target-selectors";
-import { Players } from "@rbxts/services";
 
 export class Tracker {
 	public readonly userId: string;

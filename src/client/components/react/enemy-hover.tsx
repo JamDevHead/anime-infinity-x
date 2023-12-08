@@ -1,6 +1,6 @@
-import Roact from "@rbxts/roact";
-import { lerp, useMotor, useMountEffect, useUnmountEffect } from "@rbxts/pretty-react-hooks";
 import { Spring } from "@rbxts/flipper";
+import { lerp, useMotor, useMountEffect, useUnmountEffect } from "@rbxts/pretty-react-hooks";
+import Roact from "@rbxts/roact";
 
 export function EnemyHover() {
 	const [mount, setMount] = useMotor(1);

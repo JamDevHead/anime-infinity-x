@@ -30,9 +30,9 @@ export function createStore() {
 		enemyHover: enemyHoverSlice,
 		loading: loadingSlice,
 		blur: blurSlice,
-    portal: portalSlice,
-    eggUi: eggUiSlice,
-    eggQueue: eggQueueSlice,
+		portal: portalSlice,
+		eggUi: eggUiSlice,
+		eggQueue: eggQueueSlice,
 	});
 
 	store.applyMiddleware(profilerMiddleware, devToolsMiddleware, receiverMiddleware(store));

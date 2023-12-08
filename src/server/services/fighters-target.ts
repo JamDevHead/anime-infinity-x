@@ -1,13 +1,13 @@
+import { Components } from "@flamework/components";
 import { OnStart, Service } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { OnPlayerAdd } from "@/server/services/lifecycles/on-player-add";
 import { store } from "@/server/store";
+import { getEnemyByUid } from "@/server/utils/enemies";
 import { doesPlayerHasFighter } from "@/server/utils/fighters";
 import remotes from "@/shared/remotes";
 import { selectFighterTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
 import { selectActivePlayerFighters } from "@/shared/store/players/fighters";
-import { getEnemyByUid } from "@/server/utils/enemies";
-import { Components } from "@flamework/components";
 
 @Service()
 export class FightersTarget implements OnStart, OnPlayerAdd {
