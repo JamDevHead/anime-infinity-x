@@ -62,7 +62,7 @@ export const useMockData = (props?: MockDataProps): void => {
 				all: table.create(5, false).map((_, index) => ({
 					id: tostring(index),
 					title: `Mission ${index}`,
-					completed: index % 2 === 0,
+					type: "kill",
 					tasks: [],
 				})),
 				active: undefined,

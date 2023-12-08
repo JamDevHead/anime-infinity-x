@@ -9,6 +9,7 @@ import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
 import { selectPlayerMissions } from "@/shared/store/players";
+import { Mission } from "@/shared/store/players/missions";
 
 export const RightSideHud = () => {
 	const rem = useRem();
@@ -18,6 +19,10 @@ export const RightSideHud = () => {
 	const playerMissions = useRootSelector(selectPlayerMissions(id));
 
 	const { toggleMissionVisible, toggleWindowVisible } = useRootStore();
+
+	const isMissionCompleted = (mission: Mission) => {
+		return mission.tasks.reduce((acc, { progress, maxProgress }) => acc && progress === maxProgress, false);
+	};
 
 	return (
 		<Stack
@@ -34,24 +39,29 @@ export const RightSideHud = () => {
 					<MissionHud.Card>
 						<MissionHud.MissionText
 							text={`${playerMissions?.all
-								.filter((mission) => mission.completed)
+								.filter((mission) => isMissionCompleted(mission))
 								.size()}/${playerMissions?.all.size()}`}
 						/>
 						<MissionHud.Title
 							text={
-								playerMissions?.all.filter((mission) => !mission.completed)[0]?.title ?? "No Missions"
+								playerMissions?.all.filter((mission) => isMissionCompleted(mission))[0]?.title ??
+								"No Missions"
 							}
 						/>
 						<MissionHud.MissionIcon />
 					</MissionHud.Card>
 				</MissionHud.CardRoot>
 				<MissionHud.List visible={missionVisible}>
-					{playerMissions?.all.map((mission) => (
-						<MissionHud.ListItem>
-							<MissionHud.ListItemText text={mission.title} completed={mission.completed} />
-							<MissionHud.ListCheckbox checked={mission.completed} />
-						</MissionHud.ListItem>
-					))}
+					{playerMissions?.all.map((mission) => {
+						const completed = isMissionCompleted(mission);
+
+						return (
+							<MissionHud.ListItem>
+								<MissionHud.ListItemText text={mission.title} completed={completed} />
+								<MissionHud.ListCheckbox checked={completed} />
+							</MissionHud.ListItem>
+						);
+					})}
 				</MissionHud.List>
 			</MissionHud.Root>
 			<Stack
