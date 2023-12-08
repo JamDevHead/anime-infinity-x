@@ -11,6 +11,8 @@ import { StoreCard } from "@/shared/store/store/store-types";
 export function ShopFeaturedCard({ card }: { card: StoreCard }) {
 	const rem = useRem();
 
+	print(card.contents);
+
 	return (
 		<Image size={new UDim2(1, 0, 0, rem(256, "pixel"))} image={images.ui.shop.featured_background}>
 			<Stack fillDirection="Vertical" autoSize="Y" size={UDim2.fromScale(1, 1)}>
@@ -27,7 +29,8 @@ export function ShopFeaturedCard({ card }: { card: StoreCard }) {
 				<Stack
 					fillDirection="Horizontal"
 					backgroundTransparency={1}
-					size={new UDim2(1, 0, 1, -35)}
+					size={new UDim2(1, 0, 1, -rem(35, "pixel"))}
+					padding={new UDim(0, rem(12, "pixel"))}
 					horizontalAlignment="Center"
 					verticalAlignment="Center"
 				>
@@ -37,10 +40,10 @@ export function ShopFeaturedCard({ card }: { card: StoreCard }) {
 				</Stack>
 			</Stack>
 			<uipadding
-				PaddingLeft={new UDim(0, 10)}
-				PaddingRight={new UDim(0, 10)}
-				PaddingTop={new UDim(0, 10)}
-				PaddingBottom={new UDim(0, 10)}
+				PaddingLeft={new UDim(0, rem(10, "pixel"))}
+				PaddingRight={new UDim(0, rem(10, "pixel"))}
+				PaddingTop={new UDim(0, rem(10, "pixel"))}
+				PaddingBottom={new UDim(0, rem(10, "pixel"))}
 			/>
 		</Image>
 	);
