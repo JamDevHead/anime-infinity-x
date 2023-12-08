@@ -143,11 +143,11 @@ export const Teleport = () => {
 					onClick={() => {
 						if (!unlockedZone(zone) || zones?.current === zone.upper()) return;
 
-						dispatcher.setMaxProgress(100);
 						dispatcher.setProgress({
 							progress: 0,
 							status: "Loading zone...",
 						});
+						dispatcher.setMaxProgress(100);
 						dispatcher.setLoading(true);
 
 						task.wait(1);
