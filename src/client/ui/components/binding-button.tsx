@@ -70,7 +70,7 @@ export const BindingButton: FunctionComponent<BindingButtonProps> = ({
 					textAutoResize="XY"
 					autoSize="XY"
 				>
-					<uitextsizeconstraint MaxTextSize={18} MinTextSize={12} />
+					<uitextsizeconstraint MaxTextSize={18} MinTextSize={8} />
 				</Text>
 			) : icon !== undefined ? (
 				<Image
@@ -111,11 +111,13 @@ export const BindingButton: FunctionComponent<BindingButtonProps> = ({
 				backgroundColor={colors.white}
 			>
 				<Text
+					position={UDim2.fromScale(0.5, 0.5)}
+					anchorPoint={new Vector2(0.5, 0.5)}
 					size={UDim2.fromScale(1, 1)}
 					text={binding.Name}
 					font={fonts.gotham.bold}
 					textColor={colors.black}
-					textSize={24}
+					textSize={rem(24, "pixel")}
 				/>
 			</Frame>
 			<uipadding
