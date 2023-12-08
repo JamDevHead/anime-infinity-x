@@ -20,10 +20,9 @@ import { selectPlayerCurrentZone } from "@/shared/store/players/zones/zones-sele
 
 type EggLayoutProps = {
 	size?: UDim2;
-	position?: UDim2;
 };
 
-export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position }) => {
+export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size }) => {
 	const rem = useRem();
 	const userId = usePlayerId();
 	const currentZone = useSelectorCreator(selectPlayerCurrentZone, userId);
@@ -75,17 +74,19 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size, position })
 						horizontalAlignment="Center"
 						verticalAlignment="Center"
 					>
-						{Object.entries(rarityByZone).map(([key, value]) => {
-							return (
-								<FighterCard
-									headshot={key as string}
-									zone={currentZone ?? "nrt"}
-									padding={4}
-									discovered
-									description={`${value}%`}
-								/>
-							);
-						})}
+						{Object.entries<Record<string, number>>(rarityByZone)
+							.sort(([, a], [, b]) => a > b)
+							.map(([key, value]) => {
+								return (
+									<FighterCard
+										headshot={key}
+										zone={currentZone ?? "nrt"}
+										padding={4}
+										discovered
+										description={`${value}%`}
+									/>
+								);
+							})}
 						<uistroke Color={colors.white} Thickness={4}>
 							<uigradient
 								Transparency={
