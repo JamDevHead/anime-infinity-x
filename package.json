@@ -24,6 +24,7 @@
     "test": "lune scripts/lune/run-tests"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.4.1",
     "@rbxts/compiler-types": "^2.2.0-types.0",
     "@rbxts/types": "^1.0.732",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
