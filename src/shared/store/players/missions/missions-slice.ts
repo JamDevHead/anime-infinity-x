@@ -108,4 +108,38 @@ export const missionsSlice = createProducer(initialState, {
 			},
 		};
 	},
+
+	addMissionProgress: (state, playerId: string, missionId: Mission["id"], taskId: Task["id"], progress: number) => {
+		const playerMissions = state[playerId];
+
+		if (!playerMissions || !playerMissions.all.find((mission) => mission.id === missionId)) {
+			return state;
+		}
+
+		return {
+			...state,
+			[playerId]: {
+				...playerMissions,
+				all: playerMissions.all.map((mission) => {
+					if (mission.id === missionId) {
+						return {
+							...mission,
+							tasks: mission.tasks.map((task) => {
+								if (task.id === taskId) {
+									return {
+										...task,
+										progress: task.progress + progress,
+									};
+								}
+
+								return task;
+							}),
+						};
+					}
+
+					return mission;
+				}),
+			},
+		};
+	},
 });
