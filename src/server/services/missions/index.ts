@@ -1,2 +1,2 @@
-export * from "./mission-decorator";
+export * from "./mission-component";
 export * from "./mission-decorator-service";
