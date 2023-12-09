@@ -5,11 +5,11 @@ import { store } from "@/server/store";
 import { EnemyComponent } from "@/shared/components/enemy-component";
 import { selectEnemyDrops } from "@/shared/store/enemies/enemies-selectors";
 import { selectSelectedEnemies } from "@/shared/store/enemy-selection";
-import { MissionDecoratorService } from "@/server/services/missions";
+import { TaskDecoratorService } from "server/services/tasks";
 
 @Component({ tag: "EnemyNPC" })
 export class Enemy extends EnemyComponent implements OnStart {
-	constructor(private readonly missionDecoratorService: MissionDecoratorService) {
+	constructor(private readonly missionDecoratorService: TaskDecoratorService) {
 		super();
 	}
 
@@ -53,7 +53,7 @@ export class Enemy extends EnemyComponent implements OnStart {
 		}
 
 		killers.forEach((killerId) => {
-			this.missionDecoratorService.missionSignal.Fire("Kill", killerId, this);
+			this.missionDecoratorService.taskSignal.Fire("Kill", killerId, this);
 
 			for (const _ of $range(1, 20)) {
 				const id = HttpService.GenerateGUID(false);

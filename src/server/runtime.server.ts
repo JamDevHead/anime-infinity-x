@@ -16,7 +16,7 @@ Modding.registerDependency<Logger>((actor) => {
 
 Flamework.addPaths("src/server/components");
 Flamework.addPaths("src/server/services");
-Flamework.addPaths("src/server/missions");
+Flamework.addPaths("src/server/tasks");
 Flamework.addPaths("src/shared/components");
 
 Flamework.ignite();
