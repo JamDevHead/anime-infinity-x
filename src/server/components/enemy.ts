@@ -1,14 +1,18 @@
 import { Component } from "@flamework/components";
 import { OnStart } from "@flamework/core";
 import { HttpService } from "@rbxts/services";
-import { playerKilledEnemy } from "@/server/mission-events";
 import { store } from "@/server/store";
 import { EnemyComponent } from "@/shared/components/enemy-component";
 import { selectEnemyDrops } from "@/shared/store/enemies/enemies-selectors";
 import { selectSelectedEnemies } from "@/shared/store/enemy-selection";
+import { MissionDecoratorService } from "@/server/services/missions";
 
 @Component({ tag: "EnemyNPC" })
 export class Enemy extends EnemyComponent implements OnStart {
+	constructor(private readonly missionDecoratorService: MissionDecoratorService) {
+		super();
+	}
+
 	onStart() {
 		const level = this.attributes.Type === "Boss" ? 5 : tonumber(this.attributes.Type.sub(-1)) ?? 1;
 		const calculatedHealth = math.max(level * 2, 1) * 100;
@@ -49,7 +53,7 @@ export class Enemy extends EnemyComponent implements OnStart {
 		}
 
 		killers.forEach((killerId) => {
-			playerKilledEnemy(killerId, this);
+			this.missionDecoratorService.missionSignal.Fire("Kill", killerId, this);
 
 			for (const _ of $range(1, 20)) {
 				const id = HttpService.GenerateGUID(false);

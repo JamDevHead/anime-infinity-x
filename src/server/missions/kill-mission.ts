@@ -1,17 +1,18 @@
 import { MissionDecorator, MissionDecoratorService } from "@/server/services/missions";
 import { MissionComponent } from "@/server/services/missions/mission-component";
+import { Enemy } from "@/server/components/enemy";
 
 @MissionDecorator()
-export class TestMission extends MissionComponent {
+export class KillMission extends MissionComponent {
 	constructor(private missionDecoratorService: MissionDecoratorService) {
 		super();
 	}
 
-	onStart() {
-		print("TestMission onStart");
-	}
+	onStart() {}
 
-	action(): void {}
+	action(playerId: string, target: Enemy): void {
+		print("Kill mission action", playerId, target);
+	}
 
 	reward(): void {}
 }
