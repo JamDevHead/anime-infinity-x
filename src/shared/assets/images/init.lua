@@ -90,6 +90,7 @@ return {
 			inventory = "rbxassetid://15303915192",
 			lock = "rbxassetid://15491195800",
 			mission = "rbxassetid://15302522396",
+			portal = "rbxassetid://15579900108",
 			quad_menu = "rbxassetid://15434347353",
 			rebirth = "rbxassetid://15295231883",
 			search = "rbxassetid://15375260444",

@@ -100,6 +100,7 @@ export const images: {
 		readonly lock: string;
 		readonly dummy: string;
 		readonly vip_mvp: string;
+		readonly portal: string;
 	};
 	readonly ui: {
 		readonly cards: {
