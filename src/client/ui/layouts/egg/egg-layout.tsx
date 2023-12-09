@@ -37,15 +37,17 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size }) => {
 		[currentZone],
 	);
 
-	const buyEgg = () => dispatcher.addToEggQueue(currentZone ?? "NRT");
-
 	useEffect(() => {
 		setPositionMotion.spring(opened ? UDim2.fromScale(0.5, 0.3) : UDim2.fromScale(0.5, -1));
 	}, [opened, setPositionMotion]);
 
-	if (!hudVisible || (!opened && !setPositionMotion.isComplete())) {
+	if (!hudVisible) {
 		return <></>;
 	}
+	const buyEgg = () => {
+		if (!opened || !setPositionMotion.isComplete()) return;
+		dispatcher.addToEggQueue(currentZone ?? "NRT");
+	};
 
 	return (
 		<Frame

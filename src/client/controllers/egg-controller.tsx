@@ -84,6 +84,8 @@ export class EggController implements OnStart, OnTick {
 		const zone = this.zonesFolder.WaitForChild(currentZone, 30);
 		if (!zone) return;
 
+		this.incubators.clear();
+
 		const eggsFolder = zone.WaitForChild("Eggs") as Folder;
 
 		const eggConnection = eggsFolder.ChildAdded.Connect((egg) => {
