@@ -1,11 +1,13 @@
-import Roact, { FunctionComponent, PropsWithChildren } from "@rbxts/roact";
+import Roact, { FunctionComponent, PropsWithChildren, useEffect } from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
 import { fonts } from "@/client/constants/fonts";
+import { springs } from "@/client/constants/springs";
 import { Button } from "@/client/ui/components/button";
 import { Frame } from "@/client/ui/components/frame";
 import { Image } from "@/client/ui/components/image";
 import { Stack } from "@/client/ui/components/stack";
 import { Text } from "@/client/ui/components/text";
+import { useMotion } from "@/client/ui/hooks/use-motion";
 import { useRem } from "@/client/ui/hooks/use-rem";
 
 type ItemProps = {
@@ -44,14 +46,31 @@ const ButtonItem: FunctionComponent<PropsWithChildren<ButtonItemProps>> = ({
 	children,
 }) => {
 	const rem = useRem();
+	const [sizeMotion, setSizeMotion] = useMotion(size ?? UDim2.fromOffset(rem(216, "pixel"), rem(38, "pixel")));
 
 	return (
 		<Button
-			size={size ?? UDim2.fromOffset(rem(216, "pixel"), rem(38, "pixel"))}
+			size={sizeMotion}
 			backgroundTransparency={0}
 			cornerRadius={new UDim(0, 8)}
-			onClick={onClick}
 			backgroundColor={color ? color : gradient ? colors.white : undefined}
+			onClick={() => {
+				onClick?.();
+				task.spawn(() => {
+					setSizeMotion.spring(
+						UDim2.fromOffset(
+							sizeMotion.getValue().X.Offset - rem(12, "pixel"),
+							sizeMotion.getValue().Y.Offset - rem(12, "pixel"),
+						),
+						springs.responsive,
+					);
+					task.wait(0.1);
+					setSizeMotion.spring(
+						size ?? UDim2.fromOffset(rem(216, "pixel"), rem(38, "pixel")),
+						springs.responsive,
+					);
+				});
+			}}
 		>
 			<Frame
 				size={UDim2.fromScale(1, 1)}
@@ -123,16 +142,24 @@ const Root: FunctionComponent<PropsWithChildren<ContextMenuProps>> = ({
 	children,
 }) => {
 	const rem = useRem();
+	const [openedMotion, setOpenedMotion] = useMotion(0);
+
+	useEffect(() => {
+		setOpenedMotion.spring(opened ? 1 : 0, {
+			...springs.responsive,
+			damping: 1,
+		});
+	}, [opened, setOpenedMotion]);
 
 	return (
 		<Frame
-			visible={opened}
 			position={position}
 			size={size}
 			autoSize={autoSize ?? "XY"}
 			backgroundColor={colors.black}
 			cornerRadius={new UDim(0, rem(12, "pixel"))}
 		>
+			<uiscale Scale={openedMotion} />
 			<Frame
 				size={UDim2.fromScale(1, 1)}
 				backgroundColor={colors.white}
