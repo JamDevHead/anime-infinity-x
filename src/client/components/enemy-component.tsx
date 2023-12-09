@@ -58,6 +58,15 @@ export class Enemy extends EnemyComponent implements OnStart {
 
 		this.hurtParticle.Parent = this.instance;
 
+		// Fix enemy model
+		this.instance.GetDescendants().forEach((descendant) => {
+			if (descendant.IsA("BasePart")) {
+				descendant.CastShadow = true;
+				descendant.CanCollide = false;
+			}
+		});
+
+		// Play idle animation
 		this.animationTracker.playAnimationTrack("idle");
 
 		// Enemy health component
