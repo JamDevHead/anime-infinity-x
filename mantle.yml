@@ -42,3 +42,62 @@ target:
           description: |
             TODO: Add description
           maxPlayerCount: 20
+    # Passes
+    passes:
+      eggHatch:
+        name: +3 Egg Hatch
+        icon: assets/place/passes/default.png
+      autoTag:
+        name: Auto Tap
+        icon: assets/place/passes/default.png
+      autoFarm:
+        name: Auto Farm
+        icon: assets/place/passes/default.png
+      +2PetEquip:
+        name: +2 Pet Equip
+        icon: assets/place/passes/default.png
+      +5PetEquip:
+        name: +5 Pet Equip
+        icon: assets/place/passes/default.png
+      darkMatterLucky:
+        name: Dark Matter Lucky
+        icon: assets/place/passes/default.png
+      superLucky:
+        name: Super Lucky
+        icon: assets/place/passes/default.png
+      lucky:
+        name: Lucky
+        icon: assets/place/passes/default.png
+      vip:
+        name: VIP
+        icon: assets/place/passes/default.png
+    # Products
+    products:
+      secretEggRobux:
+        name: Secret Egg Robux
+        icon: assets/place/products/default.png
+        price: 99
+      starBundle1:
+        name: Star Bundle 1
+        icon: assets/place/products/default.png
+        price: 29
+      starBundle2:
+        name: Star Bundle 2
+        icon: assets/place/products/default.png
+        price: 129
+      starBundle3:
+        name: Star Bundle 3
+        icon: assets/place/products/default.png
+        price: 399
+      starBundle4:
+        name: Star Bundle 4
+        icon: assets/place/products/default.png
+        price: 799
+      starBundle5:
+        name: Star Bundle 5
+        icon: assets/place/products/default.png
+        price: 1299
+      starterPack:
+        name: Starter Pack
+        icon: assets/place/products/default.png
+        price: 99
