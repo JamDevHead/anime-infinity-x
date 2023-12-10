@@ -239,7 +239,7 @@ export function Shop() {
 						autoSize="Y"
 						size={UDim2.fromScale(1, 0)}
 						cellSize={
-							breakpoint === "mobile"
+							breakpoint === "tablet"
 								? UDim2.fromOffset(rem(400, "pixel"), rem(192, "pixel"))
 								: UDim2.fromOffset(rem(300, "pixel"), rem(192, "pixel"))
 						}

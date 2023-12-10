@@ -9,5 +9,6 @@ declare namespace JSX {
 		trail: JSX.IntrinsicElement<Trail>;
 		humanoid: JSX.IntrinsicElement<Humanoid>;
 		model: JSX.IntrinsicElement<Model>;
+		uiflexitem: JSX.IntrinsicElement<UIFlexItem>;
 	}
 }
