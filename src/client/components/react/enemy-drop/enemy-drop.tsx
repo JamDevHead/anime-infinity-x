@@ -1,6 +1,6 @@
 import { useDebounceCallback, useEventListener, useLifetime } from "@rbxts/pretty-react-hooks";
 import Roact, { useEffect, useMemo, useRef, useState } from "@rbxts/roact";
-import { ReplicatedStorage, RunService } from "@rbxts/services";
+import { RunService } from "@rbxts/services";
 import { store } from "@/client/store";
 import { Image } from "@/client/ui/components/image";
 import { useCharacter } from "@/client/ui/hooks/use-character";
@@ -12,7 +12,6 @@ import { Drop } from "@/shared/store/enemies/drops";
 import { getEnemyModelByUid } from "@/shared/utils/enemies";
 
 const RNG = new Random();
-const coinFolder = ReplicatedStorage.assets.Particles.Coins;
 
 export function EnemyDrop({ drop, soundTracker }: { drop: Drop; soundTracker: SoundTracker }) {
 	const origin = useMemo(() => drop.origin, [drop]);
@@ -46,9 +45,6 @@ export function EnemyDrop({ drop, soundTracker }: { drop: Drop; soundTracker: So
 			return;
 		}
 
-		const coins = coinFolder.GetChildren();
-		const coin = coins[RNG.NextInteger(0, coins.size() - 1)]?.Clone() as ParticleEmitter | undefined;
-
 		const max = 7;
 		const min = -7;
 		const x = RNG.NextNumber() * (max - min) + min;
@@ -58,10 +54,6 @@ export function EnemyDrop({ drop, soundTracker }: { drop: Drop; soundTracker: So
 
 		const goal = origin.add(new Vector3(x, -height / 2.05 + 0.5 + (scale >= 5 ? (scale % 5) + 0.5 : 0), y));
 
-		if (coin !== undefined) {
-			coin.Parent = partRef.current;
-			coin.Emit(5);
-		}
 		positionMotion.spring(goal, { damping: 0.4, impulse: 0.009 });
 		task.delay(0.5, () => setTrailEnabled(true));
 	}, [enemy, origin, positionMotion]);

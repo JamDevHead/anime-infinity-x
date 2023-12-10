@@ -13,6 +13,8 @@ import { EnemyComponent } from "@/shared/components/enemy-component";
 import { AnimationMap, AnimationTracker } from "@/shared/lib/animation-tracker";
 import { selectFighterWithTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
 
+const coinParticleFolder = ReplicatedStorage.assets.Particles.Coins;
+const RNG = new Random();
 const animationMap = {
 	death: { id: "14485177001", priority: Enum.AnimationPriority.Action },
 	hurt: { id: "14514314319", priority: Enum.AnimationPriority.Movement },
@@ -24,7 +26,10 @@ export class Enemy extends EnemyComponent implements OnStart {
 	private animator = this.humanoid.WaitForChild("Animator") as Animator;
 	private animationTracker = new AnimationTracker(this.animator, animationMap);
 	private hurtHighlight = new Instance("Highlight");
-	private hurtParticle = new Instance("Part") as Part & { Particle: ParticleEmitter };
+	private particleContainer = new Instance("Part") as Part & {
+		Particle: ParticleEmitter;
+		CoinParticle: ParticleEmitter;
+	};
 	private healthComponentRoot?: Root;
 	private abbreviator = useAbbreviator();
 
@@ -44,19 +49,27 @@ export class Enemy extends EnemyComponent implements OnStart {
 
 		const particle = ReplicatedStorage.assets.Particles.HurtParticle.Clone();
 		const [cframe, size] = this.instance.GetBoundingBox();
+		const coins = coinParticleFolder.GetChildren();
+		const coinParticle = coins[RNG.NextInteger(0, coins.size() - 1)]?.Clone() as ParticleEmitter | undefined;
+
+		if (coinParticle !== undefined) {
+			coinParticle.Enabled = false;
+			coinParticle.Name = "CoinParticle";
+			coinParticle.Parent = this.particleContainer;
+		}
 
 		particle.Name = "Particle";
-		particle.Parent = this.hurtParticle;
-		this.hurtParticle.Anchored = true;
+		particle.Parent = this.particleContainer;
 
-		this.hurtParticle.Size = size;
-		this.hurtParticle.CFrame = cframe;
-		this.hurtParticle.CanCollide = false;
-		this.hurtParticle.CanQuery = false;
-		this.hurtParticle.CanTouch = false;
-		this.hurtParticle.Transparency = 1;
+		this.particleContainer.Size = size;
+		this.particleContainer.CFrame = cframe;
+		this.particleContainer.Anchored = true;
+		this.particleContainer.CanCollide = false;
+		this.particleContainer.CanQuery = false;
+		this.particleContainer.CanTouch = false;
+		this.particleContainer.Transparency = 1;
 
-		this.hurtParticle.Parent = this.instance;
+		this.particleContainer.Parent = this.instance;
 
 		// Fix enemy model
 		this.instance.GetDescendants().forEach((descendant) => {
@@ -85,6 +98,9 @@ export class Enemy extends EnemyComponent implements OnStart {
 			this.animationTracker.destroy();
 			return;
 		}
+
+		// Play coin drop particles
+		this.particleContainer.CoinParticle.Emit(30);
 
 		// Play death animation
 		this.animationTracker.swapAnimation("death");
@@ -134,7 +150,7 @@ export class Enemy extends EnemyComponent implements OnStart {
 		this.createHurtParticle(damage);
 
 		// Play particle
-		this.hurtParticle.Particle.Emit(1);
+		this.particleContainer.Particle.Emit(1);
 
 		// Play hurt sound
 		this.soundController.tracker.play("hurt", this.instance.HumanoidRootPart);

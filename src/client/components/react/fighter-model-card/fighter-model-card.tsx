@@ -1,11 +1,11 @@
 import { useCamera, useEventListener, useLatest, useUnmountEffect } from "@rbxts/pretty-react-hooks";
+import { createPortal } from "@rbxts/react-roblox";
 import Roact, { useEffect, useMemo, useState } from "@rbxts/roact";
 import { ReplicatedStorage, RunService } from "@rbxts/services";
-import { PlayerFighter } from "@/shared/store/players";
-import { createPortal } from "@rbxts/react-roblox";
-import { Text } from "@/client/ui/components/text";
-import { fonts } from "@/client/constants/fonts";
 import { colors } from "@/client/constants/colors";
+import { fonts } from "@/client/constants/fonts";
+import { Text } from "@/client/ui/components/text";
+import { PlayerFighter } from "@/shared/store/players";
 
 const fightersFolder = ReplicatedStorage.assets.Avatars.FightersModels;
 const fightersParticles = ReplicatedStorage.assets.Particles.EnemyUnbox;
