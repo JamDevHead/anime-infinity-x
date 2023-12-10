@@ -1,4 +1,5 @@
 import Object from "@rbxts/object-utils";
+import { md5 } from "@rbxts/rbxts-hashlib";
 import { useSelectorCreator } from "@rbxts/react-reflex";
 import Roact, { FunctionComponent, useEffect, useMemo } from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
@@ -16,6 +17,7 @@ import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
 import { FighterRarity } from "@/shared/constants/rarity";
+import { selectPlayerIndex } from "@/shared/store/players";
 import { selectPlayerCurrentZone } from "@/shared/store/players/zones/zones-selectors";
 
 type EggLayoutProps = {
@@ -26,6 +28,7 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size }) => {
 	const rem = useRem();
 	const userId = usePlayerId();
 	const currentZone = useSelectorCreator(selectPlayerCurrentZone, userId);
+	const playerIndex = useSelectorCreator(selectPlayerIndex, userId);
 	const dispatcher = useRootStore();
 	const opened = useRootSelector(selectEggUiStatus);
 	const hudVisible = useRootSelector(selectHudVisible);
@@ -75,16 +78,19 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size }) => {
 						cellSize={UDim2.fromOffset(rem(96, "pixel"), rem(96, "pixel"))}
 						horizontalAlignment="Center"
 						verticalAlignment="Center"
+						sortOrder={Enum.SortOrder.LayoutOrder}
 					>
 						{Object.entries<Record<string, number>>(rarityByZone)
 							.sort(([, a], [, b]) => a > b)
 							.map(([key, value]) => {
+								const characterUUID = md5(key);
+
 								return (
 									<FighterCard
 										headshot={key}
 										zone={currentZone ?? "nrt"}
 										padding={4}
-										discovered
+										discovered={playerIndex?.discovered.includes(characterUUID)}
 										description={`${value}%`}
 									/>
 								);
