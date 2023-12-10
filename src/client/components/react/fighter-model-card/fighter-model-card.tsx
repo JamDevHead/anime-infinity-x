@@ -2,8 +2,30 @@ import { useCamera, useEventListener, useLatest, useUnmountEffect } from "@rbxts
 import Roact, { useEffect, useMemo, useState } from "@rbxts/roact";
 import { ReplicatedStorage, RunService } from "@rbxts/services";
 import { PlayerFighter } from "@/shared/store/players";
+import { createPortal } from "@rbxts/react-roblox";
+import { Text } from "@/client/ui/components/text";
+import { fonts } from "@/client/constants/fonts";
+import { colors } from "@/client/constants/colors";
 
 const fightersFolder = ReplicatedStorage.assets.Avatars.FightersModels;
+const fightersParticles = ReplicatedStorage.assets.Particles.EnemyUnbox;
+
+function FighterModelBillboard({ name }: { name: string }) {
+	return (
+		<billboardgui StudsOffsetWorldSpace={new Vector3(0, -1.5, -0.3)} Size={UDim2.fromScale(3, 1)} AlwaysOnTop>
+			<Text
+				size={UDim2.fromScale(1, 1)}
+				backgroundTransparency={1}
+				text={name}
+				font={fonts.fredokaOne.bold}
+				textColor={colors.white}
+				textScaled
+			>
+				<uistroke Thickness={5.7} />
+			</Text>
+		</billboardgui>
+	);
+}
 
 export function FighterModelCard({ fighter }: { fighter: Pick<PlayerFighter, "zone" | "name"> }) {
 	const camera = useCamera();
@@ -65,11 +87,31 @@ export function FighterModelCard({ fighter }: { fighter: Pick<PlayerFighter, "zo
 		fighterModel.WorldPivot = bounding;
 		fighterModel.ScaleTo(0.15);
 		fighterModel.Parent = camera;
+
+		// create particle
+		const particlePart = new Instance("Part");
+
+		particlePart.Size = Vector3.one;
+		particlePart.Anchored = true;
+		particlePart.CanCollide = false;
+		particlePart.CanQuery = false;
+		particlePart.Transparency = 1;
+		particlePart.CFrame = bounding;
+		particlePart.Parent = fighterModel;
+
+		const particles = fightersParticles.GetChildren() as ParticleEmitter[];
+
+		particles.forEach((particle) => {
+			const clonedParticle = particle.Clone();
+
+			clonedParticle.Parent = particlePart;
+			clonedParticle.Emit(1);
+		});
 	}, [camera, fighterModel]);
 
 	useUnmountEffect(() => {
 		fighterModel?.Destroy();
 	});
 
-	return <></>;
+	return <>{fighterModel && createPortal(<FighterModelBillboard name={fighter.name} />, fighterModel)}</>;
 }
