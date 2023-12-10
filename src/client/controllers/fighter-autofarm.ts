@@ -6,10 +6,12 @@ import { store } from "@/client/store";
 import { selectSpecificPerk } from "@/client/store/perks";
 import remotes from "@/shared/remotes";
 
+const HORIZONTAL_VECTOR = new Vector3(1, 0, 1);
+
 @Controller()
 export class FighterAutofarmController implements OnStart, OnTick {
 	private autofarmEnabled = false;
-	private minDistance = 10;
+	private minDistance = 30;
 	private selectedEnemy?: Enemy;
 
 	constructor(
@@ -53,17 +55,17 @@ export class FighterAutofarmController implements OnStart, OnTick {
 		}
 
 		const enemies = this.components.getAllComponents<Enemy>();
-		const origin = character.GetPivot().Position;
+		const origin = character.GetPivot().Position.mul(HORIZONTAL_VECTOR);
 
 		return enemies.reduce(
 			(closestEnemy, enemy) => {
-				const enemyDistance = enemy.root.Position.sub(origin).Magnitude;
+				const enemyDistance = enemy.root.Position.mul(HORIZONTAL_VECTOR).sub(origin).Magnitude;
 
 				if (closestEnemy === undefined && enemyDistance < this.minDistance) {
 					return enemy;
 				}
 
-				const closestEnemyDistance = closestEnemy?.root.Position.sub(origin).Magnitude;
+				const closestEnemyDistance = closestEnemy?.root.Position.mul(HORIZONTAL_VECTOR).sub(origin).Magnitude;
 
 				if (
 					closestEnemyDistance !== undefined &&
