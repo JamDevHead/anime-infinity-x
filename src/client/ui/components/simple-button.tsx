@@ -1,7 +1,9 @@
 import Roact, { PropsWithChildren } from "@rbxts/roact";
+import { springs } from "@/client/constants/springs";
 import { Button } from "@/client/ui/components/button";
 import { FrameProps } from "@/client/ui/components/frame";
 import { Image } from "@/client/ui/components/image";
+import { useMotion } from "@/client/ui/hooks/use-motion";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
 
@@ -13,9 +15,18 @@ interface SimpleButtonProps extends PropsWithChildren, FrameProps {
 
 export function SimpleButton({ children, position, size, color, onClick, icon, anchorPoint }: SimpleButtonProps) {
 	const rem = useRem();
+	const [click, clickMotion] = useMotion(1);
+
+	function onMouseDown() {
+		clickMotion.spring(0.8, springs.responsive);
+		task.delay(0.1, () => {
+			clickMotion.spring(1, springs.responsive);
+		});
+	}
 
 	return (
 		<Button
+			onMouseDown={onMouseDown}
 			position={position}
 			size={size || UDim2.fromOffset(rem(6), rem(6))}
 			onClick={onClick}
@@ -23,6 +34,7 @@ export function SimpleButton({ children, position, size, color, onClick, icon, a
 			backgroundTransparency={1}
 			anchorPoint={anchorPoint}
 		>
+			<uiscale Scale={click} />
 			<Image size={UDim2.fromScale(1, 1)} image={images.ui.rounded_button_base} imageColor={color}>
 				<uipadding
 					PaddingLeft={new UDim(0, rem(24, "pixel"))}
