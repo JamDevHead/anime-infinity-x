@@ -1,4 +1,4 @@
-import { useLifetime, useMountEffect } from "@rbxts/pretty-react-hooks";
+import { useLifetime, useMountEffect, useUnmountEffect } from "@rbxts/pretty-react-hooks";
 import Roact from "@rbxts/roact";
 import { Enemy } from "@/client/components/enemy-component";
 import { Image } from "@/client/ui/components/image";
@@ -14,6 +14,10 @@ export function EnemyAura({ enemy }: { enemy: Enemy }) {
 
 	useMountEffect(() => {
 		enemy.highlight.OutlineTransparency = 0.15;
+	});
+
+	useUnmountEffect(() => {
+		enemy.highlight.OutlineTransparency = 1;
 	});
 
 	return (

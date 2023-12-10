@@ -37,7 +37,10 @@ function HoverProvider({ components }: { components: Components }) {
 
 	useEffect(() => {
 		if (lastHoveredEnemy.current) {
-			lastHoveredEnemy.current.highlight.OutlineTransparency = 1;
+			if (lastHoveredEnemy.current.highlight.OutlineTransparency === 0) {
+				lastHoveredEnemy.current.highlight.OutlineTransparency = 1;
+			}
+			lastHoveredEnemy.current = undefined;
 		}
 
 		if (!hoveredEnemy) {
