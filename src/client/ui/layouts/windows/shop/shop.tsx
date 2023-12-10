@@ -1,18 +1,18 @@
 import Roact, { FunctionComponent } from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
 import { fonts } from "@/client/constants/fonts";
-import { useRootSelector, useRootStore } from "@/client/store";
+import { useRootSelector } from "@/client/store";
 import { Frame } from "@/client/ui/components/frame";
 import { Grid } from "@/client/ui/components/grid";
 import { Image } from "@/client/ui/components/image";
 import { ScrollView } from "@/client/ui/components/scroll-view";
 import { Stack } from "@/client/ui/components/stack";
 import { Text } from "@/client/ui/components/text";
-import { ToggleOption } from "@/client/ui/components/toggle-option";
 import { useAbbreviator } from "@/client/ui/hooks/use-abbreviator";
 import { useBreakpoint } from "@/client/ui/hooks/use-breakpoint";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { ShopFeaturedCard } from "@/client/ui/layouts/windows/shop/shop-featured-card";
+import { TwitterCard } from "@/client/ui/layouts/windows/shop/twitter-card";
 import { images } from "@/shared/assets/images";
 import { selectStoreFeatured } from "@/shared/store/store/store-selectors";
 
@@ -183,8 +183,6 @@ export function Shop() {
 	const rem = useRem();
 	const featured = useRootSelector(selectStoreFeatured);
 
-	const { toggleWindowVisible } = useRootStore();
-
 	return (
 		<Stack size={UDim2.fromScale(1, 1)} fillDirection={"Vertical"} clipsDescendants>
 			<ScrollView
@@ -210,14 +208,7 @@ export function Shop() {
 				{featured.map((card) => (
 					<ShopFeaturedCard card={card} />
 				))}
-				<Image size={new UDim2(1, 0, 0, rem(192, "pixel"))} image={images.ui.shop.redeem_background}>
-					<ToggleOption
-						position={UDim2.fromScale(0.98, 0.9)}
-						anchorPoint={new Vector2(1, 1)}
-						checked={true}
-						onClick={() => toggleWindowVisible("codes")}
-					/>
-				</Image>
+				<TwitterCard />
 				<Text
 					textScaled
 					textColor={Color3.fromHex("#fff")}

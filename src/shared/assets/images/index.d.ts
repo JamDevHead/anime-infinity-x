@@ -135,13 +135,17 @@ export const images: {
 			};
 		};
 		readonly enemy_health: {
-			health_bar_fill: string;
-			health_bar_outline: string;
+			readonly health_bar_fill: string;
+			readonly health_bar_outline: string;
 		};
 		readonly shop: {
 			readonly featured_background: string;
+			readonly featured_inline: string;
+			readonly featured_stars_back: string;
+			readonly featured_stars_front: string;
 			readonly redeem_background: string;
 			readonly placeholder_card: string;
+			readonly gift: string;
 		};
 		readonly blur: string;
 		readonly rounded_button_base: string;

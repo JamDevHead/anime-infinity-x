@@ -564,8 +564,28 @@ id = 15450966260
 packable = false
 
 [inputs."assets/images/ui/shop/featured_background.png"]
-hash = "6ccb2218ecc6bf684f9d0e44efd828feec738d7cb5e0ba304b70ae2a4c928d2e"
-id = 15549528373
+hash = "6f8381f632634cca13a44593ef72b778a13befc2e1a8cc87634fb5d3508d0dd2"
+id = 15593578033
+packable = false
+
+[inputs."assets/images/ui/shop/featured_inline.png"]
+hash = "88b4d36149fee07617baff638c62e2f7e509ef2dfdb9cf84fabafed89a13b433"
+id = 15593578134
+packable = false
+
+[inputs."assets/images/ui/shop/featured_stars_back.png"]
+hash = "0173e44a06d1445ac67e98d9b7c2be363980cfebbb824e9e20c8f046ebdec6da"
+id = 15593578240
+packable = false
+
+[inputs."assets/images/ui/shop/featured_stars_front.png"]
+hash = "5d7ba31619b9c9112d1734df6ac8ff43eb87b3618ca90123031fa21b4aa1c329"
+id = 15593578383
+packable = false
+
+[inputs."assets/images/ui/shop/gift.png"]
+hash = "7b8af2c7092ac7384b5c3474825f7276ef027c7b26af2864c4961da9527e961c"
+id = 15594162535
 packable = false
 
 [inputs."assets/images/ui/shop/placeholder_card.png"]
@@ -574,8 +594,8 @@ id = 15572463592
 packable = false
 
 [inputs."assets/images/ui/shop/redeem_background.png"]
-hash = "b114a98fc2a91ff1f91a4831bf3bcf778d143e004c0939d40631de2767d4097b"
-id = 15554054844
+hash = "d05f43390bb6c65f6a96ff8bcd6d9bb4adf1e050e3cf046dacf059596ea408be"
+id = 15594141277
 packable = false
 
 [inputs."assets/images/ui/stats_bar_base.png"]
