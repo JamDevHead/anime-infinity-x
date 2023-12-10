@@ -103,7 +103,9 @@ export const FighterCard: FunctionComponent<FighterCardProps> = ({
 										textXAlignment="Center"
 										textScaled
 										textWrapped
-									/>
+									>
+										<uistroke Color={colors.black} Thickness={rem(3, "pixel")} />
+									</Text>
 								)}
 							</Image>
 						</CanvasGroup>
