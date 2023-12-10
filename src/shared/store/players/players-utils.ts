@@ -27,6 +27,9 @@ export const defaultPlayerData = {
 		changing: false,
 		unlocked: ["NRT"],
 	},
+	index: {
+		discovered: [],
+	},
 	info: {
 		firstTime: true,
 		version: $git("Commit").Commit,

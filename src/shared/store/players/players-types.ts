@@ -9,6 +9,7 @@ export interface PlayerData {
 	boosts: PlayerBoosts;
 	settings: Record<string, boolean | number>;
 	zones: PlayerZones;
+	index: PlayerIndex;
 	info: PlayerInfo;
 }
 
@@ -56,6 +57,10 @@ export interface PlayerBoosts {
 export interface PlayerInventory {
 	maxStorage: number;
 	maxFighters: number;
+}
+
+export interface PlayerIndex {
+	discovered: string[];
 }
 
 export interface PlayerInfo {

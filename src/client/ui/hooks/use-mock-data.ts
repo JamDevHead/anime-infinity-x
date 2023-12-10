@@ -1,3 +1,4 @@
+import { md5 } from "@rbxts/rbxts-hashlib";
 import { useEffect } from "@rbxts/roact";
 import { ReplicatedStorage } from "@rbxts/services";
 import { store } from "@/client/store";
@@ -103,6 +104,9 @@ export const useMockData = (props?: MockDataProps): void => {
 			info: {
 				firstTime: false,
 				version: "1.0.0",
+			},
+			index: {
+				discovered: [md5("Naro")],
 			},
 			...props?.customData,
 		});

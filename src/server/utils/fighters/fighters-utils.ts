@@ -2,7 +2,7 @@ import { md5 } from "@rbxts/rbxts-hashlib";
 import { HttpService, ReplicatedStorage } from "@rbxts/services";
 import { FighterStats } from "@/server/constants/fighter-stats";
 import { store } from "@/server/store";
-import { PlayerFighter } from "@/shared/store/players";
+import { PlayerFighter, selectPlayerIndex } from "@/shared/store/players";
 import { selectActivePlayerFighters, selectPlayerFighter } from "@/shared/store/players/fighters";
 
 const fightersFolder = ReplicatedStorage.assets.Avatars.FightersModels;
@@ -29,6 +29,11 @@ export function addFighterFor(player: Player, fighterData: Omit<PlayerFighter, "
 	const userId = tostring(player.UserId);
 	const characterUid = md5(fighterData.name);
 	const fighterUid = HttpService.GenerateGUID(false);
+
+	const index = store.getState(selectPlayerIndex(userId));
+	if (index === undefined) return;
+
+	if (!index.discovered.includes(characterUid)) store.addDiscoveredFighter(userId, characterUid);
 
 	store.addFighter(userId, fighterUid, { ...fighterData, characterUid });
 	return {
