@@ -1,15 +1,15 @@
 import { Component } from "@flamework/components";
 import { OnStart } from "@flamework/core";
 import { HttpService } from "@rbxts/services";
+import { MissionDecoratorService } from "server/services/missions";
 import { store } from "@/server/store";
 import { EnemyComponent } from "@/shared/components/enemy-component";
 import { selectEnemyDrops } from "@/shared/store/enemies/enemies-selectors";
 import { selectSelectedEnemies } from "@/shared/store/enemy-selection";
-import { TaskDecoratorService } from "server/services/tasks";
 
 @Component({ tag: "EnemyNPC" })
 export class Enemy extends EnemyComponent implements OnStart {
-	constructor(private readonly missionDecoratorService: TaskDecoratorService) {
+	constructor(private readonly missionDecoratorService: MissionDecoratorService) {
 		super();
 	}
 

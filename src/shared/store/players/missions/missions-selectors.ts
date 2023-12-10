@@ -11,6 +11,18 @@ export const selectPlayerMissions = (playerId: string) => {
 
 export const selectAllPlayerMissions = (playerId: string) => {
 	return createSelector(selectPlayerMissions(playerId), (missions) => {
-		return missions?.all ?? [];
+		return missions?.all;
+	});
+};
+
+export const selectPlayerMission = (playerId: string, missionId: string) => {
+	return createSelector(selectAllPlayerMissions(playerId), (missions) => {
+		return missions?.find((mission) => mission.id === missionId);
+	});
+};
+
+export const selectPlayerMissionWithTaskId = (playerId: string, taskId: string) => {
+	return createSelector(selectAllPlayerMissions(playerId), (missions) => {
+		return missions?.find((mission) => mission.tasks.some((task) => task.id === taskId));
 	});
 };
