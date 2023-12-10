@@ -53,6 +53,40 @@ function AutofarmButton() {
 	);
 }
 
+function AutoclickButton() {
+	const dispatcher = useRootStore();
+	const autoclick = useSelectorCreator(selectSpecificPerk, "autoclick");
+	const rem = useRem();
+	const [rotation, setRotation] = useState(0);
+
+	useEventListener(
+		RunService.Heartbeat,
+		(deltaTime) => {
+			setRotation(rotation + math.deg(deltaTime) * 5);
+		},
+		{ connected: autoclick },
+	);
+
+	return (
+		<SimpleButton
+			position={UDim2.fromScale(0, -0.8)}
+			anchorPoint={new Vector2(0.5, 0.5)}
+			size={UDim2.fromOffset(rem(96, "pixel"), rem(96, "pixel"))}
+			color={Color3.fromRGB(255, 0, 0)}
+			icon={images.icons.hand_click}
+			onClick={() => dispatcher.toggleAutoclick()}
+		>
+			<Image
+				position={UDim2.fromScale(1, 1)}
+				size={UDim2.fromOffset(rem(38, "pixel"), rem(38, "pixel"))}
+				anchorPoint={new Vector2(1, 1)}
+				image={images.icons.rebirth}
+				rotation={rotation}
+			/>
+		</SimpleButton>
+	);
+}
+
 export const BottomHudButtons = () => {
 	const [hoveredBoosts, setHoveredBoosts] = useState<boolean[]>([]);
 	const [boostTimers, setBoostTimers] = useState<number[]>([]);
@@ -91,20 +125,7 @@ export const BottomHudButtons = () => {
 					size={UDim2.fromOffset(rem(312, "pixel"), rem(40, "pixel"))}
 					image={images.ui.hud_bottom_curve}
 				>
-					<SimpleButton
-						position={UDim2.fromScale(0, -0.8)}
-						anchorPoint={new Vector2(0.5, 0.5)}
-						size={UDim2.fromOffset(rem(96, "pixel"), rem(96, "pixel"))}
-						color={Color3.fromRGB(255, 0, 0)}
-						icon={images.icons.hand_click}
-					>
-						<Image
-							position={UDim2.fromScale(1, 1)}
-							size={UDim2.fromOffset(rem(38, "pixel"), rem(38, "pixel"))}
-							anchorPoint={new Vector2(1, 1)}
-							image={images.icons.rebirth}
-						/>
-					</SimpleButton>
+					<AutoclickButton />
 
 					<AttackButton
 						position={UDim2.fromScale(0.5, -1.7)}
