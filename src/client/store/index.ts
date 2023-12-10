@@ -12,6 +12,7 @@ import { eggQueueSlice } from "@/client/store/egg-queue";
 import { enemyHoverSlice } from "@/client/store/enemy-hover";
 import { inventorySlice } from "@/client/store/inventory";
 import { loadingSlice } from "@/client/store/loading";
+import { perksSlice } from "@/client/store/perks";
 import { portalSlice } from "@/client/store/portal";
 import { slices } from "@/shared/store";
 import { profilerMiddleware } from "@/shared/store/middleware/profile-middleware";
@@ -33,6 +34,7 @@ export function createStore() {
 		portal: portalSlice,
 		eggUi: eggUiSlice,
 		eggQueue: eggQueueSlice,
+		perks: perksSlice,
 	});
 
 	store.applyMiddleware(profilerMiddleware, devToolsMiddleware, receiverMiddleware(store));

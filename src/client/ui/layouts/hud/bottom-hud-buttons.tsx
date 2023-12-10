@@ -1,7 +1,11 @@
+import { useEventListener } from "@rbxts/pretty-react-hooks";
+import { useSelectorCreator } from "@rbxts/react-reflex";
 import Roact, { useEffect, useRef, useState } from "@rbxts/roact";
+import { RunService } from "@rbxts/services";
 import { setInterval } from "@rbxts/set-timeout";
 import { boostIcons } from "@/client/constants/boost-icons";
-import { useRootSelector } from "@/client/store";
+import { useRootSelector, useRootStore } from "@/client/store";
+import { selectSpecificPerk } from "@/client/store/perks";
 import { AttackButton } from "@/client/ui/components/attack-button";
 import { Boost } from "@/client/ui/components/boost";
 import { FadingFrame } from "@/client/ui/components/fading-frame";
@@ -14,6 +18,40 @@ import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
 import { selectPlayerBoosts } from "@/shared/store/players";
+
+function AutofarmButton() {
+	const dispatcher = useRootStore();
+	const autofarm = useSelectorCreator(selectSpecificPerk, "autofarm");
+	const rem = useRem();
+	const [rotation, setRotation] = useState(0);
+
+	useEventListener(
+		RunService.Heartbeat,
+		(deltaTime) => {
+			setRotation(rotation + math.deg(deltaTime) * 5);
+		},
+		{ connected: autofarm },
+	);
+
+	return (
+		<SimpleButton
+			position={UDim2.fromScale(1, -0.8)}
+			anchorPoint={new Vector2(0.5, 0.5)}
+			size={UDim2.fromOffset(rem(96, "pixel"), rem(96, "pixel"))}
+			color={Color3.fromRGB(36, 166, 15)}
+			icon={images.icons.sword_outline}
+			onClick={() => dispatcher.toggleAutofarm()}
+		>
+			<Image
+				position={UDim2.fromScale(1, 1)}
+				size={UDim2.fromOffset(rem(38, "pixel"), rem(38, "pixel"))}
+				anchorPoint={new Vector2(1, 1)}
+				image={images.icons.rebirth}
+				rotation={rotation}
+			/>
+		</SimpleButton>
+	);
+}
 
 export const BottomHudButtons = () => {
 	const [hoveredBoosts, setHoveredBoosts] = useState<boolean[]>([]);
@@ -67,6 +105,7 @@ export const BottomHudButtons = () => {
 							image={images.icons.rebirth}
 						/>
 					</SimpleButton>
+
 					<AttackButton
 						position={UDim2.fromScale(0.5, -1.7)}
 						anchorPoint={new Vector2(0.5, 0.5)}
@@ -74,20 +113,8 @@ export const BottomHudButtons = () => {
 						color={Color3.fromRGB(255, 255, 255)}
 						icon={images.icons.hand_click}
 					/>
-					<SimpleButton
-						position={UDim2.fromScale(1, -0.8)}
-						anchorPoint={new Vector2(0.5, 0.5)}
-						size={UDim2.fromOffset(rem(96, "pixel"), rem(96, "pixel"))}
-						color={Color3.fromRGB(36, 166, 15)}
-						icon={images.icons.sword_outline}
-					>
-						<Image
-							position={UDim2.fromScale(1, 1)}
-							size={UDim2.fromOffset(rem(38, "pixel"), rem(38, "pixel"))}
-							anchorPoint={new Vector2(1, 1)}
-							image={images.icons.rebirth}
-						/>
-					</SimpleButton>
+
+					<AutofarmButton />
 				</Image>
 				<uipadding
 					PaddingBottom={new UDim(0, rem(16, "pixel"))}
