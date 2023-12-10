@@ -1,31 +1,22 @@
-import { Spring } from "@rbxts/flipper";
-import { useLifetime, useMotor, useMountEffect } from "@rbxts/pretty-react-hooks";
-import Roact, { useRef } from "@rbxts/roact";
+import { useLifetime, useMountEffect } from "@rbxts/pretty-react-hooks";
+import Roact from "@rbxts/roact";
+import { Enemy } from "@/client/components/enemy-component";
 import { Image } from "@/client/ui/components/image";
 import { images } from "@/shared/assets/images";
 
 const auraSpeed = 20;
 
-export function EnemyAura({ enemy }: { enemy: Model }) {
-	const root = enemy.FindFirstChild("HumanoidRootPart") as Part | undefined;
-	const enemySize = new Vector3(4, 4, 1).mul(enemy.GetScale());
-	const auraPosition = root && root.Position.sub(Vector3.yAxis.mul(enemySize.Y / 2 + root.Size.Y / 2));
+export function EnemyAura({ enemy }: { enemy: Enemy }) {
+	const enemySize = new Vector3(4, 4, 1).mul(enemy.instance.GetScale());
+	const auraPosition = enemy.root.Position.sub(Vector3.yAxis.mul(enemySize.Y / 2 + enemy.root.Size.Y / 2));
 	const lifetime = useLifetime();
 	const rotation = lifetime.map((time) => math.rad(time * 360) * auraSpeed);
-	const [highlightFade, setHighlightFade] = useMotor(1);
-	const highlightRef = useRef<Highlight>();
 
 	useMountEffect(() => {
-		if (!highlightRef.current) {
-			return;
-		}
-
-		setHighlightFade(new Spring(0.7));
-		task.wait(0.125);
-		setHighlightFade(new Spring(1));
+		enemy.highlight.OutlineTransparency = 0.15;
 	});
 
-	return root ? (
+	return (
 		<>
 			<part
 				Position={auraPosition}
@@ -40,16 +31,6 @@ export function EnemyAura({ enemy }: { enemy: Model }) {
 					<Image rotation={rotation} size={UDim2.fromScale(1, 1)} image={images.fx.target_aura} />
 				</surfacegui>
 			</part>
-			<highlight
-				ref={highlightRef}
-				DepthMode={Enum.HighlightDepthMode.Occluded}
-				FillTransparency={highlightFade}
-				FillColor={Color3.fromRGB(5, 5, 5)}
-				OutlineTransparency={0.1}
-				OutlineColor={Color3.fromRGB(255, 255, 255)}
-			/>
 		</>
-	) : (
-		<></>
 	);
 }

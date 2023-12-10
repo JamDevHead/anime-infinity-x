@@ -23,9 +23,10 @@ const animationMap = {
 
 @Component({ tag: "EnemyNPC" })
 export class Enemy extends EnemyComponent implements OnStart {
+	public highlight = new Instance("Highlight");
+
 	private animator = this.humanoid.WaitForChild("Animator") as Animator;
 	private animationTracker = new AnimationTracker(this.animator, animationMap);
-	private hurtHighlight = new Instance("Highlight");
 	private particleContainer = new Instance("Part") as Part & {
 		Particle: ParticleEmitter;
 		CoinParticle: ParticleEmitter;
@@ -41,11 +42,11 @@ export class Enemy extends EnemyComponent implements OnStart {
 	}
 
 	onStart() {
-		this.hurtHighlight.DepthMode = Enum.HighlightDepthMode.Occluded;
-		this.hurtHighlight.FillColor = Color3.fromHex("#000");
-		this.hurtHighlight.FillTransparency = 1;
-		this.hurtHighlight.OutlineTransparency = 1;
-		this.hurtHighlight.Parent = this.instance;
+		this.highlight.DepthMode = Enum.HighlightDepthMode.Occluded;
+		this.highlight.FillColor = Color3.fromHex("#000");
+		this.highlight.FillTransparency = 1;
+		this.highlight.OutlineTransparency = 1;
+		this.highlight.Parent = this.instance;
 
 		const particle = ReplicatedStorage.assets.Particles.HurtParticle.Clone();
 		const [cframe, size] = this.instance.GetBoundingBox();
@@ -140,8 +141,8 @@ export class Enemy extends EnemyComponent implements OnStart {
 		this.animationTracker.playAnimationTrack("hurt");
 
 		// Flash highlight
-		this.hurtHighlight.FillTransparency = 0.2;
-		TweenService.Create(this.hurtHighlight, new TweenInfo(0.15), {
+		this.highlight.FillTransparency = 0.2;
+		TweenService.Create(this.highlight, new TweenInfo(0.15), {
 			FillTransparency: 1,
 		}).Play();
 

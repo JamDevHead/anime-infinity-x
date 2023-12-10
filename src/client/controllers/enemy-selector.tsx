@@ -42,7 +42,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 		root.render(
 			<StrictMode>
 				<ReflexProvider producer={store}>
-					<EnemyProvider userId={this.localUserId} />
+					<EnemyProvider userId={this.localUserId} components={this.components} />
 				</ReflexProvider>
 			</StrictMode>,
 		);
