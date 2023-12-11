@@ -79,7 +79,9 @@ export class FighterAutoclick implements OnStart, OnTick {
 		}
 
 		return () => {
-			this.selectedEnemy = undefined;
+			if (enemy && this.selectedEnemy === enemy) {
+				this.selectedEnemy = undefined;
+			}
 		};
 	}
 }
