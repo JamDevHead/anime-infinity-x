@@ -69,15 +69,29 @@ export const fightersSlice = createProducer(initialState, {
 	removeActiveFighter: (state, playerId: string, fighterUid: string) => {
 		const playerData = state[playerId];
 
-		if (!playerData) {
-			return state;
-		}
+		if (!playerData) return state;
 
 		return {
 			...state,
 			[playerId]: {
 				all: playerData.all,
 				actives: playerData.actives.filter((uid) => uid !== fighterUid),
+			},
+		};
+	},
+
+	renameDisplayName: (state, playerId: string, fighterUid: string, displayName: string) => {
+		const playerData = state[playerId];
+
+		if (!playerData) return state;
+
+		return {
+			...state,
+			[playerId]: {
+				all: playerData.all.map((fighter) =>
+					fighter.uid === fighterUid ? { ...fighter, displayName } : fighter,
+				),
+				actives: playerData.actives,
 			},
 		};
 	},

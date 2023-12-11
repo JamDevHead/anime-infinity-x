@@ -27,6 +27,7 @@ const remotes = createRemotes({
 		equipFighter: remote<Server, [fighterUid: string]>(),
 		unequipFighter: remote<Server, [fighterUid: string]>(),
 		sellFighter: remote<Server, [fighterUid: string]>(),
+		renameFighter: remote<Server, [fighterUid: string, displayName: string]>(),
 	}),
 
 	drops: namespace({

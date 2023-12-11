@@ -101,6 +101,7 @@ export const images: {
 		readonly dummy: string;
 		readonly vip_mvp: string;
 		readonly portal: string;
+		readonly pencil: string;
 	};
 	readonly ui: {
 		readonly cards: {
@@ -172,5 +173,6 @@ export const images: {
 		readonly shadow_star: string;
 		readonly click_effect: string;
 		readonly egg_background: string;
+		readonly separator: string;
 	};
 };

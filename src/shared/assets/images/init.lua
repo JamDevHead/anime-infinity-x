@@ -90,6 +90,7 @@ return {
 			inventory = "rbxassetid://15303915192",
 			lock = "rbxassetid://15491195800",
 			mission = "rbxassetid://15302522396",
+			pencil = "rbxassetid://15601995365",
 			portal = "rbxassetid://15579900108",
 			quad_menu = "rbxassetid://15434347353",
 			rebirth = "rbxassetid://15295231883",
@@ -146,6 +147,7 @@ return {
 			option_toggle_off = "rbxassetid://15352146313",
 			option_toggle_on = "rbxassetid://15352146405",
 			rounded_button_base = "rbxassetid://15267940299",
+			separator = "rbxassetid://15601868394",
 			shadow_star = "rbxassetid://15450966260",
 			shop = {
 				featured_background = "rbxassetid://15593578033",

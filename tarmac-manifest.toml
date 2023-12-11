@@ -338,6 +338,11 @@ hash = "68579c7bade917b6774e5134df9bf325a2b3dbd11c6d7c880c8cfd4296ea9d5c"
 id = 15302522396
 packable = false
 
+[inputs."assets/images/icons/pencil.png"]
+hash = "99dcb5488934bad4eaf6c4483f258c1c0bd05ade836fa95d60591950d5fd4434"
+id = 15601995365
+packable = false
+
 [inputs."assets/images/icons/portal.png"]
 hash = "96490e5fe3c1d069e983b7059597badfc29606374b599992737f2b0c0f8bd38f"
 id = 15579900108
@@ -556,6 +561,11 @@ packable = false
 [inputs."assets/images/ui/rounded_button_base.png"]
 hash = "9e24c345039bc9deab69a4fb534ee29c91302be44dffa9a12ea1df438a3d9f81"
 id = 15267940299
+packable = false
+
+[inputs."assets/images/ui/separator.png"]
+hash = "81d4a66546fc9999d32203b31a52b39d7da6ac02a7ba96a26de0e5eed718f34d"
+id = 15601868394
 packable = false
 
 [inputs."assets/images/ui/shadow_star.png"]
