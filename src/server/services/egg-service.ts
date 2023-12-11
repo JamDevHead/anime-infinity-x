@@ -47,7 +47,7 @@ export class EggService implements OnStart {
 				name: rarity[0],
 				displayName: rarity[0],
 				rarity: this.getRarityByEnum(rarity[1]) ?? 1,
-				stats: generateStats(rarity[1]),
+				stats: generateStats(this.getRarityByEnum(rarity[1]) ?? 1, zoneIndex),
 				zone,
 			});
 		});

@@ -53,10 +53,10 @@ export function removeFighterFor(player: Player, fighterUid: string) {
 	store.removeFighter(userId, fighterUid);
 }
 
-export const generateStats = (rarity: number) => {
-	const damage = math.random() * rarity * FighterStats.damageMultiplier;
-	const dexterity = math.random() * rarity * FighterStats.dexterityMultiplier;
-	const sellPrice = math.random() * rarity * FighterStats.sellPriceMultiplier;
+export const generateStats = (rarity: number, zoneIndex: number) => {
+	const damage = math.random() * rarity * zoneIndex * FighterStats.damageMultiplier;
+	const dexterity = math.random() * rarity * zoneIndex * FighterStats.dexterityMultiplier;
+	const sellPrice = math.random() * rarity * zoneIndex * FighterStats.sellPriceMultiplier;
 	const level = math.random(1, 3);
 	const xp = 0;
 
