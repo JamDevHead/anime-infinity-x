@@ -48,6 +48,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 		);
 
 		this.raycastParams.FilterType = Enum.RaycastFilterType.Exclude;
+		this.raycastParams.AddToFilter(Workspace.WaitForChild("Players") as Folder);
 
 		const selectLocalPlayerActiveFighters = selectActivePlayerFighters(this.localUserId);
 		const onActiveFighterChange = (activeFighters: string[]) => {
@@ -88,7 +89,6 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 
 	onCharacterAdded(character: Model) {
 		this.root = character.WaitForChild("HumanoidRootPart") as unknown as Part;
-		this.raycastParams.AddToFilter(character);
 	}
 
 	onCharacterRemoved() {

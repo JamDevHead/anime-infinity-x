@@ -46,7 +46,10 @@ export class Enemy extends EnemyComponent implements OnStart {
 		this.highlight.FillColor = Color3.fromHex("#000");
 		this.highlight.FillTransparency = 1;
 		this.highlight.OutlineTransparency = 1;
-		this.highlight.Parent = this.instance;
+
+		this.highlight.GetPropertyChangedSignal("OutlineTransparency").Connect(() => {
+			this.highlight.Parent = this.highlight.OutlineTransparency === 1 ? undefined : this.instance;
+		});
 
 		const particle = ReplicatedStorage.assets.Particles.HurtParticle.Clone();
 		const [cframe, size] = this.instance.GetBoundingBox();
