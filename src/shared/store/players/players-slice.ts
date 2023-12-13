@@ -6,6 +6,7 @@ import { infoSlice } from "@/shared/store/players/info";
 import { inventorySlice } from "@/shared/store/players/inventory";
 import { missionsSlice } from "@/shared/store/players/missions/missions-slice";
 import { indexSlice } from "@/shared/store/players/player-index";
+import { settingsSlice } from "@/shared/store/players/settings";
 import { zonesSlice } from "@/shared/store/players/zones";
 
 export const playersSlice = combineProducers({
@@ -17,4 +18,5 @@ export const playersSlice = combineProducers({
 	inventory: inventorySlice,
 	info: infoSlice,
 	index: indexSlice,
+	settings: settingsSlice,
 });

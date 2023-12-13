@@ -1,5 +1,6 @@
 import { BroadcastAction } from "@rbxts/reflex";
 import { Client, createRemotes, namespace, remote, Server } from "@rbxts/remo";
+import { Setting } from "@/@types/models/setting";
 import { SharedState } from "@/shared/store";
 import { PlayerFighter } from "@/shared/store/players";
 
@@ -11,8 +12,7 @@ const remotes = createRemotes({
 	}),
 
 	settings: namespace({
-		load: remote<Client, [settings: Record<string, boolean | number>]>(),
-		save: remote<Server, [settings: Record<string, boolean | number>]>(),
+		save: remote<Server, [settings: Record<string, Setting>]>(),
 	}),
 
 	fighterTarget: namespace({

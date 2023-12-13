@@ -2,7 +2,7 @@ import { Controller, OnStart, OnTick } from "@flamework/core";
 import { Workspace } from "@rbxts/services";
 import { SoundController } from "@/client/controllers/sound-controller";
 import { store } from "@/client/store";
-import { selectSetting } from "@/client/store/settings";
+import { selectClientSetting } from "@/client/store/settings";
 import { SoundCache } from "@/shared/lib/sound-tracker/sound-cache";
 
 @Controller()
@@ -24,12 +24,12 @@ export class BackgroundMusicController implements OnStart, OnTick {
 		this.soundController.tracker.play("ambience", this.soundContainer, { Volume: 0.1 });
 		this.soundController.tracker.play("background", this.soundContainer, { Volume: 0.2 });
 
-		const musicSelector = selectSetting("music");
+		const musicSelector = selectClientSetting("music");
 
-		store.subscribe(musicSelector, (newSetting) => this.onSettingChange(newSetting as boolean));
+		store.subscribe(musicSelector, (newSetting) => this.onSettingChange(newSetting.value as boolean));
 
 		const newSetting = store.getState(musicSelector);
-		this.onSettingChange(newSetting as boolean);
+		this.onSettingChange(newSetting.value as boolean);
 	}
 
 	onTick(dt: number) {

@@ -1,6 +1,5 @@
 import Object from "@rbxts/object-utils";
 import Roact from "@rbxts/roact";
-import { DefaultSettings } from "@/client/constants/default-settings";
 import { fonts } from "@/client/constants/fonts";
 import { useRootSelector, useRootStore } from "@/client/store";
 import { Image } from "@/client/ui/components/image";
@@ -10,12 +9,15 @@ import { Text } from "@/client/ui/components/text";
 import { ToggleOption } from "@/client/ui/components/toggle-option";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
+import { DefaultSettings } from "@/shared/constants/default-settings";
 
 export const Settings = () => {
 	const rem = useRem();
 
-	const { settings } = useRootSelector((store) => store.settings);
+	const settings = useRootSelector((state) => state.clientSettings);
 	const dispatch = useRootStore();
+
+	if (settings === undefined) return <></>;
 
 	return (
 		<>
@@ -34,7 +36,7 @@ export const Settings = () => {
 					textColor={Color3.fromRGB(255, 255, 255)}
 				/>
 				<ScrollView size={UDim2.fromScale(1, 1)} padding={new UDim(0, 8)}>
-					{Object.entries(settings).map(([key, value]) => (
+					{Object.entries(settings.localSettings).map(([key, { value }]) => (
 						<Image key={key} size={UDim2.fromScale(1, 0.2)} image={images.ui.option_background}>
 							<Stack size={UDim2.fromScale(1, 1)} fillDirection="Horizontal" verticalAlignment="Center">
 								<Text
@@ -47,7 +49,7 @@ export const Settings = () => {
 								{typeOf(value) === "boolean" && (
 									<ToggleOption
 										checked={value as boolean}
-										onChange={(value) => dispatch.setSetting({ key: key, value: value })}
+										onChange={(value) => dispatch.setClientSetting({ key: key, value: value })}
 									/>
 								)}
 							</Stack>

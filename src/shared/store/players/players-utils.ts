@@ -1,4 +1,5 @@
 import { $git } from "rbxts-transform-debug";
+import { DefaultSettings } from "@/shared/constants/default-settings";
 import { PlayerData } from "@/shared/store/players/players-types";
 
 export const defaultPlayerData = {
@@ -21,7 +22,7 @@ export const defaultPlayerData = {
 	boosts: {
 		all: [],
 	},
-	settings: {},
+	settings: DefaultSettings,
 	zones: {
 		current: "NRT",
 		changing: false,
