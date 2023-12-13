@@ -98,6 +98,8 @@ export class Enemy extends EnemyComponent implements OnStart {
 	onDestroy() {
 		this.healthComponentRoot?.unmount();
 
+		this.highlight.Destroy();
+
 		if (!this.instance.FindFirstChild("HumanoidRootPart")) {
 			this.animationTracker.destroy();
 			return;
