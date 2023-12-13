@@ -1,4 +1,5 @@
 import { Boost } from "@/@types/models/boost";
+import { Setting } from "@/@types/models/setting";
 import { Mission } from "@/shared/store/players/missions";
 
 export interface PlayerData {
@@ -7,7 +8,7 @@ export interface PlayerData {
 	missions: PlayerMission;
 	fighters: PlayerFighters;
 	boosts: PlayerBoosts;
-	settings: Record<string, boolean | number>;
+	settings: Record<string, Setting>;
 	zones: PlayerZones;
 	index: PlayerIndex;
 	info: PlayerInfo;

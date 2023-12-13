@@ -5,7 +5,6 @@ import { dpsSlice } from "./dps";
 import { hudSlice } from "./hud";
 import { devToolsMiddleware } from "./middleware/devtools";
 import { receiverMiddleware } from "./middleware/receiver";
-import { settingsSlice } from "./settings";
 import { windowSlice } from "./window";
 import { blurSlice } from "@/client/store/blur";
 import { eggQueueSlice } from "@/client/store/egg-queue";
@@ -14,6 +13,7 @@ import { inventorySlice } from "@/client/store/inventory";
 import { loadingSlice } from "@/client/store/loading";
 import { perksSlice } from "@/client/store/perks";
 import { portalSlice } from "@/client/store/portal";
+import { clientSettingsSlice } from "@/client/store/settings/client-settings-slice";
 import { slices } from "@/shared/store";
 import { profilerMiddleware } from "@/shared/store/middleware/profile-middleware";
 
@@ -25,7 +25,7 @@ export function createStore() {
 		...slices,
 		dps: dpsSlice,
 		hud: hudSlice,
-		settings: settingsSlice,
+		clientSettings: clientSettingsSlice,
 		window: windowSlice,
 		inventory: inventorySlice,
 		enemyHover: enemyHoverSlice,

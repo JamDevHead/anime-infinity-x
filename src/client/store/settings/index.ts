@@ -1,2 +1,2 @@
-export * from "./settings-slice";
-export * from "./settings-selectors";
+export * from "./client-settings-slice";
+export * from "./client-settings-selectors";
