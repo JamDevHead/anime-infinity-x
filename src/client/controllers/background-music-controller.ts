@@ -29,7 +29,10 @@ export class BackgroundMusicController implements OnStart, OnTick {
 		store.subscribe(musicSelector, (newSetting) => this.onSettingChange(newSetting.value as boolean));
 
 		const newSetting = store.getState(musicSelector);
-		this.onSettingChange(newSetting.value as boolean);
+
+		if (newSetting !== undefined) {
+			this.onSettingChange(newSetting.value as boolean);
+		}
 	}
 
 	onTick(dt: number) {
