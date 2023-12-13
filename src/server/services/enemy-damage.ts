@@ -2,8 +2,11 @@ import { Components } from "@flamework/components";
 import { OnStart, OnTick, Service } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { Enemy } from "@/server/components/enemy";
+import { DpsService } from "@/server/services/dps-service";
+import { OnPlayerAdd } from "@/server/services/lifecycles/on-player-add";
 import { store } from "@/server/store";
 import { getEnemyByUid } from "@/server/utils/enemies";
+import { getFighterOwner } from "@/server/utils/fighters";
 import remotes from "@/shared/remotes";
 import { selectSelectedEnemiesByPlayerId } from "@/shared/store/enemy-selection";
 import { FighterTargetSlice } from "@/shared/store/fighter-target";
@@ -13,8 +16,8 @@ import { getEnemyModelByUid } from "@/shared/utils/enemies";
 import { calculateStun } from "@/shared/utils/fighters";
 
 @Service()
-export class EnemyDamage implements OnStart, OnTick {
-	private fightersTargets = new Map<string, Enemy>();
+export class EnemyDamage implements OnStart, OnTick, OnPlayerAdd {
+	private fightersTargets = new Map<string, { owner: Player; enemy: Enemy }>();
 	private fightersStuns = new Map<string, number>();
 
 	private DAMAGE_TICK = 1 / 20;
@@ -23,6 +26,7 @@ export class EnemyDamage implements OnStart, OnTick {
 	constructor(
 		private readonly logger: Logger,
 		private readonly components: Components,
+		private readonly dpsService: DpsService,
 	) {}
 
 	onStart() {
@@ -63,7 +67,9 @@ export class EnemyDamage implements OnStart, OnTick {
 				}
 
 				// TODO: calculate player damage
-				enemy.takeDamage(1);
+				const damage = 1;
+				enemy.takeDamage(damage);
+				this.dpsService.addToStore(player, damage);
 			});
 		});
 	}
@@ -81,6 +87,16 @@ export class EnemyDamage implements OnStart, OnTick {
 		}
 	}
 
+	onPlayerRemoved(player: Player) {
+		this.fightersTargets.forEach((fightersTargets, fighterId) => {
+			if (fightersTargets.owner !== player) {
+				return;
+			}
+
+			this.fightersTargets.delete(fighterId);
+		});
+	}
+
 	private fighterTargetObserver(enemyId: string, fighterId: string) {
 		const enemyModel = getEnemyModelByUid(enemyId);
 		const enemy = enemyModel && this.components.getComponent<Enemy>(enemyModel);
@@ -89,12 +105,16 @@ export class EnemyDamage implements OnStart, OnTick {
 			return;
 		}
 
-		this.fightersTargets.set(fighterId, enemy);
+		const player = getFighterOwner(fighterId);
+
+		if (player) {
+			this.fightersTargets.set(fighterId, { owner: player, enemy });
+		}
 
 		return () => {
 			const fighterTarget = this.fightersTargets.get(fighterId);
 
-			if (fighterTarget?.attributes.Guid !== enemy.attributes.Guid) {
+			if (fighterTarget?.enemy.attributes.Guid !== enemy.attributes.Guid) {
 				return;
 			}
 
@@ -103,7 +123,7 @@ export class EnemyDamage implements OnStart, OnTick {
 	}
 
 	private damageEnemies() {
-		for (const [fighterId, enemy] of table.clone(this.fightersTargets)) {
+		for (const [fighterId, { owner, enemy }] of table.clone(this.fightersTargets)) {
 			const fighter = store.getState(selectPlayersFightersWithUid(fighterId));
 
 			if (!fighter) {
@@ -121,6 +141,8 @@ export class EnemyDamage implements OnStart, OnTick {
 			}
 
 			const damage = fighter.stats.damage;
+
+			this.dpsService.addToStore(owner, damage);
 
 			const isDead = enemy.takeDamage(damage);
 

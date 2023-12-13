@@ -1,7 +1,6 @@
 import { useProducer, UseProducerHook, useSelector, UseSelectorHook } from "@rbxts/react-reflex";
 import { combineProducers, InferState } from "@rbxts/reflex";
 import { eggUiSlice } from "client/store/egg-ui";
-import { dpsSlice } from "./dps";
 import { hudSlice } from "./hud";
 import { devToolsMiddleware } from "./middleware/devtools";
 import { receiverMiddleware } from "./middleware/receiver";
@@ -23,7 +22,6 @@ export type RootState = InferState<RootStore>;
 export function createStore() {
 	const store = combineProducers({
 		...slices,
-		dps: dpsSlice,
 		hud: hudSlice,
 		clientSettings: clientSettingsSlice,
 		window: windowSlice,

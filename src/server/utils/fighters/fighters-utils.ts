@@ -1,9 +1,13 @@
 import { md5 } from "@rbxts/rbxts-hashlib";
-import { HttpService, ReplicatedStorage } from "@rbxts/services";
+import { HttpService, Players, ReplicatedStorage } from "@rbxts/services";
 import { FighterStats } from "@/server/constants/fighter-stats";
 import { store } from "@/server/store";
 import { PlayerFighter, selectPlayerIndex } from "@/shared/store/players";
-import { selectActivePlayerFighters, selectPlayerFighter } from "@/shared/store/players/fighters";
+import {
+	selectActivePlayerFighters,
+	selectPlayerFighter,
+	selectPlayerFromFighterId,
+} from "@/shared/store/players/fighters";
 
 const fightersFolder = ReplicatedStorage.assets.Avatars.FightersModels;
 
@@ -62,3 +66,12 @@ export const generateStats = (rarity: number, zoneIndex: number) => {
 
 	return { damage, dexterity, sellPrice, level, xp };
 };
+
+export function getFighterOwner(fighterUid: string) {
+	const playerId = store.getState(selectPlayerFromFighterId(fighterUid));
+	const userId = tonumber(playerId);
+
+	if (userId === undefined) return;
+
+	return Players.GetPlayerByUserId(userId);
+}

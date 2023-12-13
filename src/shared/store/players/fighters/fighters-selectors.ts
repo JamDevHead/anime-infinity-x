@@ -49,6 +49,21 @@ export const selectActivePlayerFighters = (playerId: string) => {
 	);
 };
 
+/** **WARNING**
+ * This is a very expensive selector, use it only when needed.
+ */
+export const selectPlayerFromFighterId = (fighterUid: string) => {
+	return createSelector(selectPlayersFighters, (fighters) => {
+		for (const [playerId, playerFighters] of pairs(fighters)) {
+			const fighter = playerFighters?.all.find((fighter) => fighter.uid === fighterUid);
+
+			if (fighter) {
+				return playerId as string;
+			}
+		}
+	});
+};
+
 export const selectActiveFighters = (state: SharedState) => {
 	const activeFighters = {} as Record<string, string[]>;
 

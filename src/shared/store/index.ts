@@ -1,6 +1,7 @@
 import { CombineStates } from "@rbxts/reflex";
 import { enemiesSlice } from "./enemies";
 import { playersSlice } from "./players";
+import { dpsSlice } from "@/shared/store/dps";
 import { eggsSlice } from "@/shared/store/eggs";
 import { enemySelectionSlice } from "@/shared/store/enemy-selection";
 import { fighterTargetSlice } from "@/shared/store/fighter-target";
@@ -14,4 +15,5 @@ export const slices = {
 	enemySelection: enemySelectionSlice,
 	eggs: eggsSlice,
 	store: storeSlice,
+	dps: dpsSlice,
 };

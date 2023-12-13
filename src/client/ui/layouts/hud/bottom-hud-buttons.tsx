@@ -4,7 +4,7 @@ import Roact, { useEffect, useRef, useState } from "@rbxts/roact";
 import { RunService } from "@rbxts/services";
 import { setInterval } from "@rbxts/set-timeout";
 import { boostIcons } from "@/client/constants/boost-icons";
-import { useRootSelector, useRootStore } from "@/client/store";
+import { useRootStore } from "@/client/store";
 import { selectSpecificPerk } from "@/client/store/perks";
 import { AttackButton } from "@/client/ui/components/attack-button";
 import { Boost } from "@/client/ui/components/boost";
@@ -17,6 +17,7 @@ import { Text } from "@/client/ui/components/text";
 import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
+import { selectPlayerDamagePerSecond } from "@/shared/store/dps";
 import { selectPlayerBoosts } from "@/shared/store/players";
 
 function AutofarmButton() {
@@ -94,8 +95,8 @@ export const BottomHudButtons = () => {
 	const rem = useRem();
 	const id = usePlayerId();
 
-	const { dps } = useRootSelector((state) => state.dps);
-	const boosts = useRootSelector(selectPlayerBoosts(id));
+	const dps = useSelectorCreator(selectPlayerDamagePerSecond, id);
+	const boosts = useSelectorCreator(selectPlayerBoosts, id);
 
 	useEffect(() => {
 		setHoveredBoosts(boosts?.all.map(() => false) ?? []);
@@ -204,7 +205,7 @@ export const BottomHudButtons = () => {
 							position={UDim2.fromScale(0.5, 0.5)}
 						>
 							<Text
-								text={`${dps} DPS`}
+								text={`${dps ?? 0} DPS`}
 								textColor={Color3.fromRGB(255, 255, 255)}
 								textSize={rem(24, "pixel")}
 								size={UDim2.fromScale(1, 1)}
