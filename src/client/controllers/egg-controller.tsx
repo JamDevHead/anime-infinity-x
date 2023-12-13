@@ -45,8 +45,8 @@ export class EggController implements OnStart, OnTick {
 			return () => {
 				this.soundController.tracker.play("reward");
 				task.wait(2);
-				store.setHudVisible(true);
 				store.removeEggPurchase(fighter);
+				store.setHudVisible(true);
 			};
 		});
 

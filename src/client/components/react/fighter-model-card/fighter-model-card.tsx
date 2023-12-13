@@ -1,7 +1,7 @@
 import { useCamera, useEventListener, useLatest, useUnmountEffect } from "@rbxts/pretty-react-hooks";
 import { createPortal } from "@rbxts/react-roblox";
 import Roact, { useEffect, useMemo, useState } from "@rbxts/roact";
-import { ReplicatedStorage, RunService } from "@rbxts/services";
+import { ReplicatedStorage, RunService, Workspace } from "@rbxts/services";
 import { colors } from "@/client/constants/colors";
 import { fonts } from "@/client/constants/fonts";
 import { Text } from "@/client/ui/components/text";
@@ -12,7 +12,7 @@ const fightersParticles = ReplicatedStorage.assets.Particles.EnemyUnbox;
 
 function FighterModelBillboard({ name }: { name: string }) {
 	return (
-		<billboardgui StudsOffsetWorldSpace={new Vector3(0, -1.5, -0.3)} Size={UDim2.fromScale(3, 1)} AlwaysOnTop>
+		<billboardgui StudsOffset={new Vector3(0, -0.2, 0.3)} Size={UDim2.fromScale(3, 0.15)} AlwaysOnTop>
 			<Text
 				size={UDim2.fromScale(1, 1)}
 				backgroundTransparency={1}
@@ -37,18 +37,17 @@ export function FighterModelCard({ fighter }: { fighter: Pick<PlayerFighter, "zo
 
 		return fighterModel?.Clone() as Model | undefined;
 	}, [fighter.name, fighter.zone]);
+	const [root, setRoot] = useState<BasePart | undefined>();
 
 	useEventListener(
 		RunService.RenderStepped,
 		() => {
-			const model = fighterModel as Model;
-
 			const scale = 0.18;
 			const offset = new Vector3(0, -0.5, -6);
 			const cameraOffset = new CFrame(offset.mul(scale));
 			const fighterCFrame = camera.CFrame.mul(cameraOffset).mul(CFrame.Angles(0, math.rad(180), 0));
 
-			model.PivotTo(fighterCFrame);
+			root?.PivotTo(fighterCFrame);
 		},
 		{ connected: fighterModel !== undefined },
 	);
@@ -65,21 +64,50 @@ export function FighterModelCard({ fighter }: { fighter: Pick<PlayerFighter, "zo
 		}
 
 		const humanoid = fighterModel.WaitForChild("Humanoid") as Humanoid;
-		const animator = (humanoid.FindFirstChild("Animator") as Animator) ?? new Instance("Animator");
-		animator.Parent = humanoid;
+		const fighterRoot = humanoid.RootPart;
 
-		const [bounding] = fighterModel.GetBoundingBox();
+		if (!fighterRoot) {
+			return;
+		}
+
+		const animator = (humanoid.FindFirstChild("Animator") as Animator) ?? new Instance("Animator");
+
+		animator.Parent = humanoid;
+		setRoot(fighterRoot);
+
+		const idleAnimation = new Instance("Animation");
+		idleAnimation.AnimationId = "rbxassetid://14451184535";
+		idleAnimation.Name = "Idle";
+		idleAnimation.Parent = animator;
+
+		task.spawn(() => {
+			while (!animator.IsDescendantOf(Workspace)) {
+				task.wait();
+			}
+
+			const idleTrack = animator.LoadAnimation(idleAnimation);
+			idleTrack.Play();
+		});
+
+		const bounding = fighterModel.GetBoundingBox()[0];
 		const parts = [] as BasePart[];
 
-		fighterModel.GetDescendants().forEach((descendant) => {
+		fighterRoot.Anchored = true;
+
+		for (const descendant of fighterModel.GetDescendants()) {
 			if (descendant.IsA("BasePart")) {
 				descendant.CastShadow = false;
-				descendant.Anchored = true;
 				descendant.CanCollide = false;
 				descendant.CanQuery = false;
+
+				if (descendant === fighterRoot) {
+					continue;
+				}
+
+				descendant.Anchored = false;
 				parts.push(descendant);
 			}
-		});
+		}
 
 		setCollidableParts(parts);
 
@@ -88,30 +116,19 @@ export function FighterModelCard({ fighter }: { fighter: Pick<PlayerFighter, "zo
 		fighterModel.ScaleTo(0.15);
 		fighterModel.Parent = camera;
 
-		// create particle
-		const particlePart = new Instance("Part");
-
-		particlePart.Size = Vector3.one;
-		particlePart.Anchored = true;
-		particlePart.CanCollide = false;
-		particlePart.CanQuery = false;
-		particlePart.Transparency = 1;
-		particlePart.CFrame = bounding;
-		particlePart.Parent = fighterModel;
-
-		const particles = fightersParticles.GetChildren() as ParticleEmitter[];
-
-		particles.forEach((particle) => {
+		// Create particles
+		for (const particle of fightersParticles.GetChildren() as ParticleEmitter[]) {
 			const clonedParticle = particle.Clone();
+			clonedParticle.LockedToPart = true;
+			clonedParticle.Parent = fighterRoot;
 
-			clonedParticle.Parent = particlePart;
-			clonedParticle.Emit(1);
-		});
+			task.delay(0.1, () => clonedParticle.Emit(1));
+		}
 	}, [camera, fighterModel]);
 
 	useUnmountEffect(() => {
 		fighterModel?.Destroy();
 	});
 
-	return <>{fighterModel && createPortal(<FighterModelBillboard name={fighter.name} />, fighterModel)}</>;
+	return <>{root && createPortal(<FighterModelBillboard name={fighter.name} />, root)}</>;
 }
