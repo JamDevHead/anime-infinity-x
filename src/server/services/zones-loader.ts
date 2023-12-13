@@ -7,6 +7,8 @@ import { OnPlayerAdd } from "@/server/services/lifecycles/on-player-add";
 import { store } from "@/server/store";
 import { selectPlayerCurrentZone } from "@/shared/store/players/zones/zones-selectors";
 
+const FAR_CF = new CFrame(0, 3e8, 0);
+
 @Service()
 export class ZonesLoader implements OnStart, OnPlayerAdd, OnCharacterAdd {
 	public zonesFolder = new Instance("Folder") as ZonesFolder;
@@ -96,22 +98,30 @@ export class ZonesLoader implements OnStart, OnPlayerAdd, OnCharacterAdd {
 			return;
 		}
 
+		store.setChangingZone(tostring(player.UserId), true);
+
 		if (character.Parent === undefined) {
 			while (character.Parent === undefined) {
 				task.wait();
 			}
 		}
 
-		store.setChangingZone(tostring(player.UserId), true);
+		const root = character.WaitForChild("HumanoidRootPart") as Part;
+		root.Anchored = true;
+
+		character.PivotTo(FAR_CF);
 
 		this.logger.Debug("Spawning {@player} on zone {zone}", character.GetFullName(), zoneName);
 
 		const spawnOffset = Vector3.yAxis.mul(3 + zone.Spawn.Size.Y / 2);
 		const spawnCFrame = zone.Spawn.CFrame.add(spawnOffset);
 
-		player.RequestStreamAroundAsync(spawnCFrame.Position, 5);
+		player.RequestStreamAroundAsync(spawnCFrame.Position);
 
 		character.PivotTo(spawnCFrame);
+		if (root) {
+			root.Anchored = false;
+		}
 
 		//task.wait(1);
 		store.setChangingZone(tostring(player.UserId), false);
