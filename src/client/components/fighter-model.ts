@@ -20,7 +20,7 @@ const animationMap = {
 	idle: { id: "14451184535" },
 	walk: { id: "14678864223" },
 	run: { id: "14678864223" },
-	jump: { id: "125750702" },
+	jump: { id: "125750702", priority: Enum.AnimationPriority.Action },
 	fall: { id: "15484732189" },
 	soco1: { id: "15461463119" },
 	soco2: { id: "15461470426" },
@@ -134,9 +134,10 @@ export class FighterModel
 
 		this.lastFighterPosition = root.Position;
 
-		const isFalling = !this.isGrounded();
+		const isGrounded = this.isGrounded();
+		const isFalling = !isGrounded && rootVelocity.Y < 0;
 		const isJumping = humanoid.Jump && this.fighterGoal.currentEnemy === undefined;
-		const isRunning = speed > 5;
+		const isRunning = isGrounded && speed > 5;
 		const animationTracker = this.animationTracker;
 
 		if (animationTracker.isAnimationPlaying("soco1") || animationTracker.isAnimationPlaying("soco2")) {
@@ -147,10 +148,8 @@ export class FighterModel
 
 		switch (true) {
 			case isJumping:
-				if (newState !== Enum.HumanoidStateType.Jumping) {
-					newState = Enum.HumanoidStateType.Jumping;
-					animationTracker.swapAnimation("jump");
-				}
+				newState = Enum.HumanoidStateType.Jumping;
+				animationTracker.swapAnimation("jump");
 				break;
 			case isFalling:
 				if (newState !== Enum.HumanoidStateType.FallingDown) {
@@ -165,7 +164,7 @@ export class FighterModel
 					animationTracker.swapAnimation("run");
 				}
 				break;
-			default:
+			case isGrounded:
 				if (newState !== Enum.HumanoidStateType.Landed) {
 					newState = Enum.HumanoidStateType.Landed;
 					animationTracker.swapAnimation("idle");
