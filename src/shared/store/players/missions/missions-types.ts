@@ -3,15 +3,12 @@ export interface Mission {
 	title: string;
 	description?: string;
 	tasks: Task[];
-	completed: boolean;
 }
 
 export interface Task {
 	id: string;
 	title: string;
-	description: string;
-	done: boolean;
-	reward: number;
-	level: number;
-	type: string;
+	description?: string;
+	progress: number;
+	maxProgress: number;
 }
