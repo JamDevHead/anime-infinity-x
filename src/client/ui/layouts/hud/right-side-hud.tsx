@@ -72,14 +72,14 @@ export const RightSideHud = () => {
 				autoSize="XY"
 			>
 				<SideGroupButtons.Root>
-					<SimpleButton color={Color3.fromHex("#BF07FF")} icon={images.icons.daily_rewards} />
-					<SimpleButton color={Color3.fromHex("#076AFF")} icon={images.icons.book} />
-					<SimpleButton color={Color3.fromHex("#16792C")} icon={images.icons.boost} />
+					{/*<SimpleButton color={Color3.fromHex("#076AFF")} icon={images.icons.book} />*/}
+					{/*<SimpleButton color={Color3.fromHex("#16792C")} icon={images.icons.boost} />*/}
 					<SimpleButton
 						color={Color3.fromHex("#ff0707")}
 						icon={images.icons.portal}
 						onClick={() => toggleWindowVisible("teleport")}
 					/>
+					<SimpleButton color={Color3.fromHex("#BF07FF")} icon={images.icons.daily_rewards} />
 					<SimpleButton
 						color={colors.white}
 						icon={images.icons.settings}
