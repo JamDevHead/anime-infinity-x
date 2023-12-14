@@ -6,8 +6,8 @@ export abstract class MissionComponent {
 
 	abstract tasks: Task[];
 
-	abstract onStart(): void;
+	onStart?(): void;
 	abstract action(...args: unknown[]): void;
-	abstract reward(): void;
+	// abstract reward(playerId: string, mission: Mission): void;
 	abstract transform(index: number): Omit<Task, "id">;
 }

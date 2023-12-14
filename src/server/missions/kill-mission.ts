@@ -1,4 +1,4 @@
-import { MissionDecoratorService, MissionTask } from "server/services/missions";
+import { MissionTask } from "server/services/missions";
 import { Enemy } from "@/server/components/enemy";
 import { MissionComponent } from "@/server/services/missions/mission-component";
 import { store } from "@/server/store";
@@ -42,12 +42,6 @@ export class KillMission extends MissionComponent {
 		},
 	] as Task[];
 
-	constructor(private missionDecoratorService: MissionDecoratorService) {
-		super();
-	}
-
-	onStart() {}
-
 	action(playerId: string, target: Enemy): void {
 		print("Kill mission task action", playerId, target);
 		const currentZone = store.getState(selectPlayerCurrentZone(playerId));
@@ -73,7 +67,7 @@ export class KillMission extends MissionComponent {
 		}
 	}
 
-	reward(): void {}
+	// reward(playerId: string, mission: Mission): void {}
 
 	transform(index: number): Omit<Task, "id"> {
 		return {

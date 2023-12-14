@@ -29,7 +29,7 @@ export class MissionDecoratorService implements OnInit, OnStart {
 
 	onStart() {
 		for (const [, mission] of this.missions) {
-			task.spawn(() => mission.onStart());
+			task.spawn(() => mission.onStart?.());
 		}
 
 		this.taskSignal.Connect((missionType, ...args) => {
