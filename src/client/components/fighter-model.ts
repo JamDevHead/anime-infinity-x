@@ -94,7 +94,7 @@ export class FighterModel
 		// Setup fighter highlight
 		const highlight = new Instance("Highlight");
 		highlight.FillTransparency = 1;
-		highlight.OutlineTransparency = 0;
+		highlight.OutlineTransparency = 0.5;
 		highlight.DepthMode = Enum.HighlightDepthMode.Occluded;
 		highlight.OutlineColor = Color3.fromRGB();
 		highlight.Parent = this.instance;
