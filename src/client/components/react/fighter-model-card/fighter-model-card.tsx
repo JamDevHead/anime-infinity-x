@@ -155,5 +155,13 @@ export function FighterModelCard({ fighter }: { fighter: Pick<PlayerFighter, "zo
 		fighterModel?.Destroy();
 	});
 
-	return <>{root && createPortal(<FighterModelBillboard chance={fighterChange} name={fighter.name} />, root)}</>;
+	return (
+		<>
+			{root && createPortal(<FighterModelBillboard chance={fighterChange} name={fighter.name} />, root)}
+			{createPortal(
+				<depthoffieldeffect FarIntensity={1} FocusDistance={0} InFocusRadius={1.5} NearIntensity={0} />,
+				camera,
+			)}
+		</>
+	);
 }

@@ -10,5 +10,6 @@ declare namespace JSX {
 		humanoid: JSX.IntrinsicElement<Humanoid>;
 		model: JSX.IntrinsicElement<Model>;
 		uiflexitem: JSX.IntrinsicElement<UIFlexItem>;
+		depthoffieldeffect: JSX.IntrinsicElement<DepthOfFieldEffect>;
 	}
 }
