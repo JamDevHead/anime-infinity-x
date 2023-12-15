@@ -1,9 +1,11 @@
 import { Controller, OnStart } from "@flamework/core";
-import { Error } from "@/shared/utils/error-exception";
+import { Logger } from "@rbxts/log";
 
 @Controller()
 export class ProductsController implements OnStart {
+	constructor(private readonly logger: Logger) {}
+
 	onStart(): void {
-		throw new Error("Method not implemented.");
+		this.logger.Info("ProductsController started!");
 	}
 }
