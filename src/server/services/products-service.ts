@@ -33,6 +33,12 @@ export class ProductsService implements OnStart, OnPlayerAdd {
 		});
 
 		MarketplaceService.ProcessReceipt = (receiptInfo) => {
+			this.logger.Warn(
+				"Player purchased gamepass: {@gamepassId} ({@player})",
+				receiptInfo.ProductId,
+				receiptInfo.PlayerId,
+			);
+
 			for (const process of this.processors) {
 				const [success, result] = pcall(() => process(receiptInfo));
 
