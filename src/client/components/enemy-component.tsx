@@ -191,7 +191,7 @@ export class Enemy extends EnemyComponent implements OnStart {
 
 		hurtBillboard.Size = UDim2.fromScale(enemyScale * 1.25, enemyScale);
 		hurtBillboard.AlwaysOnTop = true;
-		hurtBillboard.MaxDistance = 30;
+		hurtBillboard.MaxDistance = 50 * enemyScale;
 
 		hurtLabel.BackgroundTransparency = 1;
 		hurtLabel.Size = UDim2.fromScale(1, 1);
@@ -214,7 +214,7 @@ export class Enemy extends EnemyComponent implements OnStart {
 			),
 		);
 
-		task.delay(enemyScale / 2, () => {
+		task.delay(math.sqrt(Workspace.Gravity / (enemyScale * 5)) / 4, () => {
 			hurtPart.Destroy();
 		});
 	}
