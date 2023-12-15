@@ -10,7 +10,7 @@ import { PlayerFighter } from "@/shared/store/players";
 
 const zonesFolder = ReplicatedStorage.assets.Zones;
 
-export function Egg({ fighter }: { fighter: PlayerFighter }) {
+export function Egg({ fighter, eggZone }: { fighter: PlayerFighter; eggZone: string }) {
 	const dispatcher = useRootStore();
 	const camera = useCamera();
 	const [rotation, rotationMotion] = useMotion(0);
@@ -19,12 +19,12 @@ export function Egg({ fighter }: { fighter: PlayerFighter }) {
 	const [animationFinished, setAnimationFinished] = useState(false);
 
 	const eggModel = useMemo(() => {
-		const eggZone = zonesFolder.FindFirstChild(fighter.zone);
-		const eggs = eggZone?.FindFirstChild("Eggs");
+		const eggZoneFolder = zonesFolder.FindFirstChild(eggZone);
+		const eggs = eggZoneFolder?.FindFirstChild("Eggs");
 		const incubator = eggs?.FindFirstChild("Incubadora");
 
 		return incubator?.FindFirstChild("Egg")?.Clone() as Model | undefined;
-	}, [fighter.zone]);
+	}, [eggZone]);
 
 	useEffect(() => {
 		if (!eggModel) {
@@ -53,7 +53,7 @@ export function Egg({ fighter }: { fighter: PlayerFighter }) {
 			if (stage >= 10) {
 				dispatcher.removeFromEggQueue(fighter);
 				rotationMotion.set(0);
-				transparencyMotion.spring(1, springs.wobbly);
+				transparencyMotion.spring(1.2, springs.wobbly);
 				sizeMotion.spring(0.01, springs.responsive);
 				setAnimationFinished(true);
 				cleanup();

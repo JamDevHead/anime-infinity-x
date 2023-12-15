@@ -57,7 +57,7 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size }) => {
 			.await();
 
 		if (success && fighter) {
-			dispatcher.addToEggQueue(fighter);
+			dispatcher.addToEggQueue(fighter, fighter.zone);
 		}
 	};
 

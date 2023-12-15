@@ -9,7 +9,7 @@ export function EggProvider() {
 	return (
 		<>
 			{eggPurchases.map((purchasedFighter) => (
-				<Egg fighter={purchasedFighter} />
+				<Egg eggZone={purchasedFighter.eggZone} fighter={purchasedFighter} />
 			))}
 		</>
 	);

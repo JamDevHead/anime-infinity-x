@@ -49,7 +49,7 @@ export class EggController implements OnStart, OnTick {
 				}
 
 				store.setHudVisible(false);
-				store.addEggPurchase(fighter);
+				store.addEggPurchase(fighter, fighter.eggZone);
 
 				return () => {
 					this.soundController.tracker.play("reward");
@@ -63,7 +63,7 @@ export class EggController implements OnStart, OnTick {
 		);
 
 		remotes.eggs.requestToOpen.connect((fighter) => {
-			store.addToEggQueue(fighter);
+			store.addToEggQueue(fighter, "Special");
 		});
 
 		store.subscribe(selectPlayerCurrentZone(tostring(Players.LocalPlayer.UserId)), (currentZone) =>

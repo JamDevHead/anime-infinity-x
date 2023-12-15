@@ -49,8 +49,6 @@ export class SpaceEggProcessor implements OnStart {
 				return false;
 			}
 
-			this.logger.Info("Player purchased secret egg: {@player}", receiptInfo.PlayerId);
-
 			const fighter = addFighterFor(player, {
 				name: randomFighter.name,
 				displayName: randomFighter.name,
@@ -59,11 +57,16 @@ export class SpaceEggProcessor implements OnStart {
 				stats: generateStats(fighterRarity, 0),
 			});
 
+			this.logger.Info("Player purchased secret egg: {@player}", receiptInfo.PlayerId);
+			print("fighter", fighter);
+
 			if (!fighter) {
 				return false;
 			}
 
-			remotes.eggs.requestToOpen.fire(player, fighter);
+			task.delay(0.5, () => {
+				remotes.eggs.requestToOpen.fire(player, fighter);
+			});
 
 			return true;
 		});
