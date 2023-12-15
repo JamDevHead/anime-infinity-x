@@ -39,7 +39,7 @@ function AutofarmButton() {
 			position={UDim2.fromScale(1, -0.8)}
 			anchorPoint={new Vector2(0.5, 0.5)}
 			size={UDim2.fromOffset(rem(96, "pixel"), rem(96, "pixel"))}
-			color={Color3.fromRGB(36, 166, 15)}
+			color={autofarm ? Color3.fromHex("#24a60f") : Color3.fromHex("#ff0000")}
 			icon={images.icons.sword_outline}
 			onClick={() => dispatcher.toggleAutofarm()}
 		>
@@ -73,7 +73,7 @@ function AutoclickButton() {
 			position={UDim2.fromScale(0, -0.8)}
 			anchorPoint={new Vector2(0.5, 0.5)}
 			size={UDim2.fromOffset(rem(96, "pixel"), rem(96, "pixel"))}
-			color={Color3.fromRGB(255, 0, 0)}
+			color={autoclick ? Color3.fromHex("#24a60f") : Color3.fromHex("#ff0000")}
 			icon={images.icons.hand_click}
 			onClick={() => dispatcher.toggleAutoclick()}
 		>
