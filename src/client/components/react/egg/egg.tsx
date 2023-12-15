@@ -51,17 +51,17 @@ export function Egg({ fighter }: { fighter: PlayerFighter }) {
 			rotationMotion.spring(80 * (state ? -1 : 1), springs.wobbly);
 
 			if (stage >= 10) {
+				dispatcher.removeFromEggQueue(fighter);
 				rotationMotion.set(0);
 				transparencyMotion.spring(1, springs.wobbly);
 				sizeMotion.spring(0.01, springs.responsive);
 				setAnimationFinished(true);
-				dispatcher.removeFromEggQueue(fighter.zone);
 				cleanup();
 			}
 		}, 0.1);
 
 		return cleanup;
-	}, [eggModel, camera, rotationMotion, transparencyMotion, sizeMotion, dispatcher, fighter.zone]);
+	}, [eggModel, camera, rotationMotion, transparencyMotion, sizeMotion, dispatcher, fighter.zone, fighter]);
 
 	useEventListener(
 		RunService.RenderStepped,

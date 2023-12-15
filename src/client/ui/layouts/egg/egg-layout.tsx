@@ -17,6 +17,7 @@ import { usePlayerId } from "@/client/ui/hooks/use-player-id";
 import { useRem } from "@/client/ui/hooks/use-rem";
 import { images } from "@/shared/assets/images";
 import { FighterRarity } from "@/shared/constants/rarity";
+import remotes from "@/shared/remotes";
 import { selectPlayerIndex } from "@/shared/store/players";
 import { selectPlayerCurrentZone } from "@/shared/store/players/zones/zones-selectors";
 
@@ -49,7 +50,15 @@ export const EggLayout: FunctionComponent<EggLayoutProps> = ({ size }) => {
 	}
 	const buyEgg = () => {
 		if (!opened || !setPositionMotion.isComplete()) return;
-		dispatcher.addToEggQueue(currentZone ?? "NRT");
+
+		const [success, fighter] = remotes.eggs.open
+			.request(currentZone ?? "NRT")
+			.timeout(10)
+			.await();
+
+		if (success && fighter) {
+			dispatcher.addToEggQueue(fighter);
+		}
 	};
 
 	return (

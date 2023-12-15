@@ -45,6 +45,7 @@ const remotes = createRemotes({
 
 	eggs: namespace({
 		open: remote<Server, [eggZone: string]>().returns<PlayerFighter | undefined>(),
+		requestToOpen: remote<Client, [fighter: PlayerFighter]>(),
 	}),
 
 	attackEnemy: remote<Server>(),

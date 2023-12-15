@@ -2,7 +2,7 @@ import { createProducer } from "@rbxts/reflex";
 import { PlayerFighter } from "@/shared/store/players";
 
 interface EggQueueState {
-	queue: string[];
+	queue: PlayerFighter[];
 	eggPurchases: PlayerFighter[];
 }
 
@@ -12,14 +12,14 @@ const initialState: EggQueueState = {
 };
 
 export const eggQueueSlice = createProducer(initialState, {
-	addToEggQueue: (state, eggZone: string) => ({
+	addToEggQueue: (state, fighter: PlayerFighter) => ({
 		...state,
-		queue: [...state.queue, eggZone],
+		queue: [...state.queue, fighter],
 	}),
 
-	removeFromEggQueue: (state, eggZone: string) => ({
+	removeFromEggQueue: (state, fighter: PlayerFighter) => ({
 		...state,
-		queue: state.queue.filter((zoneInQueue) => zoneInQueue !== eggZone),
+		queue: state.queue.filter((fighterInQueue) => fighterInQueue !== fighter),
 	}),
 
 	addEggPurchase: (state, fighter: PlayerFighter) => ({

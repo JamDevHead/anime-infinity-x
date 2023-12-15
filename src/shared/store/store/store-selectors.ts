@@ -3,7 +3,7 @@ import { SharedState } from "@/shared/store";
 
 export const selectStoreFeatured = (state: SharedState) => state.store.featured;
 
-const selectStoreContents = (state: SharedState) => state.store.contents;
+export const selectStoreContents = (state: SharedState) => state.store.contents;
 
 export const selectStoreContent = (id: string) => {
 	return createSelector(selectStoreContents, (contents) => {

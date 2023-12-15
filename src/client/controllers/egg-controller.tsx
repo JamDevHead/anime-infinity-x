@@ -21,6 +21,7 @@ export class EggController implements OnStart, OnTick {
 
 	onStart(): void {
 		const root = createRoot(new Instance("Folder"));
+		const queue: string[] = [];
 
 		root.render(
 			createPortal(
@@ -31,23 +32,38 @@ export class EggController implements OnStart, OnTick {
 			),
 		);
 
-		store.observe(selectEggQueue, (eggZone) => {
-			const [success, fighter] = remotes.eggs.open.request(eggZone).timeout(10).await();
+		store.observe(
+			selectEggQueue,
+			(fighter) => fighter.uid,
+			(fighter) => {
+				const id = fighter.uid;
 
-			if (!success || !fighter) {
-				store.removeFromEggQueue(eggZone);
-				return;
-			}
+				queue.push(id);
+				let currentInQueue = queue[0];
 
-			store.setHudVisible(false);
-			store.addEggPurchase(fighter);
+				if (currentInQueue !== id) {
+					while (currentInQueue !== id) {
+						task.wait();
+						currentInQueue = queue[0];
+					}
+				}
 
-			return () => {
-				this.soundController.tracker.play("reward");
-				task.wait(2);
-				store.removeEggPurchase(fighter);
-				store.setHudVisible(true);
-			};
+				store.setHudVisible(false);
+				store.addEggPurchase(fighter);
+
+				return () => {
+					this.soundController.tracker.play("reward");
+					task.wait(2);
+
+					queue.remove(0);
+					store.removeEggPurchase(fighter);
+					store.setHudVisible(true);
+				};
+			},
+		);
+
+		remotes.eggs.requestToOpen.connect((fighter) => {
+			store.addToEggQueue(fighter);
 		});
 
 		store.subscribe(selectPlayerCurrentZone(tostring(Players.LocalPlayer.UserId)), (currentZone) =>
