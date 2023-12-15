@@ -142,7 +142,7 @@ const GamePassCard: FunctionComponent<BigCardProps> = ({
 type SimpleCardProps = {
 	icon: string;
 	title: string;
-	description: string;
+	description?: string;
 	price?: number;
 	product?: {
 		id: number;
@@ -206,17 +206,19 @@ const SimpleCard: FunctionComponent<SimpleCardProps> = ({ icon, price, title, de
 							size={UDim2.fromOffset(rem(84, "pixel"), rem(74, "pixel"))}
 							scaleType={"Fit"}
 						/>
-						<Text
-							textColor={Color3.fromHex("#fff")}
-							font={fonts.gotham.bold}
-							textAutoResize="XY"
-							textWrapped
-							textSize={rem(18, "pixel")}
-							size={UDim2.fromOffset(0, 0)}
-							text={description}
-						>
-							<uistroke Color={Color3.fromHex("#000")} Thickness={2} />
-						</Text>
+						{description !== undefined && (
+							<Text
+								textColor={Color3.fromHex("#fff")}
+								font={fonts.gotham.bold}
+								textAutoResize="XY"
+								textWrapped
+								textSize={rem(18, "pixel")}
+								size={UDim2.fromOffset(0, 0)}
+								text={description}
+							>
+								<uistroke Color={Color3.fromHex("#000")} Thickness={2} />
+							</Text>
+						)}
 					</Stack>
 					<Text
 						textColor={Color3.fromHex("#fff")}
@@ -314,6 +316,20 @@ export function Shop() {
 					autoSize="XY"
 					padding={new UDim(0, rem(24, "pixel"))}
 				>
+					<Frame size={UDim2.fromScale(1, 0)} backgroundTransparency={1} autoSize="Y">
+						<GamePassCard
+							icon={images.icons.vip_mvp}
+							title="MVP"
+							description="Your fighter, chat tag and packs discount!"
+							gradient={new ColorSequence(Color3.fromHex("#ffd600"), Color3.fromHex("#ff9900"))}
+							product={GamePasses.VIP}
+							onClick={() => MarketplaceService.PromptGamePassPurchase(LocalPlayer, GamePasses.VIP)}
+						/>
+						<uipadding
+							PaddingLeft={new UDim(0, rem(12, "pixel"))}
+							PaddingRight={new UDim(0, rem(12, "pixel"))}
+						/>
+					</Frame>
 					<Grid
 						autoSize="Y"
 						size={UDim2.fromScale(1, 0)}
@@ -326,14 +342,6 @@ export function Shop() {
 						horizontalAlignment="Center"
 						rows={2}
 					>
-						<GamePassCard
-							icon={images.icons.vip_mvp}
-							title="MVP"
-							description="Your fighter, chat tag and packs discount!"
-							gradient={new ColorSequence(Color3.fromHex("#ffd600"), Color3.fromHex("#ff9900"))}
-							product={GamePasses.VIP}
-							onClick={() => MarketplaceService.PromptGamePassPurchase(LocalPlayer, GamePasses.VIP)}
-						/>
 						<GamePassCard
 							icon={images.icons.dummy}
 							title="Extra Equip (x5)"
@@ -367,7 +375,6 @@ export function Shop() {
 						<SimpleCard
 							icon={images.icons.boosts.lucky_boost}
 							title="Lucky"
-							description="Lucky"
 							product={{
 								id: GamePasses.LUCKY,
 								type: "GamePass",
@@ -377,7 +384,6 @@ export function Shop() {
 						<SimpleCard
 							icon={images.icons.boosts.lucky_boost}
 							title="Super Lucky"
-							description="Lucky"
 							product={{
 								id: GamePasses.SUPER_LUCKY,
 								type: "GamePass",
@@ -389,7 +395,6 @@ export function Shop() {
 						<SimpleCard
 							icon={images.icons.boosts.lucky_boost}
 							title="Dark Matter Lucky"
-							description="Lucky"
 							product={{
 								id: GamePasses.DARK_MATTER_LUCKY,
 								type: "GamePass",
