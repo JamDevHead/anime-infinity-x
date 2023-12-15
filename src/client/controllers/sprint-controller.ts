@@ -3,7 +3,7 @@ import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add
 import { OnInput } from "@/client/controllers/lifecycles/on-input";
 
 @Controller()
-export class Sprint implements OnCharacterAdd, OnInput {
+export class SprintController implements OnCharacterAdd, OnInput {
 	private humanoid: Humanoid | undefined;
 
 	onCharacterAdded(character: Model) {
