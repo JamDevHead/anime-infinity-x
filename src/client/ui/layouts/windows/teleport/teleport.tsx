@@ -135,27 +135,29 @@ export const Teleport = () => {
 				font={fonts.inter.bold}
 				textAutoResize="XY"
 			/>
-			{Object.entries(ZONES).map(([zone, { name, background }]) => (
-				<TeleportCard
-					key={zone}
-					text={name}
-					image={background}
-					locked={!unlockedZone(zone)}
-					onClick={() => {
-						if (!unlockedZone(zone) || zones?.current === zone.upper()) return;
+			{Object.entries(ZONES)
+				.sort(([, { price: a }], [, { price: b }]) => a < b)
+				.map(([zone, { name, background }]) => (
+					<TeleportCard
+						key={zone}
+						text={name}
+						image={background}
+						locked={!unlockedZone(zone)}
+						onClick={() => {
+							if (!unlockedZone(zone) || zones?.current === zone.upper()) return;
 
-						dispatcher.setProgress({
-							progress: 0,
-							status: "Loading zone...",
-						});
-						dispatcher.setMaxProgress(100);
-						dispatcher.setLoading(true);
+							dispatcher.setProgress({
+								progress: 0,
+								status: "Loading zone...",
+							});
+							dispatcher.setMaxProgress(100);
+							dispatcher.setLoading(true);
 
-						task.wait(1);
-						remotes.zone.teleport.fire(zone);
-					}}
-				/>
-			))}
+							task.wait(1);
+							remotes.zone.teleport.fire(zone);
+						}}
+					/>
+				))}
 			<uipadding
 				PaddingLeft={new UDim(0, rem(24, "pixel"))}
 				PaddingRight={new UDim(0, rem(42, "pixel"))}
