@@ -1,6 +1,7 @@
-import Roact, { useEffect } from "@rbxts/roact";
+import Roact, { FunctionComponent, useEffect } from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
 import { fonts } from "@/client/constants/fonts";
+import { Button } from "@/client/ui/components/button";
 import { Image } from "@/client/ui/components/image";
 import { Stack } from "@/client/ui/components/stack";
 import { Text } from "@/client/ui/components/text";
@@ -10,7 +11,16 @@ import { ContentCard } from "@/client/ui/layouts/windows/shop/content-card";
 import { images } from "@/shared/assets/images";
 import { StoreCard } from "@/shared/store/store/store-types";
 
-export function ShopFeaturedCard({ card }: { card: StoreCard }) {
+type ShopFeaturedCardProps = {
+	card: StoreCard;
+	button?: {
+		text: string;
+		product?: string;
+		onClick: () => void;
+	};
+};
+
+export const ShopFeaturedCard: FunctionComponent<ShopFeaturedCardProps> = ({ card, button }) => {
 	const rem = useRem();
 
 	const [backStarsPosition, setBackStarsPosition] = useMotion(-1);
@@ -49,7 +59,7 @@ export function ShopFeaturedCard({ card }: { card: StoreCard }) {
 
 	return (
 		<Image
-			size={new UDim2(1, 0, 0, rem(256, "pixel"))}
+			size={new UDim2(1, 0, 0, rem(256 * 1.2, "pixel"))}
 			image={images.ui.shop.featured_background}
 			cornerRadius={new UDim(0, rem(14, "pixel"))}
 			clipsDescendants
@@ -83,12 +93,19 @@ export function ShopFeaturedCard({ card }: { card: StoreCard }) {
 				image={images.ui.shop.featured_inline}
 				size={UDim2.fromScale(1, 1)}
 			/>
-			<Stack fillDirection="Vertical" autoSize="Y" size={UDim2.fromScale(1, 1)}>
+			<Stack
+				fillDirection="Vertical"
+				autoSize="Y"
+				size={UDim2.fromScale(1, 1)}
+				sortOrder={Enum.SortOrder.LayoutOrder}
+			>
 				<Text
-					textScaled
+					//textScaled
 					textColor={Color3.fromHex("#fff")}
 					font={fonts.gotham.bold}
-					size={new UDim2(1, 0, 0, rem(35, "pixel"))}
+					size={UDim2.fromScale(1, 0)}
+					textSize={rem(23, "pixel")}
+					textAutoResize={"XY"}
 					text={`・${card.title}・`}
 				>
 					<uitextsizeconstraint MaxTextSize={23} />
@@ -106,13 +123,37 @@ export function ShopFeaturedCard({ card }: { card: StoreCard }) {
 						<ContentCard contentId={contentId} />
 					))}
 				</Stack>
+
 				<uipadding
 					PaddingLeft={new UDim(0, rem(10, "pixel"))}
 					PaddingRight={new UDim(0, rem(10, "pixel"))}
 					PaddingTop={new UDim(0, rem(10, "pixel"))}
-					PaddingBottom={new UDim(0, rem(10, "pixel"))}
+					PaddingBottom={new UDim(0, rem(18, "pixel"))}
 				/>
 			</Stack>
+
+			{button && (
+				<Button
+					size={UDim2.fromOffset(rem(200, "pixel"), rem(50, "pixel"))}
+					position={UDim2.fromScale(0.5, 0.98)}
+					anchorPoint={new Vector2(0.5, 1)}
+					onClick={button.onClick}
+					cornerRadius={new UDim(0, rem(14, "pixel"))}
+					backgroundColor={colors.white}
+				>
+					<Text
+						textColor={Color3.fromHex("#fff")}
+						font={fonts.gotham.bold}
+						size={new UDim2(1, 0, 1, 0)}
+						text={button.text}
+						textSize={rem(20, "pixel")}
+					/>
+					<uigradient
+						Color={new ColorSequence(Color3.fromHex("#0050c3"), Color3.fromHex("#7a00bc"))}
+						Rotation={90}
+					/>
+				</Button>
+			)}
 			<uistroke Color={colors.white} Thickness={rem(4, "pixel")}>
 				<uigradient
 					Color={new ColorSequence(Color3.fromHex("#0050c3"), Color3.fromHex("#7a00bc"))}
@@ -121,4 +162,4 @@ export function ShopFeaturedCard({ card }: { card: StoreCard }) {
 			</uistroke>
 		</Image>
 	);
-}
+};
