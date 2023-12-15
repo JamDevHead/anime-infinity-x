@@ -13,7 +13,7 @@ export class InventoryProcessor implements OnStart {
 
 	onStart() {
 		this.productsService.processors.add((receiptInfo) => {
-			if (receiptInfo.ProductId !== GamePasses.PET_EQUIP_2 || receiptInfo.ProductId !== GamePasses.PET_EQUIP_5)
+			if (receiptInfo.ProductId !== GamePasses.PET_EQUIP_2 && receiptInfo.ProductId !== GamePasses.PET_EQUIP_5)
 				return false;
 
 			const quantity = receiptInfo.ProductId === GamePasses.PET_EQUIP_2 ? 2 : 5;
