@@ -1,5 +1,6 @@
 import { OnTick, Service } from "@flamework/core";
 import { store } from "@/server/store";
+import { selectPlayerDamagePerSecond } from "@/shared/store/dps";
 
 @Service()
 export class DpsService implements OnTick {
@@ -18,7 +19,14 @@ export class DpsService implements OnTick {
 
 		this.dpsStore.forEach((dps, playerId) => {
 			const calculatedTimer = dps / timer;
-			store.setPlayerDps(playerId, math.floor(calculatedTimer));
+			const playerCalculatedDps = math.floor(calculatedTimer);
+			const playerDps = store.getState(selectPlayerDamagePerSecond(playerId));
+
+			if (playerDps === playerCalculatedDps) {
+				return;
+			}
+
+			store.setPlayerDps(playerId, playerCalculatedDps);
 			this.dpsStore.set(playerId, 0);
 		});
 
