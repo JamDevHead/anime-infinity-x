@@ -21,7 +21,8 @@ export class Enemy extends EnemyComponent implements OnStart {
 		this.humanoid.Health = calculatedHealth;
 		this.humanoid.BreakJointsOnDeath = false;
 
-		this.instance.ScaleTo(this.attributes.Scale ?? level + 0.5);
+		// scale 20% per level
+		this.instance.ScaleTo(this.attributes.Scale ?? 1 + level * 0.2);
 
 		const animator = this.humanoid.FindFirstChild("Animator") ?? new Instance("Animator");
 		animator.Parent = this.humanoid;
