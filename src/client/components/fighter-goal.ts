@@ -38,6 +38,7 @@ export class FighterGoal
 	private raycastParams = new RaycastParams();
 	private trove = new Trove();
 	private root: Part | undefined;
+	private puffParticle = ReplicatedStorage.assets.Particles.Puff.Clone();
 	private humanoid: Humanoid | undefined;
 	private fighterModel: FighterModel | undefined;
 	private owner!: Player;
@@ -81,6 +82,7 @@ export class FighterGoal
 		this.fighterPart.Transparency = 1;
 		this.fighterPart.CFrame = this.instance.WorldCFrame;
 
+		this.puffParticle.Parent = this.instance;
 		this.fighterPart.Parent = this.instance;
 
 		this.trove.add(this.fighterPart);
@@ -241,7 +243,10 @@ export class FighterGoal
 		const groundResult = occlusionResult && this.getGroundResult(occlusionResult);
 
 		if (!occlusionResult || !groundResult) {
-			this.fighterPart.CFrame = FAR_CFRAME;
+			if (this.fighterPart.CFrame !== FAR_CFRAME) {
+				this.puffParticle.Emit(15);
+				this.fighterPart.CFrame = FAR_CFRAME;
+			}
 			return;
 		}
 
