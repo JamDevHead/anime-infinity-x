@@ -65,6 +65,7 @@ return {
 		icons = {
 			arrow_left = "rbxassetid://15472590955",
 			attack_cursor = "rbxassetid://15523386254",
+			attack_cursor_blocked = "rbxassetid://15657890530",
 			backpack = "rbxassetid://15438096788",
 			bolt = "rbxassetid://15472591107",
 			book = "rbxassetid://15489276385",

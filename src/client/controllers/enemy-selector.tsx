@@ -14,7 +14,7 @@ import { getMouseTarget } from "@/client/utils/mouse";
 import { images } from "@/shared/assets/images";
 import { EnemyComponent } from "@/shared/components/enemy-component";
 import remotes from "@/shared/remotes";
-import { selectSelectedEnemiesByPlayerId } from "@/shared/store/enemy-selection";
+import { selectSelectedEnemiesByPlayerId, selectSelectedEnemyById } from "@/shared/store/enemy-selection";
 import { selectActivePlayerFighters } from "@/shared/store/players/fighters";
 
 @Controller()
@@ -67,23 +67,32 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 	}
 
 	onRender() {
-		const hoveredEnemy = store.getState(selectHoveredEnemy);
-		const enemy = this.getEnemyAtMousePosition();
+		const currentHoveredEnemy = store.getState(selectHoveredEnemy);
+		const enemyAtMouse = this.getEnemyAtMousePosition();
+		const selectedEnemy = enemyAtMouse
+			? store.getState(selectSelectedEnemyById(this.localUserId, enemyAtMouse.attributes.Guid))
+			: undefined;
+		const isSelected = selectedEnemy !== undefined;
+		const isEnemyCurrentHover = currentHoveredEnemy === enemyAtMouse?.attributes.Guid;
 
-		if (hoveredEnemy === enemy?.attributes.Guid) {
+		UserInputService.MouseIcon =
+			currentHoveredEnemy !== undefined || (isSelected && selectedEnemy === enemyAtMouse?.attributes.Guid)
+				? isSelected
+					? images.icons.attack_cursor_blocked
+					: images.icons.attack_cursor
+				: this.defaultCursorIcon;
+
+		if (isEnemyCurrentHover) {
 			return;
 		}
 
-		const selectedEnemies = store.getState(selectSelectedEnemiesByPlayerId(this.localUserId));
-
-		if (hoveredEnemy !== undefined) {
+		if (currentHoveredEnemy !== undefined) {
 			UserInputService.MouseIcon = this.defaultCursorIcon;
 			store.removeHoveredEnemy();
 		}
 
-		if (enemy && !selectedEnemies?.includes(enemy.attributes.Guid)) {
-			UserInputService.MouseIcon = images.icons.attack_cursor;
-			store.setHoveredEnemy(enemy.attributes.Guid);
+		if (enemyAtMouse && !isSelected) {
+			store.setHoveredEnemy(enemyAtMouse.attributes.Guid);
 		}
 	}
 
@@ -107,6 +116,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 		if (!this.isValidInput(input) || gameProcessedEvent || this.isActiveFightersEmpty) {
 			return;
 		}
+
 		const timer = this.clickTimer;
 		this.clickTimer = 0;
 
@@ -118,14 +128,13 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 		const enemy = this.getEnemyAtMousePosition();
 
 		if (!enemy) {
-			this.clearSelection();
 			return;
 		}
 
+		this.clearSelection();
 		const uid = enemy.attributes.Guid;
 
 		if (!selectedEnemies?.includes(uid)) {
-			this.clearSelection();
 			remotes.fighterTarget.select.fire(uid);
 		}
 	}

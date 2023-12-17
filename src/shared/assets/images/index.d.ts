@@ -68,6 +68,7 @@ export const images: {
 			readonly strength_boost: string;
 		};
 		readonly attack_cursor: string;
+		readonly attack_cursor_blocked: string;
 		readonly hand_click: string;
 		readonly sword_outline: string;
 		readonly rebirth: string;

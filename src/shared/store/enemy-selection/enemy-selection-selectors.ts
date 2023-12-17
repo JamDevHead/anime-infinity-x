@@ -14,3 +14,9 @@ export const selectSelectedEnemiesByPlayerId = (playerId: string) => {
 		{ resultEqualityCheck: shallowEqual },
 	);
 };
+
+export const selectSelectedEnemyById = (playerId: string, id: string) => {
+	return createSelector(selectSelectedEnemiesByPlayerId(playerId), (enemies) => {
+		return enemies?.find((enemy) => enemy === id);
+	});
+};
