@@ -44,10 +44,6 @@ export class FirstTimeController implements OnStart, OnCharacterAdd {
 		this.setupCamera();
 	}
 
-	onCharacterRemoved() {
-		this.restoreCamera();
-	}
-
 	setupCamera() {
 		const playerInfo = store.getState(selectPlayerInfo(tostring(Players.LocalPlayer.UserId)));
 
