@@ -1,7 +1,7 @@
 import { Controller, OnTick } from "@flamework/core";
-import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
-import { HAS_KEYBOARD } from "@/client/constants/device-info";
 import { UserInputService } from "@rbxts/services";
+import { HAS_KEYBOARD } from "@/client/constants/device-info";
+import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 
 const SPEED = 25;
 const DEFAULT_SPEED = 16;
@@ -25,9 +25,6 @@ export class SprintController implements OnCharacterAdd, OnTick {
 		}
 
 		const moveDirection = math.sign(this.humanoid.MoveDirection.Magnitude);
-
-		print("moveDirection sign:", moveDirection);
-		print("walking for:", this.walkingFor);
 
 		if (moveDirection === 1) {
 			this.walkingFor += dt;
