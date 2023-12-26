@@ -6,6 +6,7 @@ import { filterZones } from "@/server/store/filters/state/zones-filter";
 import { filterIndex } from "@/server/store/filters/state/index-filter";
 import { filterInfo } from "@/server/store/filters/state/info-filter";
 import { filterFighters } from "@/server/store/filters/state/fighters-filter";
+import { filterBoosts } from "@/server/store/filters/state/boosts-filter";
 
 export const filterPlayers: FilterState = (player, state) => {
 	return {
@@ -19,6 +20,7 @@ export const filterPlayers: FilterState = (player, state) => {
 			info: filterInfo(player, state.players.info),
 			index: filterIndex(player, state.players.index),
 			fighters: filterFighters(player, state.players.fighters),
+			boosts: filterBoosts(player, state.players.boosts),
 		},
 	};
 };
