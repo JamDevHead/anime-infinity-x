@@ -1,15 +1,4 @@
-import { FilterState } from "@/server/store/filters/filter";
+import { simpleFilter } from "@/server/store/filters/state/index";
+import { SettingsState } from "@/shared/store/players/settings";
 
-export const filterSettings: FilterState = (player, state) => {
-	const userId = tostring(player.UserId);
-
-	return {
-		...state,
-		players: {
-			...state.players,
-			settings: {
-				[userId]: state.players.settings[userId],
-			},
-		},
-	};
-};
+export const filterSettings = simpleFilter<SettingsState>();

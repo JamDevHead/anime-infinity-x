@@ -1,7 +1,14 @@
-import { FilterState } from "@/server/store/filters/filter";
-import { filterMissions } from "@/server/store/filters/state/missions-filter";
-import { filterSettings } from "@/server/store/filters/state/settings-filter";
-import { filterZones } from "@/server/store/filters/state/zones-filter";
-import { filterInventory } from "@/server/store/filters/state/inventory-filter";
+import { Filter, FilterState } from "@/server/store/filters/filter";
+import { filterPlayers } from "@/server/store/filters/state/players-filter";
 
-export const stateFilters: FilterState[] = [filterZones, filterSettings, filterMissions, filterInventory];
+export const stateFilters: FilterState[] = [filterPlayers];
+
+export function simpleFilter<T extends { [key: string]: unknown }>() {
+	return ((player, state) => {
+		const userId = tostring(player.UserId);
+
+		return {
+			[userId]: state[userId],
+		};
+	}) as Filter<T>;
+}

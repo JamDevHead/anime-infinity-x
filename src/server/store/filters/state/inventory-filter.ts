@@ -1,15 +1,4 @@
-import { FilterState } from "@/server/store/filters/filter";
+import { InventoryState } from "@/shared/store/players/inventory";
+import { simpleFilter } from "@/server/store/filters/state/index";
 
-export const filterInventory: FilterState = (player, state) => {
-	const userId = tostring(player.UserId);
-
-	return {
-		...state,
-		players: {
-			...state.players,
-			inventory: {
-				[userId]: state.players.inventory[userId],
-			},
-		},
-	};
-};
+export const filterInventory = simpleFilter<InventoryState>();

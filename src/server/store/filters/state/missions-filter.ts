@@ -1,15 +1,4 @@
-import { FilterState } from "@/server/store/filters/filter";
+import { MissionsState } from "@/shared/store/players/missions";
+import { simpleFilter } from "@/server/store/filters/state/index";
 
-export const filterMissions: FilterState = (player, state) => {
-	const userId = tostring(player.UserId);
-
-	return {
-		...state,
-		players: {
-			...state.players,
-			missions: {
-				[userId]: state.players.missions[userId],
-			},
-		},
-	};
-};
+export const filterMissions = simpleFilter<MissionsState>();
