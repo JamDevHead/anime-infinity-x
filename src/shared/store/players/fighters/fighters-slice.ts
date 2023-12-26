@@ -1,7 +1,7 @@
 import { createProducer } from "@rbxts/reflex";
 import { PlayerData, PlayerFighter, PlayerFighters } from "@/shared/store/players/players-types";
 
-interface FighterState {
+export interface FighterState {
 	readonly [playerId: string]: PlayerFighters | undefined;
 }
 
