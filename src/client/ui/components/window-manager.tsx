@@ -38,7 +38,7 @@ export const WindowManager = () => {
 	useEffect(() => {
 		setBlur(visible === true ? 12 : 0);
 		positionMotion.spring(visible === true ? UDim2.fromScale(0.5, 0.5) : UDim2.fromScale(0.5, -1));
-	}, [currentWindow, positionMotion, visible]);
+	}, [currentWindow, positionMotion, setBlur, visible]);
 
 	const getWindowContent = () => {
 		switch (currentWindow) {

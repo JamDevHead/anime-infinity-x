@@ -1,5 +1,5 @@
 import { Modding, OnInit, OnStart, Service } from "@flamework/core";
-import { Constructor } from "@flamework/core/out/types";
+import { Constructor } from "@flamework/core/out/utility";
 import { Signal } from "@rbxts/beacon";
 import { MissionComponent } from "@/server/services/missions/mission-component";
 
