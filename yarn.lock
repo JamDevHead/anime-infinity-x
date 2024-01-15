@@ -1532,10 +1532,10 @@
   resolved "https://registry.yarnpkg.com/@rbxts/trove/-/trove-1.3.0.tgz#c0bb5478e17435bc16a19a4fe3fba7626650d17b"
   integrity sha512-Ibekh0xr2G0WTWlUhbIaybWZvKF0C4flaBJBhJOuyS/sp6qyyn9l3pWWbSI4zrIExuOIswwKQ7O1BJj2bIJYCA==
 
-"@rbxts/types@^1.0.317", "@rbxts/types@^1.0.732":
-  version "1.0.738"
-  resolved "https://registry.yarnpkg.com/@rbxts/types/-/types-1.0.738.tgz#7ae38d06643dfe759042b209c7c7923f8ddaf17f"
-  integrity sha512-3DXmizqp7sY+yQ0CUmifwEddngXjgQHM7k9CaYxeNvYzLa2XIhPVfs1DnmNf8dsv8I7UMTzV5QV/co3yeIVDTA==
+"@rbxts/types@^1.0.317", "@rbxts/types@^1.0.739":
+  version "1.0.739"
+  resolved "https://registry.yarnpkg.com/@rbxts/types/-/types-1.0.739.tgz#fa758f29b2173ad7d9e18ecf73623941c335eeca"
+  integrity sha512-T2FCrHht66lLUaWeFhD68OnfOlDJgG66ZxaoTrDOqEgqUbzvOzWLTzhbdfcqjJQFLxGM22GkD2u9w+RHjDU6iQ==
 
 "@rbxts/virtualized-list@^1.3.2-ts.0":
   version "1.3.2-ts.0"
