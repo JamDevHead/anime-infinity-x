@@ -9,12 +9,12 @@ export function broadcasterMiddleware(): ProducerMiddleware {
 	const broadcaster = createBroadcaster({
 		producers: slices,
 		hydrateRate: 60,
-		beforeDispatch: (player, action) => {
-			return filter(player, action, actionFilters);
-		},
-		beforeHydrate: (player, state) => {
-			return filter(player, state, stateFilters);
-		},
+		// beforeDispatch: (player, action) => {
+		// 	return filter(player, action, actionFilters);
+		// },
+		// beforeHydrate: (player, state) => {
+		// 	return filter(player, state, stateFilters);
+		// },
 		dispatch: (player, actions) => {
 			remotes.store.dispatch.fire(player, actions);
 		},

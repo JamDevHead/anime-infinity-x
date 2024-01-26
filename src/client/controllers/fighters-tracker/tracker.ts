@@ -47,7 +47,7 @@ export class Tracker {
 			);
 		} else {
 			this.trove.add(
-				store.observe(selectPlayerFightersTarget(this.userId), (fighter) => {
+				store.observe(selectPlayerFightersTarget(this.userId), () => {
 					this.updateFighters();
 				}),
 			);
