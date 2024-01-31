@@ -9,11 +9,11 @@
     "compile": "rbxtsc --verbose",
     "watch": "rbxtsc -w",
     "build:setup": "yarn compile && rojo build --output place-scripts.rbxlx",
-    "build:prod": "cross-env NODE_ENV=production lune scripts/lune/build-project.luau --",
-    "build:dev": "lune scripts/lune/build-project.luau -- --dev",
-    "sync": "lune scripts/lune/sync-assets.luau",
-    "sync:dev": "lune scripts/lune/sync-assets.luau -- --dev",
-    "gen:types": "lune scripts/lune/generate-types.luau --",
+    "build:prod": "cross-env NODE_ENV=production lune run scripts/lune/build-project.luau --",
+    "build:dev": "lune run scripts/lune/build-project.luau -- --dev",
+    "sync": "lune run scripts/lune/sync-assets.luau",
+    "sync:dev": "lune run scripts/lune/sync-assets.luau -- --dev",
+    "gen:types": "lune run scripts/lune/generate-types.luau --",
     "tarmac": "tarmac sync --target roblox",
     "open:place": "scripts/open-place-binary",
     "serve": "rojo serve",
@@ -21,7 +21,7 @@
     "deploy:prod": "yarn build:prod && mantle deploy --environment production",
     "output:dev": "mantle outputs --environment canary > mantle-output.json",
     "output:prod": "mantle outputs --environment production > mantle-output.json",
-    "test": "lune scripts/lune/run-tests"
+    "test": "lune run scripts/lune/run-tests"
   },
   "devDependencies": {
     "@rbxts/compiler-types": "^2.2.0-types.0",
