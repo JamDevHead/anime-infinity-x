@@ -1,6 +1,5 @@
 import { Controller, OnStart } from "@flamework/core";
 import { Players, Workspace } from "@rbxts/services";
-import { Trove } from "@rbxts/trove";
 import { Tracker } from "@/client/controllers/fighters-tracker/tracker";
 import remotes from "@/shared/remotes";
 
@@ -8,9 +7,8 @@ import remotes from "@/shared/remotes";
 export class FightersTracker implements OnStart {
 	public readonly RootOffset = new Vector3(0, -3, 4);
 	public readonly fightersFolder = new Instance("Folder");
-	public readonly goalContainer = Workspace.Terrain;
 
-	private troves = new Map<string, Trove>();
+	private trackers = new Map<string, Tracker>();
 	private activePlayerFighters = new Map<string, Map<string, Attachment>>();
 
 	onStart() {
@@ -32,17 +30,9 @@ export class FightersTracker implements OnStart {
 		};
 
 		const onNewPlayer = (player: Player) => {
-			const trove = new Trove();
+			const tracker = new Tracker(player, this);
 
-			this.troves.set(tostring(player.UserId), trove);
-
-			const tracker = trove.add(new Tracker(player, this));
-
-			trove.add(
-				player.CharacterRemoving.Connect(() => {
-					tracker.onCharacterRemoving();
-				}),
-			);
+			this.trackers.set(tostring(player.UserId), tracker);
 		};
 
 		Players.GetPlayers().forEach(onNewPlayer);
@@ -54,8 +44,8 @@ export class FightersTracker implements OnStart {
 			onPlayerCleanup(player);
 			this.activePlayerFighters.delete(userId);
 
-			this.troves.get(userId)?.destroy();
-			this.troves.delete(userId);
+			this.trackers.get(userId)?.destroy();
+			this.trackers.delete(userId);
 		});
 	}
 

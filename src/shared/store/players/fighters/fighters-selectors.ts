@@ -63,13 +63,3 @@ export const selectPlayerFromFighterId = (fighterUid: string) => {
 		}
 	});
 };
-
-export const selectActiveFighters = (state: SharedState) => {
-	const activeFighters = {} as Record<string, string[]>;
-
-	for (const [playerId, playerFighters] of pairs(state.players.fighters)) {
-		activeFighters[playerId] = playerFighters?.actives ?? [];
-	}
-
-	return activeFighters;
-};

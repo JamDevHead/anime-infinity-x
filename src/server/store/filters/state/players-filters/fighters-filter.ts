@@ -6,11 +6,6 @@ export const filterFighters: Filter<FighterState> = (player, state) => {
 	const fighters = state[userId];
 
 	return {
-		[userId]: fighters
-			? {
-					actives: fighters.actives,
-					all: [],
-			  }
-			: undefined,
+		[userId]: fighters,
 	};
 };

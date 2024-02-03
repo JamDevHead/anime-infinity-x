@@ -26,7 +26,7 @@ export interface PlayerZones {
 }
 
 export interface PlayerFighters {
-	actives: string[];
+	actives: { fighterId: string; characterId: string }[];
 	all: PlayerFighter[];
 }
 

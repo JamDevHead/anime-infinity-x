@@ -1,20 +1,18 @@
-import { Players } from "@rbxts/services";
+import { createSelector } from "@rbxts/reflex";
+import { Workspace } from "@rbxts/services";
 import { Trove } from "@rbxts/trove";
 import { ActiveFighters } from "@/client/controllers/fighters-tracker/active-fighters";
-import { FightersTracker } from "@/client/controllers/fighters-tracker/index";
+import { FightersTracker } from "@/client/controllers/fighters-tracker/tracker-controller";
 import { store } from "@/client/store";
-import { selectSelectedEnemiesByPlayerId } from "@/shared/store/enemy-selection";
-import {
-	selectFighterTarget,
-	selectPlayerFightersTarget,
-} from "@/shared/store/fighter-target/fighter-target-selectors";
+import { PlayerFighters } from "@/shared/store/players";
+import { selectPlayerFighters } from "@/shared/store/players/fighters";
 
 export class Tracker {
 	public readonly userId: string;
-	private readonly localUserId = tostring(Players.LocalPlayer.UserId);
+	public readonly goalContainer = Workspace.Terrain;
 
-	private activeFighters: ActiveFighters;
 	private trove = new Trove();
+	private activeFighters = this.trove.add(new ActiveFighters(this.goalContainer));
 	private root: Part | undefined;
 
 	constructor(
@@ -22,45 +20,59 @@ export class Tracker {
 		public fightersTracker: FightersTracker,
 	) {
 		this.userId = tostring(player.UserId);
-		this.activeFighters = this.trove.add(new ActiveFighters(this));
 
 		task.spawn(() => {
 			if (player.Character) {
-				this.onCharacter(player.Character);
+				this.onCharacterAdded(player.Character);
 			}
 		});
 
-		this.trove.add(player.CharacterAdded.Connect((character) => this.onCharacter(character)));
-		// this.trove.add(
-		// 	store.subscribe(selectActivePlayerFighters(this.localUserId), (activeFighters, previousActiveFighters) =>
-		// 		this.updateActiveFighters(activeFighters, previousActiveFighters),
-		// 	),
-		// );
+		this.trove.add(player.CharacterAdded.Connect((character) => this.onCharacterAdded(character)));
 
-		if (this.userId === this.localUserId) {
-			this.trove.add(
-				store.subscribe(
-					selectSelectedEnemiesByPlayerId(this.userId),
-					(selectedEnemies, previousSelectedEnemies) =>
-						this.updateSelectedEnemies(selectedEnemies, previousSelectedEnemies),
-				),
-			);
-		} else {
-			this.trove.add(
-				store.observe(selectPlayerFightersTarget(this.userId), () => {
-					this.updateFighters();
-				}),
-			);
-		}
+		this.trove.add(player.CharacterRemoving.Connect(() => this.onCharacterRemoving()));
+
+		const selectActiveFightersFromPlayer = createSelector(selectPlayerFighters(this.userId), (fighters) => {
+			return fighters?.actives;
+		});
+
+		const activeFighterObserver = (fighter: { fighterId: string; characterId: string }) => {
+			print("active fighter added");
+			this.activeFighters.createFighterGoal(fighter.fighterId);
+			this.updateFighters();
+
+			return () => {
+				this.activeFighters.removeFighterGoal(fighter.fighterId);
+				this.updateFighters();
+			};
+		};
+
+		const entityAdded = (fighter: { fighterId: string; characterId: string }) => {
+			const doesNotHaveActiveFighter = (fighters?: PlayerFighters["actives"]) => {
+				return fighters?.find((otherFighter) => otherFighter.fighterId === fighter.fighterId) === undefined;
+			};
+
+			const cleanup = activeFighterObserver(fighter);
+
+			store.once(selectActiveFightersFromPlayer, doesNotHaveActiveFighter, () => cleanup());
+		};
+
+		this.trove.add(
+			store.subscribe(selectActiveFightersFromPlayer, (current, previous) => {
+				if (!current) {
+					return;
+				}
+
+				for (const [key, value] of pairs(current)) {
+					if (previous?.[key - 1] === undefined) {
+						entityAdded(value);
+					}
+				}
+			}),
+		);
 	}
 
 	public destroy() {
 		this.trove.destroy();
-	}
-
-	public onCharacterRemoving() {
-		// Cleanup previous fighters
-		this.activeFighters.clean();
 	}
 
 	public updateFighters() {
@@ -91,68 +103,14 @@ export class Tracker {
 		}
 	}
 
-	private onCharacter(character: Model) {
+	private onCharacterAdded(character: Model) {
 		this.root = character.WaitForChild("HumanoidRootPart") as Part;
 		this.updateFighters();
 	}
 
-	private updateSelectedEnemies(
-		selectedEnemies: string[] | undefined,
-		previousSelectedEnemies: string[] | undefined,
-	) {
-		if (!selectedEnemies) {
-			return;
-		}
-		const doesNotHaveTarget = (enemyUid: string) => (enemies: string[] | undefined) => {
-			return enemies?.includes(enemyUid) === false;
-		};
-
-		for (const [enemyIndex, enemyUid] of pairs(selectedEnemies)) {
-			if (previousSelectedEnemies?.[enemyIndex] !== undefined) {
-				continue;
-			}
-
-			const cleanup = this.onSelectedEnemy(enemyUid);
-
-			this.trove.add(
-				store.once(selectSelectedEnemiesByPlayerId(this.userId), doesNotHaveTarget(enemyUid), cleanup),
-			);
-		}
-	}
-
-	private onSelectedEnemy(enemyUid: string) {
-		// Set all fighters target to enemy
-		this.activeFighters.forEach((_, fighterUid) => {
-			this.fightersTracker.setFighterTarget(fighterUid, enemyUid);
-		});
-
-		this.updateFighters();
-
-		return () => {
-			// Remove all fighters target, if the enemy is the same
-			this.activeFighters.forEach((_, fighterUid) => {
-				const fighterTargetUid = store.getState(selectFighterTarget(fighterUid));
-
-				if (fighterTargetUid === undefined || fighterTargetUid !== enemyUid) {
-					return;
-				}
-
-				this.fightersTracker.removeFighterTarget(fighterUid, enemyUid);
-			});
-
-			this.updateFighters();
-		};
-	}
-
-	private onActiveFighter(uid: string) {
-		print("new active fighter", uid);
-
-		this.activeFighters.createFighterGoal(uid);
-		this.updateFighters();
-
-		return () => {
-			this.activeFighters.removeFighterGoal(uid);
-			this.updateFighters();
-		};
+	private onCharacterRemoving() {
+		this.root = undefined;
+		// Cleanup previous fighters
+		this.activeFighters.clear();
 	}
 }

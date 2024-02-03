@@ -63,12 +63,13 @@ export class FightersTarget implements OnStart, OnPlayerAdd {
 	}
 
 	onPlayerRemoved(player: Player) {
-		const fighters = store.getState(selectActivePlayerFighters(tostring(player.UserId)));
+		const userId = tostring(player.UserId);
+		const fighters = store.getState(selectActivePlayerFighters(userId));
 
-		this.logger.Debug(`Removing targets for player ${tostring(player.UserId)}`);
+		this.logger.Debug(`Removing targets for player ${userId}`);
 
-		fighters.forEach((fighterUid) => {
-			store.removeFighterTarget(fighterUid);
+		fighters.forEach(({ fighterId }) => {
+			store.removeFighterTarget(fighterId);
 		});
 	}
 }

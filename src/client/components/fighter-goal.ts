@@ -7,7 +7,7 @@ import { Players, ReplicatedStorage, Workspace } from "@rbxts/services";
 import { Trove } from "@rbxts/trove";
 import { FighterModel } from "@/client/components/fighter-model";
 import { EnemySelector } from "@/client/controllers/enemy-selector";
-import { FightersTracker } from "@/client/controllers/fighters-tracker";
+import { FightersTracker } from "@/client/controllers/fighters-tracker/tracker-controller";
 import { store } from "@/client/store";
 import { getEnemyByUid } from "@/client/utils/enemies";
 import { EnemyComponent } from "@/shared/components/enemy-component";

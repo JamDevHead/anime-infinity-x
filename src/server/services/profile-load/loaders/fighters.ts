@@ -35,6 +35,6 @@ export function loadFighters(player: Player, profile: Profile<PlayerData>, logge
 
 			return fighterToRemove.name !== fighter.name;
 		});
-		profile.Data.fighters.actives = fighters.actives.filter((fighter) => fighter !== fighterToRemove.uid);
+		profile.Data.fighters.actives = fighters.actives.filter(({ fighterId }) => fighterId !== fighterToRemove.uid);
 	});
 }

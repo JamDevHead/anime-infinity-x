@@ -1,12 +1,12 @@
+import { filterBoosts } from "./boosts-filter";
+import { filterFighters } from "./fighters-filter";
+import { filterIndex } from "./index-filter";
+import { filterInfo } from "./info-filter";
+import { filterInventory } from "./inventory-filter";
+import { filterMissions } from "./missions-filter";
+import { filterSettings } from "./settings-filter";
+import { filterZones } from "./zones-filter";
 import { FilterState } from "@/server/store/filters/filter";
-import { filterMissions } from "@/server/store/filters/state/missions-filter";
-import { filterInventory } from "@/server/store/filters/state/inventory-filter";
-import { filterSettings } from "@/server/store/filters/state/settings-filter";
-import { filterZones } from "@/server/store/filters/state/zones-filter";
-import { filterIndex } from "@/server/store/filters/state/index-filter";
-import { filterInfo } from "@/server/store/filters/state/info-filter";
-import { filterFighters } from "@/server/store/filters/state/fighters-filter";
-import { filterBoosts } from "@/server/store/filters/state/boosts-filter";
 
 export const filterPlayers: FilterState = (player, state) => {
 	return {

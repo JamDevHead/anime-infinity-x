@@ -16,12 +16,12 @@ export function doesPlayerHasFighter(player: Player, fighterUid: string) {
 	return store.getState(selectPlayerFighter(userId, fighterUid)) !== undefined;
 }
 
-export const isFighterEquipped = (player: Player, fighterUid: string) => {
+export const isFighterEquipped = (player: Player, fighterId: string) => {
 	const userId = tostring(player.UserId);
 	const activeFighters = store.getState(selectActivePlayerFighters(userId));
 	if (!activeFighters) return false;
 
-	return activeFighters.includes(fighterUid);
+	return activeFighters.find((fighter) => fighter.fighterId === fighterId) !== undefined;
 };
 
 export function addFighterFor(player: Player, fighterData: Omit<PlayerFighter, "uid" | "characterUid">) {

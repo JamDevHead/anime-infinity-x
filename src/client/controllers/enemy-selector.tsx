@@ -15,6 +15,7 @@ import { images } from "@/shared/assets/images";
 import { EnemyComponent } from "@/shared/components/enemy-component";
 import remotes from "@/shared/remotes";
 import { selectSelectedEnemiesByPlayerId, selectSelectedEnemyById } from "@/shared/store/enemy-selection";
+import { PlayerFighters } from "@/shared/store/players";
 import { selectActivePlayerFighters } from "@/shared/store/players/fighters";
 
 @Controller()
@@ -51,7 +52,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 		this.raycastParams.AddToFilter(Workspace.WaitForChild("Players") as Folder);
 
 		const selectLocalPlayerActiveFighters = selectActivePlayerFighters(this.localUserId);
-		const onActiveFighterChange = (activeFighters: string[]) => {
+		const onActiveFighterChange = (activeFighters: PlayerFighters["actives"]) => {
 			this.isActiveFightersEmpty = activeFighters.size() === 0;
 
 			if (this.isActiveFightersEmpty) {
