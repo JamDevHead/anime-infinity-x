@@ -7,7 +7,7 @@
     "lint": "yarn eslint src && yarn prettier --check src",
     "lint:fix": "yarn eslint src --fix && yarn prettier --write src",
     "compile": "rbxtsc --verbose",
-    "watch": "rbxtsc -w",
+    "watch": "rbxtsc -w --verbose",
     "build:setup": "yarn compile && rojo build --output place-scripts.rbxlx",
     "build:prod": "cross-env NODE_ENV=production lune scripts/lune/build-project.luau --",
     "build:dev": "lune scripts/lune/build-project.luau -- --dev",
