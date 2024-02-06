@@ -5,10 +5,13 @@ import { MissionDecoratorService } from "server/services/missions";
 import { store } from "@/server/store";
 import { EnemyComponent } from "@/shared/components/enemy-component";
 import { selectEnemyDrops } from "@/shared/store/enemies/enemies-selectors";
-import { selectSelectedEnemies } from "@/shared/store/enemy-selection";
+
+const MAX_ASSIST_TIME = 10; // seconds
 
 @Component({ tag: "EnemyNPC" })
 export class Enemy extends EnemyComponent implements OnStart {
+	private playersInvolved = new Map<Player, number>();
+
 	constructor(private readonly missionDecoratorService: MissionDecoratorService) {
 		super();
 	}
@@ -40,27 +43,21 @@ export class Enemy extends EnemyComponent implements OnStart {
 	}
 
 	onDestroy() {
-		const enemiesSelected = store.getState(selectSelectedEnemies);
-		const killers = new Set<string>();
+		this.playersInvolved.forEach((timeOfDamage, author) => {
+			const timeDiff = tick() - timeOfDamage;
 
-		for (const [playerId, enemies] of pairs(enemiesSelected)) {
-			if (enemies?.includes(this.attributes.Guid)) {
-				store.removeSelectedEnemy(playerId as string, this.attributes.Guid);
-
-				if (!killers.has(playerId as string)) {
-					killers.add(playerId as string);
-				}
+			if (timeDiff > MAX_ASSIST_TIME) {
+				return;
 			}
-		}
 
-		killers.forEach((killerId) => {
-			this.missionDecoratorService.taskSignal.Fire("Kill", killerId, this);
+			const userId = tostring(author.UserId);
+			this.missionDecoratorService.taskSignal.Fire("Kill", userId, this);
 
 			for (const _ of $range(1, 20)) {
 				const id = HttpService.GenerateGUID(false);
 
 				store.addDrop(this.attributes.Guid, {
-					owner: killerId,
+					owner: userId,
 					id,
 					type: "Gold",
 					quantity: math.random(1, 10),
@@ -68,6 +65,8 @@ export class Enemy extends EnemyComponent implements OnStart {
 				});
 			}
 		});
+
+		this.playersInvolved.clear();
 
 		task.delay(5, () => {
 			this.instance.Destroy();
@@ -82,8 +81,9 @@ export class Enemy extends EnemyComponent implements OnStart {
 		});
 	}
 
-	public takeDamage(damage: number) {
+	public takeDamage(author: Player, damage: number) {
 		this.humanoid.TakeDamage(damage);
+		this.playersInvolved.set(author, tick());
 
 		const isDead = this.humanoid.Health <= 0;
 

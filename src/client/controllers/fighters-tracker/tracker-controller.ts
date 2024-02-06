@@ -1,7 +1,10 @@
 import { Controller, OnStart } from "@flamework/core";
 import { Players, Workspace } from "@rbxts/services";
 import { Tracker } from "@/client/controllers/fighters-tracker/tracker";
+import { store } from "@/client/store";
 import remotes from "@/shared/remotes";
+import { selectEnemySelectionFromPlayer } from "@/shared/store/players/enemy-selection";
+import { selectActivePlayerFighters } from "@/shared/store/players/fighters";
 
 @Controller()
 export class FightersTracker implements OnStart {
@@ -37,6 +40,7 @@ export class FightersTracker implements OnStart {
 
 		Players.GetPlayers().forEach(onNewPlayer);
 		Players.PlayerAdded.Connect(onNewPlayer);
+		this.listenForEnemySelection();
 
 		Players.PlayerRemoving.Connect((player) => {
 			const userId = tostring(player.UserId);
@@ -49,18 +53,26 @@ export class FightersTracker implements OnStart {
 		});
 	}
 
-	public setFighterTarget(uid: string, enemyUid: string) {
-		remotes.fighterTarget.set.fire(uid, enemyUid);
-	}
-
-	public removeFighterTarget(uid: string, enemyUid: string) {
-		remotes.fighterTarget.remove.fire(uid, enemyUid);
-	}
-
 	public getFormation(troopAmount: number, spacing = 4) {
 		const rows = math.ceil((math.sqrt(8 * troopAmount + 1) - 1) / 2);
 
 		return this.generateTriangleFormation(rows, spacing);
+	}
+
+	private listenForEnemySelection() {
+		const userId = tostring(Players.LocalPlayer.UserId);
+
+		store.subscribe(selectEnemySelectionFromPlayer(userId), (enemyId) => {
+			const activeFighters = store.getState(selectActivePlayerFighters(userId));
+
+			activeFighters?.forEach(({ fighterId }) => {
+				if (fighterId !== undefined) {
+					enemyId !== undefined
+						? remotes.fighterTarget.set.fire(fighterId, enemyId)
+						: remotes.fighterTarget.remove.fire(fighterId);
+				}
+			});
+		});
 	}
 
 	private generateTriangleFormation(rows: number, spacing: number) {

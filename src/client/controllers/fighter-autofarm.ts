@@ -1,10 +1,10 @@
 import { Components } from "@flamework/components";
 import { Controller, OnStart, OnTick } from "@flamework/core";
 import { Enemy } from "@/client/components/enemy-component";
+import { EnemySelectorController } from "@/client/controllers/enemy-selector-controller";
 import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { store } from "@/client/store";
 import { selectSpecificPerk } from "@/client/store/perks";
-import remotes from "@/shared/remotes";
 
 const HORIZONTAL_VECTOR = new Vector3(1, 0, 1);
 
@@ -17,6 +17,7 @@ export class FighterAutofarmController implements OnStart, OnTick {
 	constructor(
 		private readonly characterAdd: CharacterAdd,
 		private readonly components: Components,
+		private readonly enemySelector: EnemySelectorController,
 	) {}
 
 	onStart() {
@@ -37,14 +38,13 @@ export class FighterAutofarmController implements OnStart, OnTick {
 		}
 
 		if (closestEnemy === undefined) {
-			remotes.fighterTarget.unselectAll.fire();
+			this.enemySelector.clearSelection();
 			this.selectedEnemy = undefined;
 			return;
 		}
 
 		this.selectedEnemy = closestEnemy;
-		remotes.fighterTarget.unselectAll.fire();
-		remotes.fighterTarget.select.fire(closestEnemy.attributes.Guid);
+		this.enemySelector.setSelection(closestEnemy.attributes.Guid);
 	}
 
 	private getClosestEnemy() {

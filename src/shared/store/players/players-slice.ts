@@ -1,6 +1,7 @@
 import { combineProducers } from "@rbxts/reflex";
 import { balanceSlice } from "@/shared/store/players/balance";
 import { boostsSlice } from "@/shared/store/players/boosts";
+import { enemySelectionSlice } from "@/shared/store/players/enemy-selection";
 import { fightersSlice } from "@/shared/store/players/fighters";
 import { infoSlice } from "@/shared/store/players/info";
 import { inventorySlice } from "@/shared/store/players/inventory";
@@ -19,4 +20,5 @@ export const playersSlice = combineProducers({
 	info: infoSlice,
 	index: indexSlice,
 	settings: settingsSlice,
+	enemySelection: enemySelectionSlice,
 });

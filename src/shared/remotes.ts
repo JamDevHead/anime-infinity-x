@@ -17,10 +17,12 @@ const remotes = createRemotes({
 
 	fighterTarget: namespace({
 		set: remote<Server, [fighterUid: string, targetUid: string]>(),
-		remove: remote<Server, [fighterUid: string, targetUid: string]>(),
-		select: remote<Server, [targetUid: string]>(),
-		unselect: remote<Server, [targetUid: string]>(),
-		unselectAll: remote<Server>(),
+		remove: remote<Server, [fighterUid: string]>(),
+	}),
+
+	enemySelection: namespace({
+		select: remote<Server, [targetId: string]>(),
+		unselect: remote<Server>(),
 	}),
 
 	inventory: namespace({

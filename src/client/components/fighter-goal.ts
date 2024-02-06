@@ -6,7 +6,7 @@ import { createSelector } from "@rbxts/reflex";
 import { Players, ReplicatedStorage, Workspace } from "@rbxts/services";
 import { Trove } from "@rbxts/trove";
 import { FighterModel } from "@/client/components/fighter-model";
-import { EnemySelector } from "@/client/controllers/enemy-selector";
+import { EnemySelectorController } from "@/client/controllers/enemy-selector-controller";
 import { FightersTracker } from "@/client/controllers/fighters-tracker/tracker-controller";
 import { store } from "@/client/store";
 import { getEnemyByUid } from "@/client/utils/enemies";
@@ -46,7 +46,7 @@ export class FighterGoal
 	constructor(
 		private readonly logger: Logger,
 		private readonly fightersTracker: FightersTracker,
-		private readonly enemySelector: EnemySelector,
+		private readonly enemySelector: EnemySelectorController,
 		private readonly components: Components,
 	) {
 		super();

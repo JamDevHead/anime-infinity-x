@@ -6,7 +6,6 @@ import { store } from "@/server/store";
 import { getEnemyByUid } from "@/server/utils/enemies";
 import { doesPlayerHasFighter } from "@/server/utils/fighters";
 import remotes from "@/shared/remotes";
-import { selectFighterTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
 import { selectActivePlayerFighters } from "@/shared/store/players/fighters";
 
 @Service()
@@ -42,13 +41,7 @@ export class FightersTarget implements OnStart, OnPlayerAdd {
 			store.setFighterTarget(fighterUid, targetUid);
 		});
 
-		remotes.fighterTarget.remove.connect((player, fighterUid, targetUid) => {
-			const fighterTargetUid = store.getState(selectFighterTarget(fighterUid));
-
-			if (fighterTargetUid !== targetUid) {
-				return;
-			}
-
+		remotes.fighterTarget.remove.connect((player, fighterUid) => {
 			if (!doesPlayerHasFighter(player, fighterUid)) {
 				this.logger.Warn(
 					`Player ${tostring(
@@ -68,7 +61,7 @@ export class FightersTarget implements OnStart, OnPlayerAdd {
 
 		this.logger.Debug(`Removing targets for player ${userId}`);
 
-		fighters.forEach(({ fighterId }) => {
+		fighters?.forEach(({ fighterId }) => {
 			store.removeFighterTarget(fighterId);
 		});
 	}
