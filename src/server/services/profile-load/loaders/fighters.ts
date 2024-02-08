@@ -61,7 +61,7 @@ function checkActiveFighters(
 		}
 
 		// Check if active fighter still exists
-		if (valid && allFighters.some((otherFighter) => otherFighter.uid === fighter.fighterId)) {
+		if (valid && !allFighters.some((otherFighter) => otherFighter.uid === fighter.fighterId)) {
 			valid = false;
 		}
 
