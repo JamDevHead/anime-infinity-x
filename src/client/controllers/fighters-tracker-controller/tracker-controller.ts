@@ -1,7 +1,7 @@
 import { Controller, OnStart } from "@flamework/core";
 import Make from "@rbxts/make";
 import { Players, Workspace } from "@rbxts/services";
-import { Tracker } from "@/client/controllers/fighters-tracker/tracker";
+import { Tracker } from "@/client/controllers/fighters-tracker-controller/tracker";
 import { store } from "@/client/store";
 import remotes from "@/shared/remotes";
 import { selectEnemySelectionFromPlayer } from "@/shared/store/players/enemy-selection";

@@ -8,7 +8,7 @@ import { Trove } from "@rbxts/trove";
 import { FighterGoalAttributes } from "@/client/components/fighter-goal/fighter-goal-types";
 import { FighterModel } from "@/client/components/fighter-model";
 import { EnemySelectorController } from "@/client/controllers/enemy-selector-controller";
-import { FightersTracker } from "@/client/controllers/fighters-tracker/tracker-controller";
+import { FightersTracker } from "@/client/controllers/fighters-tracker-controller/tracker-controller";
 import { store } from "@/client/store";
 import { getEnemyByUid } from "@/client/utils/enemies";
 import { EnemyComponent } from "@/shared/components/enemy-component";

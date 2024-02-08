@@ -5,7 +5,7 @@ import { Logger } from "@rbxts/log";
 import { Workspace } from "@rbxts/services";
 import { Trove } from "@rbxts/trove";
 import { FighterGoal } from "@/client/components/fighter-goal/fighter-goal-component";
-import { FightersTracker } from "@/client/controllers/fighters-tracker/tracker-controller";
+import { FightersTracker } from "@/client/controllers/fighters-tracker-controller/tracker-controller";
 import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { AnimationMap, AnimationTracker } from "@/shared/lib/animation-tracker";
 import { calculateStun } from "@/shared/utils/fighters/fighters-utils";

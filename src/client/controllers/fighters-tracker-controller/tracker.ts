@@ -2,7 +2,7 @@ import { createSelector, shallowEqual } from "@rbxts/reflex";
 import { Workspace } from "@rbxts/services";
 import { Trove } from "@rbxts/trove";
 import { FighterGoalAttributes } from "@/client/components/fighter-goal/fighter-goal-types";
-import { FightersTracker } from "@/client/controllers/fighters-tracker/tracker-controller";
+import { FightersTracker } from "@/client/controllers/fighters-tracker-controller/tracker-controller";
 import { store } from "@/client/store";
 import { ActivePlayerFighter } from "@/shared/store/players";
 import { identifyActiveFighter, selectActiveFightersFromPlayer } from "@/shared/store/players/fighters";
