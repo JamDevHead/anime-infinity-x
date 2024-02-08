@@ -156,13 +156,15 @@ export class FighterGoal extends BaseComponent<FighterGoalAttributes, Attachment
 			return;
 		}
 
+		let currentHealth = enemy.humanoid.Health;
+
 		this.trove.add(
 			enemy.humanoid.HealthChanged.Connect((newHealth) => {
-				const currentHealth = enemy.humanoid.Health;
-
 				if (currentHealth > newHealth) {
 					this.fighterModelComponent?.attack();
 				}
+
+				currentHealth = enemy.humanoid.Health;
 			}),
 		);
 
