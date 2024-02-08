@@ -1,10 +1,11 @@
-import { Component, Components } from "@flamework/components";
+import { Component } from "@flamework/components";
 import { OnStart } from "@flamework/core";
 import { createPortal, createRoot, Root } from "@rbxts/react-roblox";
 import Roact from "@rbxts/roact";
 import { ReplicatedStorage, TweenService, Workspace } from "@rbxts/services";
 import { EnemyHealth } from "@/client/components/react/enemy-health/enemy-health";
 import { fonts } from "@/client/constants/fonts";
+import { EnemySelectorController } from "@/client/controllers/enemy-selector-controller";
 import { SoundController } from "@/client/controllers/sound-controller";
 import { useAbbreviator } from "@/client/ui/hooks/use-abbreviator";
 import { EnemyComponent } from "@/shared/components/enemy-component";
@@ -32,8 +33,8 @@ export class Enemy extends EnemyComponent implements OnStart {
 	private abbreviator = useAbbreviator();
 
 	constructor(
-		private readonly components: Components,
 		private readonly soundController: SoundController,
+		private readonly enemySelector: EnemySelectorController,
 	) {
 		super();
 	}
@@ -110,6 +111,9 @@ export class Enemy extends EnemyComponent implements OnStart {
 
 		// Play death sound
 		this.soundController.tracker.play("death", this.instance.HumanoidRootPart);
+
+		// Clear selection
+		this.enemySelector.clearSelection();
 
 		// Fade out
 		const tweenInfo = new TweenInfo(2, Enum.EasingStyle.Linear, Enum.EasingDirection.Out);
