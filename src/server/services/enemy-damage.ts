@@ -9,7 +9,7 @@ import { FighterTargetSlice } from "@/shared/store/fighter-target";
 import { selectFightersTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
 import { selectPlayersFightersWithUid } from "@/shared/store/players/fighters";
 import { getEnemyModelByUid } from "@/shared/utils/enemies";
-import { calculateStun } from "@/shared/utils/fighters";
+import { calculateStun } from "@/shared/utils/fighters/fighters-utils";
 
 @Service()
 export class EnemyDamage implements OnStart, OnTick, OnPlayerAdd {

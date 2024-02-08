@@ -8,7 +8,7 @@ import { FighterGoal } from "@/client/components/fighter-goal";
 import { FightersTracker } from "@/client/controllers/fighters-tracker/tracker-controller";
 import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { AnimationMap, AnimationTracker } from "@/shared/lib/animation-tracker";
-import { calculateStun } from "@/shared/utils/fighters";
+import { calculateStun } from "@/shared/utils/fighters/fighters-utils";
 
 interface IFighterModel extends Model {
 	Humanoid: Humanoid & {

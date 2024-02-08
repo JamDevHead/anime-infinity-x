@@ -1,40 +1,110 @@
 import { Logger } from "@rbxts/log";
 import { Profile } from "@rbxts/profileservice/globals";
 import { ReplicatedStorage } from "@rbxts/services";
-import { PlayerData, PlayerFighter } from "@/shared/store/players";
+import { t } from "@rbxts/t";
+import { ActivePlayerFighter, PlayerData, PlayerFighter } from "@/shared/store/players";
+import { validateActiveFighter, validateFighter } from "@/shared/utils/fighters";
 
 const fightersFolder = ReplicatedStorage.assets.Avatars.FightersModels;
 
-export function loadFighters(player: Player, profile: Profile<PlayerData>, logger: Logger) {
-	const fighters = profile.Data.fighters;
-	const fightersToRemove = [] as PlayerFighter[];
+function checkAllFighters(fighters: PlayerFighter[], idsToRemove: Set<string>, fightersRemoved: number) {
+	for (const [index, fighter] of pairs(fighters)) {
+		let valid = validateFighter(fighter);
 
-	for (const fighter of fighters.all) {
-		const fighterZone = fighter?.zone !== undefined ? fightersFolder.FindFirstChild(fighter.zone) : undefined;
-		const fighterModel = fighter?.name !== undefined ? fighterZone?.FindFirstChild(fighter.name) : undefined;
+		// Check if fighter exists in the game
+		const fighterZone = valid ? fightersFolder.FindFirstChild(fighter.zone) : undefined;
+		const fighterModel = fighterZone?.FindFirstChild(fighter.name);
 
-		if (fighterModel) {
-			continue;
+		if (!fighterModel) {
+			valid = false;
 		}
 
-		fightersToRemove.push(fighter);
+		// If fighter is already prone to removal
+		if (valid && idsToRemove.has(fighter.uid)) {
+			valid = false;
+		}
+
+		if (!valid) {
+			fighters.unorderedRemove(index - 1);
+			fightersRemoved++;
+
+			// Remove the fighter using the ID
+			if (t.string(fighter)) {
+				idsToRemove.add(fighter);
+			} else {
+				const hasId = t.interface({
+					uid: t.string,
+				});
+
+				if (hasId(fighter)) {
+					idsToRemove.add(fighter.uid);
+				}
+			}
+		}
 	}
 
-	if (fightersToRemove.size() === 0) {
+	return fightersRemoved;
+}
+
+function checkActiveFighters(
+	fighters: ActivePlayerFighter[],
+	allFighters: PlayerFighter[],
+	idsToRemove: Set<string>,
+	fightersRemoved: number,
+) {
+	for (const [index, fighter] of pairs(fighters)) {
+		let valid = validateActiveFighter(fighter);
+
+		// If fighter is already prone to removal
+		if (valid && idsToRemove.has(fighter.fighterId)) {
+			valid = false;
+		}
+
+		// Check if active fighter still exists
+		if (valid && allFighters.some((otherFighter) => otherFighter.uid === fighter.fighterId)) {
+			valid = false;
+		}
+
+		if (!valid) {
+			fighters.unorderedRemove(index - 1);
+			fightersRemoved++;
+
+			// Remove the fighter using the ID
+			if (t.string(fighter)) {
+				idsToRemove.add(fighter);
+			} else {
+				const hasId = t.interface({
+					fighterId: t.string,
+				});
+
+				if (hasId(fighter)) {
+					idsToRemove.add(fighter.fighterId);
+				}
+			}
+		}
+	}
+
+	return fightersRemoved;
+}
+
+export function loadFighters(player: Player, profile: Profile<PlayerData>, logger: Logger) {
+	const fighters = profile.Data.fighters;
+	const idsToRemove = new Set<string>();
+
+	const allFighters = table.clone(fighters.all);
+	const activeFighters = table.clone(fighters.actives);
+	let fightersRemoved = 0;
+
+	fightersRemoved = checkAllFighters(allFighters, idsToRemove, fightersRemoved);
+	fightersRemoved = checkActiveFighters(activeFighters, allFighters, idsToRemove, fightersRemoved);
+
+	if (fightersRemoved === 0) {
 		logger.Info(`Player ${player.Name} has no outdated fighters in it's data`);
 		return;
 	}
 
-	logger.Info(`Removing ${fightersToRemove.size()} outdated fighters from ${player.Name} ${player.UserId}`);
+	logger.Info(`Removed ${fightersRemoved} outdated fighters from ${player.Name} ${player.UserId}`);
 
-	fightersToRemove.forEach((fighterToRemove) => {
-		profile.Data.fighters.all = fighters.all.filter((fighter) => {
-			if (fighterToRemove.uid !== undefined) {
-				return fighterToRemove.uid !== fighter.uid;
-			}
-
-			return fighterToRemove.name !== fighter.name;
-		});
-		profile.Data.fighters.actives = fighters.actives.filter(({ fighterId }) => fighterId !== fighterToRemove.uid);
-	});
+	profile.Data.fighters.all = allFighters;
+	profile.Data.fighters.actives = activeFighters;
 }

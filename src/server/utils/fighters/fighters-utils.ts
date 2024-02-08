@@ -1,13 +1,13 @@
-import { md5 } from "@rbxts/rbxts-hashlib";
 import { HttpService, Players, ReplicatedStorage } from "@rbxts/services";
 import { FighterStats } from "@/server/constants/fighter-stats";
 import { store } from "@/server/store";
 import { PlayerFighter, selectPlayerIndex } from "@/shared/store/players";
 import {
-	selectActivePlayerFighters,
+	selectActiveFightersFromPlayer,
 	selectPlayerFighter,
 	selectPlayerFromFighterId,
 } from "@/shared/store/players/fighters";
+import { getCharacterId } from "@/shared/utils/fighters/fighters-utils";
 
 const fightersFolder = ReplicatedStorage.assets.Avatars.FightersModels;
 
@@ -18,7 +18,7 @@ export function doesPlayerHasFighter(player: Player, fighterUid: string) {
 
 export const isFighterEquipped = (player: Player, fighterId: string) => {
 	const userId = tostring(player.UserId);
-	const activeFighters = store.getState(selectActivePlayerFighters(userId));
+	const activeFighters = store.getState(selectActiveFightersFromPlayer(userId));
 	if (!activeFighters) return false;
 
 	return activeFighters.find((fighter) => fighter.fighterId === fighterId) !== undefined;
@@ -31,7 +31,7 @@ export function addFighterFor(player: Player, fighterData: Omit<PlayerFighter, "
 	assert(fighterModel, `Failed to find ${fighterData.name}`);
 
 	const userId = tostring(player.UserId);
-	const characterUid = md5(fighterData.name);
+	const characterUid = getCharacterId(fighterData.name);
 	const fighterUid = HttpService.GenerateGUID(false);
 
 	const index = store.getState(selectPlayerIndex(userId));

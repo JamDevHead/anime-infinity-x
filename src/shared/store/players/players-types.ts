@@ -25,8 +25,13 @@ export interface PlayerZones {
 	unlocked: string[];
 }
 
+export interface ActivePlayerFighter {
+	fighterId: string;
+	characterId: string;
+}
+
 export interface PlayerFighters {
-	actives: { fighterId: string; characterId: string }[];
+	actives: ActivePlayerFighter[];
 	all: PlayerFighter[];
 }
 
