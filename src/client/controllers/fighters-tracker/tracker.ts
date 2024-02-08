@@ -1,18 +1,18 @@
-import { createSelector } from "@rbxts/reflex";
+import { createSelector, shallowEqual } from "@rbxts/reflex";
 import { Workspace } from "@rbxts/services";
 import { Trove } from "@rbxts/trove";
-import { ActiveFighters } from "@/client/controllers/fighters-tracker/active-fighters";
+import { FighterGoalAttributes } from "@/client/components/fighter-goal/fighter-goal-types";
 import { FightersTracker } from "@/client/controllers/fighters-tracker/tracker-controller";
 import { store } from "@/client/store";
-import { PlayerFighters } from "@/shared/store/players";
-import { selectPlayerFighters } from "@/shared/store/players/fighters";
+import { ActivePlayerFighter } from "@/shared/store/players";
+import { identifyActiveFighter, selectActiveFightersFromPlayer } from "@/shared/store/players/fighters";
 
 export class Tracker {
 	public readonly userId: string;
-	public readonly goalContainer = Workspace.Terrain;
 
+	private readonly goalContainer = Workspace.Terrain;
 	private trove = new Trove();
-	private activeFighters = this.trove.add(new ActiveFighters(this.goalContainer));
+	private activeFighters = new Map<ActivePlayerFighter, Attachment>();
 	private root: Part | undefined;
 
 	constructor(
@@ -28,45 +28,23 @@ export class Tracker {
 		});
 
 		this.trove.add(player.CharacterAdded.Connect((character) => this.onCharacterAdded(character)));
-
 		this.trove.add(player.CharacterRemoving.Connect(() => this.onCharacterRemoving()));
 
-		const selectActiveFightersFromPlayer = createSelector(selectPlayerFighters(this.userId), (fighters) => {
-			return fighters?.actives;
-		});
-
-		const activeFighterObserver = (fighter: { fighterId: string; characterId: string }) => {
-			print("active fighter added");
-			this.activeFighters.createFighterGoal(fighter.fighterId);
-			this.updateFighters();
-
-			return () => {
-				this.activeFighters.removeFighterGoal(fighter.fighterId);
-				this.updateFighters();
-			};
-		};
-
-		const entityAdded = (fighter: { fighterId: string; characterId: string }) => {
-			const doesNotHaveActiveFighter = (fighters?: PlayerFighters["actives"]) => {
-				return fighters?.find((otherFighter) => otherFighter.fighterId === fighter.fighterId) === undefined;
-			};
-
-			const cleanup = activeFighterObserver(fighter);
-
-			store.once(selectActiveFightersFromPlayer, doesNotHaveActiveFighter, () => cleanup());
-		};
+		const selectActiveFightersFromLocalPlayer = createSelector(
+			[selectActiveFightersFromPlayer(this.userId)],
+			(fighters) => fighters ?? [],
+			shallowEqual,
+		);
 
 		this.trove.add(
-			store.subscribe(selectActiveFightersFromPlayer, (current, previous) => {
-				if (!current) {
-					return;
-				}
+			store.observe(selectActiveFightersFromLocalPlayer, identifyActiveFighter, (fighter) => {
+				this.activeFighters.set(fighter, new Instance("Attachment", this.goalContainer));
+				this.updateFighters();
 
-				for (const [key, value] of pairs(current)) {
-					if (previous?.[key - 1] === undefined) {
-						entityAdded(value);
-					}
-				}
+				return () => {
+					this.activeFighters.delete(fighter);
+					this.updateFighters();
+				};
 			}),
 		);
 	}
@@ -75,7 +53,7 @@ export class Tracker {
 		this.trove.destroy();
 	}
 
-	public updateFighters() {
+	private updateFighters() {
 		if (!this.root) {
 			return;
 		}
@@ -85,21 +63,23 @@ export class Tracker {
 		const formationSize = formation.size();
 		let index = 0;
 
-		for (const [uid, goalAttachment] of this.activeFighters.fighters) {
+		for (const [fighter, attachment] of this.activeFighters) {
 			index++;
-
-			if (!goalAttachment) {
-				continue;
-			}
 
 			const fighterGoal = formation[index % formationSize];
 			const fighterOffset = this.fightersTracker.RootOffset.add(fighterGoal);
+			const attributes = {
+				...fighter,
+				goalOffset: fighterOffset,
+				playerId: this.userId,
+			} satisfies FighterGoalAttributes;
 
-			goalAttachment.WorldPosition = this.root.Position.add(fighterOffset);
-			goalAttachment.SetAttribute("Offset", fighterOffset);
-			goalAttachment.SetAttribute("UID", uid);
-			goalAttachment.SetAttribute("OwnerId", this.userId);
-			goalAttachment.AddTag("FighterGoal");
+			for (const [key, value] of pairs(attributes)) {
+				attachment.SetAttribute(key, value);
+			}
+
+			attachment.WorldPosition = this.root.Position.add(fighterOffset);
+			attachment.AddTag("FighterGoal");
 		}
 	}
 

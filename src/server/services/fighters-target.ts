@@ -6,7 +6,7 @@ import { store } from "@/server/store";
 import { getEnemyByUid } from "@/server/utils/enemies";
 import { doesPlayerHasFighter } from "@/server/utils/fighters";
 import remotes from "@/shared/remotes";
-import { selectActivePlayerFighters } from "@/shared/store/players/fighters";
+import { selectActiveFightersFromPlayer } from "@/shared/store/players/fighters";
 
 @Service()
 export class FightersTarget implements OnStart, OnPlayerAdd {
@@ -57,7 +57,7 @@ export class FightersTarget implements OnStart, OnPlayerAdd {
 
 	onPlayerRemoved(player: Player) {
 		const userId = tostring(player.UserId);
-		const fighters = store.getState(selectActivePlayerFighters(userId));
+		const fighters = store.getState(selectActiveFightersFromPlayer(userId));
 
 		this.logger.Debug(`Removing targets for player ${userId}`);
 

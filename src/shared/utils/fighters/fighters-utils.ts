@@ -36,7 +36,7 @@ export function getFighterFromCharacterId(id: string) {
 		}
 	}
 
-	return fighterName !== undefined ? fightersFolder.FindFirstChild(fighterName) : undefined;
+	return fighterName !== undefined ? fightersFolder.FindFirstChild(fighterName, true) : undefined;
 }
 
 setupCharactersName();

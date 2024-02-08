@@ -4,7 +4,7 @@ import Gizmo from "@rbxts/gizmo";
 import { Logger } from "@rbxts/log";
 import { Workspace } from "@rbxts/services";
 import { Trove } from "@rbxts/trove";
-import { FighterGoal } from "@/client/components/fighter-goal";
+import { FighterGoal } from "@/client/components/fighter-goal/fighter-goal-component";
 import { FightersTracker } from "@/client/controllers/fighters-tracker/tracker-controller";
 import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { AnimationMap, AnimationTracker } from "@/shared/lib/animation-tracker";
@@ -26,12 +26,12 @@ const animationMap = {
 	soco2: { id: "15461470426" },
 } satisfies AnimationMap;
 
-@Component({ tag: "Fighter" })
+@Component()
 export class FighterModel
 	extends BaseComponent<NonNullable<unknown>, IFighterModel>
 	implements OnStart, OnPhysics, OnRender
 {
-	public fighterGoal!: FighterGoal;
+	public fighterGoal: FighterGoal | undefined;
 
 	private humanoid = this.instance.Humanoid;
 	private torso = this.instance.FindFirstChild("Torso") as Part | undefined;
@@ -120,7 +120,7 @@ export class FighterModel
 		const character = this.characterAdd.character;
 		const humanoid = character?.FindFirstChild("Humanoid") as Humanoid | undefined;
 
-		if (!this.humanoid?.RootPart || !humanoid) {
+		if (!this.humanoid?.RootPart || !humanoid || !this.fighterGoal) {
 			return;
 		}
 
@@ -195,7 +195,7 @@ export class FighterModel
 	}
 
 	public attack() {
-		const dexterity = this.fighterGoal.fighterInfo?.stats.dexterity ?? 10;
+		const dexterity = this.fighterGoal?.fighterInfo?.stats.dexterity ?? 10;
 
 		if (this.fighterStun > 0) {
 			return;

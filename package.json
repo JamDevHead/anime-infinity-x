@@ -51,6 +51,7 @@
     "@rbxts/beacon": "^2.1.1",
     "@rbxts/gizmo": "git+https://github.com/JamDevHead/gizmo.git",
     "@rbxts/log": "^0.6.3",
+    "@rbxts/make": "^1.0.6",
     "@rbxts/pretty-react-hooks": "^0.3.3",
     "@rbxts/profileservice": "^1.4.2",
     "@rbxts/rbxts-hashlib": "^1.0.2",

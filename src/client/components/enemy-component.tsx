@@ -6,12 +6,9 @@ import { ReplicatedStorage, TweenService, Workspace } from "@rbxts/services";
 import { EnemyHealth } from "@/client/components/react/enemy-health/enemy-health";
 import { fonts } from "@/client/constants/fonts";
 import { SoundController } from "@/client/controllers/sound-controller";
-import { store } from "@/client/store";
 import { useAbbreviator } from "@/client/ui/hooks/use-abbreviator";
-import { getFighterByUid } from "@/client/utils/fighters";
 import { EnemyComponent } from "@/shared/components/enemy-component";
 import { AnimationMap, AnimationTracker } from "@/shared/lib/animation-tracker";
-import { selectFighterWithTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
 
 const coinParticleFolder = ReplicatedStorage.assets.Particles.Coins;
 const RNG = new Random();
@@ -160,15 +157,6 @@ export class Enemy extends EnemyComponent implements OnStart {
 
 		// Play hurt sound
 		this.soundController.tracker.play("hurt", this.instance.HumanoidRootPart);
-
-		// Notify current fighters of hurt
-		const fighterUid = store.getState(selectFighterWithTarget(this.attributes.Guid));
-
-		fighterUid.forEach((uid) => {
-			const fighter = getFighterByUid(uid, this.components);
-
-			fighter?.attack();
-		});
 	}
 
 	private createHurtParticle(damage: number) {

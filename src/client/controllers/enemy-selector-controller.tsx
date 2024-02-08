@@ -2,6 +2,7 @@ import { Components } from "@flamework/components";
 import { Controller, OnRender, OnStart } from "@flamework/core";
 import { ReflexProvider } from "@rbxts/react-reflex";
 import { createRoot } from "@rbxts/react-roblox";
+import { createSelector, shallowEqual } from "@rbxts/reflex";
 import Roact, { StrictMode } from "@rbxts/roact";
 import { Players, UserInputService, Workspace } from "@rbxts/services";
 import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
@@ -13,9 +14,9 @@ import { getMouseTarget } from "@/client/utils/mouse";
 import { images } from "@/shared/assets/images";
 import { EnemyComponent } from "@/shared/components/enemy-component";
 import remotes from "@/shared/remotes";
-import { PlayerFighters } from "@/shared/store/players";
+import { ActivePlayerFighter } from "@/shared/store/players";
 import { selectEnemySelectionFromPlayer } from "@/shared/store/players/enemy-selection";
-import { selectActivePlayerFighters } from "@/shared/store/players/fighters";
+import { selectActiveFightersFromPlayer } from "@/shared/store/players/fighters";
 
 @Controller()
 export class EnemySelectorController implements OnCharacterAdd, OnInput, OnStart, OnRender {
@@ -131,8 +132,13 @@ export class EnemySelectorController implements OnCharacterAdd, OnInput, OnStart
 	}
 
 	private listenForActiveFighters() {
-		const selectLocalPlayerActiveFighters = selectActivePlayerFighters(this.localUserId);
-		const onActiveFighterChange = (activeFighters?: PlayerFighters["actives"]) => {
+		const selectLocalPlayerActiveFighters = createSelector(
+			[selectActiveFightersFromPlayer(this.localUserId)],
+			(fighters) => fighters ?? [],
+			shallowEqual,
+		);
+
+		store.subscribe(selectLocalPlayerActiveFighters, (activeFighters?: ActivePlayerFighter[]) => {
 			if (!activeFighters) {
 				return;
 			}
@@ -142,12 +148,7 @@ export class EnemySelectorController implements OnCharacterAdd, OnInput, OnStart
 			if (this.isActiveFightersEmpty) {
 				this.clearSelection();
 			}
-		};
-
-		store.subscribe(selectLocalPlayerActiveFighters, onActiveFighterChange);
-
-		const activeFighters = store.getState(selectLocalPlayerActiveFighters);
-		onActiveFighterChange(activeFighters);
+		});
 	}
 
 	private isValidInput(input: InputObject) {
