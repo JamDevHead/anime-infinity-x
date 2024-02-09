@@ -42,13 +42,13 @@ local endTime = os.clock()
 local gotResult = type(resultOrError) == "table"
 
 if gotResult then
-    local template = "🔧 Ran tests in %.2f, did ok: (%s), code: (%s)\n\t%s"
+    local template = "🔧 Ran tests in %.2f, did ok: (%s), code: (%s)\n\t%s\n\t%s"
 
     if resultOrError.ok == true and resultOrError.stdout == "" and resultOrError.stderr == "" then
         error("❌ RunInRoblox failed to return test result, re-run")
     end
 
-    print(template:format(endTime - startTime, tostring(resultOrError.ok), tostring(resultOrError.code), resultOrError.stdout:gsub("\n", "\n\t")))
+    print(template:format(endTime - startTime, tostring(resultOrError.ok), tostring(resultOrError.code), resultOrError.stdout:gsub("\n", "\n\t")), resultOrError.stderr:gsub("\n", "\n\t"))
 
     if not resultOrError.ok then
         error("❌ Something went wrong in testing")
