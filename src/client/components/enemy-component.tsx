@@ -1,17 +1,15 @@
-import { Component, Components } from "@flamework/components";
+import { Component } from "@flamework/components";
 import { OnStart } from "@flamework/core";
 import { createPortal, createRoot, Root } from "@rbxts/react-roblox";
 import Roact from "@rbxts/roact";
 import { ReplicatedStorage, TweenService, Workspace } from "@rbxts/services";
 import { EnemyHealth } from "@/client/components/react/enemy-health/enemy-health";
 import { fonts } from "@/client/constants/fonts";
+import { EnemySelectorController } from "@/client/controllers/enemy-selector-controller";
 import { SoundController } from "@/client/controllers/sound-controller";
-import { store } from "@/client/store";
 import { useAbbreviator } from "@/client/ui/hooks/use-abbreviator";
-import { getFighterByUid } from "@/client/utils/fighters";
 import { EnemyComponent } from "@/shared/components/enemy-component";
 import { AnimationMap, AnimationTracker } from "@/shared/lib/animation-tracker";
-import { selectFighterWithTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
 
 const coinParticleFolder = ReplicatedStorage.assets.Particles.Coins;
 const RNG = new Random();
@@ -35,8 +33,8 @@ export class Enemy extends EnemyComponent implements OnStart {
 	private abbreviator = useAbbreviator();
 
 	constructor(
-		private readonly components: Components,
 		private readonly soundController: SoundController,
+		private readonly enemySelector: EnemySelectorController,
 	) {
 		super();
 	}
@@ -114,6 +112,9 @@ export class Enemy extends EnemyComponent implements OnStart {
 		// Play death sound
 		this.soundController.tracker.play("death", this.instance.HumanoidRootPart);
 
+		// Clear selection
+		this.enemySelector.clearSelection();
+
 		// Fade out
 		const tweenInfo = new TweenInfo(2, Enum.EasingStyle.Linear, Enum.EasingDirection.Out);
 		const propertyTable = {
@@ -160,15 +161,6 @@ export class Enemy extends EnemyComponent implements OnStart {
 
 		// Play hurt sound
 		this.soundController.tracker.play("hurt", this.instance.HumanoidRootPart);
-
-		// Notify current fighters of hurt
-		const fighterUid = store.getState(selectFighterWithTarget(this.attributes.Guid));
-
-		fighterUid.forEach((uid) => {
-			const fighter = getFighterByUid(uid, this.components);
-
-			fighter?.attack();
-		});
 	}
 
 	private createHurtParticle(damage: number) {

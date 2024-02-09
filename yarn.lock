@@ -1278,6 +1278,11 @@
   resolved "https://registry.yarnpkg.com/@rbxts/beacon/-/beacon-2.1.1.tgz#a9b02466ff02fbc2bc64e1e2cca52b2e85605a63"
   integrity sha512-QeFMSGj+Iijp+tHcV9eyqVyeKZ/9zp7GqRJ/hecKiHmoTu4yFcyGnUQAaX7OdQKBCgLvWMJ9wK/FXMECjFA2Kg==
 
+"@rbxts/compiler-types@^1.2.3-types.1":
+  version "1.2.3-types.1"
+  resolved "https://registry.yarnpkg.com/@rbxts/compiler-types/-/compiler-types-1.2.3-types.1.tgz#d7945531c917d62bafadd2b5aa6c2f2e88a2036a"
+  integrity sha512-SXXIBazyJ7N6d2xcy471/kqZZpCv7EDOWrRJ45jcv3g00VQaZwYl4Elr10woqRloIblQanwJ7yUqGXAsWv7iuQ==
+
 "@rbxts/compiler-types@^2.2.0-types.0":
   version "2.2.0-types.0"
   resolved "https://registry.yarnpkg.com/@rbxts/compiler-types/-/compiler-types-2.2.0-types.0.tgz#cba7ff0cde0fa9ac18abb4251452814232d67a1e"
@@ -1315,6 +1320,14 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@rbxts/maid/-/maid-1.1.0.tgz#ef4c4ea915d80f2e7baacb7e9ea037f3e2549bd6"
   integrity sha512-bVWXZ0p2M3OJzPzvN5fY0T4s37ezUMY7EX31Xspp7Ds4C/K9yE4MHMRXjtlNvsYVPmoc5tdhAbpZY02Veix5lg==
+
+"@rbxts/make@^1.0.6":
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/@rbxts/make/-/make-1.0.6.tgz#9fbed42cd263b6ce997cdb6a840f77fdeb9e6b36"
+  integrity sha512-ZL1FMxDqWv1TIzE064JFen75rgybV7ulQHTUVqXuvngDBa3lP3btFiIdUO2MMJAOZpHKinC9jFudcCenrprcPg==
+  dependencies:
+    "@rbxts/compiler-types" "^1.2.3-types.1"
+    "@rbxts/types" "^1.0.537"
 
 "@rbxts/message-templates@^0.3.1", "@rbxts/message-templates@^0.3.2":
   version "0.3.2"
@@ -1536,6 +1549,11 @@
   version "1.0.746"
   resolved "https://registry.yarnpkg.com/@rbxts/types/-/types-1.0.746.tgz#7ba80184db80bf93b9da0b23be2eace20cfbabcc"
   integrity sha512-inD9xg4JsywIqEHF0fX57Z42a3TiwsQOdfbLvcdlaXYveBhn/BAYWszDissgXTndpKdlfTLwvQMMXgLNEwdMAw==
+
+"@rbxts/types@^1.0.537":
+  version "1.0.748"
+  resolved "https://registry.yarnpkg.com/@rbxts/types/-/types-1.0.748.tgz#b0ece98af366d9b2845f6500e6996ed7d8630a97"
+  integrity sha512-fqNYKVNYBcYr4NNbg8rKOruJkmUmvZ3W6gy2xKG8mbp8PW58CZEozOf1AHlzulB5fBQefZyB3oa/MJqrXQc6Lg==
 
 "@rbxts/virtualized-list@^1.3.2-ts.0":
   version "1.3.2-ts.0"

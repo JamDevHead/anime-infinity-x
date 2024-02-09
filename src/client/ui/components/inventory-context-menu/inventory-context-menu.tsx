@@ -148,7 +148,7 @@ export const InventoryContextMenu = () => {
 					PaddingBottom={new UDim(0, rem(12, "pixel"))}
 				/>
 			</ContextMenu.Item>
-			{playerFighters && playerFighters.actives.find((fighter) => fighter === selectedItem) ? (
+			{playerFighters && playerFighters.actives.find(({ fighterId }) => fighterId === selectedItem) ? (
 				<ContextMenu.ButtonItem
 					text="Unequip"
 					gradient={

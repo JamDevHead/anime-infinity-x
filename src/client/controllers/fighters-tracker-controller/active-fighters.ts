@@ -1,22 +1,10 @@
-import { Trove } from "@rbxts/trove";
-import { Tracker } from "@/client/controllers/fighters-tracker/tracker";
-import { store } from "@/client/store";
-import { selectActivePlayerFighters } from "@/shared/store/players/fighters";
-
 type KeyOf<T> = T extends Map<infer K, infer _> ? K : never;
 type ValueOf<T> = T extends Map<infer _, infer V> ? V : never;
 
 export class ActiveFighters {
 	public fighters = new Map<string, Attachment>();
 
-	private trove = new Trove();
-	private readonly goalContainer: Instance;
-
-	constructor(private tracker: Tracker) {
-		this.goalContainer = tracker.fightersTracker.goalContainer;
-
-		this.trove.add(store.observe(selectActivePlayerFighters(tracker.userId), (uid) => this.onActiveFighter(uid)));
-	}
+	constructor(private readonly goalContainer: Instance) {}
 
 	public createFighterGoal(uid: string) {
 		let goalAttachment = this.fighters.get(uid);
@@ -50,7 +38,7 @@ export class ActiveFighters {
 		return this.fighters.size();
 	}
 
-	public clean() {
+	public clear() {
 		this.fighters.forEach((attachment) => {
 			attachment.RemoveTag("FighterGoal");
 			attachment.SetAttribute("OwnerId", undefined);
@@ -60,18 +48,7 @@ export class ActiveFighters {
 	}
 
 	public destroy() {
-		this.clean();
+		this.clear();
 		this.fighters.clear();
-		this.trove.destroy();
-	}
-
-	private onActiveFighter(uid: string) {
-		this.createFighterGoal(uid);
-		this.tracker.updateFighters();
-
-		return () => {
-			this.removeFighterGoal(uid);
-			this.tracker.updateFighters();
-		};
 	}
 }

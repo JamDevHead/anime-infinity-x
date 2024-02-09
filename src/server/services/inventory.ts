@@ -24,7 +24,7 @@ export class InventoryService implements OnStart {
 				return;
 			}
 
-			if (fighters.actives.find((uid) => uid === fighterUid) !== undefined) {
+			if (fighters.actives.find(({ fighterId }) => fighterId === fighterUid) !== undefined) {
 				this.logger.Warn("Player {@player} already has fighter {fighterUid} active", player, fighterUid);
 				return;
 			}
@@ -45,7 +45,7 @@ export class InventoryService implements OnStart {
 				return;
 			}
 
-			if (fighters?.actives.find((uid) => uid === fighterUid) === undefined) {
+			if (fighters?.actives.find(({ fighterId }) => fighterId === fighterUid) === undefined) {
 				this.logger.Warn("Player {@player} does not have fighter {fighterUid} active", player, fighterUid);
 				return;
 			}

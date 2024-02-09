@@ -57,7 +57,7 @@ export const useMockData = (props?: MockDataProps): void => {
 			},
 			fighters: {
 				all: fightersData,
-				actives: fightersData.map((fighter) => fighter.uid),
+				actives: fightersData.map(({ uid, characterUid }) => ({ fighterId: uid, characterId: characterUid })),
 			},
 			missions: {
 				all: table.create(5, false).map((_, index) => ({

@@ -1,11 +1,11 @@
 import { createProducer } from "@rbxts/reflex";
 import { PlayerBoosts, PlayerData } from "@/shared/store/players/players-types";
 
-export interface MissionsState {
+export interface BoostsState {
 	readonly [playerId: string]: PlayerBoosts | undefined;
 }
 
-const initialState: MissionsState = {};
+const initialState: BoostsState = {};
 
 export const boostsSlice = createProducer(initialState, {
 	loadPlayerData: (state, playerId: string, data: PlayerData) => ({

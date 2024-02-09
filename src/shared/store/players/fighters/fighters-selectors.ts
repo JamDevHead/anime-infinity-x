@@ -1,8 +1,13 @@
-import { createSelector, shallowEqual } from "@rbxts/reflex";
+import { createSelector } from "@rbxts/reflex";
 import type { SharedState } from "@/shared/store";
+import { ActivePlayerFighter } from "@/shared/store/players";
 
-export const selectPlayersFighters = (state: SharedState) => {
+const selectPlayersFighters = (state: SharedState) => {
 	return state.players.fighters;
+};
+
+export const identifyActiveFighter = (fighter: ActivePlayerFighter) => {
+	return fighter.fighterId;
 };
 
 export const selectPlayerFighters = (playerId: string) => {
@@ -11,14 +16,10 @@ export const selectPlayerFighters = (playerId: string) => {
 	});
 };
 
-export const selectAllPlayerFighters = (playerId: string) => {
-	return createSelector(
-		selectPlayerFighters(playerId),
-		(fighters) => {
-			return fighters?.all ?? [];
-		},
-		{ resultEqualityCheck: shallowEqual },
-	);
+export const selectActiveFightersFromPlayer = (playerId: string) => {
+	return (state: SharedState) => {
+		return state.players.fighters[playerId]?.actives;
+	};
 };
 
 export const selectPlayerFighter = (playerId: string, fighterUid: string) => {
@@ -39,16 +40,6 @@ export const selectPlayersFightersWithUid = (fighterUid: string) => {
 	});
 };
 
-export const selectActivePlayerFighters = (playerId: string) => {
-	return createSelector(
-		selectPlayerFighters(playerId),
-		(fighters) => {
-			return fighters?.actives ?? [];
-		},
-		{ resultEqualityCheck: shallowEqual },
-	);
-};
-
 /** **WARNING**
  * This is a very expensive selector, use it only when needed.
  */
@@ -62,14 +53,4 @@ export const selectPlayerFromFighterId = (fighterUid: string) => {
 			}
 		}
 	});
-};
-
-export const selectActiveFighters = (state: SharedState) => {
-	const activeFighters = {} as Record<string, string[]>;
-
-	for (const [playerId, playerFighters] of pairs(state.players.fighters)) {
-		activeFighters[playerId] = playerFighters?.actives ?? [];
-	}
-
-	return activeFighters;
 };

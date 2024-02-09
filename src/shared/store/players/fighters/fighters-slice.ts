@@ -1,7 +1,8 @@
 import { createProducer } from "@rbxts/reflex";
 import { PlayerData, PlayerFighter, PlayerFighters } from "@/shared/store/players/players-types";
+import { mapProperty } from "@/shared/utils/object-utils";
 
-interface FighterState {
+export interface FighterState {
 	readonly [playerId: string]: PlayerFighters | undefined;
 }
 
@@ -18,81 +19,47 @@ export const fightersSlice = createProducer(initialState, {
 		[playerId]: undefined,
 	}),
 
-	addFighter: (state, playerId: string, fighterUid: string, playerFighterData: Omit<PlayerFighter, "uid">) => {
-		const playerData = state[playerId];
-
-		if (!playerData) {
-			return state;
-		}
-
-		return {
-			...state,
-			[playerId]: {
-				all: [...playerData.all, { uid: fighterUid, ...playerFighterData }],
-				actives: playerData.actives,
-			},
-		};
+	addFighter: (state, playerId: string, fighterId: string, playerFighterData: Omit<PlayerFighter, "uid">) => {
+		return mapProperty(state, playerId, (playerFighter) => ({
+			...playerFighter,
+			all: [...playerFighter.all, { uid: fighterId, ...playerFighterData }],
+		}));
 	},
 
-	removeFighter: (state, playerId: string, fighterUid: string) => {
-		const playerData = state[playerId];
-
-		if (!playerData) {
-			return state;
-		}
-
-		return {
-			...state,
-			[playerId]: {
-				all: playerData.all.filter((fighter) => fighter.uid !== fighterUid),
-				actives: playerData.actives.filter((uid) => uid !== fighterUid),
-			},
-		};
+	removeFighter: (state, playerId: string, fighterId: string) => {
+		return mapProperty(state, playerId, (fighters) => ({
+			...fighters,
+			all: fighters.all.filter((fighter) => fighter.uid !== fighterId),
+			actives: fighters.actives.filter((fighter) => fighter.fighterId !== fighterId),
+		}));
 	},
 
-	addActiveFighter: (state, playerId: string, fighterUid: string) => {
-		const playerData = state[playerId];
+	addActiveFighter: (state, playerId: string, fighterId: string) => {
+		return mapProperty(state, playerId, (fighters) => {
+			const fighterData = fighters.all.find((fighter) => fighter.uid === fighterId);
 
-		if (!playerData) {
-			return state;
-		}
+			if (!fighterData) {
+				return fighters;
+			}
 
-		return {
-			...state,
-			[playerId]: {
-				all: playerData.all,
-				actives: [...playerData.actives, fighterUid],
-			},
-		};
+			return {
+				...fighters,
+				actives: [...fighters.actives, { characterId: fighterData.characterUid, fighterId }],
+			};
+		});
 	},
 
-	removeActiveFighter: (state, playerId: string, fighterUid: string) => {
-		const playerData = state[playerId];
-
-		if (!playerData) return state;
-
-		return {
-			...state,
-			[playerId]: {
-				all: playerData.all,
-				actives: playerData.actives.filter((uid) => uid !== fighterUid),
-			},
-		};
+	removeActiveFighter: (state, playerId: string, fighterId: string) => {
+		return mapProperty(state, playerId, (fighters) => ({
+			...fighters,
+			actives: fighters.actives.filter((fighter) => fighter.fighterId !== fighterId),
+		}));
 	},
 
-	renameDisplayName: (state, playerId: string, fighterUid: string, displayName: string) => {
-		const playerData = state[playerId];
-
-		if (!playerData) return state;
-
-		return {
-			...state,
-			[playerId]: {
-				all: playerData.all.map((fighter) =>
-					fighter.uid === fighterUid ? { ...fighter, displayName } : fighter,
-				),
-				actives: playerData.actives,
-			},
-		};
+	renameDisplayName: (state, playerId: string, fighterId: string, displayName: string) => {
+		return mapProperty(state, playerId, (fighters) => ({
+			...fighters,
+			all: fighters.all.map((fighter) => (fighter.uid === fighterId ? { ...fighter, displayName } : fighter)),
+		}));
 	},
 });

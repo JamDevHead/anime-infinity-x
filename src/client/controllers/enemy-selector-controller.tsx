@@ -1,8 +1,8 @@
 import { Components } from "@flamework/components";
 import { Controller, OnRender, OnStart } from "@flamework/core";
-import { Logger } from "@rbxts/log";
 import { ReflexProvider } from "@rbxts/react-reflex";
 import { createRoot } from "@rbxts/react-roblox";
+import { createSelector, shallowEqual } from "@rbxts/reflex";
 import Roact, { StrictMode } from "@rbxts/roact";
 import { Players, UserInputService, Workspace } from "@rbxts/services";
 import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
@@ -14,11 +14,12 @@ import { getMouseTarget } from "@/client/utils/mouse";
 import { images } from "@/shared/assets/images";
 import { EnemyComponent } from "@/shared/components/enemy-component";
 import remotes from "@/shared/remotes";
-import { selectSelectedEnemiesByPlayerId, selectSelectedEnemyById } from "@/shared/store/enemy-selection";
-import { selectActivePlayerFighters } from "@/shared/store/players/fighters";
+import { ActivePlayerFighter } from "@/shared/store/players";
+import { selectEnemySelectionFromPlayer } from "@/shared/store/players/enemy-selection";
+import { selectActiveFightersFromPlayer } from "@/shared/store/players/fighters";
 
 @Controller()
-export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender {
+export class EnemySelectorController implements OnCharacterAdd, OnInput, OnStart, OnRender {
 	public enemyFolder: Folder | undefined;
 
 	private localPlayer = Players.LocalPlayer;
@@ -29,10 +30,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 	private defaultCursorIcon = UserInputService.MouseIcon;
 	private clickTimer = 0;
 
-	constructor(
-		private readonly logger: Logger,
-		private readonly components: Components,
-	) {}
+	constructor(private readonly components: Components) {}
 
 	onStart() {
 		this.enemyFolder = Workspace.WaitForChild("Enemies") as Folder;
@@ -50,34 +48,20 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 		this.raycastParams.FilterType = Enum.RaycastFilterType.Exclude;
 		this.raycastParams.AddToFilter(Workspace.WaitForChild("Players") as Folder);
 
-		const selectLocalPlayerActiveFighters = selectActivePlayerFighters(this.localUserId);
-		const onActiveFighterChange = (activeFighters: string[]) => {
-			this.isActiveFightersEmpty = activeFighters.size() === 0;
-
-			if (this.isActiveFightersEmpty) {
-				this.clearSelection();
-			}
-		};
-
-		store.subscribe(selectLocalPlayerActiveFighters, onActiveFighterChange);
-
-		const activeFighters = store.getState(selectLocalPlayerActiveFighters);
-
-		onActiveFighterChange(activeFighters);
+		this.listenForActiveFighters();
 	}
 
 	onRender() {
-		const currentHoveredEnemy = store.getState(selectHoveredEnemy);
 		const enemyAtMouse = this.getEnemyAtMousePosition();
-		const selectedEnemy = enemyAtMouse
-			? store.getState(selectSelectedEnemyById(this.localUserId, enemyAtMouse.attributes.Guid))
-			: undefined;
-		const isSelected = selectedEnemy !== undefined;
+		const currentHoveredEnemy = store.getState(selectHoveredEnemy);
 		const isEnemyCurrentHover = currentHoveredEnemy === enemyAtMouse?.attributes.Guid;
 
+		const selectedEnemyId = store.getState(selectEnemySelectionFromPlayer(this.localUserId));
+		const isSelectedEnemyAtMouse = selectedEnemyId === enemyAtMouse?.attributes.Guid;
+
 		UserInputService.MouseIcon =
-			currentHoveredEnemy !== undefined || (isSelected && selectedEnemy === enemyAtMouse?.attributes.Guid)
-				? isSelected
+			enemyAtMouse !== undefined
+				? isSelectedEnemyAtMouse
 					? images.icons.attack_cursor_blocked
 					: images.icons.attack_cursor
 				: this.defaultCursorIcon;
@@ -91,7 +75,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 			store.removeHoveredEnemy();
 		}
 
-		if (enemyAtMouse && !isSelected) {
+		if (enemyAtMouse && !isSelectedEnemyAtMouse) {
 			store.setHoveredEnemy(enemyAtMouse.attributes.Guid);
 		}
 	}
@@ -124,7 +108,7 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 			return;
 		}
 
-		const selectedEnemies = store.getState(selectSelectedEnemiesByPlayerId(this.localUserId));
+		const selectedEnemyId = store.getState(selectEnemySelectionFromPlayer(this.localUserId));
 		const enemy = this.getEnemyAtMousePosition();
 
 		if (!enemy) {
@@ -132,15 +116,39 @@ export class EnemySelector implements OnCharacterAdd, OnInput, OnStart, OnRender
 		}
 
 		this.clearSelection();
-		const uid = enemy.attributes.Guid;
+		const enemyId = enemy.attributes.Guid;
 
-		if (!selectedEnemies?.includes(uid)) {
-			remotes.fighterTarget.select.fire(uid);
+		if (selectedEnemyId !== enemyId) {
+			this.setSelection(enemyId);
 		}
 	}
 
-	private clearSelection() {
-		remotes.fighterTarget.unselectAll.fire();
+	public clearSelection() {
+		remotes.enemySelection.unselect.fire();
+	}
+
+	public setSelection(enemyId: string) {
+		remotes.enemySelection.select.fire(enemyId);
+	}
+
+	private listenForActiveFighters() {
+		const selectLocalPlayerActiveFighters = createSelector(
+			[selectActiveFightersFromPlayer(this.localUserId)],
+			(fighters) => fighters ?? [],
+			shallowEqual,
+		);
+
+		store.subscribe(selectLocalPlayerActiveFighters, (activeFighters?: ActivePlayerFighter[]) => {
+			if (!activeFighters) {
+				return;
+			}
+
+			this.isActiveFightersEmpty = activeFighters.size() === 0;
+
+			if (this.isActiveFightersEmpty) {
+				this.clearSelection();
+			}
+		});
 	}
 
 	private isValidInput(input: InputObject) {

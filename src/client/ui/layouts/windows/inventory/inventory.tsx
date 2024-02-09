@@ -85,7 +85,10 @@ export const Inventory = () => {
 						{playerFighters?.all.map((fighter) => (
 							<FighterCard
 								key={fighter.uid}
-								active={playerFighters?.actives.includes(fighter.uid)}
+								active={
+									playerFighters?.actives.find(({ fighterId }) => fighterId === fighter.uid) !==
+									undefined
+								}
 								headshot={fighter.name}
 								zone={fighter.zone}
 								rating={fighter.rarity}

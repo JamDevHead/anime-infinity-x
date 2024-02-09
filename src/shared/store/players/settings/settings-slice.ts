@@ -2,7 +2,7 @@ import { createProducer } from "@rbxts/reflex";
 import { Setting } from "@/@types/models/setting";
 import { PlayerData } from "@/shared/store/players/players-types";
 
-type SettingsState = {
+export type SettingsState = {
 	readonly [playerId: string]: Record<string, Setting> | undefined;
 };
 
