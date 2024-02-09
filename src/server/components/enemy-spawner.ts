@@ -16,6 +16,7 @@ export class Enemy extends BaseComponent<EnemyAttributes, Part> implements OnSta
 	private currentEnemy: EnemyModel | undefined;
 	private enemiesZone = ServerStorage.assets.Avatars.NPCsModels.FindFirstChild(this.attributes.EnemyZone);
 	private spawnerSurfaceCFrame = this.instance.CFrame.sub(Vector3.yAxis.mul(this.instance.Size.Y / 2));
+	private enemies: Instance[] = [];
 
 	constructor(
 		private readonly logger: Logger,
@@ -33,6 +34,26 @@ export class Enemy extends BaseComponent<EnemyAttributes, Part> implements OnSta
 		this.instance.CanTouch = false;
 		this.instance.Transparency = 1;
 
+		this.enemies = this.enemiesZone?.GetChildren().filter((enemy) => {
+			let valid = enemy.GetAttribute("Type") !== "" && enemy.GetAttribute("Type") !== undefined;
+
+			if (valid && this.attributes.AllowedEnemies !== undefined) {
+				const allowedEnemies = this.attributes.AllowedEnemies.split(",");
+				valid = allowedEnemies.find((allowedEnemy) => allowedEnemy === enemy.Name) !== undefined;
+			}
+
+			if (valid && this.attributes.Type !== undefined) {
+				valid = enemy.GetAttribute("Type") === this.attributes.Type;
+			}
+
+			return valid;
+		});
+
+		if (this.enemies.isEmpty()) {
+			this.logger.Debug(`Enemy array list is empty from ${this.attributes.EnemyZone}`);
+			return;
+		}
+
 		const enemy = this.getEnemy();
 
 		if (enemy) {
@@ -40,29 +61,12 @@ export class Enemy extends BaseComponent<EnemyAttributes, Part> implements OnSta
 		}
 	}
 
-	getEnemy(tries?: number): EnemyModel | undefined {
-		let enemies =
-			this.enemiesZone
-				?.GetChildren()
-				.filter((enemy) => enemy.GetAttribute("Type") !== "" && enemy.GetAttribute("Type") !== undefined) ?? [];
-
-		if (this.attributes.AllowedEnemies !== undefined) {
-			const allowedEnemies = this.attributes.AllowedEnemies.split(",");
-			enemies = enemies.filter(
-				(enemy) => allowedEnemies.find((allowedEnemy) => allowedEnemy === enemy.Name) !== undefined,
-			);
-		}
-
-		if (this.attributes.Type !== undefined) {
-			enemies = enemies.filter((enemy) => enemy.GetAttribute("Type") === this.attributes.Type);
-		}
-
-		if (enemies.isEmpty()) {
-			this.logger.Debug("Enemy array list is empty");
+	private getEnemy(tries?: number): EnemyModel | undefined {
+		if (this.enemies.isEmpty()) {
 			return undefined;
 		}
 
-		const enemy = enemies[math.random(enemies.size()) - 1] as EnemyModel | undefined;
+		const enemy = this.enemies[math.random(this.enemies.size()) - 1] as EnemyModel | undefined;
 
 		if (!enemy) {
 			tries = tries ?? 0;
@@ -77,7 +81,7 @@ export class Enemy extends BaseComponent<EnemyAttributes, Part> implements OnSta
 		return enemy;
 	}
 
-	spawn(enemy: EnemyModel) {
+	private spawn(enemy: EnemyModel) {
 		const clonedEnemy = enemy.Clone();
 		const rootCFrame = clonedEnemy.HumanoidRootPart.GetPivot();
 
