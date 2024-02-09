@@ -1,5 +1,6 @@
 import { Controller, OnStart } from "@flamework/core";
 import { Logger } from "@rbxts/log";
+import { createSelector } from "@rbxts/reflex";
 import { Players, Workspace } from "@rbxts/services";
 import { OnCharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
 import { store } from "@/client/store";
@@ -29,8 +30,13 @@ export class FirstTimeController implements OnStart, OnCharacterAdd {
 
 		this.setupCamera();
 
-		store.subscribe(selectPlayerInfo(tostring(Players.LocalPlayer.UserId)), (playerInfo) => {
-			if (playerInfo?.firstTime) {
+		const selectPlayerFirstTime = createSelector(
+			[selectPlayerInfo(tostring(Players.LocalPlayer.UserId))],
+			(playerInfo) => playerInfo?.firstTime,
+		);
+
+		store.subscribe(selectPlayerFirstTime, (firstTime) => {
+			if (firstTime) {
 				this.setupCamera();
 				store.setHudVisible(false);
 			} else {
