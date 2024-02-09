@@ -1163,10 +1163,10 @@
     "@rbxts/signal" "^1.0.3"
     "@rbxts/t" "^2.1.4"
 
-"@flamework/core@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@flamework/core/-/core-1.1.0.tgz#04ac2dbaf60fa110684e387f949aff27714a7ee9"
-  integrity sha512-GmkxY1jI8pZo3UvvDfmoLHtNLPwx57hocm+hljCB6OOPUBQ+xsA8pQw29/PKRrgZVztg/Zi7J9mg7WZUGiOHig==
+"@flamework/core@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@flamework/core/-/core-1.1.1.tgz#64c4d15f2c49c00653fae1d7b6ce0c4a49c8060c"
+  integrity sha512-jlOubMWTkf4hPMjk+PBgGDEbw7Tj16woJ9vljCDfZpBC0bRCKhFqnqi8ua9Aqoz+o8zZqTOZakagcUp1DBGG2g==
   dependencies:
     "@rbxts/maid" "^1.0.0-ts.1"
     "@rbxts/object-utils" "^1.0.4"
