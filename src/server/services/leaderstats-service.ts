@@ -18,7 +18,7 @@ export class LeaderstatsService implements OnStart, OnPlayerAdd {
 		const leaderstats = new Instance("Folder");
 		const coins = new Instance("StringValue");
 
-		coins.Name = "🪙 Coins";
+		coins.Name = "Coins";
 		leaderstats.Name = "leaderstats";
 
 		coins.Parent = leaderstats;
