@@ -12,7 +12,9 @@ export class AnimationTracker {
 	) {
 		try {
 			for (const [name] of pairs(animationMap)) {
-				this.getAnimationTrack(name);
+				task.spawn(() => {
+					this.getAnimationTrack(name);
+				});
 			}
 		} catch (exception) {
 			warn("Failed to load animations: ", exception);
