@@ -11,6 +11,7 @@
     "build:setup": "yarn compile && rojo build --output place-scripts.rbxlx",
     "build:prod": "cross-env NODE_ENV=production lune run scripts/lune/build-project.luau --",
     "build:dev": "lune run scripts/lune/build-project.luau -- --dev",
+    "build:rojo": "rojo build -o place.rbxlx",
     "sync": "lune run scripts/lune/sync-assets.luau",
     "sync:dev": "lune run scripts/lune/sync-assets.luau -- --dev",
     "gen:types": "lune run scripts/lune/generate-types.luau --",
@@ -21,7 +22,8 @@
     "deploy:prod": "yarn build:prod && mantle deploy --environment production",
     "output:dev": "mantle outputs --environment canary > mantle-output.json",
     "output:prod": "mantle outputs --environment production > mantle-output.json",
-    "test": "rojo build -o place.rbxl && lune run scripts/lune/run-tests"
+    "test:run": "lune run scripts/lune/run-tests.luau place.rbxlx",
+    "test": "yarn compile && yarn build:rojo && yarn test:run"
   },
   "devDependencies": {
     "@rbxts/compiler-types": "^2.2.0-types.0",
