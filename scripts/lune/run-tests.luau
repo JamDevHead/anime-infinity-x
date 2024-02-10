@@ -1,65 +1,65 @@
+-- Rewrite from https://github.com/roblox-ts/roblox-ts/blob/master/tests/runLuneTests.lua
+
 local process = require("@lune/process")
 local fs = require("@lune/fs")
+local roblox = require("@lune/roblox")
+local luau = require("@lune/luau")
+local stdio = require("@lune/stdio")
 
-local config = require("modules/configManager"):getConfig()
+local placePath = process.args[1]
 
-local args = process.args
+local placeFile = fs.readFile(placePath)
+local game = roblox.deserializePlace(placeFile)
 
-local options = {
-    dev = false,
-    xml = false,
-}
+local requireCache = {}
 
-for _, arg in args do
-    if arg == "--xml" then
-        options.xml = true
+function runPlaceScript(script: ModuleScript | { Source: string, Name: string })
+    local runTests = luau.load(script.Source, {
+        debugName = script.Name,
+        environment = {
+            game = game,
+            require = requireWrapper,
+            script = script,
+            tick = os.clock
+        }
+    })
+
+    local success, result = pcall(function()
+        return runTests()
+    end)
+
+    if not success then
+        print(`[ERROR] {result}`)
+        process.exit(1)
     end
+
+    return result
 end
 
-local file = config.outputName
-local extension = options.xml and "rbxlx" or "rbxl"
-local output = `{file}.{extension}`
+function requireWrapper(target: ModuleScript)
+    local path = target:GetFullName()
+    local cached = requireCache[path]
 
-local success, existsOrError = pcall(fs.isFile, output)
+    if cached then
+        return table.unpack(cached)
+    end 
 
-assert(success and existsOrError, (existsOrError and `❌ Internal error, failed to check place existence: {existsOrError}`) or `❌ Failed to find place "{output}" to test`)
+    local result = runPlaceScript(target)
+    requireCache[path] = table.pack(result)
 
-print("🔧 Running tests")
+    return result
+end
 
-local startTime = os.clock()
 
-local success, resultOrError = pcall(function()
-    return process.spawn("run-in-roblox", {
-        "--place",
-        output,
-        "--script",
-        "scripts/testez/run-tests.server.lua"
-    })
+-- TestEZ uses TestService:Error() when tests fail
+roblox.implementMethod("TestService", "Error", function(self, description: string, source: Instance?, line: number?)
+	stdio.ewrite(`{description}\n`)
 end)
 
-local endTime = os.clock()
 
-local gotResult = type(resultOrError) == "table"
+local testRunnerSource = fs.readFile("scripts/testez/run-tests.server.lua")
 
-if gotResult then
-    local template = "🔧 Ran tests in %.2f, did ok: (%s), code: (%s)\n\t%s\n\t%s"
-
-    if resultOrError.ok == true and resultOrError.stdout == "" and resultOrError.stderr == "" then
-        error("❌ RunInRoblox failed to return test result, re-run")
-    end
-
-    print(template:format(endTime - startTime, tostring(resultOrError.ok), tostring(resultOrError.code), resultOrError.stdout:gsub("\n", "\n\t")), resultOrError.stderr:gsub("\n", "\n\t"))
-
-    if not resultOrError.ok then
-        error("❌ Something went wrong in testing")
-    end
-
-else 
-    local result = resultOrError
-
-    if gotResult then
-        result = resultOrError.stderr
-    end
-
-    error(`❌ Tests didn't run, result: {result}`)
-end
+runPlaceScript({
+    Source = testRunnerSource,
+    Name = "Test runner - INTERNAL"
+})
