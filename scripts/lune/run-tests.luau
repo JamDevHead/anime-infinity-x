@@ -12,6 +12,7 @@ local placeFile = fs.readFile(placePath)
 local game = roblox.deserializePlace(placeFile)
 
 local requireCache = {}
+local requireWrapper
 
 function runPlaceScript(script: ModuleScript | { Source: string, Name: string })
     local runTests = luau.load(script.Source, {
@@ -50,6 +51,16 @@ function requireWrapper(target: ModuleScript)
     return result
 end
 
+
+-- RuntimeLib uses :WaitForChild(), but tests don't need networking so :FindFirstChild() should be fine
+roblox.implementMethod("Instance", "WaitForChild", function(self, ...)
+	return self:FindFirstChild(...)
+end)
+
+-- Promise.lua indexes RunService.Heartbeat, but only uses it in Promise.defer and Promise.delay
+roblox.implementProperty("RunService", "Heartbeat", function()
+	return {}
+end, function() end)
 
 -- TestEZ uses TestService:Error() when tests fail
 roblox.implementMethod("TestService", "Error", function(self, description: string, source: Instance?, line: number?)
