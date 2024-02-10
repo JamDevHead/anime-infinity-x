@@ -5,9 +5,6 @@ local fs = require("@lune/fs")
 local roblox = require("@lune/roblox")
 local luau = require("@lune/luau")
 local stdio = require("@lune/stdio")
-local roblox = require("@lune/roblox")
-local luau = require("@lune/luau")
-local stdio = require("@lune/stdio")
 
 local placePath = process.args[1]
 
