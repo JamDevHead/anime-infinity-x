@@ -20,7 +20,7 @@ import { images } from "@/shared/assets/images";
 import { selectPlayerDamagePerSecond } from "@/shared/store/dps";
 import { selectPlayerBoosts } from "@/shared/store/players";
 
-function AutofarmButton() {
+function AutoFarmButton() {
 	const dispatcher = useRootStore();
 	const autofarm = useSelectorCreator(selectSpecificPerk, "autofarm");
 	const rem = useRem();
@@ -54,7 +54,7 @@ function AutofarmButton() {
 	);
 }
 
-function AutoclickButton() {
+function AutoClickButton() {
 	const dispatcher = useRootStore();
 	const autoclick = useSelectorCreator(selectSpecificPerk, "autoclick");
 	const rem = useRem();
@@ -126,7 +126,7 @@ export const BottomHudButtons = () => {
 					size={UDim2.fromOffset(rem(312, "pixel"), rem(40, "pixel"))}
 					image={images.ui.hud_bottom_curve}
 				>
-					<AutoclickButton />
+					<AutoClickButton />
 
 					<AttackButton
 						position={UDim2.fromScale(0.5, -1.7)}
@@ -136,7 +136,7 @@ export const BottomHudButtons = () => {
 						icon={images.icons.hand_click}
 					/>
 
-					<AutofarmButton />
+					<AutoFarmButton />
 				</Image>
 				<uipadding
 					PaddingBottom={new UDim(0, rem(16, "pixel"))}
