@@ -1,8 +1,6 @@
 /// <reference types="@rbxts/testez/globals" />
 
 export = () => {
-	print("Running tests on the server");
-
 	it("\"three\" variable should be equal to 3", () => {
 		const CONSTANT = 0
 
