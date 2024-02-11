@@ -21,7 +21,7 @@ export class ProfileLoad implements OnStart, OnPlayerAdd {
 
 	private waitForProfileStore() {
 		if (!this.profileStore) {
-			this.logger.Debug("Profile store is still loading");
+			this.logger.Debug("Profile reflex is still loading");
 
 			while (!this.profileStore) {
 				task.wait();

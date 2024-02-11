@@ -19,7 +19,7 @@ type MockDataProps = {
 };
 
 /**
- * This hook is used to load mock data into the store for testing purposes.
+ * This hook is used to load mock data into the reflex for testing purposes.
  * This should only be used in development and should never be used in production.
  *
  * @example
