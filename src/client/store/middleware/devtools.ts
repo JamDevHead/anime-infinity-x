@@ -10,7 +10,7 @@ export const devToolsMiddleware: ProducerMiddleware<RootState> = () => {
 		return (...args) => {
 			const state = nextAction(...args);
 
-			if (RunService.IsStudio() && event && !blacklist.includes(actionName)) {
+			if (RunService.IsStudio() && !RunService.IsRunMode() && event && !blacklist.includes(actionName)) {
 				event.FireServer({ name: actionName, args, state });
 			}
 
