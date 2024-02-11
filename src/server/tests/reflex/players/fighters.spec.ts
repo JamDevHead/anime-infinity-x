@@ -1,7 +1,7 @@
 /// <reference types="@rbxts/testez/globals" />
 
 import { store } from "@/server/store";
-import { addFighterFor, removeFighterFor } from "@/server/utils/fighters";
+import { addFighterFor, doesPlayerHasFighter, isFighterEquipped, removeFighterFor } from "@/server/utils/fighters";
 import { selectPlayerFighters } from "@/shared/store/players/fighters";
 
 export = () => {
@@ -35,11 +35,27 @@ export = () => {
 		expect(fighter).to.never.equal(undefined);
 		expect(store.getState(selectPlayer1Fighters)?.all.size()).to.be.equal(1);
 
-		if (fighter) {
-			removeFighterFor(player, fighter.uid);
-			store.flush();
-		}
+		assert(fighter);
+
+		expect(doesPlayerHasFighter(player, fighter.uid)).to.be.equal(true);
+		removeFighterFor(player, fighter.uid);
+
+		store.flush();
 
 		expect(store.getState(selectPlayer1Fighters)?.all.size()).to.be.equal(0);
+	});
+
+	it("should add and remove active fighters from player", () => {
+		expect(store.getState(selectPlayer1Fighters)?.all.size()).to.be.equal(0);
+
+		const player = { UserId: 1 } as Player;
+		const fighter = addFighterFor(player, mockFighterData);
+
+		assert(fighter);
+
+		store.addActiveFighter(tostring(player.UserId), fighter.uid);
+		store.flush();
+
+		expect(isFighterEquipped(player, fighter.uid)).to.be.equal(true);
 	});
 };
