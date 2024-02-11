@@ -77,6 +77,8 @@ roblox.implementMethod("TestService", "Error", function(self, description: strin
 end)
 
 require("./polyfill/runservice")
+require("./polyfill/players")
+require("./polyfill/httpservice")
 
 local testRunnerSource = fs.readFile("scripts/testez/run-tests.server.lua")
 
