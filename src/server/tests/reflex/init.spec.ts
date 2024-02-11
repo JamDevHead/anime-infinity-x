@@ -1,6 +1,6 @@
 /// <reference types="@rbxts/testez/globals" />
 
-import { store } from "@/client/store";
+import { store } from "@/server/store";
 import { resetStore } from "@/shared/tests/helpers/resetState";
 
 export = () => {
