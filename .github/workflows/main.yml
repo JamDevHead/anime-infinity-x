@@ -30,6 +30,9 @@ jobs:
           yarn prettier --check src
         continue-on-error: true
 
+      - name: 🛠️ Tests
+        run: yarn test
+
       - name: 🏗️ Build game
         run: yarn build:dev
         env:
