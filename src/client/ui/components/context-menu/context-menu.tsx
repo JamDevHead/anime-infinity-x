@@ -1,4 +1,4 @@
-import Roact, { FunctionComponent, PropsWithChildren, useEffect } from "@rbxts/roact";
+import Roact, { FunctionComponent, PropsWithChildren, useEffect, useState } from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
 import { fonts } from "@/client/constants/fonts";
 import { springs } from "@/client/constants/springs";
@@ -130,6 +130,7 @@ type ContextMenuProps = {
 	autoSize?: "X" | "Y" | "XY";
 	spacing?: number;
 	padding?: number;
+	onBackgroundClick?: () => void;
 };
 
 const Root: FunctionComponent<PropsWithChildren<ContextMenuProps>> = ({
@@ -140,68 +141,77 @@ const Root: FunctionComponent<PropsWithChildren<ContextMenuProps>> = ({
 	spacing,
 	padding,
 	children,
+	onBackgroundClick,
 }) => {
 	const rem = useRem();
 	const [openedMotion, setOpenedMotion] = useMotion(0);
+	const [isVisible, setIsVisible] = useState(false);
 
 	useEffect(() => {
-		setOpenedMotion.spring(opened ? 1 : 0, {
-			...springs.responsive,
-			damping: 1,
+		setOpenedMotion.tween(opened ? 1 : 0, {
+			style: Enum.EasingStyle.Quint,
+			direction: Enum.EasingDirection.Out,
+			time: 0.6,
+		});
+
+		setOpenedMotion.onStep((value) => {
+			setIsVisible(value > 0.5);
 		});
 	}, [opened, setOpenedMotion]);
 
 	return (
-		<Frame
-			position={position}
-			size={size}
-			autoSize={autoSize ?? "XY"}
-			backgroundColor={colors.black}
-			cornerRadius={new UDim(0, rem(12, "pixel"))}
-		>
-			<uiscale Scale={openedMotion} />
+		<Button size={UDim2.fromScale(1, 1)} backgroundTransparency={1} visible={isVisible} onClick={onBackgroundClick}>
 			<Frame
-				size={UDim2.fromScale(1, 1)}
-				backgroundColor={colors.white}
-				cornerRadius={new UDim(0, rem(8, "pixel"))}
+				position={position}
+				size={size}
+				autoSize={autoSize ?? "XY"}
+				backgroundColor={colors.black}
+				cornerRadius={new UDim(0, rem(12, "pixel"))}
 			>
-				<uigradient
-					Color={
-						new ColorSequence([
-							new ColorSequenceKeypoint(0, Color3.fromHex("#232645")),
-							new ColorSequenceKeypoint(1, Color3.fromHex("#12163F")),
-						])
-					}
-					Rotation={90}
-				/>
-				<Stack
-					fillDirection="Vertical"
-					horizontalAlignment="Center"
+				<uiscale Scale={openedMotion} />
+				<Frame
 					size={UDim2.fromScale(1, 1)}
-					padding={new UDim(0, rem(spacing ?? 4, "pixel"))}
-					sortOrder={Enum.SortOrder.LayoutOrder}
+					backgroundColor={colors.white}
+					cornerRadius={new UDim(0, rem(8, "pixel"))}
 				>
-					{children}
-				</Stack>
+					<uigradient
+						Color={
+							new ColorSequence([
+								new ColorSequenceKeypoint(0, Color3.fromHex("#232645")),
+								new ColorSequenceKeypoint(1, Color3.fromHex("#12163F")),
+							])
+						}
+						Rotation={90}
+					/>
+					<Stack
+						fillDirection="Vertical"
+						horizontalAlignment="Center"
+						size={UDim2.fromScale(1, 1)}
+						padding={new UDim(0, rem(spacing ?? 4, "pixel"))}
+						sortOrder={Enum.SortOrder.LayoutOrder}
+					>
+						{children}
+					</Stack>
+					<uipadding
+						PaddingLeft={new UDim(0, rem(padding ?? 4, "pixel"))}
+						PaddingRight={new UDim(0, rem(padding ?? 4, "pixel"))}
+						PaddingTop={new UDim(0, rem(padding ?? 4, "pixel"))}
+						PaddingBottom={new UDim(0, rem(padding ?? 4, "pixel"))}
+					/>
+				</Frame>
+				<uistroke
+					Thickness={rem(2, "pixel")}
+					Color={Color3.fromHex("#FF9900")}
+					ApplyStrokeMode={Enum.ApplyStrokeMode.Border}
+				/>
 				<uipadding
-					PaddingLeft={new UDim(0, rem(padding ?? 4, "pixel"))}
-					PaddingRight={new UDim(0, rem(padding ?? 4, "pixel"))}
-					PaddingTop={new UDim(0, rem(padding ?? 4, "pixel"))}
-					PaddingBottom={new UDim(0, rem(padding ?? 4, "pixel"))}
+					PaddingLeft={new UDim(0, rem(4, "pixel"))}
+					PaddingRight={new UDim(0, rem(4, "pixel"))}
+					PaddingTop={new UDim(0, rem(4, "pixel"))}
+					PaddingBottom={new UDim(0, rem(4, "pixel"))}
 				/>
 			</Frame>
-			<uistroke
-				Thickness={rem(2, "pixel")}
-				Color={Color3.fromHex("#FF9900")}
-				ApplyStrokeMode={Enum.ApplyStrokeMode.Border}
-			/>
-			<uipadding
-				PaddingLeft={new UDim(0, rem(4, "pixel"))}
-				PaddingRight={new UDim(0, rem(4, "pixel"))}
-				PaddingTop={new UDim(0, rem(4, "pixel"))}
-				PaddingBottom={new UDim(0, rem(4, "pixel"))}
-			/>
-		</Frame>
+		</Button>
 	);
 };
 

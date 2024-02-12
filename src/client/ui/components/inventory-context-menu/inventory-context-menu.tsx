@@ -35,7 +35,11 @@ export const InventoryContextMenu = () => {
 	}, [fighter, openedContextMenu, setInventoryOpenedMenu]);
 
 	return (
-		<ContextMenu.Root position={UDim2.fromOffset(menuPosition?.X, menuPosition?.Y ?? 0)} opened={openedContextMenu}>
+		<ContextMenu.Root
+			position={UDim2.fromOffset(menuPosition?.X, menuPosition?.Y ?? 0)}
+			opened={openedContextMenu}
+			onBackgroundClick={() => setInventoryOpenedMenu(false)}
+		>
 			<ContextMenu.Item>
 				<TextField
 					clipsDescendants
