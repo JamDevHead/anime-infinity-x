@@ -169,17 +169,28 @@ const Root: FunctionComponent<PropsWithChildren<RootProps>> = ({ children, size,
 		});
 	});
 
+	const close = () => {
+		setAnimatedTransparency.spring(1);
+		setScale.tween(0, {
+			style: Enum.EasingStyle.Quint,
+			direction: Enum.EasingDirection.Out,
+			time: 0.2,
+		});
+		setScale.onStep((value) => {
+			if (value < 0.5) {
+				setBackdropTransparency.spring(1 - value * 2);
+			}
+		});
+
+		setScale.onComplete(() => {
+			onClose?.();
+		});
+	};
+
 	return (
 		<PopupContext.Provider
 			value={{
-				onClose: () => {
-					setAnimatedTransparency.spring(1);
-					setBackdropTransparency.spring(1);
-					setScale.spring(0.1, springs.responsive);
-					setScale.onComplete(() => {
-						onClose?.();
-					});
-				},
+				onClose: close,
 			}}
 		>
 			<Button
@@ -187,14 +198,7 @@ const Root: FunctionComponent<PropsWithChildren<RootProps>> = ({ children, size,
 				backgroundTransparency={backdropTransparency}
 				backgroundColor={colors.black}
 				zIndex={1}
-				onClick={() => {
-					setAnimatedTransparency.spring(1);
-					setBackdropTransparency.spring(1);
-					setScale.spring(0.1, springs.responsive);
-					setScale.onComplete(() => {
-						onClose?.();
-					});
-				}}
+				onClick={close}
 			/>
 			<CanvasGroup
 				position={UDim2.fromScale(0.5, 0.5)}
