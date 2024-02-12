@@ -9,7 +9,7 @@ import { zoneCommands } from "@/server/commands/zone";
 import { ZirconServerConfig } from "@/server/constants/zircon-server-config";
 
 @Service({})
-export class Zircon implements OnInit {
+export class ZirconService implements OnInit {
 	constructor(private logger: Logger) {}
 
 	onInit(): void | Promise<void> {

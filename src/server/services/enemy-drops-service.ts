@@ -5,7 +5,7 @@ import remotes from "@/shared/remotes";
 import { selectEnemyDrop } from "@/shared/store/enemies/enemies-selectors";
 
 @Service()
-export class EnemyDrops implements OnStart {
+export class EnemyDropsService implements OnStart {
 	constructor(private readonly logger: Logger) {}
 
 	onStart() {

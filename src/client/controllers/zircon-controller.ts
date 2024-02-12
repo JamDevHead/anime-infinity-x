@@ -4,7 +4,7 @@ import { ZirconClient } from "@rbxts/zircon";
 import { ZirconClientConfig } from "@/client/constants/zircon-client-config";
 
 @Controller({})
-export class Zircon implements OnInit {
+export class ZirconController implements OnInit {
 	constructor(private logger: Logger) {}
 
 	onInit(): void | Promise<void> {

@@ -2,7 +2,7 @@ import { BaseComponent, Component } from "@flamework/components";
 import { OnStart } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { HttpService, ServerStorage } from "@rbxts/services";
-import { EnemySpawner } from "@/server/services/enemy-spawner";
+import { EnemySpawnerService } from "@/server/services/enemy-spawner-service";
 import { EnemyModel } from "@/shared/components/enemy-component";
 
 interface EnemyAttributes {
@@ -20,7 +20,7 @@ export class Enemy extends BaseComponent<EnemyAttributes, Part> implements OnSta
 
 	constructor(
 		private readonly logger: Logger,
-		private readonly enemiesSpawner: EnemySpawner,
+		private readonly enemiesSpawner: EnemySpawnerService,
 	) {
 		super();
 	}

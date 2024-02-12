@@ -8,7 +8,7 @@ import { env } from "@/server/constants/env";
 import { IS_PRODUCTION } from "@/shared/constants/core";
 
 @Service()
-export class RemoteConfig implements OnStart {
+export class RemoteConfigService implements OnStart {
 	private config: Config = {};
 	private channel = IS_PRODUCTION ? "production" : "canary";
 	private onFetched = new Signal<void>();

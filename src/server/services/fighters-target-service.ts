@@ -9,7 +9,7 @@ import remotes from "@/shared/remotes";
 import { selectActiveFightersFromPlayer } from "@/shared/store/players/fighters";
 
 @Service()
-export class FightersTarget implements OnStart, OnPlayerAdd {
+export class FightersTargetService implements OnStart, OnPlayerAdd {
 	constructor(
 		private readonly logger: Logger,
 		private readonly components: Components,

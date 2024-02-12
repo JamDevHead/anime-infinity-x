@@ -12,7 +12,7 @@ import { getEnemyModelByUid } from "@/shared/utils/enemies";
 import { calculateStun } from "@/shared/utils/fighters/fighters-utils";
 
 @Service()
-export class EnemyDamage implements OnStart, OnTick, OnPlayerAdd {
+export class EnemyDamageService implements OnStart, OnTick, OnPlayerAdd {
 	private fightersTargets = new Map<string, { owner: Player; enemy: Enemy }>();
 	private fightersStuns = new Map<string, number>();
 

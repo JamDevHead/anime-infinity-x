@@ -1,5 +1,5 @@
 import { Modding, OnInit, Service } from "@flamework/core";
-import { RemoteConfig } from "@/server/services/remote-config";
+import { RemoteConfigService } from "@/server/services/remote-config-service";
 
 export interface OnRemoteConfigUpdate {
 	onRemoteConfigUpdate?(): void;
@@ -12,7 +12,7 @@ export interface OnRemoteConfigUpdate {
 class _RemoteConfigUpdate implements OnInit {
 	private listeners = new Set<OnRemoteConfigUpdate>();
 
-	constructor(private remoteConfig: RemoteConfig) {}
+	constructor(private remoteConfig: RemoteConfigService) {}
 
 	onInit(): void | Promise<void> {
 		Modding.onListenerAdded<OnRemoteConfigUpdate>((listener) => this.listeners.add(listener));

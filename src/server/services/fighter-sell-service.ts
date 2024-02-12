@@ -5,7 +5,7 @@ import remotes from "@/shared/remotes";
 import { selectPlayerFighter, selectPlayerFighters } from "@/shared/store/players/fighters";
 
 @Service()
-export class FighterSell implements OnStart {
+export class FighterSellService implements OnStart {
 	onStart(): void {
 		remotes.inventory.sellFighter.connect((player, fighterUid) => {
 			const userId = tostring(player.UserId);

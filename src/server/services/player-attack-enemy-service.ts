@@ -7,7 +7,7 @@ import remotes from "@/shared/remotes";
 import { selectEnemySelectionFromPlayer } from "@/shared/store/players/enemy-selection";
 
 @Service()
-export class PlayerAttackEnemy implements OnStart {
+export class PlayerAttackEnemyService implements OnStart {
 	constructor(
 		private components: Components,
 		private dpsService: DpsService,

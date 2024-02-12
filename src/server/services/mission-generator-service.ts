@@ -15,7 +15,7 @@ const zoneRewards = {
 } as { [zone: string]: number };
 
 @Service()
-export class MissionGenerator implements OnPlayerAdd {
+export class MissionGeneratorService implements OnPlayerAdd {
 	onPlayerAdded(player: Player) {
 		const userId = tostring(player.UserId);
 		const zoneSelector = selectPlayerCurrentZone(userId);

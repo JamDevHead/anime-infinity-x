@@ -3,7 +3,7 @@ import { Logger } from "@rbxts/log";
 import { initializeReact } from "@/client/ui/app";
 
 @Controller()
-export class React implements OnInit {
+export class ReactController implements OnInit {
 	constructor(private logger: Logger) {}
 
 	onInit(): void | Promise<void> {
