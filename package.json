@@ -22,7 +22,8 @@
     "output:dev": "mantle outputs --environment canary > mantle-output.json",
     "output:prod": "mantle outputs --environment production > mantle-output.json",
     "test:run": "lune run scripts/lune/run-tests.luau place.rbxl",
-    "test": "yarn sync && yarn test:run"
+    "test": "yarn sync && yarn test:run",
+    "action:run": "act -P windows-latest=-self-hosted"
   },
   "devDependencies": {
     "@rbxts/compiler-types": "^2.2.0-types.0",
