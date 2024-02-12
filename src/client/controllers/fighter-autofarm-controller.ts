@@ -9,8 +9,8 @@ import { selectSpecificPerk } from "@/client/store/perks";
 const HORIZONTAL_VECTOR = new Vector3(1, 0, 1);
 
 @Controller()
-export class FighterAutofarmController implements OnStart, OnTick {
-	private autofarmEnabled = false;
+export class FighterAutoFarmController implements OnStart, OnTick {
+	private autoFarmEnabled = false;
 	private minDistance = 30;
 	private selectedEnemy?: Enemy;
 
@@ -22,12 +22,12 @@ export class FighterAutofarmController implements OnStart, OnTick {
 
 	onStart() {
 		store.subscribe(selectSpecificPerk("autofarm"), (autoFarmEnabled) => {
-			this.autofarmEnabled = autoFarmEnabled;
+			this.autoFarmEnabled = autoFarmEnabled;
 		});
 	}
 
 	onTick() {
-		if (!this.autofarmEnabled) {
+		if (!this.autoFarmEnabled) {
 			return;
 		}
 

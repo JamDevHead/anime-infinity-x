@@ -8,7 +8,7 @@ import { EnemyDropProvider } from "@/client/providers/enemy-drop-provider";
 import { store } from "@/client/store";
 
 @Controller()
-export class EnemyDrops implements OnStart {
+export class EnemyDropsController implements OnStart {
 	private dropContainer = new Instance("Folder");
 
 	constructor(private readonly soundController: SoundController) {}

@@ -9,7 +9,7 @@ import remotes from "@/shared/remotes";
 import { selectEnemySelectionFromPlayer } from "@/shared/store/players/enemy-selection";
 
 @Controller()
-export class FighterAutoclick implements OnStart, OnTick {
+export class FighterAutoClickController implements OnStart, OnTick {
 	private autoClickEnabled = false;
 	private selectedEnemy?: Enemy;
 	private timer = 0;

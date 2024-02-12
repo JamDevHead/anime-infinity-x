@@ -6,7 +6,7 @@ import { PlayerZones } from "@/shared/store/players";
 import { selectPlayerZones } from "@/shared/store/players/zones";
 
 @Controller()
-export class ZoneLoader implements OnStart {
+export class ZoneLoaderController implements OnStart {
 	private camera = Workspace.CurrentCamera as Camera;
 	private player = Players.LocalPlayer;
 	private zonesFolder = Workspace.WaitForChild("Zones") as ZonesFolder;
