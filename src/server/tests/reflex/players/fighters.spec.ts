@@ -57,5 +57,10 @@ export = () => {
 		store.flush();
 
 		expect(isFighterEquipped(player, fighter.uid)).to.be.equal(true);
+
+		removeFighterFor(player, fighter.uid);
+		store.flush();
+
+		expect(isFighterEquipped(player, fighter.uid)).to.be.equal(false);
 	});
 };
