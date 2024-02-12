@@ -10,7 +10,7 @@ import { selectPlayerCurrentZone } from "@/shared/store/players/zones/zones-sele
 const FAR_CF = new CFrame(0, 3e8, 0);
 
 @Service()
-export class ZonesLoader implements OnStart, OnPlayerAdd, OnCharacterAdd {
+export class ZonesLoaderService implements OnStart, OnPlayerAdd, OnCharacterAdd {
 	public zonesFolder = new Instance("Folder") as ZonesFolder;
 	private zonesSubscriptions = new Map<Player, () => void>();
 

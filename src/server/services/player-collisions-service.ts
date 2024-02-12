@@ -3,7 +3,7 @@ import { PhysicsService, Workspace } from "@rbxts/services";
 import { OnCharacterAdd } from "@/server/services/lifecycles/on-character-add";
 
 @Service()
-export class PlayerCollisions implements OnStart, OnCharacterAdd {
+export class PlayerCollisionsService implements OnStart, OnCharacterAdd {
 	private playersFolder = new Instance("Folder");
 
 	onStart() {

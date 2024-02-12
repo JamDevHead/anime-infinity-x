@@ -1,18 +1,18 @@
 import { OnStart, Service } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { ServerStorage, Workspace } from "@rbxts/services";
-import { ZonesLoader } from "./zones-loader";
+import { ZonesLoaderService } from "server/services/zones-loader-service";
 import { Zone } from "@/@types/models/zone";
 
 @Service()
-export class EnemySpawner implements OnStart {
+export class EnemySpawnerService implements OnStart {
 	public enemiesFolder = new Instance("Folder");
 
 	private npcModels = ServerStorage.assets.Avatars.NPCsModels;
 
 	constructor(
 		private logger: Logger,
-		private readonly zonesLoader: ZonesLoader,
+		private readonly zonesLoader: ZonesLoaderService,
 	) {}
 
 	onStart() {
