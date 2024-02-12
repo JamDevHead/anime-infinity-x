@@ -4,16 +4,12 @@ local roblox = require("@lune/roblox")
 local auth = {}
 
 function auth.getAuthCookieWithFallbacks()
-	local cookie = roblox.getAuthCookie()
-	if cookie then
-		return cookie
-	end
- 
 	local cookieFromEnv = process.env.ROBLOSECURITY
+
 	if cookieFromEnv and #cookieFromEnv > 0 then
 		return `.ROBLOSECURITY={cookieFromEnv}`
 	end
- 
+	
 	for index, arg in process.args do
 		if arg == "--auth" then
 			local cookieFromArgs = process.args[index + 1]
@@ -22,6 +18,13 @@ function auth.getAuthCookieWithFallbacks()
 			end
 			break
 		end
+	end
+
+	local cookie = roblox.getAuthCookie()
+
+	-- todo: check if cookie string is valid, a simple nil check wont work (could return ".ROBLOSECURITY=; ...")
+	if cookie then
+		return cookie
 	end
  
 	error([[

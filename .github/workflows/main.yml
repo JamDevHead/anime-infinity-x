@@ -17,7 +17,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: bahmutov/npm-install@v1
-      - uses: ok-nick/setup-aftman@v0.3.0
+
+      - name: Setup aftman
+        if: ${{ !env.ACT }}
+        uses: ok-nick/setup-aftman@v0.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -32,6 +35,8 @@ jobs:
 
       - name: 🛠️ Tests
         run: yarn test
+        env:
+          ROBLOSECURITY: ${{ secrets.ROBLOSECURITY }}
 
       - name: 🏗️ Build game
         run: yarn build:dev
