@@ -1,4 +1,5 @@
 import Roact, { FunctionComponent } from "@rbxts/roact";
+import { UiController } from "@/client/controllers/ui-controller";
 import { Button } from "@/client/ui/components/button";
 import { Image } from "@/client/ui/components/image";
 import { useRem } from "@/client/ui/hooks/use-rem";
@@ -29,6 +30,7 @@ export const ToggleOption: FunctionComponent<ToggleOptionProps> = ({
 			size={size ?? UDim2.fromOffset(rem(96, "pixel"), rem(48, "pixel"))}
 			anchorPoint={anchorPoint}
 			onClick={() => {
+				UiController.onClickSound.Fire();
 				onClick?.();
 				onChange?.(!checked);
 			}}
