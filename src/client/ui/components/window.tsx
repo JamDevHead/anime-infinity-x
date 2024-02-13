@@ -1,6 +1,7 @@
 import Roact, { FunctionComponent, PropsWithChildren } from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
 import { fonts } from "@/client/constants/fonts";
+import { UiController } from "@/client/controllers/ui-controller";
 import { Button } from "@/client/ui/components/button";
 import { Frame, FrameProps } from "@/client/ui/components/frame";
 import { Image } from "@/client/ui/components/image";
@@ -145,7 +146,10 @@ export const Window: FunctionComponent<PropsWithChildren<WindowProps>> = ({
 				</Frame>
 				{!hiddenClose && (
 					<Button
-						onClick={onClose}
+						onClick={() => {
+							UiController.onClickSound.Fire();
+							onClose?.();
+						}}
 						size={closeSize}
 						position={UDim2.fromScale(0.92, 0.1)}
 						anchorPoint={new Vector2(0.5, 0.5)}
