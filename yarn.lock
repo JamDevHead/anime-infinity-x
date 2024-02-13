@@ -1153,10 +1153,10 @@
   resolved "https://registry.yarnpkg.com/@eslint/js/-/js-8.56.0.tgz#ef20350fec605a7f7035a01764731b2de0f3782b"
   integrity sha512-gMsVel9D7f2HLkBma9VbtzZRehRogVRfbr++f06nL2vnCGCNlzOD+/MUov/F4p8myyAHspEhVobgjpX64q5m6A==
 
-"@flamework/components@^1.0.0-beta.24":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@flamework/components/-/components-1.0.1.tgz#f73fb13f3fa9cb4d9fe92d3efe3be88237bfce85"
-  integrity sha512-pCegt6Pum53N8x6ZOC2Q9aYUXrr3qocTS5oJqhI/mypYSmU7wqSKqkDvMs8dWMUFxUo86ktEvoMydqLXhajVtg==
+"@flamework/components@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@flamework/components/-/components-1.1.1.tgz#bcbca91ac9fdffaed18c0f1457258d831e2adb0e"
+  integrity sha512-AXM2k2mgzizdhjlDsZsUCyVG7BQAoJuAPZycdr4SpuaU6ZU5kWGjUyLCQGL95IB68Wg6uUp1Uwb/86Yqt4wNBA==
   dependencies:
     "@rbxts/maid" "^1.0.0-ts.1"
     "@rbxts/services" "^1.1.5"
