@@ -16,7 +16,13 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: bahmutov/npm-install@v1
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+          cache: 'yarn'
+      
+      - name: Install project dependencies
+        run: yarn --prefer-offline
 
       - name: Setup aftman
         if: ${{ !env.ACT }}
