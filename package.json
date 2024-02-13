@@ -26,6 +26,7 @@
     "action:run": "act -P windows-latest=-self-hosted --secret-file .env"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.4.1",
     "@rbxts/compiler-types": "^2.2.0-types.0",
     "@rbxts/types": "^1.0.749",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
