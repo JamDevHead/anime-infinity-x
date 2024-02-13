@@ -62,7 +62,7 @@
     "@rbxts/remo": "^1.2.4",
     "@rbxts/ripple": "^0.7.1",
     "@rbxts/roact": "npm:@rbxts/react-ts@latest",
-    "@rbxts/services": "^1.5.1",
+    "@rbxts/services": "^1.5.3",
     "@rbxts/set-timeout": "^1.1.2",
     "@rbxts/t": "^3.1.0",
     "@rbxts/testez": "^0.4.2-ts.0",
