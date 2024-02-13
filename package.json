@@ -21,8 +21,7 @@
     "deploy:prod": "yarn build:prod && mantle deploy --environment production",
     "output:dev": "mantle outputs --environment canary > mantle-output.json",
     "output:prod": "mantle outputs --environment production > mantle-output.json",
-    "test:run": "lune run scripts/lune/run-tests.luau place.rbxl",
-    "test": "yarn sync && yarn test:run",
+    "test": "lune run scripts/lune/run-tests.luau place.rbxl",
     "action:run": "act -P windows-latest=-self-hosted --secret-file .env"
   },
   "devDependencies": {

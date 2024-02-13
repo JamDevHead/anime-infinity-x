@@ -39,13 +39,13 @@ jobs:
           yarn prettier --check src
         continue-on-error: true
 
-      - name: 🛠️ Tests
-        run: yarn test
-        env:
-          ROBLOSECURITY: ${{ secrets.ROBLOSECURITY }}
-
       - name: 🏗️ Build game
         run: yarn build:dev
         env:
           ROBLOSECURITY: ${{ secrets.ROBLOSECURITY }}
           REMOTE_CONFIG_TOKEN: ${{ secrets.REMOTE_CONFIG_TOKEN }}
+          
+      - name: 🛠️ Tests
+        run: yarn test
+        env:
+          ROBLOSECURITY: ${{ secrets.ROBLOSECURITY }}
