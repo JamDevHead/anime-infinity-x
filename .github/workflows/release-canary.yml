@@ -22,7 +22,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v3
@@ -44,7 +44,7 @@ jobs:
           path: place.rbxl
 
   deploy:
-    runs-on: self-hosted
+    runs-on: windows-latest
     environment: canary
     needs: build
 
