@@ -3,5 +3,5 @@
 export = () => {
 	it("should do nothing", () => {
 		// nothing
-	})
+	});
 };

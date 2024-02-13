@@ -36,6 +36,7 @@ export function mapProperty<T extends object, K extends keyof T>(
 ): T {
 	if (object[key] !== undefined) {
 		const copy = table.clone(object);
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		copy[key] = mapper(object[key]!)!;
 		return copy;
 	}

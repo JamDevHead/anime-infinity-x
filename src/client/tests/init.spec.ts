@@ -2,6 +2,6 @@
 
 export = () => {
 	it("should throw an epic error", () => {
-		expect(() => error("Epic error")).to.throw("Epic error")
-	})
+		expect(() => error("Epic error")).to.throw("Epic error");
+	});
 };
