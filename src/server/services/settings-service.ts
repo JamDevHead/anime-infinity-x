@@ -1,7 +1,7 @@
 import { OnStart, Service } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { Setting } from "@/@types/models/setting";
-import { ProfileLoad } from "@/server/services/profile-load";
+import { ProfileLoad } from "@/server/services/profile-load-service";
 import { store } from "@/server/store";
 import { DefaultSettings } from "@/shared/constants/default-settings";
 import remotes from "@/shared/remotes";

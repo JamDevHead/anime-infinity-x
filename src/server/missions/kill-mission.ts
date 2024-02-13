@@ -1,6 +1,6 @@
-import { MissionTask } from "server/services/missions";
+import { MissionTask } from "server/services/missions-service";
 import { Enemy } from "@/server/components/enemy";
-import { MissionComponent } from "@/server/services/missions/mission-component";
+import { MissionComponent } from "@/server/services/missions-service/mission-component";
 import { store } from "@/server/store";
 import { Task } from "@/shared/store/players/missions";
 import { selectPlayerMission } from "@/shared/store/players/missions/missions-selectors";
