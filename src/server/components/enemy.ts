@@ -1,7 +1,7 @@
 import { Component } from "@flamework/components";
 import { OnStart } from "@flamework/core";
 import { HttpService } from "@rbxts/services";
-import { MissionDecoratorService } from "server/services/missions";
+import { MissionDecoratorService } from "server/services/missions-service";
 import { store } from "@/server/store";
 import { EnemyComponent } from "@/shared/components/enemy-component";
 import { selectEnemyDrops } from "@/shared/store/enemies/enemies-selectors";

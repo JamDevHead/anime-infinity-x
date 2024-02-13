@@ -4,7 +4,7 @@ import { GetProfileStore } from "@rbxts/profileservice";
 import { Profile, ProfileStore } from "@rbxts/profileservice/globals";
 import { Players } from "@rbxts/services";
 import { OnPlayerAdd } from "@/server/services/lifecycles/on-player-add";
-import { loadPlayerData } from "@/server/services/profile-load/loaders";
+import { loadPlayerData } from "@/server/services/profile-load-service/loaders";
 import { store } from "@/server/store";
 import { defaultPlayerData, PlayerData, selectPlayerData } from "@/shared/store/players";
 

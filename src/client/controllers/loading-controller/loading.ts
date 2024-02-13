@@ -1,5 +1,5 @@
 import { Controller, OnStart } from "@flamework/core";
-import { mainStep } from "@/client/controllers/loading/steps/main-step";
+import { mainStep } from "@/client/controllers/loading-controller/steps/main-step";
 import { store } from "@/client/store";
 
 @Controller()
