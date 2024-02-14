@@ -1,11 +1,9 @@
 import { BaseComponent, Component, Components } from "@flamework/components";
 import { OnRender, OnStart } from "@flamework/core";
 import Gizmo from "@rbxts/gizmo";
-import { Logger } from "@rbxts/log";
-import Make from "@rbxts/make";
 import { Players, ReplicatedStorage, Workspace } from "@rbxts/services";
 import { Trove } from "@rbxts/trove";
-import { FighterGoalAttributes } from "@/client/components/fighter-goal/fighter-goal-types";
+import { FighterGoalAttributes, FighterGoalInstance } from "@/client/components/fighter-goal/fighter-goal-types";
 import { FighterModel } from "@/client/components/fighter-model";
 import { EnemySelectorController } from "@/client/controllers/enemy-selector-controller";
 import { FightersTracker } from "@/client/controllers/fighters-tracker-controller/tracker-controller";
@@ -23,29 +21,22 @@ const HORIZONTAL_VECTOR = new Vector3(1, 0, 1);
 @Component({
 	tag: "FighterGoal",
 })
-export class FighterGoal extends BaseComponent<FighterGoalAttributes, Attachment> implements OnStart, OnRender {
-	public fighterPart = Make("Part", {
-		Name: "FighterPart",
-		Anchored: true,
-		CanCollide: false,
-		CanQuery: false,
-		CanTouch: false,
-		CastShadow: false,
-		Size: Vector3.one,
-		Transparency: 1,
-	});
+export class FighterGoal
+	extends BaseComponent<FighterGoalAttributes, FighterGoalInstance>
+	implements OnStart, OnRender
+{
 	public currentEnemy: EnemyComponent | undefined;
 	public fighterInfo: PlayerFighter | undefined;
 
 	private raycastParams = new RaycastParams();
 	private trove = new Trove();
-	private root: Part | undefined;
 	private puffParticle = ReplicatedStorage.assets.Particles.Puff.Clone();
+	private fighterModelComponent: FighterModel;
+	private goal = CFrame.identity;
+	private player = Players.GetPlayerByUserId(this.attributes.playerId);
 	private humanoid: Humanoid | undefined;
-	private fighterModelComponent: FighterModel | undefined;
 
 	constructor(
-		private readonly logger: Logger,
 		private readonly fightersTracker: FightersTracker,
 		private readonly enemySelector: EnemySelectorController,
 		private readonly components: Components,
@@ -54,9 +45,7 @@ export class FighterGoal extends BaseComponent<FighterGoalAttributes, Attachment
 
 		const fighterModel = getFighterFromCharacterId(this.attributes.characterId)?.Clone();
 
-		if (!fighterModel) {
-			return;
-		}
+		assert(fighterModel, `Failed to find fighter from character id ${this.attributes.characterId}`);
 
 		fighterModel.Parent = this.fightersTracker.fightersFolder;
 
@@ -70,45 +59,17 @@ export class FighterGoal extends BaseComponent<FighterGoalAttributes, Attachment
 	}
 
 	onStart() {
-		const userId = tonumber(this.attributes.playerId);
-
-		if (userId === undefined) {
-			this.logger.Warn("Failed to find owner {ownerId}", this.attributes.playerId);
-			return;
-		}
-
-		const localPlayer = Players.LocalPlayer;
-		const player = localPlayer.UserId !== userId ? Players.GetPlayerByUserId(userId) : localPlayer;
-
-		if (!player) {
-			this.logger.Warn("Failed to find owner {ownerId}", this.attributes.playerId);
-			return;
-		}
-
-		this.root = player.Character?.FindFirstChild("HumanoidRootPart") as Part | undefined;
-		this.humanoid = player.Character?.FindFirstChild("Humanoid") as Humanoid | undefined;
-
-		this.fighterPart.CFrame = this.instance.WorldCFrame;
-
 		this.puffParticle.Parent = this.instance;
-		this.fighterPart.Parent = this.instance;
-
-		this.trove.add(this.fighterPart);
 		this.raycastParams.FilterType = Enum.RaycastFilterType.Exclude;
 
-		if (this.root?.Parent) {
-			this.raycastParams.AddToFilter(this.root.Parent);
-		}
-		if (this.enemySelector.enemyFolder) {
-			this.raycastParams.AddToFilter(this.enemySelector.enemyFolder);
-		}
-		this.raycastParams.AddToFilter(this.fightersTracker.fightersFolder);
-		task.spawn(() => {
-			this.raycastParams.AddToFilter(Workspace.WaitForChild("Players"));
-		});
-
 		const selectCurrentFighterTarget = selectFighterTarget(this.attributes.fighterId);
+		const filterList = [
+			this.enemySelector.enemyFolder,
+			this.fightersTracker.fightersFolder,
+			Workspace.FindFirstChild("Players"),
+		];
 
+		this.raycastParams.AddToFilter(filterList.filterUndefined());
 		this.onFighterTargetUpdate(store.getState(selectCurrentFighterTarget));
 
 		this.trove.add(
@@ -127,13 +88,16 @@ export class FighterGoal extends BaseComponent<FighterGoalAttributes, Attachment
 		);
 
 		this.trove.add(
-			store.subscribe(selectPlayerFighter(tostring(userId), this.attributes.fighterId), (fighter) => {
-				if (!fighter) {
-					return;
-				}
+			store.subscribe(
+				selectPlayerFighter(tostring(this.attributes.playerId), this.attributes.fighterId),
+				(fighter) => {
+					if (!fighter) {
+						return;
+					}
 
-				this.fighterInfo = fighter;
-			}),
+					this.fighterInfo = fighter;
+				},
+			),
 		);
 	}
 
@@ -144,7 +108,7 @@ export class FighterGoal extends BaseComponent<FighterGoalAttributes, Attachment
 
 	onRender(dt: number) {
 		this.updateGoal();
-		this.updateFighterGoal(dt);
+		this.currentEnemy ? this.updateFighterTarget(dt) : this.updateFighterGoal(dt);
 	}
 
 	private onFighterTargetUpdate(enemyUid: string | undefined) {
@@ -172,12 +136,6 @@ export class FighterGoal extends BaseComponent<FighterGoalAttributes, Attachment
 	}
 
 	private updateGoal() {
-		if (!this.root) {
-			return;
-		}
-
-		let target: CFrame | undefined;
-
 		if (this.currentEnemy) {
 			const total = this.currentEnemy.attackingFighters.size();
 			const index = this.currentEnemy.attackingFighters.indexOf(this.attributes.fighterId);
@@ -187,77 +145,76 @@ export class FighterGoal extends BaseComponent<FighterGoalAttributes, Attachment
 			// Thanks NPCsController
 			const angle = math.rad((360 / total) * (index - 1));
 
-			target = new CFrame(
+			this.goal = new CFrame(
 				enemyPosition.add(new Vector3(math.cos(angle), 0, math.sin(angle)).mul(enemySize)),
 				enemyPosition,
 			);
+		} else {
+			this.goal = this.instance.CFrame;
 		}
+	}
 
-		this.instance.WorldCFrame =
-			target ?? new CFrame(this.root.CFrame.PointToWorldSpace(this.attributes.goalOffset));
+	private updateFighterTarget(dt: number) {
+		const currentFighterCFrame = this.fighterModelComponent.instance.GetPivot();
+		const groundResult = this.getGroundResult(this.goal.Position) ?? currentFighterCFrame.Position;
+
+		this.fighterModelComponent.instance.PivotTo(
+			currentFighterCFrame.Lerp(CFrame.lookAlong(groundResult, this.goal.LookVector), dt * 8),
+		);
 	}
 
 	private updateFighterGoal(dt: number) {
-		if (!this.root) {
-			return;
-		}
-
-		if (this.currentEnemy) {
-			const groundResult = this.getGroundResult(this.instance.WorldPosition)?.mul(Vector3.yAxis) ?? Vector3.zero;
-			const goalCFrame = this.instance.WorldCFrame;
-
-			this.fighterPart.CFrame = this.fighterPart.CFrame.Lerp(
-				goalCFrame.sub(goalCFrame.Position.mul(Vector3.yAxis)).add(groundResult),
-				dt * 8,
-			);
-			return;
-		}
-
-		const goal = this.instance.WorldPosition;
-		const fighterPosition = this.fighterPart.Position;
-		const occlusionResult = this.getOcclusionResult(goal);
+		const currentFighterCFrame = this.fighterModelComponent.instance.GetPivot();
+		const origin = this.instance.CFrame.ToWorldSpace(this.attributes.goalOffset.Inverse());
+		const occlusionResult = this.getOcclusionResult(origin.Position, this.goal.Position);
 		const groundResult = occlusionResult && this.getGroundResult(occlusionResult);
 
+		// if no result from ray-casts, set the fighter to far_cframe (far away from player)
 		if (!occlusionResult || !groundResult) {
-			if (this.fighterPart.CFrame !== FAR_CFRAME) {
+			if (currentFighterCFrame !== FAR_CFRAME) {
 				this.puffParticle.Emit(15);
-				this.fighterPart.CFrame = FAR_CFRAME;
+				this.fighterModelComponent.instance.PivotTo(FAR_CFRAME);
 			}
+
 			return;
 		}
 
-		debug.profilebegin(`fighter goal update ${this.attributes.fighterId}`);
+		const character = this.player?.Character;
+		const humanoid = this.humanoid?.Parent
+			? this.humanoid
+			: (character?.FindFirstChild("Humanoid") as Humanoid | undefined);
 
-		const isFloating = this.humanoid?.GetState() === Enum.HumanoidStateType.Freefall;
+		// cache humanoid for future calls
+		this.humanoid = humanoid;
 
-		const finalGoal = new Vector3(occlusionResult.X, isFloating ? goal.Y : groundResult.Y, occlusionResult.Z);
+		const isFloating = humanoid?.GetState() === Enum.HumanoidStateType.Freefall;
+		const finalGoal = new Vector3(occlusionResult.X, isFloating ? this.goal.Y : groundResult.Y, occlusionResult.Z);
 
-		const fighterGoalDiff = finalGoal.sub(fighterPosition).mul(HORIZONTAL_VECTOR);
+		const fighterGoalDiff = finalGoal.sub(currentFighterCFrame.Position);
+		const fighterGoalDiffHorizontal = fighterGoalDiff.mul(HORIZONTAL_VECTOR);
+
 		const lookAt =
-			fighterGoalDiff.Magnitude > 0.8 && !isFloating ? fighterGoalDiff.Unit : this.root.CFrame.LookVector;
+			fighterGoalDiffHorizontal.Magnitude > 0.8 && !isFloating
+				? fighterGoalDiffHorizontal.Unit
+				: this.instance.CFrame.LookVector;
 
 		const goalLookAt = finalGoal.add(lookAt.mul(HORIZONTAL_VECTOR).mul(1.5));
 		const goalCFrame = new CFrame(finalGoal, goalLookAt);
 
-		if (this.fighterPart.Position.Magnitude === math.huge || this.fighterPart.Position.Magnitude > 4e9) {
-			this.fighterPart.Position = goalCFrame.Position;
+		if (fighterGoalDiff.Magnitude > 4e9) {
+			this.puffParticle.Emit(15);
+			this.fighterModelComponent.instance.PivotTo(goalCFrame);
 			return;
 		}
 
 		// Lerp part to origin
-		this.fighterPart.CFrame = this.fighterPart.CFrame.Lerp(goalCFrame, dt * 8);
-		debug.profileend();
+		this.fighterModelComponent.instance.PivotTo(currentFighterCFrame.Lerp(goalCFrame, dt * 8));
 	}
 
-	private getOcclusionResult(goal: Vector3) {
-		if (!this.root) {
-			return;
-		}
-
-		const origin = this.root.Position;
+	private getOcclusionResult(origin: Vector3, goal: Vector3) {
 		const direction = goal.sub(origin);
 
-		const backwardsDirection = this.root.CFrame.LookVector.Unit.mul(-1);
+		const backwardsDirection = this.instance.CFrame.LookVector.Unit.mul(-1);
 		const angleCos = math.acos(direction.Unit.Dot(backwardsDirection));
 
 		const backLength = (direction.Magnitude * angleCos) / 2;

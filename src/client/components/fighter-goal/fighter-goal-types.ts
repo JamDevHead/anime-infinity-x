@@ -1,6 +1,8 @@
 export interface FighterGoalAttributes {
 	fighterId: string;
 	characterId: string;
-	playerId: string;
-	goalOffset: Vector3;
+	playerId: number;
+	goalOffset: CFrame;
 }
+
+export type FighterGoalInstance = Part & { weld: WeldConstraint };

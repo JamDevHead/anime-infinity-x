@@ -125,7 +125,7 @@ export class FighterModel
 		}
 
 		// Update fighter model
-		this.instance.PivotTo(this.fighterGoal.fighterPart.CFrame);
+		//this.instance.PivotTo(this.fighterGoal.fighterPart.CFrame);
 
 		const root = this.humanoid.RootPart;
 		const rootDisplacement = root.Position.sub(this.lastFighterPosition);
