@@ -34,7 +34,8 @@ export class FighterGoal
 	private fighterModelComponent: FighterModel;
 	private goal = CFrame.identity;
 	private player = Players.GetPlayerByUserId(this.attributes.playerId);
-	private humanoid: Humanoid | undefined;
+	private humanoid?: Humanoid;
+	private enemyHealthChangedEvent?: RBXScriptConnection;
 
 	constructor(
 		private readonly fightersTracker: FightersTracker,
@@ -115,6 +116,7 @@ export class FighterGoal
 		const enemy = enemyUid !== undefined ? getEnemyByUid(enemyUid, this.components) : undefined;
 
 		this.currentEnemy = enemy;
+		this.enemyHealthChangedEvent?.Disconnect();
 
 		if (!enemy || enemy.attackingFighters.includes(this.attributes.fighterId)) {
 			return;
@@ -122,15 +124,13 @@ export class FighterGoal
 
 		let currentHealth = enemy.humanoid.Health;
 
-		this.trove.add(
-			enemy.humanoid.HealthChanged.Connect((newHealth) => {
-				if (currentHealth > newHealth) {
-					this.fighterModelComponent?.attack();
-				}
+		this.enemyHealthChangedEvent = enemy.humanoid.HealthChanged.Connect((newHealth) => {
+			if (currentHealth > newHealth) {
+				this.fighterModelComponent?.attack();
+			}
 
-				currentHealth = enemy.humanoid.Health;
-			}),
-		);
+			currentHealth = enemy.humanoid.Health;
+		});
 
 		enemy.attackingFighters.push(this.attributes.fighterId);
 	}
