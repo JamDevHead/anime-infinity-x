@@ -76,7 +76,7 @@ export const Inventory = () => {
 						padding={new UDim(0, 12)}
 						scrollingDirection={Enum.ScrollingDirection.XY}
 						fillDirection="Horizontal"
-						horizontalAlignment="Center"
+						horizontalAlignment="Left"
 						cellSize={UDim2.fromOffset(rem(120 * 1.8, "pixel"), rem(160 * 1.8, "pixel"))}
 						cellPadding={new UDim2(0, rem(12, "pixel"), 0, rem(12, "pixel"))}
 						clipsDescendants
