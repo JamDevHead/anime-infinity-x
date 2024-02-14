@@ -26,7 +26,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - uses: bahmutov/npm-install@v1
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+          cache: 'yarn'
+      
+      - name: Install project dependencies
+        run: yarn --prefer-offline
+
       - uses: ok-nick/setup-aftman@v0.3.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -45,7 +52,6 @@ jobs:
 
   deploy:
     runs-on: windows-latest
-    environment: canary
     needs: build
 
     steps:
