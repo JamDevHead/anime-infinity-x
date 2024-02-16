@@ -47,7 +47,7 @@ export class Tracker {
 					CanTouch: false,
 					CastShadow: false,
 					Size: Vector3.one,
-					Transparency: 0,
+					Transparency: 1,
 					Parent: this.goalContainer,
 				});
 
