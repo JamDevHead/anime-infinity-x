@@ -15,9 +15,7 @@ export class FightersTracker implements OnStart {
 		Parent: Workspace,
 	});
 
-	private bulkMovement = new Map<Instance, CFrame>();
 	private trackers = new Map<string, Tracker>();
-	private ticks = 0;
 
 	onStart() {
 		const onNewPlayer = (player: Player) => {

@@ -36,6 +36,7 @@ export class FighterGoal
 	private player = Players.GetPlayerByUserId(this.attributes.playerId);
 	private humanoid?: Humanoid;
 	private enemyHealthChangedEvent?: RBXScriptConnection;
+	private currentPosition = this.instance.CFrame;
 
 	constructor(
 		private readonly fightersTracker: FightersTracker,
@@ -108,8 +109,18 @@ export class FighterGoal
 	}
 
 	onRender(dt: number) {
+		this.currentPosition = this.fighterModelComponent.instance.GetPivot();
 		this.updateGoal();
 		this.currentEnemy ? this.updateFighterTarget(dt) : this.updateFighterGoal(dt);
+	}
+
+	private setPosition(position: CFrame, alpha?: number) {
+		const alphaExists = alpha !== undefined;
+		const positionDiff = alphaExists ? position.Position.sub(this.currentPosition.Position).Magnitude : 101;
+
+		this.fighterModelComponent.instance.PivotTo(
+			alphaExists && positionDiff < 100 ? this.currentPosition.Lerp(position, alpha) : position,
+		);
 	}
 
 	private onFighterTargetUpdate(enemyUid: string | undefined) {
@@ -155,16 +166,17 @@ export class FighterGoal
 	}
 
 	private updateFighterTarget(dt: number) {
-		const currentFighterCFrame = this.fighterModelComponent.instance.GetPivot();
-		const groundResult = this.getGroundResult(this.goal.Position) ?? currentFighterCFrame.Position;
+		const groundResult = this.getGroundResult(this.goal.Position);
 
-		this.fighterModelComponent.instance.PivotTo(
-			currentFighterCFrame.Lerp(CFrame.lookAlong(groundResult, this.goal.LookVector), dt * 8),
-		);
+		if (!groundResult) {
+			return;
+		}
+
+		this.setPosition(CFrame.lookAlong(groundResult, this.goal.LookVector), dt * 8);
 	}
 
 	private updateFighterGoal(dt: number) {
-		const currentFighterCFrame = this.fighterModelComponent.instance.GetPivot();
+		const currentFighterCFrame = this.currentPosition;
 		const origin = this.instance.CFrame.ToWorldSpace(this.attributes.goalOffset.Inverse());
 		const occlusionResult = this.getOcclusionResult(origin.Position, this.goal.Position);
 		const groundResult = occlusionResult && this.getGroundResult(occlusionResult);
@@ -173,7 +185,7 @@ export class FighterGoal
 		if (!occlusionResult || !groundResult) {
 			if (currentFighterCFrame !== FAR_CFRAME) {
 				this.puffParticle.Emit(15);
-				this.fighterModelComponent.instance.PivotTo(FAR_CFRAME);
+				this.setPosition(FAR_CFRAME);
 			}
 
 			return;
@@ -208,7 +220,7 @@ export class FighterGoal
 		}
 
 		// Lerp part to origin
-		this.fighterModelComponent.instance.PivotTo(currentFighterCFrame.Lerp(goalCFrame, dt * 8));
+		this.setPosition(goalCFrame, dt * 8);
 	}
 
 	private getOcclusionResult(origin: Vector3, goal: Vector3) {

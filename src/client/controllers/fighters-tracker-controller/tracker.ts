@@ -29,7 +29,6 @@ export class Tracker {
 		});
 
 		this.trove.add(player.CharacterAdded.Connect((character) => this.onCharacterAdded(character)));
-		this.trove.add(player.CharacterRemoving.Connect(() => this.onCharacterRemoving()));
 
 		const selectActiveFightersFromLocalPlayer = createSelector(
 			[selectActiveFightersFromPlayer(this.userId)],
@@ -110,14 +109,7 @@ export class Tracker {
 	}
 
 	private onCharacterAdded(character: Model) {
-		print("character added");
 		this.root = character.WaitForChild("HumanoidRootPart") as Part;
 		this.updateFighters();
-	}
-
-	private onCharacterRemoving() {
-		print("character removed");
-		// Cleanup previous fighters
-		//this.activeFighters.clear();
 	}
 }
