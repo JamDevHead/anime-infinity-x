@@ -22,6 +22,12 @@ export const selectActiveFightersFromPlayer = (playerId: string) => {
 	};
 };
 
+export const selectAllFightersFromPlayer = (playerId: string) => {
+	return (state: SharedState) => {
+		return state.players.fighters[playerId]?.all;
+	};
+};
+
 export const selectPlayerFighter = (playerId: string, fighterId: string) => {
 	return createSelector(selectPlayerFighters(playerId), (fighters) => {
 		return fighters?.all[fighterId];

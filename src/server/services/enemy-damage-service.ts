@@ -1,20 +1,16 @@
 import { Components } from "@flamework/components";
-import { OnStart, OnTick, Service } from "@flamework/core";
+import { OnTick, Service } from "@flamework/core";
+import { Players } from "@rbxts/services";
 import { t } from "@rbxts/t";
-import { Enemy } from "@/server/components/enemy";
 import { DpsService } from "@/server/services/dps-service";
 import { OnPlayerAdd } from "@/server/services/lifecycles/on-player-add";
 import { store } from "@/server/store";
-import { getFighterOwner } from "@/server/utils/fighters";
-import { FighterTargetSlice } from "@/shared/store/fighter-target";
-import { selectFightersTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
-import { selectActiveFightersFromPlayer, selectPlayersFightersWithUid } from "@/shared/store/players/fighters";
-import { getEnemyModelByUid } from "@/shared/utils/enemies";
+import { getEnemyByUid } from "@/server/utils/enemies";
+import { selectActiveFightersFromPlayer, selectAllFightersFromPlayer } from "@/shared/store/players/fighters";
 import { calculateStun } from "@/shared/utils/fighters/fighters-utils";
 
 @Service()
-export class EnemyDamageService implements OnStart, OnTick, OnPlayerAdd {
-	private fightersTargets = new Map<string, { owner: Player; enemy: Enemy }>();
+export class EnemyDamageService implements OnTick, OnPlayerAdd {
 	private fightersStuns = new Map<string, number>();
 
 	private DAMAGE_TICK = 1 / 20;
@@ -24,29 +20,6 @@ export class EnemyDamageService implements OnStart, OnTick, OnPlayerAdd {
 		private readonly components: Components,
 		private readonly dpsService: DpsService,
 	) {}
-
-	onStart() {
-		const fighterTargetAdded = (enemyId: string, fighterId: string) => {
-			const doesNotHaveFighterTarget = (fighterTarget: FighterTargetSlice) => {
-				return fighterTarget[fighterId] === undefined || fighterTarget[fighterId] !== enemyId;
-			};
-
-			const cleanup = this.fighterTargetObserver(enemyId, fighterId);
-
-			store.once(selectFightersTarget, doesNotHaveFighterTarget, () => cleanup?.());
-		};
-
-		store.subscribe(selectFightersTarget, (fightersTarget, previousFightersTarget) => {
-			for (const [fighterId, enemyId] of pairs(fightersTarget)) {
-				if (
-					previousFightersTarget[fighterId] === undefined ||
-					fightersTarget[fighterId] !== previousFightersTarget[fighterId]
-				) {
-					fighterTargetAdded(enemyId, fighterId as string);
-				}
-			}
-		});
-	}
 
 	onTick(dt: number) {
 		const frameTime = math.min(dt, this.DAMAGE_TICK);
@@ -62,38 +35,15 @@ export class EnemyDamageService implements OnStart, OnTick, OnPlayerAdd {
 	}
 
 	onPlayerRemoved(player: Player) {
-		this.fightersTargets.forEach((fightersTargets, fighterId) => {
-			if (fightersTargets.owner !== player) {
-				return;
+		const fighters = store.getState(selectAllFightersFromPlayer(tostring(player.UserId))) ?? {};
+
+		for (const [fighterId] of pairs(fighters)) {
+			if (!t.string(fighterId)) {
+				continue;
 			}
 
-			this.fightersTargets.delete(fighterId);
-		});
-	}
-
-	private fighterTargetObserver(enemyId: string, fighterId: string) {
-		const enemyModel = getEnemyModelByUid(enemyId);
-		const enemy = enemyModel && this.components.getComponent<Enemy>(enemyModel);
-
-		if (!enemy) {
-			return;
+			this.fightersStuns.delete(fighterId);
 		}
-
-		const player = getFighterOwner(fighterId);
-
-		if (player) {
-			this.fightersTargets.set(fighterId, { owner: player, enemy });
-		}
-
-		return () => {
-			const fighterTarget = this.fightersTargets.get(fighterId);
-
-			if (fighterTarget?.enemy.attributes.Guid !== enemy.attributes.Guid) {
-				return;
-			}
-
-			this.fightersTargets.delete(fighterId);
-		};
 	}
 
 	private damageEnemies() {
@@ -102,41 +52,51 @@ export class EnemyDamageService implements OnStart, OnTick, OnPlayerAdd {
 		for (const [playerId, enemyId] of pairs(enemySelections)) {
 			assert(t.string(playerId));
 
-			const fighters = store.getState(selectActiveFightersFromPlayer(playerId)) ?? [];
+			const userId = tonumber(playerId);
+			const player = userId !== undefined ? Players.GetPlayerByUserId(userId) : undefined;
 
-			for (const fighter of fighters) {
-				const fighter = store.getState();
-			}
-		}
-
-		for (const [fighterId, { owner, enemy }] of table.clone(this.fightersTargets)) {
-			const fighter = store.getState(selectPlayersFightersWithUid(fighterId));
-
-			if (!fighter) {
-				this.fightersTargets.delete(fighterId);
+			if (!player) {
 				continue;
 			}
 
-			if (this.fightersStuns.has(fighterId)) {
-				const stunTime = this.fightersStuns.get(fighterId) as number;
+			const enemy = getEnemyByUid(enemyId, this.components);
 
-				if (stunTime > 0) {
-					this.fightersStuns.set(fighterId, stunTime - this.DAMAGE_TICK);
-					continue;
-				}
+			if (!enemy || enemy.isDead) {
+				store.unselectEnemy(playerId);
+				continue;
 			}
 
-			const damage = fighter.stats.damage;
+			const fighters = store.getState(selectActiveFightersFromPlayer(playerId)) ?? [];
 
-			this.dpsService.addToStore(owner, damage);
+			for (const { fighterId } of fighters) {
+				const fighter = store.getState(selectAllFightersFromPlayer(playerId))?.[fighterId];
 
-			const isDead = enemy.takeDamage(owner, damage);
+				if (!fighter) {
+					continue;
+				}
 
-			// 10 dexterity = 1 second stun, 100 dexterity = 0.1 second stun
-			this.fightersStuns.set(fighterId, calculateStun(fighter.stats.dexterity));
+				const stunTime = this.fightersStuns.get(fighterId);
 
-			if (isDead) {
-				store.removeFighterTarget(fighterId);
+				if (stunTime !== undefined && stunTime > 0) {
+					enemy.isDead
+						? this.fightersStuns.delete(fighterId)
+						: this.fightersStuns.set(fighterId, stunTime - this.DAMAGE_TICK);
+
+					continue;
+				}
+
+				const damage = fighter.stats.damage;
+				const isDead = enemy.takeDamage(player, damage);
+
+				this.dpsService.addToStore(player, damage);
+
+				if (isDead) {
+					this.fightersStuns.delete(fighterId);
+					store.unselectEnemy(playerId);
+				} else {
+					// 10 dexterity = 1 second stun, 100 dexterity = 0.1 second stun
+					this.fightersStuns.set(fighterId, calculateStun(fighter.stats.dexterity));
+				}
 			}
 		}
 	}
