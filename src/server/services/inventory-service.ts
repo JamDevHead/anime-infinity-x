@@ -50,7 +50,6 @@ export class InventoryService implements OnStart {
 				return;
 			}
 
-			store.removeFighterTarget(fighterUid);
 			store.removeActiveFighter(tostring(player.UserId), fighterUid);
 		});
 

@@ -1,6 +1,7 @@
 import { BaseComponent, Component, Components } from "@flamework/components";
 import { OnRender, OnStart } from "@flamework/core";
 import Gizmo from "@rbxts/gizmo";
+import { createSelector } from "@rbxts/reflex";
 import { Players, ReplicatedStorage, Workspace } from "@rbxts/services";
 import { Trove } from "@rbxts/trove";
 import { FighterGoalAttributes, FighterGoalInstance } from "@/client/components/fighter-goal/fighter-goal-types";
@@ -10,9 +11,9 @@ import { FightersTracker } from "@/client/controllers/fighters-tracker-controlle
 import { store } from "@/client/store";
 import { getEnemyByUid } from "@/client/utils/enemies";
 import { EnemyComponent } from "@/shared/components/enemy-component";
-import { selectFighterTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
 import { PlayerFighter } from "@/shared/store/players";
-import { selectPlayerFighter } from "@/shared/store/players/fighters";
+import { selectEnemySelectionFromPlayer } from "@/shared/store/players/enemy-selection";
+import { selectAllFightersFromPlayer } from "@/shared/store/players/fighters";
 import { getFighterFromCharacterId } from "@/shared/utils/fighters";
 
 const FAR_CFRAME = new CFrame(0, 5e9, 0);
@@ -26,7 +27,7 @@ export class FighterGoal
 	implements OnStart, OnRender
 {
 	public currentEnemy: EnemyComponent | undefined;
-	public fighterInfo: PlayerFighter | undefined;
+	public fighterStats: PlayerFighter["stats"] | undefined;
 
 	private raycastParams = new RaycastParams();
 	private trove = new Trove();
@@ -66,7 +67,6 @@ export class FighterGoal
 		this.puffParticle.Parent = this.instance;
 		this.raycastParams.FilterType = Enum.RaycastFilterType.Exclude;
 
-		const selectCurrentFighterTarget = selectFighterTarget(this.attributes.fighterId);
 		const filterList = [
 			this.enemySelector.enemyFolder,
 			this.fightersTracker.fightersFolder,
@@ -74,26 +74,26 @@ export class FighterGoal
 		];
 
 		this.raycastParams.AddToFilter(filterList.filterUndefined());
-		this.onFighterTargetUpdate(store.getState(selectCurrentFighterTarget));
+
+		const playerId = tostring(this.attributes.playerId);
+
+		const selectEnemySelectionFromLocalPlayer = selectEnemySelectionFromPlayer(playerId);
+
+		const selectCurrentFighterInfo = createSelector(
+			[selectAllFightersFromPlayer(playerId)],
+			(fighters) => fighters?.[this.attributes.fighterId]?.stats,
+		);
+
+		this.onFighterSelectionUpdate(store.getState(selectEnemySelectionFromLocalPlayer));
+		this.fighterStats = store.getState(selectCurrentFighterInfo);
 
 		this.trove.add(
-			store.subscribe(selectCurrentFighterTarget, (enemyUid, lastEnemyUid) =>
-				this.onFighterTargetUpdate(enemyUid, lastEnemyUid),
+			store.subscribe(selectEnemySelectionFromLocalPlayer, (enemyId, lastEnemyId) =>
+				this.onFighterSelectionUpdate(enemyId, lastEnemyId),
 			),
 		);
 
-		this.trove.add(
-			store.subscribe(
-				selectPlayerFighter(tostring(this.attributes.playerId), this.attributes.fighterId),
-				(fighter) => {
-					if (!fighter) {
-						return;
-					}
-
-					this.fighterInfo = fighter;
-				},
-			),
-		);
+		this.trove.add(store.subscribe(selectCurrentFighterInfo, (info) => (this.fighterStats = info)));
 	}
 
 	destroy() {
@@ -118,7 +118,7 @@ export class FighterGoal
 		);
 	}
 
-	private onFighterTargetUpdate(enemyUid: string | undefined, lastEnemyId?: string) {
+	private onFighterSelectionUpdate(enemyId: string | undefined, lastEnemyId?: string) {
 		const lastEnemy = lastEnemyId !== undefined ? getEnemyByUid(lastEnemyId, this.components) : undefined;
 
 		// Remove fighter from last enemy
@@ -128,7 +128,7 @@ export class FighterGoal
 			);
 		}
 
-		const enemy = enemyUid !== undefined ? getEnemyByUid(enemyUid, this.components) : undefined;
+		const enemy = enemyId !== undefined ? getEnemyByUid(enemyId, this.components) : undefined;
 
 		this.currentEnemy = enemy;
 		this.enemyHealthChangedEvent?.Disconnect();
