@@ -1,9 +1,10 @@
 import { OnTick, Service } from "@flamework/core";
+import { OnPlayerAdd } from "@/server/services/lifecycles/on-player-add";
 import { store } from "@/server/store";
 import { selectPlayerDamagePerSecond } from "@/shared/store/dps";
 
 @Service()
-export class DpsService implements OnTick {
+export class DpsService implements OnTick, OnPlayerAdd {
 	private dpsStore = new Map<string, number>();
 	private timer = 0;
 
@@ -31,6 +32,10 @@ export class DpsService implements OnTick {
 		});
 
 		this.timer = 0;
+	}
+
+	onPlayerRemoved(player: Player) {
+		store.removePlayerDps(tostring(player.UserId));
 	}
 
 	public addToStore(player: Player, dps: number) {
