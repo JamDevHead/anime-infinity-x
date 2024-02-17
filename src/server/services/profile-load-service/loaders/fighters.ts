@@ -2,14 +2,18 @@ import { Logger } from "@rbxts/log";
 import { Profile } from "@rbxts/profileservice/globals";
 import { ReplicatedStorage } from "@rbxts/services";
 import { t } from "@rbxts/t";
-import { ActivePlayerFighter, PlayerData, PlayerFighter } from "@/shared/store/players";
+import { PlayerData, PlayerFighters } from "@/shared/store/players";
 import { validateActiveFighter, validateFighter } from "@/shared/utils/fighters";
 
 const fightersFolder = ReplicatedStorage.assets.Avatars.FightersModels;
 
-function checkAllFighters(fighters: PlayerFighter[], idsToRemove: Set<string>, fightersRemoved: number) {
-	for (const [index, fighter] of pairs(fighters)) {
+function checkAllFighters(fighters: PlayerFighters["all"], idsToRemove: Set<string>, fightersRemoved: number) {
+	for (const [fighterId, fighter] of pairs(fighters)) {
 		let valid = validateFighter(fighter);
+
+		if (!t.string(fighterId)) {
+			valid = false;
+		}
 
 		// Check if fighter exists in the game
 		const fighterZone = valid ? fightersFolder.FindFirstChild(fighter.zone) : undefined;
@@ -20,12 +24,12 @@ function checkAllFighters(fighters: PlayerFighter[], idsToRemove: Set<string>, f
 		}
 
 		// If fighter is already prone to removal
-		if (valid && idsToRemove.has(fighter.uid)) {
+		if (valid && idsToRemove.has(fighterId as string)) {
 			valid = false;
 		}
 
 		if (!valid) {
-			fighters.unorderedRemove(index - 1);
+			fighters[fighterId] = undefined;
 			fightersRemoved++;
 
 			// Remove the fighter using the ID
@@ -47,8 +51,8 @@ function checkAllFighters(fighters: PlayerFighter[], idsToRemove: Set<string>, f
 }
 
 function checkActiveFighters(
-	fighters: ActivePlayerFighter[],
-	allFighters: PlayerFighter[],
+	fighters: PlayerFighters["actives"],
+	allFighters: PlayerFighters["all"],
 	idsToRemove: Set<string>,
 	fightersRemoved: number,
 ) {
@@ -61,7 +65,7 @@ function checkActiveFighters(
 		}
 
 		// Check if active fighter still exists
-		if (valid && !allFighters.some((otherFighter) => otherFighter.uid === fighter.fighterId)) {
+		if (valid && !allFighters[fighter.fighterId]) {
 			valid = false;
 		}
 

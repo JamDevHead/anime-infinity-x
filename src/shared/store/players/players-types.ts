@@ -32,7 +32,7 @@ export interface ActivePlayerFighter {
 
 export interface PlayerFighters {
 	actives: ActivePlayerFighter[];
-	all: PlayerFighter[];
+	all: { [fighterId: PlayerFighter["uid"]]: PlayerFighter | undefined };
 }
 
 export interface PlayerFighter {

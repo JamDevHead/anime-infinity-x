@@ -1,3 +1,4 @@
+import Object from "@rbxts/object-utils";
 import { useMouse } from "@rbxts/pretty-react-hooks";
 import Roact, { createRef } from "@rbxts/roact";
 import { colors } from "@/client/constants/colors";
@@ -51,7 +52,7 @@ export const Inventory = () => {
 					</Button>
 					<SearchBar size={UDim2.fromScale(0.4, 1)} />
 					<InventoryStatus
-						storage={playerFighters?.all.size() ?? 0}
+						storage={playerFighters?.all !== undefined ? Object.keys(playerFighters.all).size() : 0}
 						fighters={playerFighters?.actives.size() ?? 0}
 						maxStorage={inventory?.maxStorage ?? 0}
 						maxFighters={inventory?.maxFighters ?? 0}
@@ -82,24 +83,25 @@ export const Inventory = () => {
 						clipsDescendants
 						grid
 					>
-						{playerFighters?.all.map((fighter) => (
-							<FighterCard
-								key={fighter.uid}
-								active={
-									playerFighters?.actives.find(({ fighterId }) => fighterId === fighter.uid) !==
-									undefined
-								}
-								headshot={fighter.name}
-								zone={fighter.zone}
-								rating={fighter.rarity}
-								discovered
-								onClick={() => {
-									setInventoryMenuPosition(new Vector2(mouse.getValue().X, mouse.getValue().Y));
-									setInventoryOpenedMenu(true);
-									setInventorySelectedItem(fighter.uid);
-								}}
-							/>
-						))}
+						{playerFighters?.all !== undefined &&
+							Object.values(playerFighters.all).map((fighter) => (
+								<FighterCard
+									key={fighter.uid}
+									active={
+										playerFighters?.actives.find(({ fighterId }) => fighterId === fighter.uid) !==
+										undefined
+									}
+									headshot={fighter.name}
+									zone={fighter.zone}
+									rating={fighter.rarity}
+									discovered
+									onClick={() => {
+										setInventoryMenuPosition(new Vector2(mouse.getValue().X, mouse.getValue().Y));
+										setInventoryOpenedMenu(true);
+										setInventorySelectedItem(fighter.uid);
+									}}
+								/>
+							))}
 						<uipadding
 							PaddingLeft={new UDim(0, rem(12, "pixel"))}
 							PaddingRight={new UDim(0, rem(12, "pixel"))}

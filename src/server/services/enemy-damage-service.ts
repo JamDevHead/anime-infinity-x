@@ -1,5 +1,6 @@
 import { Components } from "@flamework/components";
 import { OnStart, OnTick, Service } from "@flamework/core";
+import { t } from "@rbxts/t";
 import { Enemy } from "@/server/components/enemy";
 import { DpsService } from "@/server/services/dps-service";
 import { OnPlayerAdd } from "@/server/services/lifecycles/on-player-add";
@@ -7,7 +8,7 @@ import { store } from "@/server/store";
 import { getFighterOwner } from "@/server/utils/fighters";
 import { FighterTargetSlice } from "@/shared/store/fighter-target";
 import { selectFightersTarget } from "@/shared/store/fighter-target/fighter-target-selectors";
-import { selectPlayersFightersWithUid } from "@/shared/store/players/fighters";
+import { selectActiveFightersFromPlayer, selectPlayersFightersWithUid } from "@/shared/store/players/fighters";
 import { getEnemyModelByUid } from "@/shared/utils/enemies";
 import { calculateStun } from "@/shared/utils/fighters/fighters-utils";
 
@@ -96,6 +97,18 @@ export class EnemyDamageService implements OnStart, OnTick, OnPlayerAdd {
 	}
 
 	private damageEnemies() {
+		const enemySelections = store.getState((state) => state.players.enemySelection);
+
+		for (const [playerId, enemyId] of pairs(enemySelections)) {
+			assert(t.string(playerId));
+
+			const fighters = store.getState(selectActiveFightersFromPlayer(playerId)) ?? [];
+
+			for (const fighter of fighters) {
+				const fighter = store.getState();
+			}
+		}
+
 		for (const [fighterId, { owner, enemy }] of table.clone(this.fightersTargets)) {
 			const fighter = store.getState(selectPlayersFightersWithUid(fighterId));
 

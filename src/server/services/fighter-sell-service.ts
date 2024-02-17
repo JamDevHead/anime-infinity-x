@@ -1,4 +1,5 @@
 import { OnStart, Service } from "@flamework/core";
+import Object from "@rbxts/object-utils";
 import { store } from "@/server/store";
 import { removeFighterFor } from "@/server/utils/fighters";
 import remotes from "@/shared/remotes";
@@ -13,7 +14,7 @@ export class FighterSellService implements OnStart {
 			const fighters = store.getState(selectPlayerFighters(userId));
 			if (!fighters) return;
 
-			if (fighters.all.size() <= 1) return;
+			if (Object.keys(fighters.all).size() <= 1) return;
 
 			const fighter = store.getState(selectPlayerFighter(userId, fighterUid));
 			if (!fighter) return;

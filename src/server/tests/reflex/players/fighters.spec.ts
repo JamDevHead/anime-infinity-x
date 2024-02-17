@@ -33,21 +33,18 @@ export = () => {
 		store.flush();
 
 		expect(fighter).to.never.equal(undefined);
-		expect(store.getState(selectPlayer1Fighters)?.all.size()).to.be.equal(1);
-
 		assert(fighter);
 
+		expect(store.getState(selectPlayer1Fighters)?.all[fighter.uid]).to.never.equal(undefined);
 		expect(doesPlayerHasFighter(player, fighter.uid)).to.be.equal(true);
 		removeFighterFor(player, fighter.uid);
 
 		store.flush();
 
-		expect(store.getState(selectPlayer1Fighters)?.all.size()).to.be.equal(0);
+		expect(store.getState(selectPlayer1Fighters)?.all[fighter.uid]).to.be.equal(undefined);
 	});
 
 	it("should add and remove active fighters from player", () => {
-		expect(store.getState(selectPlayer1Fighters)?.all.size()).to.be.equal(0);
-
 		const player = { UserId: 1 } as Player;
 		const fighter = addFighterFor(player, mockFighterData);
 

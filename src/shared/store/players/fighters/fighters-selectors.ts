@@ -22,16 +22,16 @@ export const selectActiveFightersFromPlayer = (playerId: string) => {
 	};
 };
 
-export const selectPlayerFighter = (playerId: string, fighterUid: string) => {
+export const selectPlayerFighter = (playerId: string, fighterId: string) => {
 	return createSelector(selectPlayerFighters(playerId), (fighters) => {
-		return fighters?.all.find((fighter) => fighter.uid === fighterUid);
+		return fighters?.all[fighterId];
 	});
 };
 
-export const selectPlayersFightersWithUid = (fighterUid: string) => {
+export const selectPlayersFightersWithUid = (fighterId: string) => {
 	return createSelector(selectPlayersFighters, (fighters) => {
 		for (const [_, playerFighters] of pairs(fighters)) {
-			const fighter = playerFighters?.all.find((fighter) => fighter.uid === fighterUid);
+			const fighter = playerFighters.all[fighterId];
 
 			if (fighter) {
 				return fighter;
@@ -43,12 +43,10 @@ export const selectPlayersFightersWithUid = (fighterUid: string) => {
 /** **WARNING**
  * This is a very expensive selector, use it only when needed.
  */
-export const selectPlayerFromFighterId = (fighterUid: string) => {
+export const selectPlayerFromFighterId = (fighterId: string) => {
 	return createSelector(selectPlayersFighters, (fighters) => {
 		for (const [playerId, playerFighters] of pairs(fighters)) {
-			const fighter = playerFighters?.all.find((fighter) => fighter.uid === fighterUid);
-
-			if (fighter) {
+			if (playerFighters.all[fighterId]) {
 				return playerId as string;
 			}
 		}

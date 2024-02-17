@@ -1,6 +1,6 @@
 import { createProducer } from "@rbxts/reflex";
 import { PlayerData, PlayerFighter, PlayerFighters } from "@/shared/store/players/players-types";
-import { mapProperty } from "@/shared/utils/object-utils";
+import { assign, mapProperty } from "@/shared/utils/object-utils";
 
 export interface FighterState {
 	readonly [playerId: string]: PlayerFighters | undefined;
@@ -22,21 +22,21 @@ export const fightersSlice = createProducer(initialState, {
 	addFighter: (state, playerId: string, fighterId: string, playerFighterData: Omit<PlayerFighter, "uid">) => {
 		return mapProperty(state, playerId, (playerFighter) => ({
 			...playerFighter,
-			all: [...playerFighter.all, { uid: fighterId, ...playerFighterData }],
+			all: assign(playerFighter.all, { [fighterId]: { uid: fighterId, ...playerFighterData } }),
 		}));
 	},
 
 	removeFighter: (state, playerId: string, fighterId: string) => {
 		return mapProperty(state, playerId, (fighters) => ({
 			...fighters,
-			all: fighters.all.filter((fighter) => fighter.uid !== fighterId),
+			all: mapProperty(fighters.all, fighterId, () => undefined),
 			actives: fighters.actives.filter((fighter) => fighter.fighterId !== fighterId),
 		}));
 	},
 
 	addActiveFighter: (state, playerId: string, fighterId: string) => {
 		return mapProperty(state, playerId, (fighters) => {
-			const fighterData = fighters.all.find((fighter) => fighter.uid === fighterId);
+			const fighterData = fighters.all[fighterId];
 
 			if (!fighterData) {
 				return fighters;
@@ -59,7 +59,7 @@ export const fightersSlice = createProducer(initialState, {
 	renameDisplayName: (state, playerId: string, fighterId: string, displayName: string) => {
 		return mapProperty(state, playerId, (fighters) => ({
 			...fighters,
-			all: fighters.all.map((fighter) => (fighter.uid === fighterId ? { ...fighter, displayName } : fighter)),
+			all: mapProperty(fighters.all, fighterId, (fighter) => ({ ...fighter, displayName })),
 		}));
 	},
 });

@@ -77,18 +77,9 @@ export class FighterGoal
 		this.onFighterTargetUpdate(store.getState(selectCurrentFighterTarget));
 
 		this.trove.add(
-			store.subscribe(selectCurrentFighterTarget, (enemyUid, lastEnemyUid) => {
-				const lastEnemy = lastEnemyUid !== undefined ? getEnemyByUid(lastEnemyUid, this.components) : undefined;
-
-				if (lastEnemy?.attackingFighters.includes(this.attributes.fighterId)) {
-					// Remove fighter from last enemy
-					lastEnemy.attackingFighters = lastEnemy.attackingFighters.filter(
-						(fighterId) => fighterId !== this.attributes.fighterId,
-					);
-				}
-
-				this.onFighterTargetUpdate(enemyUid);
-			}),
+			store.subscribe(selectCurrentFighterTarget, (enemyUid, lastEnemyUid) =>
+				this.onFighterTargetUpdate(enemyUid, lastEnemyUid),
+			),
 		);
 
 		this.trove.add(
@@ -127,7 +118,16 @@ export class FighterGoal
 		);
 	}
 
-	private onFighterTargetUpdate(enemyUid: string | undefined) {
+	private onFighterTargetUpdate(enemyUid: string | undefined, lastEnemyId?: string) {
+		const lastEnemy = lastEnemyId !== undefined ? getEnemyByUid(lastEnemyId, this.components) : undefined;
+
+		// Remove fighter from last enemy
+		if (lastEnemy?.attackingFighters.includes(this.attributes.fighterId)) {
+			lastEnemy.attackingFighters = lastEnemy.attackingFighters.filter(
+				(fighterId) => fighterId !== this.attributes.fighterId,
+			);
+		}
+
 		const enemy = enemyUid !== undefined ? getEnemyByUid(enemyUid, this.components) : undefined;
 
 		this.currentEnemy = enemy;

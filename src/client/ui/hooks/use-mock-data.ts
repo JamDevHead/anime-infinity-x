@@ -1,8 +1,9 @@
+import Object from "@rbxts/object-utils";
 import { md5 } from "@rbxts/rbxts-hashlib";
 import { useEffect } from "@rbxts/roact";
 import { ReplicatedStorage } from "@rbxts/services";
 import { store } from "@/client/store";
-import { PlayerFighter } from "@/shared/store/players";
+import { PlayerFighter, PlayerFighters } from "@/shared/store/players";
 import { defaultPlayerData } from "@/shared/store/players/players-utils";
 
 type MockDataProps = {
@@ -31,8 +32,10 @@ export const useMockData = (props?: MockDataProps): void => {
 	useEffect(() => {
 		const fightersModels = ReplicatedStorage.assets.Avatars.FightersModels.GetChildren();
 		const randomZone = fightersModels[math.random(fightersModels.size()) - 1];
-		const fightersData = randomZone.GetChildren().map((fighterModel, index) => {
-			return {
+		const fightersData: PlayerFighters["all"] = {};
+
+		randomZone.GetChildren().forEach((fighterModel, index) => {
+			fightersData[tostring(index)] = {
 				uid: tostring(index),
 				characterUid: tostring(index + 1000),
 				name: fighterModel.Name,
@@ -57,7 +60,10 @@ export const useMockData = (props?: MockDataProps): void => {
 			},
 			fighters: {
 				all: fightersData,
-				actives: fightersData.map(({ uid, characterUid }) => ({ fighterId: uid, characterId: characterUid })),
+				actives: Object.values(fightersData).map(({ uid, characterUid }) => ({
+					fighterId: uid,
+					characterId: characterUid,
+				})),
 			},
 			missions: {
 				all: table.create(5, false).map((_, index) => ({

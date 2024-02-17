@@ -17,7 +17,7 @@ export const defaultPlayerData = {
 	},
 	fighters: {
 		actives: [],
-		all: [],
+		all: {},
 	},
 	boosts: {
 		all: [],
