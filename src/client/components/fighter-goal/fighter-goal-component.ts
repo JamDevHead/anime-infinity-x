@@ -58,6 +58,8 @@ export class FighterGoal
 
 		this.trove.add(fighterModel);
 		this.trove.add(fighterModelComponent);
+
+		this.setPosition(this.instance.CFrame);
 	}
 
 	onStart() {
