@@ -197,7 +197,7 @@ export class FighterModel
 	public attack() {
 		const dexterity = this.fighterGoal?.fighterStats?.dexterity;
 
-		if (!dexterity || this.fighterStun > 0) {
+		if (dexterity === undefined || this.fighterStun > 0) {
 			return;
 		}
 
