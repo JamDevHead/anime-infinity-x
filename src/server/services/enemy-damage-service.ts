@@ -11,7 +11,7 @@ import { calculateStun } from "@/shared/utils/fighters/fighters-utils";
 
 @Service()
 export class EnemyDamageService implements OnTick, OnPlayerAdd {
-	private fightersStuns = new Map<string, number>();
+	private playerStuns = new Map<string, Map<string, number>>();
 
 	private DAMAGE_TICK = 1 / 20;
 	private timer = 0;
@@ -34,16 +34,12 @@ export class EnemyDamageService implements OnTick, OnPlayerAdd {
 		}
 	}
 
+	onPlayerAdded(player: Player) {
+		this.playerStuns.set(tostring(player.UserId), new Map());
+	}
+
 	onPlayerRemoved(player: Player) {
-		const fighters = store.getState(selectAllFightersFromPlayer(tostring(player.UserId))) ?? {};
-
-		for (const [fighterId] of pairs(fighters)) {
-			if (!t.string(fighterId)) {
-				continue;
-			}
-
-			this.fightersStuns.delete(fighterId);
-		}
+		this.playerStuns.delete(tostring(player.UserId));
 	}
 
 	private damageEnemies() {
@@ -67,6 +63,7 @@ export class EnemyDamageService implements OnTick, OnPlayerAdd {
 			}
 
 			const fighters = store.getState(selectActiveFightersFromPlayer(playerId)) ?? [];
+			const fighterStuns = this.playerStuns.get(playerId);
 
 			for (const { fighterId } of fighters) {
 				const fighter = store.getState(selectAllFightersFromPlayer(playerId))?.[fighterId];
@@ -75,12 +72,12 @@ export class EnemyDamageService implements OnTick, OnPlayerAdd {
 					continue;
 				}
 
-				const stunTime = this.fightersStuns.get(fighterId);
+				const stunTime = fighterStuns?.get(fighterId);
 
 				if (stunTime !== undefined && stunTime > 0) {
 					enemy.isDead
-						? this.fightersStuns.delete(fighterId)
-						: this.fightersStuns.set(fighterId, stunTime - this.DAMAGE_TICK);
+						? fighterStuns?.delete(fighterId)
+						: fighterStuns?.set(fighterId, stunTime - this.DAMAGE_TICK);
 
 					continue;
 				}
@@ -91,11 +88,10 @@ export class EnemyDamageService implements OnTick, OnPlayerAdd {
 				this.dpsService.addToStore(player, damage);
 
 				if (isDead) {
-					this.fightersStuns.delete(fighterId);
-					store.unselectEnemy(playerId);
+					this.playerStuns.delete(fighterId);
 				} else {
 					// 10 dexterity = 1 second stun, 100 dexterity = 0.1 second stun
-					this.fightersStuns.set(fighterId, calculateStun(fighter.stats.dexterity));
+					fighterStuns?.set(fighterId, calculateStun(fighter.stats.dexterity));
 				}
 			}
 		}
