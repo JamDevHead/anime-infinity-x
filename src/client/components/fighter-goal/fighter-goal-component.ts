@@ -119,7 +119,9 @@ export class FighterGoal
 		const positionDiff = alphaExists ? position.Position.sub(this.currentPosition.Position).Magnitude : 101;
 
 		this.fighterModelComponent.instance.PivotTo(
-			alphaExists && positionDiff < 100 ? this.currentPosition.Lerp(position, alpha) : position,
+			alphaExists && positionDiff < FAR_CFRAME.Position.Magnitude * 0.5
+				? this.currentPosition.Lerp(position, alpha)
+				: position,
 		);
 	}
 
