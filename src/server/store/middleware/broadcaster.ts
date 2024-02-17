@@ -6,7 +6,7 @@ import { slices } from "@/shared/store";
 export function broadcasterMiddleware(): ProducerMiddleware {
 	const broadcaster = createBroadcaster({
 		producers: slices,
-		hydrateRate: 5,
+		hydrateRate: 60,
 		// beforeDispatch: (player, action) => {
 		// 	return filter(player, action, actionFilters);
 		// },
