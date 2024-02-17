@@ -1,5 +1,6 @@
 import { Component } from "@flamework/components";
 import { OnStart } from "@flamework/core";
+import Make from "@rbxts/make";
 import { createPortal, createRoot, Root } from "@rbxts/react-roblox";
 import Roact from "@rbxts/roact";
 import { ReplicatedStorage, TweenService, Workspace } from "@rbxts/services";
@@ -30,7 +31,7 @@ export class Enemy extends EnemyComponent implements OnStart {
 		CoinParticle: ParticleEmitter;
 	};
 	private healthComponentRoot?: Root;
-	private abbreviator = useAbbreviator();
+	private abbreviator = useAbbreviator({ defaultDecimalPlaces: 0 });
 
 	constructor(
 		private readonly soundController: SoundController,
@@ -164,39 +165,47 @@ export class Enemy extends EnemyComponent implements OnStart {
 	}
 
 	private createHurtParticle(damage: number) {
-		const hurtPart = new Instance("Part");
-		const hurtBillboard = new Instance("BillboardGui");
-		const hurtLabel = new Instance("TextLabel");
 		const enemyScale = this.instance.GetScale();
+		const damageAbbreviated = this.abbreviator.numberToString(damage, true);
+
+		const hurtPart = Make("Part", {
+			Size: Vector3.one,
+			Transparency: 1,
+			Anchored: false,
+			Massless: true,
+			CanCollide: false,
+			CanQuery: false,
+			CanTouch: false,
+			CFrame: this.root.CFrame,
+			Parent: Workspace.Terrain,
+
+			Children: [
+				Make("BillboardGui", {
+					Size: UDim2.fromScale(enemyScale * 2.5, enemyScale),
+					AlwaysOnTop: true,
+					MaxDistance: 50 * enemyScale,
+					Children: [
+						Make("TextLabel", {
+							BackgroundTransparency: 1,
+							Size: UDim2.fromScale(1, 1),
+							Text: `- ${damageAbbreviated}`,
+							FontFace: fonts.fredokaOne.bold,
+							TextColor3: Color3.fromHex("#f64e4e"),
+							TextScaled: true,
+							TextStrokeColor3: Color3.fromHex("#000"),
+							TextStrokeTransparency: 0.5,
+							Children: [
+								Make("UITextSizeConstraint", {
+									MaxTextSize: 55,
+								}),
+							],
+						}),
+					],
+				}),
+			],
+		});
+
 		const FORCE = 5;
-
-		const damageAbbreviated = this.abbreviator.numberToString(damage);
-
-		hurtPart.Size = Vector3.one;
-		hurtPart.Transparency = 1;
-		hurtPart.Anchored = false;
-		hurtPart.Massless = true;
-		hurtPart.CanCollide = false;
-		hurtPart.CanQuery = false;
-		hurtPart.CanTouch = false;
-		hurtPart.CFrame = this.root.CFrame;
-
-		hurtBillboard.Size = UDim2.fromScale(enemyScale * 1.25, enemyScale);
-		hurtBillboard.AlwaysOnTop = true;
-		hurtBillboard.MaxDistance = 50 * enemyScale;
-
-		hurtLabel.BackgroundTransparency = 1;
-		hurtLabel.Size = UDim2.fromScale(1, 1);
-		hurtLabel.Text = `- ${damageAbbreviated}`;
-		hurtLabel.FontFace = fonts.fredokaOne.bold;
-		hurtLabel.TextColor3 = Color3.fromHex("#f64e4e");
-		hurtLabel.TextScaled = true;
-		hurtLabel.TextStrokeColor3 = Color3.fromHex("#000");
-		hurtLabel.TextStrokeTransparency = 0.5;
-
-		hurtLabel.Parent = hurtBillboard;
-		hurtBillboard.Parent = hurtPart;
-		hurtPart.Parent = Workspace.Terrain;
 
 		hurtPart.ApplyImpulse(
 			new Vector3(
