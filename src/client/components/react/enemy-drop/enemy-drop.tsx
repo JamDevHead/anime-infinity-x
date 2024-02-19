@@ -97,6 +97,21 @@ export function EnemyDrop({ drop, soundTracker }: { drop: Drop; soundTracker: So
 		>
 			<billboardgui MaxDistance={500} Size={UDim2.fromScale(2, 2)} Brightness={2} LightInfluence={0}>
 				<Image image={images.icons.coin} size={UDim2.fromScale(1, 1)} />
+				{drop.quantity > 1 && (
+					<textlabel
+						AnchorPoint={new Vector2(1, 0)}
+						Text={`${drop.quantity}x`}
+						Size={UDim2.fromScale(0.7, 0.7)}
+						Position={UDim2.fromScale(1.13, -0.1)}
+						BackgroundTransparency={1}
+						Font={Enum.Font.Kalam}
+						TextStrokeTransparency={0.35}
+						TextColor3={Color3.fromHex("#dfd0d0")}
+						TextScaled
+					>
+						<uitextsizeconstraint MaxTextSize={50} />
+					</textlabel>
+				)}
 			</billboardgui>
 
 			<trail
