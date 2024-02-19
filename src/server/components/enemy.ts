@@ -11,21 +11,21 @@ const MAX_ASSIST_TIME = 10; // seconds
 @Component({ tag: "EnemyNPC" })
 export class Enemy extends EnemyComponent implements OnStart {
 	private playersInvolved = new Map<Player, number>();
+	private level = this.attributes.Type === "Boss" ? 5 : tonumber(this.attributes.Type.sub(-1)) ?? 1;
 
 	constructor(private readonly missionDecoratorService: MissionDecoratorService) {
 		super();
 	}
 
 	onStart() {
-		const level = this.attributes.Type === "Boss" ? 5 : tonumber(this.attributes.Type.sub(-1)) ?? 1;
-		const calculatedHealth = math.max(level * 2, 1) * 100;
+		const calculatedHealth = math.max(this.level * 2, 1) * 100;
 
 		this.humanoid.MaxHealth = calculatedHealth;
 		this.humanoid.Health = calculatedHealth;
 		this.humanoid.BreakJointsOnDeath = false;
 
 		// scale 20% per level
-		this.instance.ScaleTo(this.attributes.Scale ?? 1 + level * 0.2);
+		this.instance.ScaleTo(this.attributes.Scale ?? 1 + this.level * 0.2);
 
 		const animator = this.humanoid.FindFirstChild("Animator") ?? new Instance("Animator");
 		animator.Parent = this.humanoid;
@@ -43,6 +43,8 @@ export class Enemy extends EnemyComponent implements OnStart {
 	}
 
 	onDestroy() {
+		const coinsToSpawn = this.level * 9 + 1;
+
 		this.playersInvolved.forEach((timeOfDamage, author) => {
 			const timeDiff = tick() - timeOfDamage;
 
@@ -50,19 +52,11 @@ export class Enemy extends EnemyComponent implements OnStart {
 				return;
 			}
 
-			const userId = tostring(author.UserId);
-			this.missionDecoratorService.taskSignal.Fire("Kill", userId, this);
+			const playerId = tostring(author.UserId);
+			this.missionDecoratorService.taskSignal.Fire("Kill", playerId, this);
 
-			for (const _ of $range(1, 20)) {
-				const id = HttpService.GenerateGUID(false);
-
-				store.addDrop(this.attributes.Guid, {
-					owner: userId,
-					id,
-					type: "Gold",
-					quantity: math.random(1, 10),
-					origin: this.root.Position,
-				});
+			for (const _ of $range(1, coinsToSpawn)) {
+				this.spawnCoinsForPlayer(playerId);
 			}
 		});
 
@@ -92,5 +86,17 @@ export class Enemy extends EnemyComponent implements OnStart {
 		}
 
 		return isDead;
+	}
+
+	private spawnCoinsForPlayer(playerId: string) {
+		const id = HttpService.GenerateGUID(false);
+
+		store.addDrop(this.attributes.Guid, {
+			owner: playerId,
+			id,
+			type: "Gold",
+			quantity: math.random(1, 10),
+			origin: this.root.Position,
+		});
 	}
 }
