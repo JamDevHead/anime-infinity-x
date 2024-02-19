@@ -56,10 +56,32 @@ export const fightersSlice = createProducer(initialState, {
 		}));
 	},
 
-	renameDisplayName: (state, playerId: string, fighterId: string, displayName: string) => {
+	setFighterStat: <T extends keyof PlayerFighter["stats"]>(
+		state: FighterState,
+		playerId: string,
+		fighterId: string,
+		name: T,
+		value: PlayerFighter["stats"][T],
+	) => {
 		return mapProperty(state, playerId, (fighters) => ({
 			...fighters,
-			all: mapProperty(fighters.all, fighterId, (fighter) => ({ ...fighter, displayName })),
+			all: mapProperty(fighters.all, fighterId, (fighter) => ({
+				...fighter,
+				stats: { ...fighter.stats, [name]: value },
+			})),
+		}));
+	},
+
+	setFighterProperty: <T extends keyof PlayerFighter>(
+		state: FighterState,
+		playerId: string,
+		fighterId: string,
+		name: T,
+		value: PlayerFighter[T],
+	) => {
+		return mapProperty(state, playerId, (fighters) => ({
+			...fighters,
+			all: mapProperty(fighters.all, fighterId, (fighter) => ({ ...fighter, [name]: value })),
 		}));
 	},
 });

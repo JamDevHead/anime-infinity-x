@@ -81,9 +81,10 @@ export class InventoryService implements OnStart {
 
 			try {
 				const filteredDisplayNameResult = TextService.FilterStringAsync(displayName, player.UserId);
-				store.renameDisplayName(
+				store.setFighterProperty(
 					tostring(player.UserId),
 					fighterUid,
+					"displayName",
 					filteredDisplayNameResult.GetNonChatStringForBroadcastAsync(),
 				);
 			} catch (e) {

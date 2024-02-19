@@ -2,9 +2,11 @@ import { Component } from "@flamework/components";
 import { OnStart } from "@flamework/core";
 import { HttpService } from "@rbxts/services";
 import { MissionDecoratorService } from "server/services/missions-service";
+import { ENEMIES_XP_WORTH_VALUES } from "@/server/constants/enemies/xp-values";
 import { store } from "@/server/store";
 import { EnemyComponent } from "@/shared/components/enemy-component";
 import { selectEnemyDrops } from "@/shared/store/enemies/enemies-selectors";
+import { selectActiveFightersFromPlayer, selectAllFightersFromPlayer } from "@/shared/store/players/fighters";
 
 const MAX_ASSIST_TIME = 10; // seconds
 
@@ -12,6 +14,8 @@ const MAX_ASSIST_TIME = 10; // seconds
 export class Enemy extends EnemyComponent implements OnStart {
 	private playersInvolved = new Map<Player, number>();
 	private level = this.attributes.Type === "Boss" ? 5 : tonumber(this.attributes.Type.sub(-1)) ?? 1;
+
+	private xpWorth = ENEMIES_XP_WORTH_VALUES[`Level ${this.level}`];
 
 	constructor(private readonly missionDecoratorService: MissionDecoratorService) {
 		super();
@@ -53,10 +57,23 @@ export class Enemy extends EnemyComponent implements OnStart {
 			}
 
 			const playerId = tostring(author.UserId);
+			const activeFighters = store.getState(selectActiveFightersFromPlayer(playerId)) ?? [];
+			const fighters = store.getState(selectAllFightersFromPlayer(playerId));
+
 			this.missionDecoratorService.taskSignal.Fire("Kill", playerId, this);
 
 			for (const _ of $range(1, coinsToSpawn)) {
 				this.spawnCoinsForPlayer(playerId);
+			}
+
+			for (const { fighterId } of activeFighters) {
+				const fighter = fighters?.[fighterId];
+
+				if (!fighter) {
+					continue;
+				}
+
+				store.setFighterStat(playerId, fighterId, "xp", fighter.stats.xp + this.xpWorth);
 			}
 		});
 
