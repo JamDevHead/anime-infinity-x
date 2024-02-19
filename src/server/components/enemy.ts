@@ -95,7 +95,7 @@ export class Enemy extends EnemyComponent implements OnStart {
 			owner: playerId,
 			id,
 			type: "Gold",
-			quantity: math.random(1, 10),
+			quantity: 1,
 			origin: this.root.Position,
 		});
 	}
