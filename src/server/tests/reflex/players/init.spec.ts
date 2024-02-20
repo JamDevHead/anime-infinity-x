@@ -6,11 +6,13 @@ import { defaultPlayerData, selectPlayerData } from "@/shared/store/players";
 export = () => {
 	beforeEach(() => {
 		store.loadPlayerData("1", defaultPlayerData);
+		store.loadPlayerData("2", defaultPlayerData);
 		store.flush();
 	});
 
 	afterEach(() => {
 		store.unloadPlayerData("1");
+		store.unloadPlayerData("2");
 		store.flush();
 	});
 
