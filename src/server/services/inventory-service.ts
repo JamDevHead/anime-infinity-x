@@ -2,7 +2,7 @@ import { OnStart, Service } from "@flamework/core";
 import { Logger } from "@rbxts/log";
 import { TextService } from "@rbxts/services";
 import { store } from "@/server/store";
-import { doesPlayerHasFighter } from "@/server/utils/fighters";
+import { doesPlayerHasFighter, getFighterFromPlayer } from "@/server/utils/fighters";
 import remotes from "@/shared/remotes";
 import { selectPlayerInventory } from "@/shared/store/players";
 import { selectPlayerFighters } from "@/shared/store/players/fighters";
@@ -12,7 +12,7 @@ export class InventoryService implements OnStart {
 	constructor(private readonly logger: Logger) {}
 
 	onStart(): void {
-		remotes.inventory.equipFighter.connect((player, fighterUid) => {
+		remotes.inventory.equipFighter.connect((player, fighterId) => {
 			const { fighters, inventory } = this.getPlayerFighterInventoryData(player);
 
 			if (!inventory || !fighters) {
@@ -20,12 +20,14 @@ export class InventoryService implements OnStart {
 				return;
 			}
 
-			if (!doesPlayerHasFighter(player, fighterUid)) {
+			const fighter = getFighterFromPlayer(player, fighterId);
+
+			if (!fighter) {
 				return;
 			}
 
-			if (fighters.actives.find(({ fighterId }) => fighterId === fighterUid) !== undefined) {
-				this.logger.Warn("Player {@player} already has fighter {fighterUid} active", player, fighterUid);
+			if (fighters.actives.some((otherFighter) => otherFighter.fighterId === fighterId)) {
+				this.logger.Warn("Player {@player} already has fighter {fighterUid} active", player, fighterId);
 				return;
 			}
 
@@ -34,7 +36,7 @@ export class InventoryService implements OnStart {
 				return;
 			}
 
-			store.addActiveFighter(tostring(player.UserId), fighterUid);
+			store.addActiveFighter(tostring(player.UserId), fighterId, fighter.characterUid);
 		});
 
 		remotes.inventory.unequipFighter.connect((player, fighterUid) => {

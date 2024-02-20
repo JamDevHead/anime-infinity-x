@@ -34,19 +34,11 @@ export const fightersSlice = createProducer(initialState, {
 		}));
 	},
 
-	addActiveFighter: (state, playerId: string, fighterId: string) => {
-		return mapProperty(state, playerId, (fighters) => {
-			const fighterData = fighters.all[fighterId];
-
-			if (!fighterData) {
-				return fighters;
-			}
-
-			return {
-				...fighters,
-				actives: [...fighters.actives, { characterId: fighterData.characterUid, fighterId }],
-			};
-		});
+	addActiveFighter: (state, playerId: string, fighterId: string, characterId: string) => {
+		return mapProperty(state, playerId, (fighters) => ({
+			...fighters,
+			actives: [...fighters.actives, { characterId, fighterId }],
+		}));
 	},
 
 	removeActiveFighter: (state, playerId: string, fighterId: string) => {

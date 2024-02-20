@@ -11,9 +11,14 @@ import { getCharacterId } from "@/shared/utils/fighters/fighters-utils";
 
 const fightersFolder = ReplicatedStorage.assets.Avatars.FightersModels;
 
-export function doesPlayerHasFighter(player: Player, fighterUid: string) {
-	const userId = tostring(player.UserId);
-	return store.getState(selectPlayerFighter(userId, fighterUid)) !== undefined;
+export function getFighterFromPlayer(player: Player, fighterId: string) {
+	const playerId = tostring(player.UserId);
+
+	return store.getState(selectPlayerFighter(playerId, fighterId));
+}
+
+export function doesPlayerHasFighter(player: Player, fighterId: string) {
+	return getFighterFromPlayer(player, fighterId) !== undefined;
 }
 
 export const isFighterEquipped = (player: Player, fighterId: string) => {

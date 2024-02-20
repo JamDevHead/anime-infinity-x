@@ -50,7 +50,7 @@ export = () => {
 
 		assert(fighter);
 
-		store.addActiveFighter(tostring(player.UserId), fighter.uid);
+		store.addActiveFighter(tostring(player.UserId), fighter.uid, fighter.characterUid);
 		store.flush();
 
 		expect(isFighterEquipped(player, fighter.uid)).to.be.equal(true);
