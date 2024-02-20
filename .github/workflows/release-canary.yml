@@ -70,3 +70,8 @@ jobs:
         env:
           ROBLOSECURITY: ${{ secrets.ROBLOSECURITY }}
           REMOTE_CONFIG_TOKEN: ${{ secrets.REMOTE_CONFIG_TOKEN }}
+
+      - name: 🗑️ Delete artifact
+        uses: geekyeggo/delete-artifact@v4
+        with:
+          name: place
