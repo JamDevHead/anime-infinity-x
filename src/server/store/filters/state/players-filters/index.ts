@@ -7,6 +7,7 @@ import { filterMissions } from "./missions-filter";
 import { filterSettings } from "./settings-filter";
 import { filterZones } from "./zones-filter";
 import { FilterState } from "@/server/store/filters/filter";
+import { filterBalance } from "@/server/store/filters/state/players-filters/balance-filter";
 
 export const filterPlayers: FilterState = (player, state) => {
 	return {
@@ -21,6 +22,7 @@ export const filterPlayers: FilterState = (player, state) => {
 			index: filterIndex(player, state.players.index),
 			fighters: filterFighters(player, state.players.fighters),
 			boosts: filterBoosts(player, state.players.boosts),
+			balance: filterBalance(player, state.players.balance),
 		},
 	};
 };
