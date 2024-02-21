@@ -15,11 +15,6 @@ const remotes = createRemotes({
 		save: remote<Server, [settings: Record<string, Setting>]>(),
 	}),
 
-	fighterTarget: namespace({
-		set: remote<Server, [fighterUid: string, targetUid: string]>(),
-		remove: remote<Server, [fighterUid: string]>(),
-	}),
-
 	enemySelection: namespace({
 		select: remote<Server, [targetId: string]>(),
 		unselect: remote<Server>(),
