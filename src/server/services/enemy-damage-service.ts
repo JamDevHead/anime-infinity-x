@@ -85,10 +85,12 @@ export class EnemyDamageService implements OnTick, OnPlayerAdd {
 				const damage = fighter.stats.damage;
 				const isDead = enemy.takeDamage(player, damage);
 
+				store.increaseFighterSpecial(fighterId, math.round(damage));
+
 				this.dpsService.addToStore(player, damage);
 
 				if (isDead) {
-					this.playerStuns.delete(fighterId);
+					fighterStuns?.delete(fighterId);
 				} else {
 					// 10 dexterity = 1 second stun, 100 dexterity = 0.1 second stun
 					fighterStuns?.set(fighterId, calculateStun(fighter.stats.dexterity));

@@ -2,7 +2,7 @@ import { createProducer } from "@rbxts/reflex";
 import { assign } from "@/shared/utils/object-utils";
 
 interface FighterSpecialsState {
-	readonly [fighterId: string]: number;
+	readonly [fighterId: string]: number | undefined;
 }
 
 const initialState: FighterSpecialsState = {};

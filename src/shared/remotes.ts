@@ -46,6 +46,10 @@ const remotes = createRemotes({
 	}),
 
 	attackEnemy: remote<Server>(),
+
+	fighter: namespace({
+		activateSpecial: remote<Server, [fighterId: string]>(),
+	}),
 });
 
 export default remotes;
