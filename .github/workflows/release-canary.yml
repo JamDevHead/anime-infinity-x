@@ -49,6 +49,7 @@ jobs:
         with:
           name: place
           path: place.rbxl
+          retention-days: 7
 
   deploy:
     runs-on: windows-latest
@@ -70,8 +71,3 @@ jobs:
         env:
           ROBLOSECURITY: ${{ secrets.ROBLOSECURITY }}
           REMOTE_CONFIG_TOKEN: ${{ secrets.REMOTE_CONFIG_TOKEN }}
-
-      - name: 🗑️ Delete artifact
-        uses: geekyeggo/delete-artifact@v4
-        with:
-          name: place
