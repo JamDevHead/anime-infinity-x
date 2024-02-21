@@ -11,7 +11,7 @@ import { calculateStun } from "@/shared/utils/fighters/fighters-utils";
 
 @Service()
 export class EnemyDamageService implements OnTick, OnPlayerAdd {
-	private playerStuns = new Map<string, Map<string, number>>();
+	public playerStuns = new Map<string, Map<string, number>>();
 
 	private DAMAGE_TICK = 1 / 20;
 	private timer = 0;
@@ -85,7 +85,7 @@ export class EnemyDamageService implements OnTick, OnPlayerAdd {
 				const damage = fighter.stats.damage;
 				const isDead = enemy.takeDamage(player, damage);
 
-				store.increaseFighterSpecial(fighterId, math.round(damage));
+				store.increaseFighterSpecial(fighterId, math.round(damage / 3));
 
 				this.dpsService.addToStore(player, damage);
 

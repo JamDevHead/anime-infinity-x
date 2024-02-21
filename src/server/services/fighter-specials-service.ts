@@ -1,5 +1,6 @@
 import { Components } from "@flamework/components";
 import { OnStart, Service } from "@flamework/core";
+import { EnemyDamageService } from "@/server/services/enemy-damage-service";
 import { store } from "@/server/store";
 import { getEnemyByUid } from "@/server/utils/enemies";
 import { isFighterEquipped } from "@/server/utils/fighters";
@@ -8,7 +9,10 @@ import { selectEnemySelectionFromPlayer } from "@/shared/store/players/enemy-sel
 
 @Service()
 export class FighterSpecialsService implements OnStart {
-	constructor(private readonly components: Components) {}
+	constructor(
+		private readonly components: Components,
+		private readonly enemyDamageService: EnemyDamageService,
+	) {}
 
 	onStart() {
 		remotes.fighter.activateSpecial.connect((player, fighterId) => {
@@ -30,6 +34,13 @@ export class FighterSpecialsService implements OnStart {
 				return;
 			}
 
+			// Add stun to fighter
+			const playerStuns = this.enemyDamageService.playerStuns.get(playerId);
+			const fighterStun = playerStuns?.get(fighterId) ?? 0;
+
+			playerStuns?.set(fighterId, fighterStun + 5);
+
+			// Remove fighter special, and give damage to enemy
 			store.setFighterSpecial(fighterId, 0);
 			enemy.takeDamage(player, specialAmount);
 		});

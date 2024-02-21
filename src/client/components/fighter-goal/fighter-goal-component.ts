@@ -50,6 +50,7 @@ export class FighterGoal
 
 		assert(fighterModel, `Failed to find fighter from character id ${this.attributes.characterId}`);
 
+		fighterModel.SetAttribute("fighterId", this.attributes.fighterId);
 		fighterModel.Parent = this.fightersTracker.fightersFolder;
 
 		const fighterModelComponent = this.components.addComponent<FighterModel>(fighterModel);

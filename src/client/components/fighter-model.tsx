@@ -2,12 +2,21 @@ import { BaseComponent, Component } from "@flamework/components";
 import { OnPhysics, OnRender, OnStart } from "@flamework/core";
 import Gizmo from "@rbxts/gizmo";
 import { Logger } from "@rbxts/log";
+import { ReflexProvider } from "@rbxts/react-reflex";
+import { createPortal, createRoot } from "@rbxts/react-roblox";
+import Roact from "@rbxts/roact";
 import { Workspace } from "@rbxts/services";
 import { Trove } from "@rbxts/trove";
 import { FighterGoal } from "@/client/components/fighter-goal/fighter-goal-component";
+import { FighterGoalAttributes } from "@/client/components/fighter-goal/fighter-goal-types";
+import { FighterSpecialHud } from "@/client/components/react/fighter-special-hud/fighter-special-hud";
 import { FightersTracker } from "@/client/controllers/fighters-tracker-controller/tracker-controller";
 import { CharacterAdd } from "@/client/controllers/lifecycles/on-character-add";
+import { OnInput } from "@/client/controllers/lifecycles/on-input";
+import { store } from "@/client/store";
+import { getMouseTarget } from "@/client/utils/mouse";
 import { AnimationMap, AnimationTracker } from "@/shared/lib/animation-tracker";
+import remotes from "@/shared/remotes";
 import { calculateStun } from "@/shared/utils/fighters/fighters-utils";
 
 interface IFighterModel extends Model {
@@ -28,8 +37,8 @@ const animationMap = {
 
 @Component()
 export class FighterModel
-	extends BaseComponent<NonNullable<unknown>, IFighterModel>
-	implements OnStart, OnPhysics, OnRender
+	extends BaseComponent<Pick<FighterGoalAttributes, "fighterId">, IFighterModel>
+	implements OnStart, OnPhysics, OnRender, OnInput
 {
 	public fighterGoal: FighterGoal | undefined;
 
@@ -68,7 +77,7 @@ export class FighterModel
 		for (const part of this.instance.GetDescendants()) {
 			if (part.IsA("BasePart")) {
 				part.CanCollide = false;
-				part.CanQuery = false;
+				part.CanQuery = true;
 				part.CanTouch = false;
 
 				if (part === root) {
@@ -79,6 +88,8 @@ export class FighterModel
 				part.Anchored = false;
 			}
 		}
+
+		this.humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None;
 
 		// Setup raycast params
 		this.raycastParams.FilterType = Enum.RaycastFilterType.Exclude;
@@ -98,6 +109,20 @@ export class FighterModel
 		highlight.DepthMode = Enum.HighlightDepthMode.Occluded;
 		highlight.OutlineColor = Color3.fromRGB();
 		highlight.Parent = this.instance;
+
+		// Fighter special hud
+		const specialRoot = createRoot(new Instance("Folder"));
+
+		specialRoot.render(
+			createPortal(
+				<ReflexProvider producer={store}>
+					<billboardgui Size={UDim2.fromScale(2.5, 0.15)} StudsOffsetWorldSpace={Vector3.yAxis.mul(3)}>
+						<FighterSpecialHud fighterId={this.attributes.fighterId} />
+					</billboardgui>
+				</ReflexProvider>,
+				root,
+			),
+		);
 
 		// Setup fighter cleanup
 		this.trove.add(() => this.animationTracker.destroy());
@@ -123,9 +148,6 @@ export class FighterModel
 		if (!this.humanoid?.RootPart || !humanoid || !this.fighterGoal) {
 			return;
 		}
-
-		// Update fighter model
-		//this.instance.PivotTo(this.fighterGoal.fighterPart.CFrame);
 
 		const root = this.humanoid.RootPart;
 		const rootDisplacement = root.Position.sub(this.lastFighterPosition);
@@ -173,6 +195,25 @@ export class FighterModel
 		}
 
 		this.currentState = newState;
+	}
+
+	onInputBegan(input: InputObject, gameProcessedEvent: boolean) {
+		if (
+			gameProcessedEvent ||
+			(input.UserInputType !== Enum.UserInputType.MouseButton1 &&
+				input.UserInputType !== Enum.UserInputType.Touch)
+		) {
+			return;
+		}
+
+		const target = getMouseTarget();
+
+		if (!target.Instance?.IsDescendantOf(this.instance)) return;
+
+		// TODO: make fighter do an animation
+
+		remotes.fighter.activateSpecial.fire(this.attributes.fighterId);
+		this.fighterStun += 5;
 	}
 
 	destroy() {
