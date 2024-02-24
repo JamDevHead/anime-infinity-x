@@ -6,7 +6,7 @@ import { RootProvider } from "@/client/ui/providers/root-provider";
 export = hoarcekat(() => {
 	return (
 		<RootProvider>
-			<Spinner />
+			<Spinner size={UDim2.fromOffset(256, 256)} />
 		</RootProvider>
 	);
 });
