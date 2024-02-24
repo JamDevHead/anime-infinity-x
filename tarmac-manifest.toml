@@ -543,6 +543,11 @@ hash = "d2b1a44233172e6b0c05b5fea17b5b4176db3cb021ec1bbbe86d4a4143fe2713"
 id = 15507155625
 packable = false
 
+[inputs."assets/images/ui/material_spinner.png"]
+hash = "35af052e0aabc410d1c79086ddc417c03dc4065c4d749d514a5e4957ff6fe90e"
+id = 16359656421
+packable = false
+
 [inputs."assets/images/ui/option_background.png"]
 hash = "b7ba5d5f7346b4478815ba800e9a667d48551a5474fed4253be2f66c6bf02578"
 id = 15358053084

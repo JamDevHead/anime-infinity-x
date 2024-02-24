@@ -175,5 +175,6 @@ export const images: {
 		readonly click_effect: string;
 		readonly egg_background: string;
 		readonly separator: string;
+		readonly material_spinner: string;
 	};
 };

@@ -2,7 +2,7 @@ import Roact from "@rbxts/roact";
 import { FrameProps } from "@/client/ui/components/frame";
 
 export interface ImageProps extends FrameProps<ImageLabel> {
-	image: string;
+	image: string | Roact.Binding<string>;
 	imageColor?: Color3 | Roact.Binding<Color3>;
 	imageTransparency?: number | Roact.Binding<number>;
 	imageRectOffset?: Vector2 | Roact.Binding<Vector2>;

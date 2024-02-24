@@ -143,6 +143,7 @@ return {
 					Y = "rbxassetid://15507155625",
 				},
 			},
+			material_spinner = "rbxassetid://16359656421",
 			option_background = "rbxassetid://15358053084",
 			option_toggle_base = "rbxassetid://15352121122",
 			option_toggle_off = "rbxassetid://15352146313",
