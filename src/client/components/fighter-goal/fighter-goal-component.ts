@@ -14,7 +14,7 @@ import { EnemyComponent } from "@/shared/components/enemy-component";
 import { PlayerFighter } from "@/shared/store/players";
 import { selectEnemySelectionFromPlayer } from "@/shared/store/players/enemy-selection";
 import { selectAllFightersFromPlayer } from "@/shared/store/players/fighters";
-import { getFighterFromCharacterId } from "@/shared/utils/fighters";
+import { getFighterModelFromCharacterId } from "@/shared/utils/fighters";
 
 const FAR_CFRAME = new CFrame(0, 5e9, 0);
 const HORIZONTAL_VECTOR = new Vector3(1, 0, 1);
@@ -46,7 +46,7 @@ export class FighterGoal
 	) {
 		super();
 
-		const fighterModel = getFighterFromCharacterId(this.attributes.characterId)?.Clone();
+		const fighterModel = getFighterModelFromCharacterId(this.attributes.characterId)?.Clone();
 
 		assert(fighterModel, `Failed to find fighter from character id ${this.attributes.characterId}`);
 

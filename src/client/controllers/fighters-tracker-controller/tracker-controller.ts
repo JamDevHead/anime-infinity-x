@@ -7,7 +7,7 @@ import { Tracker } from "@/client/controllers/fighters-tracker-controller/tracke
 export class FightersTracker implements OnStart {
 	public readonly RootOffset = new Vector3(0, -3, 4);
 	public readonly fightersFolder = Make("Folder", {
-		Name: "Fighters",
+		Name: "Fighters2",
 		Parent: Workspace,
 	});
 
@@ -15,9 +15,8 @@ export class FightersTracker implements OnStart {
 
 	onStart() {
 		const onNewPlayer = (player: Player) => {
-			const tracker = new Tracker(player, this);
-
-			this.trackers.set(tostring(player.UserId), tracker);
+			//const tracker = new Tracker(player, this);
+			// this.trackers.set(tostring(player.UserId), tracker);
 		};
 
 		Players.GetPlayers().forEach(onNewPlayer);
