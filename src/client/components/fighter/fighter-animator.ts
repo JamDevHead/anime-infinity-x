@@ -61,10 +61,15 @@ export class FighterAnimator {
 		}
 
 		if (newState !== this.animationState) {
+			if (
+				this.animationState.match("soco")[0] !== undefined &&
+				this.animationTracker.isAnimationPlaying(this.animationState)
+			) {
+				return;
+			}
+
 			this.updateAnimation(newState, speed);
 		}
-
-		this.animationState = newState;
 	}
 
 	private checkGround() {
@@ -82,11 +87,12 @@ export class FighterAnimator {
 		return groundHit !== undefined;
 	}
 
-	private updateAnimation(state: typeof this.animationState, speed: number) {
-		if (state === "run") {
+	public updateAnimation(state: typeof this.animationState, speed?: number) {
+		if (state === "run" && speed !== undefined) {
 			this.animationTracker.getAnimationTrack(state)?.AdjustSpeed(speed / 16);
 		}
 
+		this.animationState = state;
 		this.animationTracker.swapAnimation(state);
 	}
 }

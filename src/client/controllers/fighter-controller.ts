@@ -31,8 +31,9 @@ export class FighterController implements OnStart {
 	private replicateFighters(player: Player) {
 		const playerId = tostring(player.UserId);
 		const trove = new Trove();
+		const fighters = new Set<FighterComponent>();
 
-		this.listenForSelectedEnemy(trove, playerId);
+		this.listenForSelectedEnemy(trove, playerId, fighters);
 
 		const selectActiveFightersFromLocalPlayer = createSelector(
 			[selectActiveFightersFromPlayer(playerId)],
@@ -40,8 +41,6 @@ export class FighterController implements OnStart {
 		);
 
 		this.playerFightersListeners.set(playerId, trove);
-
-		const fighters = new Set<FighterComponent>();
 
 		trove.add(
 			store.observe(selectActiveFightersFromLocalPlayer, identifyActiveFighter, ({ fighterId, characterId }) => {
@@ -69,9 +68,12 @@ export class FighterController implements OnStart {
 				this.updateFighters(fighters);
 
 				return () => {
-					fighters.delete(fighterComponent);
 					fighterComponent.destroy();
 					fighterModel.Destroy();
+
+					fighters.delete(fighterComponent);
+					this.components.removeComponent<FighterComponent>(fighterModel);
+
 					this.updateFighters(fighters);
 				};
 			}),
@@ -101,9 +103,11 @@ export class FighterController implements OnStart {
 		}
 	}
 
-	private listenForSelectedEnemy(trove: Trove, playerId: string) {
+	private listenForSelectedEnemy(trove: Trove, playerId: string, fighters: Set<FighterComponent>) {
 		const selectEnemySelectionFromLocalPlayer = selectEnemySelectionFromPlayer(playerId);
 		const selectActiveFightersFromLocalPlayer = selectActiveFightersFromPlayer(playerId);
+
+		let enemyDamaged: RBXScriptConnection | undefined;
 
 		const onChanges = (enemyId?: string) => {
 			const activeFighters = store.getState(selectActiveFightersFromLocalPlayer) ?? [];
@@ -123,6 +127,22 @@ export class FighterController implements OnStart {
 			this.currentEnemy = enemy;
 
 			if (!enemy) return;
+
+			enemyDamaged?.Disconnect();
+
+			let currentHealth = enemy.humanoid.Health;
+
+			enemyDamaged = trove.add(
+				enemy.humanoid.HealthChanged.Connect((newHealth) => {
+					if (newHealth < currentHealth) {
+						for (const fighter of fighters) {
+							fighter.attack();
+						}
+					}
+
+					currentHealth = newHealth;
+				}),
+			);
 
 			const fightersSelectingEnemy = knownEnemies[enemy.attributes.Guid] ?? new Set<string>();
 

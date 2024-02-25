@@ -1,5 +1,5 @@
-import { BaseComponent, Component, Components } from "@flamework/components";
-import { OnPhysics, OnStart, OnTick } from "@flamework/core";
+import { BaseComponent, Component } from "@flamework/components";
+import { OnPhysics, OnRender, OnStart, OnTick } from "@flamework/core";
 import Make from "@rbxts/make";
 import { Players } from "@rbxts/services";
 import { Trove } from "@rbxts/trove";
@@ -11,17 +11,21 @@ import {
 	FighterPosition,
 	knownEnemies,
 } from "@/client/components/fighter";
+import { FighterAttack } from "@/client/components/fighter/fighter-attack";
+import { FighterSpecial } from "@/client/components/fighter/fighter-special";
 import { FIGHTER_FAR_CFRAME, FIGHTER_GOAL_CONTAINER } from "@/client/constants/fighters";
 import { FighterController } from "@/client/controllers/fighter-controller";
+import { OnInput } from "@/client/controllers/lifecycles/on-input";
 
 const raycastParams = new RaycastParams();
+const localPlayer = Players.LocalPlayer;
 
 @Component()
 export class FighterComponent
 	extends BaseComponent<FighterAttributes, FighterInstance>
-	implements OnStart, OnTick, OnPhysics
+	implements OnStart, OnTick, OnPhysics, OnRender, OnInput
 {
-	private player: Player;
+	private readonly player: Player;
 	private root?: BasePart;
 	private humanoid?: Humanoid;
 
@@ -46,11 +50,14 @@ export class FighterComponent
 	private fighterPosition = new FighterPosition(this.instance, this.attributes.fighterId, this.goal, raycastParams);
 	private fighterAnimator = new FighterAnimator(this.trove, this.instance, raycastParams);
 	private fighterModel = new FighterModel(this.trove, this.instance, this.goal);
+	private fighterSpecial?: FighterSpecial;
+	private fighterAttack = new FighterAttack(
+		this.attributes.playerId,
+		this.attributes.fighterId,
+		this.fighterAnimator,
+	);
 
-	constructor(
-		private readonly components: Components,
-		private readonly fighterController: FighterController,
-	) {
+	constructor(private readonly fighterController: FighterController) {
 		super();
 
 		const userId = tonumber(this.attributes.playerId) as number;
@@ -59,6 +66,12 @@ export class FighterComponent
 		assert(player, `[Fighters] Player ${userId} was not found`);
 
 		this.player = player;
+
+		if (this.player === localPlayer) {
+			this.fighterSpecial = this.trove.add(
+				new FighterSpecial(this.trove, this.instance, this.attributes.fighterId, this.fighterAttack),
+			);
+		}
 	}
 
 	destroy() {
@@ -93,9 +106,17 @@ export class FighterComponent
 		}
 	}
 
+	onInputBegan(input: InputObject, gameProcessedEvent: boolean) {
+		this.fighterSpecial?.onUserInput(input, gameProcessedEvent);
+	}
+
 	onPhysics(dt: number) {
 		task.spawn(() => this.fighterModel.onPhysics());
 		task.spawn(() => this.fighterAnimator.onPhysics(dt, this.humanoid, !!this.fighterController.getCurrentEnemy()));
+	}
+
+	onRender() {
+		this.fighterSpecial?.onRender(!!this.fighterController.getCurrentEnemy());
 	}
 
 	onTick(dt: number) {
@@ -129,5 +150,9 @@ export class FighterComponent
 		weld.Enabled = false;
 		this.goal.CFrame = this.root.CFrame.ToWorldSpace(offset);
 		weld.Enabled = true;
+	}
+
+	public attack() {
+		this.fighterAttack.attack();
 	}
 }
