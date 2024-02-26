@@ -18,7 +18,7 @@ import { getFighterModelFromCharacterId } from "@/shared/utils/fighters";
 @Controller()
 export class FighterController implements OnStart {
 	private playerFightersListeners = new Map<string, Trove>();
-	private currentEnemy?: Enemy;
+	private currentEnemy = new Map<string, Enemy>();
 
 	constructor(private readonly components: Components) {}
 
@@ -111,20 +111,21 @@ export class FighterController implements OnStart {
 
 		const onChanges = (enemyId?: string) => {
 			const activeFighters = store.getState(selectActiveFightersFromLocalPlayer) ?? [];
+			const currentEnemy = this.currentEnemy.get(playerId);
 
-			if (this.currentEnemy) {
-				const fightersSelectingEnemy = knownEnemies[this.currentEnemy.attributes.Guid] ?? new Set<string>();
+			if (currentEnemy) {
+				const fightersSelectingEnemy = knownEnemies[currentEnemy.attributes.Guid] ?? new Set<string>();
 
 				// Remove all fighters that are selecting old enemy
 				for (const { fighterId } of activeFighters) {
 					fightersSelectingEnemy.delete(fighterId);
 				}
 
-				knownEnemies[this.currentEnemy.attributes.Guid] = fightersSelectingEnemy;
+				knownEnemies[currentEnemy.attributes.Guid] = fightersSelectingEnemy;
 			}
 
 			const enemy = enemyId !== undefined ? getEnemyByUid(enemyId, this.components) : undefined;
-			this.currentEnemy = enemy;
+			enemy ? this.currentEnemy.set(playerId, enemy) : this.currentEnemy.delete(playerId);
 
 			if (!enemy) return;
 
@@ -152,6 +153,8 @@ export class FighterController implements OnStart {
 			}
 
 			knownEnemies[enemy.attributes.Guid] = fightersSelectingEnemy;
+
+			print(knownEnemies);
 		};
 
 		trove.add(store.subscribe(selectEnemySelectionFromLocalPlayer, (enemySelected) => onChanges(enemySelected)));
@@ -159,7 +162,7 @@ export class FighterController implements OnStart {
 		onChanges(store.getState(selectEnemySelectionFromLocalPlayer));
 	}
 
-	public getCurrentEnemy() {
-		return this.currentEnemy;
+	public getCurrentEnemy(playerId: string) {
+		return this.currentEnemy.get(playerId);
 	}
 }

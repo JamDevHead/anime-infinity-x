@@ -112,11 +112,17 @@ export class FighterComponent
 
 	onPhysics(dt: number) {
 		task.spawn(() => this.fighterModel.onPhysics());
-		task.spawn(() => this.fighterAnimator.onPhysics(dt, this.humanoid, !!this.fighterController.getCurrentEnemy()));
+		task.spawn(() =>
+			this.fighterAnimator.onPhysics(
+				dt,
+				this.humanoid,
+				!!this.fighterController.getCurrentEnemy(this.attributes.playerId),
+			),
+		);
 	}
 
 	onRender() {
-		this.fighterSpecial?.onRender(!!this.fighterController.getCurrentEnemy());
+		this.fighterSpecial?.onRender(!!this.fighterController.getCurrentEnemy(this.attributes.playerId));
 	}
 
 	onTick(dt: number) {
@@ -125,7 +131,7 @@ export class FighterComponent
 		const currentCFrame = this.fighterPosition.onTick();
 
 		const fighterPosition = this.fighterPosition;
-		const currentEnemy = this.fighterController.getCurrentEnemy();
+		const currentEnemy = this.fighterController.getCurrentEnemy(this.attributes.playerId);
 
 		const fighterGoalCFrame =
 			(currentEnemy && fighterPosition.getFighterPositionOnEnemy(currentEnemy, knownEnemies)) ||
