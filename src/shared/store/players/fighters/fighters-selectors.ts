@@ -28,6 +28,7 @@ export const selectAllFightersFromPlayer = (playerId: string) => {
 	};
 };
 
+// **Wont** return fighter when playerId isn't LocalPlayer
 export const selectPlayerFighter = (playerId: string, fighterId: string) => {
 	return createSelector(selectPlayerFighters(playerId), (fighters) => {
 		return fighters?.all[fighterId];

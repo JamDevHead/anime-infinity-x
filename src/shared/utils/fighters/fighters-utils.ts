@@ -26,7 +26,7 @@ export function getCharacterId(name: string) {
 	return id;
 }
 
-export function getFighterFromCharacterId(id: string) {
+export function getFighterModelFromCharacterId(id: string) {
 	let fighterName = undefined;
 
 	for (const [name, characterId] of charactersId) {
