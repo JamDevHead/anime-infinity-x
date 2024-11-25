@@ -1484,10 +1484,10 @@
     "@rbxts/luau-polyfill-internal" "1.2.3-ts.0"
     "@rbxts/shared-internal" "^0.2.1"
 
-"@rbxts/services@^1.1.4", "@rbxts/services@^1.1.5", "@rbxts/services@^1.2.0", "@rbxts/services@^1.5.1", "@rbxts/services@^1.5.3":
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/@rbxts/services/-/services-1.5.3.tgz#a19d8cb2e16796d533b7db42bf4896ec18b1b6cd"
-  integrity sha512-0Lr1OJCfhCILu0Z2+W2Hhx4nIRWLW3llSvzPskozv9AlBR99qTWrhJlh/4dux1RciKPFbZiTYi1CP+/kCloIQw==
+"@rbxts/services@^1.1.4", "@rbxts/services@^1.1.5", "@rbxts/services@^1.2.0", "@rbxts/services@^1.5.1", "@rbxts/services@^1.5.5":
+  version "1.5.5"
+  resolved "https://registry.yarnpkg.com/@rbxts/services/-/services-1.5.5.tgz#11b67060c5494ecbcf4cf479ec966a726ccc6e5b"
+  integrity sha512-Hu7QH2ecefS60zpakKG3T2vgABydoOJqpSG7nXr59wFAbPk/cA+OcsntYPHUWyHAat0VFGZ5jNZLTLdiqfssvg==
 
 "@rbxts/set-timeout@^1.1.2":
   version "1.1.2"
