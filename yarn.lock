@@ -1174,15 +1174,15 @@
     "@rbxts/signal" "^1.0.3"
     "@rbxts/t" "^3.1.0"
 
-"@flamework/networking@^1.0.0-beta.24":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@flamework/networking/-/networking-1.0.1.tgz#6e7ea68f65761864fbbe3f11e14020b1688f7ec3"
-  integrity sha512-ewPDdLIGry3Du0kSE/lzUfDKUU4QUgZmKFhry6N+W9wHKy1sL/P05tArhr1pLHWJr8nW/5nQ0e93cSnEqSOh7w==
+"@flamework/networking@^1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@flamework/networking/-/networking-1.2.3.tgz#2e4cec80b0dbe8e6b41c62c3eda18386e639a620"
+  integrity sha512-ZC799XY1HzrMqU25qzq1u61UJYJzQXIJHzvHXOovPKnoN3Covf9eby5qTZAQGnoqyDbcXjP5JVDMa+BoV4xDHw==
   dependencies:
     "@rbxts/object-utils" "^1.0.4"
     "@rbxts/services" "^1.1.5"
     "@rbxts/signal" "^1.0.3"
-    "@rbxts/t" "^2.1.4"
+    "@rbxts/t" "^3.1.0"
 
 "@humanwhocodes/config-array@^0.11.13":
   version "0.11.13"
